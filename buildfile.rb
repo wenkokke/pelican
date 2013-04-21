@@ -10,7 +10,7 @@ SNAKE_YAML  = 'org.yaml:snakeyaml:jar:1.8'
 SLF4J       = struct(
   :api     => 'org.slf4j:slf4j-api:jar:1.7.3',
   :simple  => 'org.slf4j:slf4j-simple:jar:1.7.3')
-  
+
 task 'deploy-lexicon' => 'pipeline:pelican:lexicon:deploy'
 task 'render-lexicon' => 'pipeline:pelican:lexicon:render'
 
