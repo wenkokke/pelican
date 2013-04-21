@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import lombok.Cleanup;
 import lombok.SneakyThrows;
@@ -27,7 +26,6 @@ import semante.lexicon.Lexicon;
 import semante.lexicon.Word;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
 @FieldDefaults(makeFinal=true,level=PRIVATE)
@@ -89,7 +87,7 @@ public final class ILexicon implements Lexicon<TSymbol> {
 					wMap.put(tag, wMap.get(tag).addExpr(expr));
 				}
 				else {
-					wMap.put(tag, new IWord(tag,expr));
+					wMap.put(tag, new IWord(tag,tag,expr));
 				}
 			}
 		}
@@ -141,8 +139,8 @@ public final class ILexicon implements Lexicon<TSymbol> {
 	}
 
 	@Override
-	public final Set<String> getEntries() {
-		val builder = ImmutableSet.<String> builder();
+	public final List<String> getEntries() {
+		val builder = ImmutableList.<String> builder();
 		builder.addAll(wMap.keySet());
 		builder.addAll(cMap.keySet());
 		return builder.build();

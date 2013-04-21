@@ -20,14 +20,17 @@ public final class ITExprPrinter<T extends TSymbol> implements ExprPrinter<T>, V
 	public final String format(Expr<T> expr) {
 		return expr.accept(this);
 	}
+	
 	@Override
 	public final String abstraction(T t, Expr<T> expr) {
 		return "\\"+pSymbol(t)+"."+pBetween(expr);
 	}
+	
 	@Override
 	public final String application(Expr<T> a2b, Expr<T> a) {
 		return pBetween(a2b)+" "+pBetween(a);
 	}
+	
 	@Override
 	public final String variable(T t) {
 		return pSymbol(t);

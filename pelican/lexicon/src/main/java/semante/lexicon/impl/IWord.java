@@ -16,6 +16,7 @@ import com.google.common.collect.ImmutableList;
 public final class IWord implements Word<TSymbol> {
 	
 	String				name;
+	String				text;
 	List<Expr<TSymbol>>	expr;
 	
 	public final IWord addExpr(final Expr<TSymbol> newExpr) {
@@ -38,8 +39,8 @@ public final class IWord implements Word<TSymbol> {
 	 * @param name {@link String} representation of the {@link Word}.
 	 * @param expr meaning of the {@link Word} as an {@link Expr}.
 	 */
-	public IWord(final String name, final Expr<TSymbol> expr) {
-		this(name, (List<Expr<TSymbol>>) ImmutableList.of(expr));
+	public IWord(final String name, final String text, final Expr<TSymbol> expr) {
+		this(name, text, (List<Expr<TSymbol>>) ImmutableList.of(expr));
 	}
 	
 }

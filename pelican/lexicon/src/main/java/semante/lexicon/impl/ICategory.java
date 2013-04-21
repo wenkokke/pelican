@@ -49,13 +49,13 @@ public final class ICategory implements Category<TSymbol> {
 	}
 	
 	@Override
-	public final Word<TSymbol> apply(final String newName) {
-		return new IWord(name,
+	public final Word<TSymbol> apply(final String text) {
+		return new IWord(name, text,
 			transform(expr,
 				new Function<Expr<TSymbol>,Expr<TSymbol>>() {
 					@Override
 					public final Expr<TSymbol> apply(final Expr<TSymbol> input) {
-						return alphaConv2.alphaConvert(OldWordName, newName, input);
+						return alphaConv2.alphaConvert(WordSymbol, text, input);
 					}
 				}));
 	}

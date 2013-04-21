@@ -16,7 +16,7 @@ public interface Category<T extends TSymbol> {
 	 * 
 	 * TODO This should probably be read from the lexicon file with a WordName statement.
 	 */
-	String OldWordName = "WORD";
+	String WordSymbol = "WORD";
 	
 	/**
 	 * @return the category's name.

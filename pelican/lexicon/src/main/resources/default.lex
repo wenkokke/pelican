@@ -1,12 +1,16 @@
 > N     WORD:et
 
+simple implementation of transitive nouns.
+
+> N     WORD:((et)t)et
+
 the below definitions deal with noun-clusters up to a size of 3 nouns.
 it assumes the annotation is placed on the rightmost node, but at the moment this is not yet checked.
 since this introduces a bad ambiguety into the lexicon this should be resolved as soon as possible,
-most likely by turning it into a series of annotations NC2, NC3, NC4, etc... for noun clusters of sizes
+most likely by turning it into a series of annotations $NC_2$, $NC_3$, $NC_4$, etc... for noun clusters of sizes
 two, three and four respectively.
 
-> NC2    \A:et.\GQ:(et)(et)t.\B:et.EXISTS:(et)t (\x:e.AND:ttt (GQ:(et)(et)t WORD:et (\z:e.AND:ttt (B:et z:e) (OF:eet z:e x:e))) (A:et x:e))
+> NC2   \A:et.\GQ:(et)(et)t.\B:et.EXISTS:(et)t (\x:e.AND:ttt (GQ:(et)(et)t WORD:et (\z:e.AND:ttt (B:et z:e) (OF:eet z:e x:e))) (A:et x:e))
 > NC3   \A1:et.\A2:et.\GQ:(et)(et)t.\B:et.EXISTS:(et)t (\x1:e.EXISTS:(et)t (\x2:e.AND:ttt (AND:ttt (GQ:(et)(et)t WORD:et (\z:e.AND:ttt (B:et z:e) (OF:eet z:e x1:e))) (A1:et x1:e)) (AND:ttt (OF:eet x1:e x2:e) (A2:et x2:e))))
 
 the $NP_D$ annotation is now deprecated, to be replaced by the $NP$ annotation.
@@ -82,6 +86,7 @@ below definition is predicative IS.
 
 > A     \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
 > THE   \A:et.\B:et.B:et (IOTA:(et)e A:et)
+> THE   \P:(et)t.\B:et.P:(et)t B:et
 
 below definition is equivalent to A.
 
@@ -92,6 +97,7 @@ below definitions is a superset of what we would actually like posessives to mea
 as right now the definition is equivalent to A and SOME.
 
 > POSS  \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
+> OWN   \A:et.A:et
 
 below definition is equivalent to MI.
 
@@ -109,12 +115,26 @@ below definition is equivalent to MA_PR.
 below definitions are pr... whatevers.
 
 > TO    \P:(et)t.P:(et)t
-> P_R   \P:(et)t.\A:et.\GQ:(et)(et)t.\B:et.AND:ttt (GQ:(et)(et)t A:et B:et) (GQ:(et)(et)t A:et (\x:e.P:(et)t (\y:e.WORD:eet x:e y:e)))
+> P_R   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:eet x:e y:e))
+% P_R   \P:(et)t.\A:et.\GQ:(et)(et)t.\B:et.AND:ttt (GQ:(et)(et)t A:et B:et) (GQ:(et)(et)t A:et (\x:e.P:(et)t (\y:e.WORD:eet x:e y:e)))
 
-below definitions are fake for the time being.
+simple lexical binding of numbers as quantifiers, barring numerical inferences.
 
-> NUM \A:et.A:et
-> AT_LEAST \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
+> NUMBER WORD:(et)t
+
+dates are implemented as a special case of $NP$s, which includes date clusters.
+
+> DATE   \A:et.A:et WORD:e
+> DATEC2 \P:(et)t.\A:et.AND:ttt (A:et WORD:e) (P:(et)t A:et)
+> DATEC3 \P1:(et)t.\P2:(et)t.\A:et.AND:ttt (A:et WORD:e) (AND:ttt (P1:(et)t A:et) (P2:(et)t A:et))
+
+below definition is auxilliary verbs.
+
+> V_AUX \x:e.x:e
+> V_AUX \A:et.A:et
+> V_AUX \P:(et)t.P:(et)t
+> V_AUX \GQ:(et)(et)t.GQ:(et)(et)t
+> V_AUX \M:(et)et.M:(et)et
 
 below definition is equal to an identity function.
 

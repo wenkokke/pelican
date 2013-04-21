@@ -1,14 +1,14 @@
 package semante.pipeline;
 
-import lombok.Getter;
+import java.util.List;
 
-public abstract class Pipeline {
+public interface Pipeline {
 	
-	public abstract <ID> Result<ID> prove(
+	<ID> Result<ID> prove(
 			final BinaryTree<ID, Annotation> text,
 			final BinaryTree<ID, Annotation> hypothesis,
 			final String subsumptions) throws Exception;
 	
-	@Getter
-	protected static Pipeline instance;
+	List<Category> getCategories();
+  
 }

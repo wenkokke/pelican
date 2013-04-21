@@ -1,6 +1,7 @@
 package semante.pipeline.impl;
 
 import static com.google.common.collect.Lists.transform;
+import static java.lang.String.format;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 
 @Value
-public final class ASTPrinter<ID, T extends TSymbol>
+public final class ITreePrinter<ID, T extends TSymbol>
 	implements BinaryTree.Visitor<ID, Word<T>, Pair<String,List<Type>>> {
 
 	TLambdaCalc<T> lambdacalc;
@@ -49,7 +50,8 @@ public final class ASTPrinter<ID, T extends TSymbol>
 
 	@Override
 	public final Pair<String,List<Type>> leaf(final Word<T> value) {
-		return IPair.<String,List<Type>> pair(value.getName(),
+		return IPair.<String,List<Type>> pair(
+			format("%s|%s", value.getText().toLowerCase(), value.getName()),
 			transform(value.getExpr(),
 				new Function<Expr<T>,Type>() {
 					@Override

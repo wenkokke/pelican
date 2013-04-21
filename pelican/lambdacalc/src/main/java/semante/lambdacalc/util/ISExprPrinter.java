@@ -14,7 +14,7 @@ public final class ISExprPrinter<S extends Symbol> implements ExprPrinter<S>, Vi
 	}
 	@Override
 	public String abstraction(S s, Expr<S> expr) {
-		return "λ"+s.getName()+"."+withParens(expr);
+		return "\\"+s.getName()+"."+withParens(expr);
 	}
 	@Override
 	public String application(Expr<S> f, Expr<S> arg) {

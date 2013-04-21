@@ -1,0 +1,16 @@
+name:                lex2tex
+version:             0.1.0.0
+synopsis:            Renders a lexicon file as a TeX document.
+license:             SemAnTE
+license-file:        LICENSE
+author:              Pepijn Kokke
+maintainer:          pepijn.kokke@gmail.com
+copyright:           (c) 2013 Pepijn Kokke
+category:            Compiler
+build-type:          Simple
+cabal-version:       >=1.8
+
+executable lex2tex
+  main-is:             LeX2TeX.hs
+  build-depends:       base ==4.5.*, uu-parsinglib ==2.7.*
+  hs-source-dirs:      src/main/hs
