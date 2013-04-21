@@ -2,16 +2,29 @@ package semante.lambdacalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.Value;
+import lombok.experimental.Wither;
 import semante.lambdacalc.Expr;
+import semante.lambdacalc.ExprPrinter;
 import semante.lambdacalc.Symbol;
+import semante.lambdacalc.util.ISExprPrinter;
 
 @FieldDefaults(makeFinal=true,level=PRIVATE)
 abstract class IExpr<S extends Symbol> implements Expr<S> {
 	
-	@Value
+	private final ExprPrinter<S> PRINTER = new ISExprPrinter<S>(); 
+	
+	@Override
+	public final String toString() {
+		return PRINTER.format(this);
+	}
+	
+	@Getter @Wither
+	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
+	@FieldDefaults(makeFinal=true,level=PRIVATE)
 	static final class Abstraction<S extends Symbol> extends IExpr<S> {
 		S s; Expr<S> arg;
 		
@@ -21,8 +34,10 @@ abstract class IExpr<S extends Symbol> implements Expr<S> {
 		}
 	}
 	
-	@Value
+	@Getter @Wither
+	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
+	@FieldDefaults(makeFinal=true,level=PRIVATE)
 	static final class Application<S extends Symbol> extends IExpr<S> {
 		Expr<S> f; Expr<S> arg;
 		
@@ -32,8 +47,10 @@ abstract class IExpr<S extends Symbol> implements Expr<S> {
 		}
 	}
 	
-	@Value
+	@Getter @Wither
+	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
+	@FieldDefaults(makeFinal=true,level=PRIVATE)
 	static final class Variable<S extends Symbol> extends IExpr<S> {
 		S s;
 

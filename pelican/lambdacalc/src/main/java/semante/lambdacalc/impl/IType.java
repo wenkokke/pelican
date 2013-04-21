@@ -1,9 +1,9 @@
 package semante.lambdacalc.impl;
 
-import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PUBLIC;
-import lombok.RequiredArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.Value;
 import semante.lambdacalc.Type;
 import semante.lambdacalc.TypePrinter;
 import semante.lambdacalc.util.ITypePrinter;
@@ -14,8 +14,8 @@ abstract class IType implements Type {
 	static Constant E = new Constant("e");
 	static Constant T = new Constant("t");
 	
-	@RequiredArgsConstructor
-	@FieldDefaults(makeFinal=true,level=PRIVATE)
+	@Value
+	@EqualsAndHashCode(callSuper = false)
 	static final class Constant extends IType {
 		String name;
 		
@@ -29,8 +29,8 @@ abstract class IType implements Type {
 		}
 	}
 	
-	@RequiredArgsConstructor
-	@FieldDefaults(makeFinal=true,level=PRIVATE)
+	@Value
+	@EqualsAndHashCode(callSuper = false)
 	static final class Function extends IType {
 		Type f, arg;
 
@@ -44,7 +44,8 @@ abstract class IType implements Type {
 		}
 	}
 	
-	static final class Identity implements Type.Identity {
+	@Value
+	public static final class Identity implements Type.Identity {
 
 		@Override
 		public Type typeConstant(String name) {

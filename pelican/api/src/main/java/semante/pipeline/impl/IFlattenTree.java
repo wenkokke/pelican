@@ -1,6 +1,7 @@
 package semante.pipeline.impl;
 
 import java.util.List;
+import static java.lang.String.*;
 
 import lombok.val;
 import lombok.experimental.Value;
@@ -10,10 +11,12 @@ import semante.lambdacalc.TSymbol;
 import semante.lexicon.Word;
 import semante.pipeline.BinaryTree;
 import semante.pipeline.FlattenTree;
+import semante.pipeline.Result;
 import semante.util.Either;
 import semante.util.impl.IEither;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 @Value
 public final class IFlattenTree<ID,T extends TSymbol> implements FlattenTree<ID,T> {
@@ -21,27 +24,28 @@ public final class IFlattenTree<ID,T extends TSymbol> implements FlattenTree<ID,
 	TLambdaCalc<T> lambdacalc;
 	
 	@Override
-	public final Either<ID,List<Expr<T>>> flatten(final BinaryTree<ID, Word<T>> tree) {
-		return tree.accept(new BinaryTree.Visitor<ID, Word<T>, Either<ID,List<Expr<T>>>>() {
+	public final Either<Result<ID>,List<Expr<T>>> flatten(final BinaryTree<ID, Word<T>> tree) {
+		return tree.accept(
+			new BinaryTree.Visitor<ID, Word<T>, Either<Result<ID>,List<Expr<T>>>>() {
 
 			@Override
-			public final Either<ID,List<Expr<T>>> node(
+			public final Either<Result<ID>,List<Expr<T>>> node(
 					final ID id,
 					final BinaryTree<ID, Word<T>> treeL,
 					final BinaryTree<ID, Word<T>> treeR) {
 				val builder = ImmutableList.<Expr<T>> builder();
-				val listL = treeL.accept(this);
-				val listR = treeR.accept(this);
+				val eitherL = treeL.accept(this);
+				val eitherR = treeR.accept(this);
 				
 				// check any errors.
-				if (listL.isLeft()) { return listL; }
-				if (listR.isLeft()) { return listR; }
+				if (eitherL.isLeft()) { return eitherL; }
+				if (eitherR.isLeft()) { return eitherR; }
 				
 				// check all combinations, maintain if *any* is well-typed.
 				boolean any = false;
 				
-				for (val elemL: listL.getRight()) {
-					for (val elemR: listR.getRight()) {
+				for (val elemL: eitherL.getRight()) {
+					for (val elemR: eitherR.getRight()) {
 						
 						// get types of L and R.
 						val lType = lambdacalc.typeOf(elemL);
@@ -64,15 +68,23 @@ public final class IFlattenTree<ID,T extends TSymbol> implements FlattenTree<ID,
 				
 				// if no expr is well-typed, throw a typeerror.
 				if (!any) {
-					return IEither.left(id);
+					val printer = new ITreePrinter<ID,T>(lambdacalc);
+					val errorL = treeL.accept(printer);
+					val typesL = ImmutableSet.copyOf(errorL.getSecond());
+					val errorR = treeR.accept(printer);
+					val typesR = ImmutableSet.copyOf(errorR.getSecond());
+					return IEither.left((Result<ID>)
+						new IResult$ErrorMsg<ID>(id,
+							format("cannot combine %s and %s of types %s and %s",
+								errorL.getFirst(),errorR.getFirst(),typesL,typesR)));
 				}
 				
 				// else return the well-typed expr.
-				return IEither.<ID, List<Expr<T>>> right(builder.build());
+				return IEither.right((List<Expr<T>>) builder.build());
 			}
 
 			@Override
-			public final Either<ID, List<Expr<T>>> leaf(Word<T> word) {
+			public final Either<Result<ID>, List<Expr<T>>> leaf(Word<T> word) {
 				return IEither.right(word.getExpr());
 			}
 		});

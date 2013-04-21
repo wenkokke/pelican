@@ -4,6 +4,7 @@ import static com.google.common.collect.Lists.transform;
 import static semante.util.impl.IBinaryTree.functor;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import lombok.EqualsAndHashCode;
 import lombok.val;
@@ -15,6 +16,7 @@ import semante.lexicon.RichLexicon;
 import semante.lexicon.Word;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
+import semante.pipeline.Category;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result;
 import semante.predcalc.FOLExpr.Formula;
@@ -22,20 +24,35 @@ import semante.predcalc.impl.IPredCalc;
 import semante.predcalc.util.ILambda2Pred;
 import semante.prover.ProverException;
 import semante.settings.Settings;
+import semante.util.impl.ICategory;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
-public final class IPipeline extends Pipeline {
+public final class IPipeline implements Pipeline {
 	
 	Settings				settings;
 	TLambdaCalc<TSymbol>	lambdacalc;
 	RichLexicon				lexicon;
 	
 	@Override
-	public <ID> Result<ID> prove(
+	public final List<Category> getCategories() {
+		return Lists.transform(lexicon.getEntries(), new Function<String,Category>() {
+			
+			@Override
+			public final Category apply(final String input) {
+				return new ICategory(input);
+			}
+		});
+	}
+	
+	@Override
+	public final <ID> Result<ID> prove(
 		final BinaryTree<ID, Annotation> txt,
 		final BinaryTree<ID, Annotation> hyp,
 		final String subsumptions) throws FileNotFoundException {
@@ -64,17 +81,9 @@ public final class IPipeline extends Pipeline {
 		// flatten trees into lambda expressions.
 		val flatten = new IFlattenTree<ID, TSymbol>(lambdacalc);
 		val stltxt = flatten.flatten(anntxt);
-		if (stltxt.isLeft()) {
-			val printer = new ASTPrinter<ID, TSymbol>(lambdacalc);
-			return new IResult$ErrorMsg<ID>(stltxt.getLeft(),
-					anntxt.accept(printer).getFirst());
-		}
+		if (stltxt.isLeft()) { return stltxt.getLeft(); }
 		val stlhyp = flatten.flatten(annhyp);
-		if (stlhyp.isLeft()) {
-			val printer = new ASTPrinter<ID, TSymbol>(lambdacalc);
-			return new IResult$ErrorMsg<ID>(stlhyp.getLeft(),
-					annhyp.accept(printer).getFirst());
-		}
+		if (stlhyp.isLeft()) { return stlhyp.getLeft(); }
 		
 		// beta-reduce the expressions.
 		val br =
@@ -87,6 +96,12 @@ public final class IPipeline extends Pipeline {
 		val brstltxt = transform(stltxt.getRight(),br);
 		val brstlhyp = transform(stlhyp.getRight(),br);
 		
+		val nubtxt = ImmutableList.copyOf(ImmutableSet.copyOf(brstltxt));
+		val nubhyp = ImmutableList.copyOf(ImmutableSet.copyOf(brstlhyp));
+		
+		System.err.println("txt:"+nubtxt);
+		System.err.println("hyp:"+nubhyp);
+		
 		// smash to first-order logic.
 		val fol = new IPredCalc();
 		val stl2fol = new ILambda2Pred<TSymbol>(fol, lambdacalc);
@@ -97,8 +112,8 @@ public final class IPipeline extends Pipeline {
 				return stl2fol.smash(input);
 			}
 		};
-		val foltxt = transform(brstltxt,smash);
-		val folhyp = transform(brstlhyp,smash);
+		val foltxt = transform(nubtxt,smash);
+		val folhyp = transform(nubhyp,smash);
 		
 		// iterate and see if any analysis can be proven.
 		for (val proptxt : foltxt) {
@@ -108,10 +123,9 @@ public final class IPipeline extends Pipeline {
 						return new IResult$Proof<ID>();
 					}
 				} catch (ProverException e) {
-					e.printStackTrace();
 				}
 			}
 		}
-		return new IResult$CounterExample<ID>();
+		return new IResult$Unknown<ID>();
 	}
 }

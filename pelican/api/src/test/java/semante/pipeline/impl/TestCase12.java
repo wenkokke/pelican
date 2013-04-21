@@ -36,7 +36,7 @@ public class TestCase12 extends ATestCase {
 		val who			= leaf(pair("WHO_A", "APP"));
 		//  is
 		val romano	   	= leaf(pair("NP", "Romano"));
-		val prodi	   	= leaf(pair("NP", "Prodi"));
+		val prodi	   	= leaf(pair("NPC2", "Prodi"));
 		//  ,
 		val was 		= leaf(pair("IS", "was"));
 		//  the

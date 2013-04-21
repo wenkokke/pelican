@@ -8,5 +8,5 @@ import semante.lexicon.Word;
 import semante.util.Either;
 
 public interface FlattenTree<ID, T extends TSymbol> {
-	Either<ID,List<Expr<T>>> flatten(BinaryTree<ID, Word<T>> tree);
+	Either<Result<ID>,List<Expr<T>>> flatten(BinaryTree<ID, Word<T>> tree);
 }
