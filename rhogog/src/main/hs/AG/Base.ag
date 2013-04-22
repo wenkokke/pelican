@@ -1,0 +1,43 @@
+
+-- |@Lx@: a lexicon contains a list of statements.
+data Lx
+   | Lx ss :: Ss
+
+-- |@Ss@: a list of statements.
+type Ss = [St]
+
+-- |@Ss@: a statement is either a type statement
+--  or a term definition.
+data St
+   | Ty an :: An ident :: Var t1 :: Ty
+   | Tm an :: An ident :: Var t1 :: Tm
+  
+-- |@An@: an annotation is either public (+),
+--  private (-) or "automatic" (@).
+data An
+   | Publ
+   | Priv
+   | Auto
+
+{
+type TyVar = Char
+}
+
+-- |@Ty@: a type is a series of single-character
+--  variables with optional arrows.
+data Ty
+   | Var ident :: TyVar
+   | App t1,t2 :: Ty
+  
+{
+type Var = String
+}
+
+-- |@Tm@: a term is either a variable, an application
+--  or a lambda abstraction.
+data Tm
+   | Var ident :: Var
+   | App t1,t2 :: Tm
+   | Lam ident :: Var t1 :: Tm
+
+deriving * : Eq
