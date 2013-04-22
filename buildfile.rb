@@ -28,6 +28,15 @@ define 'pipeline' do
     package :jar
   end
   
+  define 'rhogog' do
+    compile.uuagc(%w{
+      AG.ag AG/Base.ag AG/Printing.ag
+    })
+    compile.ghc(%w{
+      Main.hs AG.hs Base.hs Parsing.hs Printing.hs
+    })
+  end
+  
   define 'pelican' do
     eclipse.natures :java
     

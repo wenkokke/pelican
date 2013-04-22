@@ -1,0 +1,47 @@
+
+imports
+{
+import UU.Pretty
+}
+
+attr Lx St Ss An Ty Tm
+  syn pp use {>-<} {empty} :: PP_Doc
+  
+sem St
+  | Ty    loc.pp = @an.pp >#< text @ident >#< text ":" >#< @t1.pp
+  | Tm    loc.pp = @an.pp >#< text @ident >#< text "=" >#< @t1.pp
+  
+sem An
+  | Publ  loc.pp = text "+"
+  | Priv  loc.pp = text "-"
+  | Auto  loc.pp = text "@"
+  
+attr Ty Tm
+  syn pp_parens :: PP_Doc
+  
+sem Ty
+  | Var loc.pp        = text [@ident]
+        loc.pp_parens = @pp
+  | App loc.pp        = @t1.pp_parens >|< @t2.pp
+        loc.pp_parens = pp_parens @pp
+        
+sem Tm
+  | Var loc.pp        = text @ident
+        loc.pp_parens = @pp
+  | App loc.pp        = @t1.pp_parens >#< @t2.pp_parens
+        loc.pp_parens = pp_parens @pp
+  | Lam loc.pp        = text "\\" >|< text @ident >|< text "." >|< @t1.pp
+        loc.pp_parens = pp_parens @pp
+
+
+-- show
+{
+instance PP Lx where pp lx = pp_Syn_Lx (wrap_Lx (sem_Lx lx) Inh_Lx)
+instance PP St where pp st = pp_Syn_St (wrap_St (sem_St st) Inh_St)
+instance PP Ty where pp ty = pp_Syn_Ty (wrap_Ty (sem_Ty ty) Inh_Ty)
+instance PP Tm where pp tm = pp_Syn_Tm (wrap_Tm (sem_Tm tm) Inh_Tm)
+instance Show Lx where show = show . pp
+instance Show St where show = show . pp
+instance Show Ty where show = show . pp
+instance Show Tm where show = show . pp
+}
