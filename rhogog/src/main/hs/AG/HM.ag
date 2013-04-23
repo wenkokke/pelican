@@ -1,0 +1,39 @@
+
+imports
+{
+import Data.Maybe (maybe)
+import Data.Map (Map)
+import qualified Data.Map
+import qualified Data.Map as M
+}
+
+type MbTy  = maybe Ty
+type TyEnv = map {Var} Ty
+
+attr Lx St Ss Tm
+  chn tyEnv :: TyEnv
+
+attr Ty MbTy
+  syn it :: self
+
+sem St
+  | Ty  lhs.tyEnv = M.insert @ident @ty1.it @lhs.tyEnv
+  | Tm  tm1.ty    = M.lookup @ident @lhs.tyEnv
+  
+sem Tm
+  | Var inst.ty   :: MbTy
+        inst.ty    = M.lookup @ident @lhs.tyEnv
+  | App inst.ty   :: MbTy
+        inst.ty    = Nothing
+  | Lam inst.ty   :: MbTy
+        inst.ty    = Nothing
+        tm1 .tyEnv = maybe @lhs.tyEnv (\ty1 -> M.insert @ident ty1 @lhs.tyEnv) @ty1.it
+        lhs .tyEnv = M.delete @ident @tm1.tyEnv
+
+{
+-- |Retrieves a complete type environment.
+class    HasTyEnv a  where tyEnv :: a -> TyEnv
+instance HasTyEnv Lx where tyEnv lx = tyEnv_Syn_Lx $ wrap_Lx (sem_Lx lx) (Inh_Lx M.empty)
+instance HasTyEnv St where tyEnv st = tyEnv_Syn_St $ wrap_St (sem_St st) (Inh_St M.empty)
+instance HasTyEnv Tm where tyEnv tm = tyEnv_Syn_Tm $ wrap_Tm (sem_Tm tm) (Inh_Tm M.empty)
+}
