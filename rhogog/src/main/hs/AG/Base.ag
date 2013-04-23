@@ -9,8 +9,8 @@ type Ss = [St]
 -- |@Ss@: a statement is either a type statement
 --  or a term definition.
 data St
-   | Ty an :: An ident :: Var t1 :: Ty
-   | Tm an :: An ident :: Var t1 :: Tm
+   | Ty an :: An ident :: Var ty1 :: Ty
+   | Tm an :: An ident :: Var tm1 :: Tm
   
 -- |@An@: an annotation is either public (+),
 --  private (-) or "automatic" (@).
@@ -27,7 +27,8 @@ type TyVar = Char
 --  variables with optional arrows.
 data Ty
    | Var ident :: TyVar
-   | App t1,t2 :: Ty
+   | App ty1,ty2 :: Ty
+   | All ident :: TyVar ty1 :: Ty
   
 {
 type Var = String
@@ -37,7 +38,7 @@ type Var = String
 --  or a lambda abstraction.
 data Tm
    | Var ident :: Var
-   | App t1,t2 :: Tm
-   | Lam ident :: Var t1 :: Tm
+   | App tm1,tm2 :: Tm
+   | Lam ident :: Var ty1 :: MbTy tm1 :: Tm
 
 deriving * : Eq
