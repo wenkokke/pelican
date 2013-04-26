@@ -30,7 +30,7 @@ define 'pipeline' do
   
   define 'rhogog' do
     compile.uuagc(%w{
-      AG.ag AG/Base.ag AG/Printing.ag
+      AG.ag AG/HM.ag AG/Base.ag AG/Printing.ag
     })
     compile.ghc(%w{
       Main.hs AG.hs Base.hs Parsing.hs Printing.hs

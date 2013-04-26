@@ -9,8 +9,8 @@ type Ss = [St]
 -- |@Ss@: a statement is either a type statement
 --  or a term definition.
 data St
-   | Ty an :: An ident :: Var ty1 :: Ty
-   | Tm an :: An ident :: Var tm1 :: Tm
+   | Ty an :: An ident :: Var ty :: Ty
+   | Tm an :: An ident :: Var tm :: Tm
   
 -- |@An@: an annotation is either public (+),
 --  private (-) or "automatic" (@).
@@ -28,17 +28,31 @@ type TyVar = Char
 data Ty
    | Var ident :: TyVar
    | App ty1,ty2 :: Ty
-   | All ident :: TyVar ty1 :: Ty
+   | All ident :: TyVar ty :: Ty
   
 {
 type Var = String
 }
 
+-- |@MbTy@: an optional type, e.g. for type annotations.
+type MbTy = maybe Ty
+
+-- |@SfTy@: a soft type, i.e. any number of types.
+type SfTy = [Ty]
+
+-- |@Ident@: an optionally typed identifiers.
+
+-- |Set capturing all type representations.
+set TyS : Ty MbTy SfTy
+
+-- |Set capturing all parts of the language.
+set TmS : Lx St Ss Tm
+
 -- |@Tm@: a term is either a variable, an application
 --  or a lambda abstraction.
 data Tm
-   | Var ident :: Var
+   | Var ident :: Var ty :: MbTy
    | App tm1,tm2 :: Tm
-   | Lam ident :: Var ty1 :: MbTy tm1 :: Tm
+   | Lam ident :: Var ty :: MbTy tm :: Tm
 
 deriving * : Eq

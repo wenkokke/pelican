@@ -1,39 +1,79 @@
+optpragmas
+{
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE TypeSynonymInstances #-}
+}
 
 imports
 {
-import Data.Maybe (maybe)
+import Text.Printf (printf)
+import Data.List (union,delete,(\\))
 import Data.Map (Map)
 import qualified Data.Map
-import qualified Data.Map as M
+import qualified Data.Map as Map
 }
 
-type MbTy  = maybe Ty
+-- |Allows types to access themselves.
+attr TyS syn it :: self
+
+-- |Represents the type environment where the algorithm W
+--  can lookup previously inferred types of variables.
 type TyEnv = map {Var} Ty
 
-attr Lx St Ss Tm
-  chn tyEnv :: TyEnv
-
-attr Ty MbTy
-  syn it :: self
-
-sem St
-  | Ty  lhs.tyEnv = M.insert @ident @ty1.it @lhs.tyEnv
-  | Tm  tm1.ty    = M.lookup @ident @lhs.tyEnv
-  
-sem Tm
-  | Var inst.ty   :: MbTy
-        inst.ty    = M.lookup @ident @lhs.tyEnv
-  | App inst.ty   :: MbTy
-        inst.ty    = Nothing
-  | Lam inst.ty   :: MbTy
-        inst.ty    = Nothing
-        tm1 .tyEnv = maybe @lhs.tyEnv (\ty1 -> M.insert @ident ty1 @lhs.tyEnv) @ty1.it
-        lhs .tyEnv = M.delete @ident @tm1.tyEnv
+-- |Represents a stream of fresh type variables. As it is
+--  a stream, it should not be allowed to run out.
+type TyGen = [TyVar]
 
 {
--- |Retrieves a complete type environment.
-class    HasTyEnv a  where tyEnv :: a -> TyEnv
-instance HasTyEnv Lx where tyEnv lx = tyEnv_Syn_Lx $ wrap_Lx (sem_Lx lx) (Inh_Lx M.empty)
-instance HasTyEnv St where tyEnv st = tyEnv_Syn_St $ wrap_St (sem_St st) (Inh_St M.empty)
-instance HasTyEnv Tm where tyEnv tm = tyEnv_Syn_Tm $ wrap_Tm (sem_Tm tm) (Inh_Tm M.empty)
+-- |Simple implementation of a typename generator which first
+--  enumerates the alphabet, and then continues with numbered types.
+types :: TyGen
+types = ['a'..'z']
+}
+
+-------------------------------
+-- env : Type Environments   --
+-------------------------------
+
+attr TmS
+  chn env :: TyEnv
+  
+attr TyS TyEnv
+  inh env :: TyEnv
+  
+{
+class HasTyEnv a where tyEnv :: a -> TyEnv
+instance HasTyEnv Lx where tyEnv lx = env_Syn_Lx $ wrap_Lx (sem_Lx lx) (Inh_Lx Map.empty)
+instance HasTyEnv St where tyEnv st = env_Syn_St $ wrap_St (sem_St st) (Inh_St Map.empty)
+instance HasTyEnv Tm where tyEnv tm = env_Syn_Tm $ wrap_Tm (sem_Tm tm) (Inh_Tm Map.empty)
+}
+
+-------------------------------
+-- gen : Type Generalization --
+-------------------------------
+
+attr TyS TyEnv
+  syn gen :: self
+  
+sem Ty
+  | * inst.env :: TyEnv
+      inst.env = @lhs.env
+      loc .gen = foldr Ty_All @it (@ftv \\ @env.ftv)
+
+-------------------------------
+-- ftv : Free Type Variables --
+-------------------------------
+  
+attr TyS TyEnv
+  syn ftv use {`union`} {[]} :: {[TyVar]}
+
+sem Ty
+  | Var loc.ftv = return @ident
+  | App loc.ftv = @ty1.ftv `union` @ty2.ftv
+  | All loc.ftv = delete @ident @ty.ftv
+  
+{
+class HasFTV a where ftv :: a -> [TyVar]
+instance HasFTV Ty where ftv ty = ftv_Syn_Ty $ wrap_Ty (sem_Ty ty) (Inh_Ty Map.empty)
+instance HasFTV TyEnv where ftv tyEnv = ftv_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv tyEnv) (Inh_TyEnv Map.empty)
 }
