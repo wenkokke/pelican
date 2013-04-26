@@ -1,9 +1,11 @@
 {-# LANGUAGE Rank2Types #-}
+{-# LANGUAGE TupleSections #-}
 {-# LANGUAGE FlexibleContexts #-}
 module Parsing where
 
 import Base
-import Data.Maybe (catMaybes)
+import qualified StdLib as Std
+import Data.Maybe (catMaybes,maybeToList)
 import Text.ParserCombinators.UU
 import Text.ParserCombinators.UU.BasicInstances
 import Text.ParserCombinators.UU.Utils
@@ -16,26 +18,34 @@ pLx = Lx_Lx <$ pSpaces <*> pMany pSt
 pSt :: Parser St
 pSt = pStTy <|> pStTm
   where
-  pStTy = St_Ty <$> pAn <*> lexeme pIdent <* pSymbol ":" <*> pTy
-  pStTm = St_Tm <$> pAn <*> lexeme pIdent <* pSymbol "=" <*> pTm
+  pStTy = St_Ty <$> pAn <*> pVar <* pSymbol ":" <*> pTy
+  pStTm = St_Tm <$> pAn <*> pVar <* pSymbol "=" <*> pTm
 
 -- |Parses entry annotations which have replaced bird tags.
 pAn :: Parser An
-pAn = pPubl <<|> pPriv <<|> pAuto
+pAn = pPubl <|> pPriv <|> pAuto
   where
   pPubl = An_Publ <$ pSymbol "+"
   pPriv = An_Priv <$ pSymbol "-"
   pAuto = An_Auto <$ pSymbol "@"
 
+-- |Parses optional types.
+pMbTy :: Parser MbTy
+pMbTy = pMaybe (pSymbol ":" *> pTy)
+
+-- |Parses soft types.
+pSfTy :: Parser SfTy
+pSfTy = maybeToList <$> pMbTy
+
 -- |Parses types in the extended lexicon syntax.
 pTy :: Parser Ty
-pTy = pAll <<|> pApp2
+pTy = pAll <|> pApp2
   where
-  pVar  = Ty_Var <$> pTyVar <<|> pParens pTy
-  pApp1 = foldr1 Ty_App <$> pList1Sep (pure []) pVar
-  pApp2 = foldr1 Ty_App <$> pList1Sep (pSymbol "->") pApp1
   pAll  = uncurry (foldr Ty_All) <$ pSymbol "!" <*> pTyVars
-  
+  pApp2 = foldr1 Ty_App <$> pList1Sep (pSymbol "->") pApp1
+  pApp1 = foldr1 Ty_App <$> pList1Sep (pure []) pAtom
+  pAtom = Ty_Var <$> pTyVar <|> pParens pTy
+
 -- |Parses a type variable in the extended lexicon syntax.
 pTyVar :: Parser TyVar
 pTyVar = lexeme $ pLower
@@ -46,35 +56,53 @@ pTyVars = flip (,) <$> pList1Sep pSpaces pTyVar <* pDot <*> pTy
 
 -- |Parses terms in the extended lexicon syntax.
 pTm :: Parser Tm
-pTm = pLambda <<|> pIota <<|> pForall <<|> pExists <<|> pTerm
+pTm = pLambda <|> pIota <|> pForall <|> pExists <|> pTerm
   where
-  
+
   -- |Parses simple terms.
   pTerm      = pEquiv
-  pImpl      = pOp "IMPLIES" (pSymbol "->")  pDisj
-  pEquiv     = pOp "EQ"      (pSymbol "==")  pImpl
-  pDisj      = pOp "OR"      (pSymbol "\\/") pConj
-  pConj      = pOp "AND"     (pSymbol "/\\") pApp
-  pOp x op e = foldl1 (Tm_App . Tm_App (Tm_Var x)) <$> pList1Sep op e
-  pApp       = foldl1 Tm_App <$> pList1Sep pSpaces pVar
-  pVar       = lexeme $ Tm_Var <$> pIdent <<|> pParens pTm
-  
+  pEquiv     = pOp Std.eq      (pSymbol "==")  pImpl
+  pImpl      = pOp Std.implies (pSymbol "=>")  pDisj
+  pDisj      = pOp Std.or      (pSymbol "\\/") pConj
+  pConj      = pOp Std.and     (pSymbol "/\\") pApp
+  pOp f op e = foldl1 (Tm_App . Tm_App f) <$> pList1Sep op e
+  pApp       = foldl1 Tm_App <$> pList1Sep pSpaces (pNeg <<|> pAtom)
+  pNeg       = Tm_App Std.not <$ pSymbol "~" <*> pAtom
+  pAtom      = uTm_Var <$> pIdent <|> pParens pTm
+
   -- |Parses quantifying terms.
-  pForall    = quantify "FORALL" <$ pSymbol "!"  <*> pTyIdents
-  pExists    = quantify "EXISTS" <$ pSymbol "?"  <*> pTyIdents
-  pIota      = quantify "IOTA"   <$ pSymbol "i"  <*> pTyIdents
-  pLambda    = uncurry (foldr $ uncurry Tm_Lam) <$ pSymbol "\\" <*> pTyIdents
-  quantify f = uncurry (foldr $ (Tm_App (Tm_Var f).) . uncurry Tm_Lam)
-  
+  pForall    = quantify Std.forall <$ pSymbol "!"  <*> pIdents
+  pExists    = quantify Std.exists <$ pSymbol "?"  <*> pIdents
+  pIota      = quantify Std.iota   <$ pSymbol "i"  <*> pIdents
+  pLambda    = uncurry (foldr uTm_Lam) <$ pSymbol "\\" <*> pIdents
+  quantify f = uncurry (foldr $ (Tm_App f .) . uTm_Lam)
+
+-- |Shorthand for @uncurry Tm_Lam@.  
+uTm_Lam = uncurry Tm_Lam
+
+-- |Shorthand for @uncurry Tm_Var@.
+uTm_Var = uncurry Tm_Var
+
 -- |Parses identifiers in the extended lexicon syntax.
-pIdent :: Parser Var
-pIdent = (:) <$> pLetter <*> pMany (pLetter <|> pDigit <|> pSym '_')
+pVar :: Parser Var
+pVar = lexeme $ (:) <$> pLetter <*> pMany (pLetter <|> pDigit <|> pSym '_')
 
 -- |Parses an explicitly typed identifier in the extended lexicon syntax.
-pTyIdent :: Parser (Var,MbTy)
-pTyIdent = (,) <$> pIdent <*> (pMaybe $ pSymbol ":" *> pTy)
+pIdent :: Parser (Var,MbTy)
+pIdent = (,) <$> pVar <*> pMbTy
 
 -- |Parses a sequence of typed identifiers.
-pTyIdents :: Parser (Tm,[(Var,MbTy)])
-pTyIdents = flip (,) <$> pList1Sep s pTyIdent <* pDot <*> pTm
-  where s = pSym ' '
+pIdents :: Parser (Tm,[(Var,MbTy)])
+pIdents = flip (,) <$> pList1Sep pSpace pIdent <* pDot <*> pTm
+
+-- |Parses an explicitly typed identifier in the extended lexicon syntax.
+pSfTyIdent :: Parser (Var,SfTy)
+pSfTyIdent = (,) <$> pVar <*> pSfTy
+
+-- |Parses a sequence of typed identifiers.
+pSfTyIdents :: Parser (Tm,[(Var,SfTy)])
+pSfTyIdents = flip (,) <$> pList1Sep pSpace pSfTyIdent <* pDot <*> pTm
+
+-- |Parses a single space.
+pSpace :: Parser Char
+pSpace = pSym ' '

@@ -6,12 +6,12 @@ import UU.Pretty (PP,PP_Doc,(>-<),(>|<),(>#<),text,pp,pp_parens)
 import qualified UU.Pretty as PP (empty)
 }
 
-attr Lx St Ss An Ty MbTy Tm
+attr Lx St Ss An Ty MbTy SfTy Tm
   syn pp use {>-<} {PP.empty} :: PP_Doc
   
 sem St
-  | Ty    loc.pp = @an.pp >#< text @ident >#< text ":" >#< @ty1.pp
-  | Tm    loc.pp = @an.pp >#< text @ident >#< text "=" >#< @tm1.pp
+  | Ty    loc.pp = @an.pp >#< text @ident >#< text ":" >#< @ty.pp
+  | Tm    loc.pp = @an.pp >#< text @ident >#< text "=" >#< @tm.pp
   
 sem An
   | Publ  loc.pp = text "+"
@@ -26,7 +26,7 @@ sem Ty
         loc.pp_parens = @pp
   | App loc.pp        = @ty1.pp_parens >|< @ty2.pp
         loc.pp_parens = pp_parens @pp
-  | All loc.pp        = text ['!',@ident,'.'] >|< @ty1.pp
+  | All loc.pp        = text ['!',@ident,'.'] >|< @ty.pp
         loc.pp_parens = pp_parens @pp
         
 sem Tm
@@ -34,7 +34,7 @@ sem Tm
         loc.pp_parens = @pp
   | App loc.pp        = @tm1.pp_parens >#< @tm2.pp_parens
         loc.pp_parens = pp_parens @pp
-  | Lam loc.pp        = text "\\" >|< text @ident >|< text ":" >|< @ty1.pp >|< text "." >|< @tm1.pp
+  | Lam loc.pp        = text "\\" >|< text @ident >|< text ":" >|< @ty.pp >|< text "." >|< @tm.pp
         loc.pp_parens = pp_parens @pp
 
 -- show
@@ -42,7 +42,7 @@ sem Tm
 instance PP Lx where pp lx = pp_Syn_Lx $ wrap_Lx (sem_Lx lx) (Inh_Lx (tyEnv lx))
 instance PP St where pp st = pp_Syn_St $ wrap_St (sem_St st) (Inh_St (tyEnv st))
 instance PP Tm where pp tm = pp_Syn_Tm $ wrap_Tm (sem_Tm tm) (Inh_Tm (tyEnv tm))
-instance PP Ty where pp ty = pp_Syn_Ty $ wrap_Ty (sem_Ty ty) (Inh_Ty)
+instance PP Ty where pp ty = pp_Syn_Ty $ wrap_Ty (sem_Ty ty) (Inh_Ty Map.empty)
 instance Show Lx where show = show . pp
 instance Show St where show = show . pp
 instance Show Tm where show = show . pp
