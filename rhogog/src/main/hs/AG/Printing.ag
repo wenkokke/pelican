@@ -45,7 +45,7 @@ sem Ident
 instance PP Lx where pp lx = pp_Syn_Lx $ wrap_Lx (sem_Lx lx) (Inh_Lx (tyEnv lx))
 instance PP St where pp st = pp_Syn_St $ wrap_St (sem_St st) (Inh_St (tyEnv st))
 instance PP Tm where pp tm = pp_Syn_Tm $ wrap_Tm (sem_Tm tm) (Inh_Tm (tyEnv tm))
-instance PP Ty where pp ty = pp_Syn_Ty $ wrap_Ty (sem_Ty ty) (Inh_Ty [])
+instance PP Ty where pp ty = pp_Syn_Ty $ wrap_Ty (sem_Ty ty) (Inh_Ty [] [])
 instance Show Lx where show = show . pp
 instance Show St where show = show . pp
 instance Show Tm where show = show . pp
