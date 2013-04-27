@@ -26,8 +26,6 @@ et_e  = et ~> e
 et_et = et ~> et
 
 -- |Complex semantic types.
-
--- |Complex semantic types.
 levels :: IntMap [Ty]
 levels = foldl level empty [0..5]
 
@@ -35,34 +33,38 @@ level :: IntMap [Ty] -> Int -> IntMap [Ty]
 level m 0 = insert 0 [e,t] m
 level m n = insert n [a ~> b | a <- d, b <- d] m where d = fold (++) [] m
 
+-- |Function definition function.
+def :: Var -> Ty -> Tm
+def x ty = Tm_Var (Ident_Ident x $ Just ty)
+
 -- |Encoding of universal quantifier in lambda calculus.
 forall  :: Tm
-forall   = Tm_Var "FORALL"  (Just et_t)
+forall   = def "FORALL" et_t
 
 -- |Encoding of existential quantifier in lambda calculus.
 exists  :: Tm 
-exists   = Tm_Var "EXISTS"  (Just et_t)
+exists   = def "EXISTS" et_t
 
 -- |Encoding of iota function in lambda calculus.
 iota    :: Tm
-iota     = Tm_Var "IOTA"    (Just et_e)
+iota     = def "IOTA" et_e
 
 -- |Encoding of material implication in lambda calculus.
 implies :: Tm 
-implies  = Tm_Var "IMPLIES" (Just ttt)
+implies  = def "IMPLIES" ttt
 
 -- |Encoding of equality relation in lambda calculus.
 eq      :: Tm 
-eq       = Tm_Var "EQ"      (Just eet)
+eq       = def "EQ" eet
 
 -- |Encoding of conjunction in lambda calculus.
 and     :: Tm 
-and      = Tm_Var "AND"     (Just ttt)
+and      = def "AND" ttt
 
 -- |Encoding of disjunction in lambda calculus.
 or      :: Tm 
-or       = Tm_Var "OR"      (Just ttt)
+or       = def "OR" ttt
 
 -- |Encoding of negation in lambda calculus.
 not     :: Tm
-not      = Tm_Var "NOT"     (Just tt)
+not      = def "NOT" tt

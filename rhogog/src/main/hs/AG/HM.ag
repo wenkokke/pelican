@@ -35,11 +35,8 @@ types = ['a'..'z']
 -- env : Type Environments   --
 -------------------------------
 
-attr TmS
+attr TmS Ident
   chn env :: TyEnv
-  
-attr TyS TyEnv
-  inh env :: TyEnv
   
 {
 class HasTyEnv a where tyEnv :: a -> TyEnv
@@ -56,9 +53,7 @@ attr TyS TyEnv
   syn gen :: self
   
 sem Ty
-  | * inst.env :: TyEnv
-      inst.env = @lhs.env
-      loc .gen = foldr Ty_All @it (@ftv \\ @env.ftv)
+  | *   loc.gen = foldr Ty_All @it (@ftv \\ @lhs.ftv)
 
 -------------------------------
 -- ftv : Free Type Variables --
@@ -66,6 +61,12 @@ sem Ty
   
 attr TyS TyEnv
   syn ftv use {`union`} {[]} :: {[TyVar]}
+  inh ftv :: {[TyVar]}
+  
+sem Ident
+  | *  inst.env :: TyEnv
+       inst.env = @lhs.env
+       ty  .ftv = @env.ftv
 
 sem Ty
   | Var loc.ftv = return @ident
@@ -74,6 +75,6 @@ sem Ty
   
 {
 class HasFTV a where ftv :: a -> [TyVar]
-instance HasFTV Ty where ftv ty = ftv_Syn_Ty $ wrap_Ty (sem_Ty ty) (Inh_Ty Map.empty)
-instance HasFTV TyEnv where ftv tyEnv = ftv_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv tyEnv) (Inh_TyEnv Map.empty)
+instance HasFTV Ty where ftv ty = ftv_Syn_Ty $ wrap_Ty (sem_Ty ty) (Inh_Ty [])
+instance HasFTV TyEnv where ftv tyEnv = ftv_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv tyEnv) (Inh_TyEnv [])
 }

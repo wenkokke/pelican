@@ -9,7 +9,7 @@ type Ss = [St]
 -- |@Ss@: a statement is either a type statement
 --  or a term definition.
 data St
-   | Ty an :: An ident :: Var ty :: Ty
+   | Ty an :: An ident :: Ident
    | Tm an :: An ident :: Var tm :: Tm
   
 -- |@An@: an annotation is either public (+),
@@ -51,8 +51,11 @@ set TmS : Lx St Ss Tm
 -- |@Tm@: a term is either a variable, an application
 --  or a lambda abstraction.
 data Tm
-   | Var ident :: Var ty :: MbTy
+   | Var ident :: Ident
    | App tm1,tm2 :: Tm
-   | Lam ident :: Var ty :: MbTy tm :: Tm
+   | Lam ident :: Ident tm :: Tm
+   
+data Ident
+   | Ident tm :: Var ty :: MbTy
 
 deriving * : Eq
