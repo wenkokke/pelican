@@ -27,8 +27,18 @@ type TyGen = [TyVar]
 {
 -- |Simple implementation of a typename generator which first
 --  enumerates the alphabet, and then continues with numbered types.
-types :: TyGen
-types = ['a'..'z']
+tyGen :: TyGen
+tyGen = ['a'..'z']
+}
+
+{
+-- |Default arguments for type catamorphisms.
+inh_ty :: Inh_Ty
+inh_ty = Inh_Ty tyGen []
+
+-- |Default arguments for type-environment catamorphisms.
+inh_tyEnv :: Inh_TyEnv
+inh_tyEnv = Inh_TyEnv tyGen []
 }
 
 -------------------------------
@@ -46,6 +56,34 @@ instance HasTyEnv Tm where tyEnv tm = env_Syn_Tm $ wrap_Tm (sem_Tm tm) (Inh_Tm M
 }
 
 -------------------------------
+-- fsh : Fresh-Name Streams  --
+-------------------------------
+
+attr TyS TyEnv
+  inh fsh :: {[TyVar]}
+  
+sem Ident
+  | * env.fsh = tyGen
+      ty .fsh = tyGen
+  
+-------------------------------
+-- ins : Type Instantiation  --
+-------------------------------
+
+attr TyS TyEnv
+  syn ins :: self
+  
+-- substitute fresh names for all bound variables
+sem Ty
+  | * loc.ins = foldr Ty_All @it (@ftv \\ @lhs.ftv)
+
+{
+class HasIns a where ins :: a -> a
+instance HasIns Ty where ins ty = ins_Syn_Ty $ wrap_Ty (sem_Ty ty) inh_ty
+instance HasIns TyEnv where ins ty = ins_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv ty) inh_tyEnv
+}
+
+-------------------------------
 -- gen : Type Generalization --
 -------------------------------
 
@@ -53,7 +91,13 @@ attr TyS TyEnv
   syn gen :: self
   
 sem Ty
-  | *   loc.gen = foldr Ty_All @it (@ftv \\ @lhs.ftv)
+  | * loc.gen = foldr Ty_All @it (@ftv \\ @lhs.ftv)
+
+{
+class HasGen a where gen :: a -> a
+instance HasGen Ty where gen ty = gen_Syn_Ty $ wrap_Ty (sem_Ty ty) inh_ty
+instance HasGen TyEnv where gen ty = gen_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv ty) inh_tyEnv
+}
 
 -------------------------------
 -- ftv : Free Type Variables --
@@ -64,9 +108,9 @@ attr TyS TyEnv
   inh ftv :: {[TyVar]}
   
 sem Ident
-  | *  inst.env :: TyEnv
-       inst.env = @lhs.env
-       ty  .ftv = @env.ftv
+  | * inst.env :: TyEnv
+      inst.env = @lhs.env
+      ty  .ftv = @env.ftv
 
 sem Ty
   | Var loc.ftv = return @ident
@@ -75,6 +119,6 @@ sem Ty
   
 {
 class HasFTV a where ftv :: a -> [TyVar]
-instance HasFTV Ty where ftv ty = ftv_Syn_Ty $ wrap_Ty (sem_Ty ty) (Inh_Ty [])
-instance HasFTV TyEnv where ftv tyEnv = ftv_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv tyEnv) (Inh_TyEnv [])
+instance HasFTV Ty where ftv ty = ftv_Syn_Ty $ wrap_Ty (sem_Ty ty) inh_ty
+instance HasFTV TyEnv where ftv tyEnv = ftv_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv tyEnv) inh_tyEnv
 }
