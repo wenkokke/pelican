@@ -60,6 +60,6 @@ data Tm
    | Lam ident :: Ident tm :: Tm
    
 data Ident
-   | Ident tm :: Var ty :: MbTy
+   | Ident name :: Var ty :: MbTy
 
 deriving * : Eq
