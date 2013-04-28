@@ -2,29 +2,30 @@ optpragmas
 {
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE FunctionalDependencies #-}
 }
 
 imports
 {
-import Text.Printf (printf)
 import Data.List (union,delete,(\\))
+import Data.Maybe (fromMaybe)
 import Data.Map (Map)
 import qualified Data.Map
 import qualified Data.Map as Map
 }
 
 -- |Allows types to access themselves.
-attr TyS syn it :: self
+attr TyS syn this :: self
 
 -- |Represents the type environment where the algorithm W
 --  can lookup previously inferred types of variables.
 type TyEnv = map {Var} Ty
 
+{
 -- |Represents a stream of fresh type variables. As it is
 --  a stream, it should not be allowed to run out.
 type TyGen = [TyVar]
 
-{
 -- |Simple implementation of a typename generator which first
 --  enumerates the alphabet, and then continues with numbered types.
 tyGen :: TyGen
@@ -32,13 +33,20 @@ tyGen = ['a'..'z']
 }
 
 {
--- |Default arguments for type catamorphisms.
-inh_ty :: Inh_Ty
-inh_ty = Inh_Ty tyGen []
-
--- |Default arguments for type-environment catamorphisms.
-inh_tyEnv :: Inh_TyEnv
-inh_tyEnv = Inh_TyEnv tyGen []
+class (HasFTV a) => HasInh a b | a -> b where
+  inh :: a -> b
+instance HasInh Ty Inh_Ty where
+  inh a = Inh_Ty
+        { fsh_Inh_Ty      = tyGen \\ ftv a
+        , ftv_Inh_Ty      = tyPrim
+        , subs_Inh_Ty     = Map.empty
+        }
+instance HasInh TyEnv Inh_TyEnv where
+  inh a = Inh_TyEnv
+        { fsh_Inh_TyEnv   = tyGen \\ ftv a
+        , ftv_Inh_TyEnv   = tyPrim
+        , subs_Inh_TyEnv  = Map.empty
+        }
 }
 
 -------------------------------
@@ -49,7 +57,7 @@ attr TmS Ident
   chn env :: TyEnv
   
 {
-class HasTyEnv a where tyEnv :: a -> TyEnv
+class    HasTyEnv ty where tyEnv :: ty -> TyEnv
 instance HasTyEnv Lx where tyEnv lx = env_Syn_Lx $ wrap_Lx (sem_Lx lx) (Inh_Lx Map.empty)
 instance HasTyEnv St where tyEnv st = env_Syn_St $ wrap_St (sem_St st) (Inh_St Map.empty)
 instance HasTyEnv Tm where tyEnv tm = env_Syn_Tm $ wrap_Tm (sem_Tm tm) (Inh_Tm Map.empty)
@@ -60,12 +68,55 @@ instance HasTyEnv Tm where tyEnv tm = env_Syn_Tm $ wrap_Tm (sem_Tm tm) (Inh_Tm M
 -------------------------------
 
 attr TyS TyEnv
-  inh fsh :: {[TyVar]}
+  chn fsh :: TyGen
   
 sem Ident
-  | * env.fsh = tyGen
-      ty .fsh = tyGen
+  | *   ty .fsh = tyGen \\ @ty.ftv
+        env.fsh = tyGen
+      
+sem Ty
+  | App ty1.fsh = @lhs.fsh
+        ty2.fsh = @ty1.fsh
+        lhs.fsh = @ty2.fsh
+
+{
+class    HasFsh ty    where fsh :: ty -> TyGen
+instance HasFsh Ty    where fsh ty = fsh_Syn_Ty $ wrap_Ty (sem_Ty ty) (inh ty)
+instance HasFsh TyEnv where fsh ty = fsh_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv ty) (inh ty)
+}        
+
+-------------------------------
+-- sub : Type Substitution   --
+-------------------------------
+{
+-- |Represents type substitutions.
+type Subst = Map TyVar Ty
+}
+
+attr TyS TyEnv
+  inh subs :: Subst
+  syn subbed :: self
   
+sem Ident
+  | * ty .subs = Map.empty
+      env.subs = Map.empty
+
+sem Ty
+  | Var loc.subbed = fromMaybe @this (Map.lookup @ident @lhs.subs)
+  
+{
+class HasSub ty where
+  sub     :: Subst -> ty -> ty
+  replace :: TyVar -> Ty -> ty -> ty
+  replace x ty2 ty1 = sub (Map.singleton x ty2) ty1
+  rename  :: TyVar -> TyVar -> ty -> ty
+  rename  x  y  ty1 = replace x (Ty_Var y) ty1
+instance HasSub Ty where
+  sub subs ty = subbed_Syn_Ty $ wrap_Ty (sem_Ty ty) (inh ty)
+instance HasSub TyEnv where
+  sub subs ty = subbed_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv ty) (inh ty)
+}
+
 -------------------------------
 -- ins : Type Instantiation  --
 -------------------------------
@@ -75,12 +126,14 @@ attr TyS TyEnv
   
 -- substitute fresh names for all bound variables
 sem Ty
-  | * loc.ins = foldr Ty_All @it (@ftv \\ @lhs.ftv)
+  | All loc.new = head @lhs.fsh
+        ty .fsh = tail @lhs.fsh
+        loc.ins = rename @ident @new @ty.ins
 
 {
-class HasIns a where ins :: a -> a
-instance HasIns Ty where ins ty = ins_Syn_Ty $ wrap_Ty (sem_Ty ty) inh_ty
-instance HasIns TyEnv where ins ty = ins_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv ty) inh_tyEnv
+class    HasIns ty    where ins :: ty -> ty
+instance HasIns Ty    where ins ty = ins_Syn_Ty $ wrap_Ty (sem_Ty ty) (inh ty)
+instance HasIns TyEnv where ins ty = ins_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv ty) (inh ty)
 }
 
 -------------------------------
@@ -91,12 +144,12 @@ attr TyS TyEnv
   syn gen :: self
   
 sem Ty
-  | * loc.gen = foldr Ty_All @it (@ftv \\ @lhs.ftv)
+  | * loc.gen = foldr Ty_All @this (@ftv \\ @lhs.ftv)
 
 {
-class HasGen a where gen :: a -> a
-instance HasGen Ty where gen ty = gen_Syn_Ty $ wrap_Ty (sem_Ty ty) inh_ty
-instance HasGen TyEnv where gen ty = gen_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv ty) inh_tyEnv
+class    HasGen ty    where gen :: ty -> ty
+instance HasGen Ty    where gen ty = gen_Syn_Ty $ wrap_Ty (sem_Ty ty) (inh ty)
+instance HasGen TyEnv where gen ty = gen_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv ty) (inh ty)
 }
 
 -------------------------------
@@ -104,8 +157,7 @@ instance HasGen TyEnv where gen ty = gen_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv ty) i
 -------------------------------
   
 attr TyS TyEnv
-  syn ftv use {`union`} {[]} :: {[TyVar]}
-  inh ftv :: {[TyVar]}
+  chn ftv :: FTV
   
 sem Ident
   | * inst.env :: TyEnv
@@ -118,7 +170,10 @@ sem Ty
   | All loc.ftv = delete @ident @ty.ftv
   
 {
-class HasFTV a where ftv :: a -> [TyVar]
-instance HasFTV Ty where ftv ty = ftv_Syn_Ty $ wrap_Ty (sem_Ty ty) inh_ty
-instance HasFTV TyEnv where ftv tyEnv = ftv_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv tyEnv) inh_tyEnv
+-- |Represents the free (or unbound) type variables in an expression.
+type FTV = [TyVar]
+
+class    HasFTV ty    where ftv :: ty -> FTV
+instance HasFTV Ty    where ftv ty = ftv_Syn_Ty $ wrap_Ty (sem_Ty ty) ((inh ty) {fsh_Inh_Ty=[]})
+instance HasFTV TyEnv where ftv ty = ftv_Syn_TyEnv $ wrap_TyEnv (sem_TyEnv ty) ((inh ty) {fsh_Inh_TyEnv=[]})
 }
