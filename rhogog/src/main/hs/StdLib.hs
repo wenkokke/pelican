@@ -1,6 +1,5 @@
 module StdLib where
 
-import Prelude hiding (or,and)
 import Base
 import Control.Monad (join)
 import Data.IntMap (IntMap,(!),insert,empty,fold)

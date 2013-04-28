@@ -21,6 +21,10 @@ data An
 
 {
 type TyVar = Char
+
+-- |List of primitive semantic type variables.
+tyPrim :: [TyVar]
+tyPrim = "et"
 }
 
 -- |@Ty@: a type is a series of single-character
