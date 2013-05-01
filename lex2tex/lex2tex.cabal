@@ -1,8 +1,7 @@
 name:                lex2tex
 version:             0.1.0.0
 synopsis:            Renders a lexicon file as a TeX document.
-license:             SemAnTE
-license-file:        LICENSE
+license:             GPL-3
 author:              Pepijn Kokke
 maintainer:          pepijn.kokke@gmail.com
 copyright:           (c) 2013 Pepijn Kokke
