@@ -1,7 +1,7 @@
 package semante.pipeline;
 
-import semante.util.Pair;
-import semante.util.SimpleBinaryTree;
+import semante.pipeline.util.Pair;
+import semante.pipeline.util.SimpleBinaryTree;
 
 public interface Entailment {
 	SimpleBinaryTree<Pair<String,String>> getText();

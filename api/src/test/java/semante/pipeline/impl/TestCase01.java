@@ -1,8 +1,8 @@
 package semante.pipeline.impl;
 
-import static semante.util.impl.IPair.pair;
-import static semante.util.impl.ISimpleBinaryTree.leaf;
-import static semante.util.impl.ISimpleBinaryTree.node;
+import static semante.pipeline.util.impl.IPair.pair;
+import static semante.pipeline.util.impl.ISimpleBinaryTree.leaf;
+import static semante.pipeline.util.impl.ISimpleBinaryTree.node;
 import lombok.val;
 
 import org.junit.Before;

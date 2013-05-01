@@ -1,7 +1,7 @@
 package semante.pipeline.impl;
 
-import semante.pipeline.Result;
 import lombok.experimental.Value;
+import semante.pipeline.Result;
 
 @Value
 public final class IResult$CounterExample<ID> implements Result<ID> {@Override

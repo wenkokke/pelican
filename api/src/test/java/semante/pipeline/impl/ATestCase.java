@@ -19,11 +19,11 @@ import semante.pipeline.Pipeline;
 import semante.pipeline.Result.Visitor;
 import semante.settings.SettingsException;
 import semante.settings.impl.ISettings;
-import semante.util.Pair;
-import semante.util.SimpleBinaryTree;
-import semante.util.binarytree.impl.ILabeller;
-import semante.util.impl.IAnnotation;
-import semante.util.impl.IBinaryTree;
+import semante.pipeline.util.Pair;
+import semante.pipeline.util.SimpleBinaryTree;
+import semante.pipeline.util.binarytree.impl.ILabeller;
+import semante.pipeline.util.impl.IAnnotation;
+import semante.pipeline.util.impl.IBinaryTree;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
