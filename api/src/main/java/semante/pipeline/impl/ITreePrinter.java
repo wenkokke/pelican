@@ -13,8 +13,8 @@ import semante.lambdacalc.TSymbol;
 import semante.lambdacalc.Type;
 import semante.lexicon.Word;
 import semante.pipeline.BinaryTree;
-import semante.util.Pair;
-import semante.util.impl.IPair;
+import semante.pipeline.util.Pair;
+import semante.pipeline.util.impl.IPair;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;

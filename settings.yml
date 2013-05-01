@@ -1,0 +1,10 @@
+SemAnTE:
+  Repository:
+    Default:  'D:/Dropbox/SemAnTE'
+  Lexicon:
+    Default:  'D:/Projects/SemAnTE/pelican/lexicon/src/main/resources/default.lex'
+  Prover:
+    Location: 'D:/System/lib/LADR/1007B/bin'
+  Server:
+    Hostname: '91.233.105.232'
+    Username: 'root'

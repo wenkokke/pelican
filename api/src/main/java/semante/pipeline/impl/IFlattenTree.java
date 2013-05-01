@@ -1,7 +1,8 @@
 package semante.pipeline.impl;
 
+import static java.lang.String.format;
+
 import java.util.List;
-import static java.lang.String.*;
 
 import lombok.val;
 import lombok.experimental.Value;
@@ -12,8 +13,8 @@ import semante.lexicon.Word;
 import semante.pipeline.BinaryTree;
 import semante.pipeline.FlattenTree;
 import semante.pipeline.Result;
-import semante.util.Either;
-import semante.util.impl.IEither;
+import semante.pipeline.util.Either;
+import semante.pipeline.util.impl.IEither;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;

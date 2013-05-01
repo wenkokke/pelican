@@ -1,7 +1,7 @@
 package semante.pipeline.impl;
 
 import static com.google.common.collect.Lists.transform;
-import static semante.util.impl.IBinaryTree.functor;
+import static semante.pipeline.util.impl.IBinaryTree.functor;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -19,12 +19,12 @@ import semante.pipeline.BinaryTree;
 import semante.pipeline.Category;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result;
+import semante.pipeline.util.impl.ICategory;
 import semante.predcalc.FOLExpr.Formula;
 import semante.predcalc.impl.IPredCalc;
 import semante.predcalc.util.ILambda2Pred;
 import semante.prover.ProverException;
 import semante.settings.Settings;
-import semante.util.impl.ICategory;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -59,7 +59,7 @@ public final class IPipeline implements Pipeline {
 		
 		// lookup annotations in the lexicon.
 		val lookup = functor(
-			Functions.<ID>identity(), 
+			Functions.<ID> identity(), 
 			new Function<Annotation,Word<TSymbol>>() {
 				
 				@Override
