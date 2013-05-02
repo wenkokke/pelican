@@ -45,6 +45,8 @@ final class IExprPrinter implements ExprPrinter, Formula.Visitor<String>, Term.V
 			return name;
 		} else if (name.equals("-")) {
 			return "-(" + makeList(" | ", formulas) + ")";
+		} else if (name.equals(".")) {
+			return makeList(".\n", formulas);
 		} else {
 			return "(" + makeList(" "+name+" ", formulas) + ")";
 		}

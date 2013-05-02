@@ -62,9 +62,9 @@ public class ILambda2Pred<T extends TSymbol> implements Lambda2Pred<T> {
 		if (!pragmatics.isEmpty()) {
 			Formula top = pragmatics.remove(0);
 			for (IFOLExpr.Formula p : pragmatics) {
-				top = new IFOLExpr.Connective("&", Arrays.asList(new Formula[] { top, p}));
+				top = new IFOLExpr.Connective(".", Arrays.asList(new Formula[] { top, p}));
 			}
-			return new IFOLExpr.Connective("&", Arrays.asList(new Formula[] { top, out }));
+			return new IFOLExpr.Connective(".", Arrays.asList(new Formula[] { top, out }));
 		} else {
 			return out;
 		}
