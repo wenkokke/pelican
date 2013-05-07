@@ -66,14 +66,14 @@ public class TestCase12 extends ATestCase {
 					node(the,node(head,node(of,node(the,node(italian,opposition))))),
 					node(who,node(romano,prodi))
 					),
-				node(was,node(the,node(last,node(president,node(of,node(the,node(european,commission)))))))
+				node(was,node(the,node(last,president)))
 				);
 
 		
 		val tree2 = 
 			node(
 				node(romano,prodi),
-				node(is,node(a,node(former,node(president,node(of,node(the,node(european,commission)))))))
+				node(is,node(a,node(former,president)))
 				);
 		
 		aPair = new IEntailment(tree1, tree2, "");
