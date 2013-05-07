@@ -38,7 +38,7 @@ public class TestCase11 extends ATestCase {
 		val romano_prodi= leaf(pair("NP", "romano prodi"));
 		val former		= leaf(pair("MR", "former"));
 		val president	= leaf(pair("N", "president"));
-		val euro_union	= leaf(pair("NP", "european union"));
+		val euro_union	= leaf(pair("N", "european union"));
 				
 		// build the annotation trees.
 		val t1 		= node(node(the,node(head,node(of,node(the,node(italian,opposition))))),node(who,node(is,romano_prodi)));
