@@ -14,11 +14,12 @@ import lombok.Getter;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 import semante.predcalc.FOLExpr.Formula;
+import semante.predcalc.FOLForm;
 import semante.predcalc.PredCalc;
 import semante.prover.OutputParser;
 import semante.prover.Prover;
-import semante.prover.ProverException;
 import semante.prover.ProverArgs.ResultType;
+import semante.prover.ProverException;
 import semante.prover.impl.IProverRunner.ExitStatus;
 import semante.settings.Settings;
 
@@ -37,12 +38,12 @@ public class IProver implements Prover {
 	}
 
 	@Override
-	public boolean prove(Formula text, Formula hypothesis) throws ProverException {
+	public boolean prove(FOLForm text, FOLForm hypothesis) throws ProverException {
 		return prove(text, hypothesis, "");
 	}	
 	
 	@Override
-	public boolean prove(Formula txt, Formula hyp, String subsumptionRules) throws ProverException  {
+	public boolean prove(FOLForm txt, FOLForm hyp, String subsumptionRules) throws ProverException  {
 
 		IProverArgs proverArgs = null;
 		File tempFile = null;
@@ -211,17 +212,25 @@ public class IProver implements Prover {
 		}
 	}
 
-	public String toProofInput(Formula txt, Formula hyp, String subs) {
+	public String toProofInput(FOLForm txt, FOLForm hyp, String subs) {
 		val out = new StringBuilder();
 		out.append("formulas(assumptions).\n");
-		out.append(fol.format(txt) + ".\n");
+		out.append("% Pragmatics:\n");
+		for (Formula prg : txt.getPragmatics()) {
+			out.append(fol.format(prg) + ".\n");
+		}
+		for (Formula prg : hyp.getPragmatics()) {
+			out.append(fol.format(prg) + ".\n");
+		}
+		out.append("\n% Semantics:\n");
+		out.append(fol.format(txt.getSemantics()) + ".\n");
 		if (subs != null) {
 			out.append(subs + "\n");
 		}
 		out.append("end_of_list.\n");
 		out.append("\n");
 		out.append("formulas(goals).\n");
-		out.append(fol.format(hyp) + ".\n");
+		out.append(fol.format(hyp.getSemantics()) + ".\n");
 		out.append("end_of_list.");
 		return out.toString();
 	}
