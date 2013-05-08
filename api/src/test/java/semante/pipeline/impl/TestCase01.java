@@ -15,6 +15,7 @@ public final class TestCase01 extends ATestCase {
 	
 	@Test
 	public final void testEverything() throws Exception {
+		System.err.println("tst:1");
 		someTest(aPair);
 	}
 

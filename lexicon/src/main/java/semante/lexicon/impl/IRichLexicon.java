@@ -4,6 +4,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 import lombok.Delegate;
 import lombok.val;
@@ -32,12 +33,18 @@ public class IRichLexicon implements RichLexicon {
 	public Word<TSymbol> getEntry(String key, String text) {
 		
 		// try words then categories.
-		val word = lex.getWord(key);
-		if (word != null) {
-			return word;
+		val cat1 = lex.getWord(key);
+		if (cat1 != null) {
+			return cat1;
 		}
 		else {
-			return lex.getCategory(key, text);
+			val cat2 = lex.getCategory(key, text);
+			if (cat2 != null) {
+				return cat2;
+			}
+			else {
+				throw new NoSuchElementException(key);
+			}
 		}
 	}
 

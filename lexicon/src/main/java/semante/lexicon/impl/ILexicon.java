@@ -53,7 +53,13 @@ public final class ILexicon implements Lexicon<TSymbol> {
 
 	@Override
 	public final Word<TSymbol> getCategory(String name, String wordName) {
-		return cMap.get(name).apply(wordName);
+		val cat = cMap.get(name);
+		if (cat != null) {
+			return cat.apply(wordName);
+		}
+		else {
+			return null;
+		}
 	}
 	
 	private static final int TAG  = 1;
