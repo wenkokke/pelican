@@ -49,6 +49,7 @@ public class IProver implements Prover {
 		
 		try{
 			val proofInput = toProofInput(txt, hyp, subsumptionRules);
+			System.err.println(proofInput);
 			proverArgs = new IProverArgs(txt.toString(), hyp.toString());
 			
 			String fileName;

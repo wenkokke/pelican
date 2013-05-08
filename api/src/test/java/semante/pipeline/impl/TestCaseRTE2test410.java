@@ -11,7 +11,7 @@ import org.junit.Test;
 import semante.pipeline.Entailment;
 
 
-public class TestCase12 extends ATestCase {
+public class TestCaseRTE2test410 extends ATestCase {
 
 	@Test
 	public final void testEverything() throws Exception {
@@ -63,10 +63,11 @@ public class TestCase12 extends ATestCase {
 		// ANNOTATION:
 		val tree1 =
 			node(
-				node(romano,prodi),
-				node(was,
-					node(the,
-						node(last,president)))
+				node(
+					node(the,node(head,node(of,node(the,node(italian,opposition))))),
+					node(who,node(romano,prodi))
+					),
+				node(was,node(the,node(last,node(president,node(of,node(the,node(european,commission)))))))
 				);
 
 		
@@ -75,15 +76,14 @@ public class TestCase12 extends ATestCase {
 				node(romano,prodi),
 				node(is,
 					node(a,
-						node(former,president)))
+						node(former,
+							node(president,
+								node(of,
+									node(the,
+										node(european,commission)))))))
 				);
-		// president(prodi) & last(president,prodi)
-		// last(x,y) -> former(x,y)
-		// president(prodi) & former(president,prodi)
 		
-		val subsumptionRules = "all x (last_president(x) -> former_president(x)).";
-		
-		aPair = new IEntailment(tree1, tree2, subsumptionRules);
+		aPair = new IEntailment(tree1, tree2, "");
 	}
 
 }

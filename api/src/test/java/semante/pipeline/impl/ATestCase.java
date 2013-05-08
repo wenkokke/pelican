@@ -67,7 +67,6 @@ public abstract class ATestCase {
 		val ann = IBinaryTree.functor(
 			Functions.<Integer> identity(),
 			new Function<Pair<String,String>,Annotation>() {
-				
 				@Override
 				public final Annotation apply(final Pair<String,String> pair) {
 					return new IAnnotation(pair.getFirst(),pair.getSecond());

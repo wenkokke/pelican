@@ -9,6 +9,7 @@ import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.val;
 import lombok.experimental.Value;
+import lombok.extern.slf4j.Slf4j;
 import semante.lambdacalc.Expr;
 import semante.lambdacalc.TLambdaCalc;
 import semante.lambdacalc.TSymbol;
@@ -32,6 +33,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
+@Slf4j
 @Value
 @EqualsAndHashCode(callSuper = false)
 public final class IPipeline implements Pipeline {
@@ -99,8 +101,12 @@ public final class IPipeline implements Pipeline {
 		val nubtxt = ImmutableList.copyOf(ImmutableSet.copyOf(brstltxt));
 		val nubhyp = ImmutableList.copyOf(ImmutableSet.copyOf(brstlhyp));
 		
-		System.err.println("txt:"+nubtxt);
-		System.err.println("hyp:"+nubhyp);
+		for (val nub: nubtxt) {
+			System.err.println("txt:"+nub);
+		}
+		for (val nub: nubhyp) {
+			System.err.println("hyp:"+nub);
+		}
 		
 		// smash to first-order logic.
 		val fol = new IPredCalc();
@@ -115,6 +121,15 @@ public final class IPipeline implements Pipeline {
 		val foltxt = transform(nubtxt,smash);
 		val folhyp = transform(nubhyp,smash);
 		
+		for (val nub: foltxt) {
+			System.err.println("txt:");
+			System.err.println(fol.format(nub));
+		}
+		for (val nub: folhyp) {
+			System.err.println("hyp:");
+			System.err.println(fol.format(nub));
+		}
+		
 		// iterate and see if any analysis can be proven.
 		for (val proptxt : foltxt) {
 			for (val prophyp : folhyp) {
@@ -123,6 +138,7 @@ public final class IPipeline implements Pipeline {
 						return new IResult$Proof<ID>();
 					}
 				} catch (ProverException e) {
+					System.err.println(e);
 				}
 			}
 		}

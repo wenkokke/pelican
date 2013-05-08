@@ -11,7 +11,7 @@ import org.junit.Test;
 import semante.pipeline.Entailment;
 
 
-public class TestCase12 extends ATestCase {
+public class TestCase13 extends ATestCase {
 
 	@Test
 	public final void testEverything() throws Exception {
@@ -74,12 +74,9 @@ public class TestCase12 extends ATestCase {
 			node(
 				node(romano,prodi),
 				node(is,
-					node(a,
+					node(the,
 						node(former,president)))
 				);
-		// president(prodi) & last(president,prodi)
-		// last(x,y) -> former(x,y)
-		// president(prodi) & former(president,prodi)
 		
 		val subsumptionRules = "all x (last_president(x) -> former_president(x)).";
 		
