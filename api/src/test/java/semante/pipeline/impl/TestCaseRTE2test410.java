@@ -27,33 +27,32 @@ public class TestCaseRTE2test410 extends ATestCase {
 		// hypothesis: 	Romano Prodi is a former president of the European Commission.
 		
 		// TEXT:
-		val the  		= leaf(pair("THE", "the"));
-		val head 		= leaf(pair("N", "head"));
-		val of	 		= leaf(pair("P_R", "of"));
+		val the  			= leaf(pair("THE", "the"));
+		val head 			= leaf(pair("N", "head"));
+		val of	 			= leaf(pair("P_R", "of"));
 		//  the
-		val italian    	= leaf(pair("MR", "Italian"));
-		val opposition 	= leaf(pair("N", "opposition"));
+		val italian    		= leaf(pair("MR", "Italian"));
+		val opposition 		= leaf(pair("N", "opposition"));
 		//  ,
-		val who			= leaf(pair("WHO_A", "APP"));
+		val who				= leaf(pair("WHO_A", "APP"));
 		//  is
-		val romano	   	= leaf(pair("IGNORE", "Romano"));
-		val prodi	   	= leaf(pair("NP", "Prodi"));
+		val romano_prodi  	= leaf(pair("NP", "Romano Prodi"));
 		//  ,
-		val was 		= leaf(pair("IS", "was"));
+		val was		 		= leaf(pair("IS", "was"));
 		//  the
-		val last		= leaf(pair("MR", "last"));
-		val president	= leaf(pair("N", "president"));
+		val last			= leaf(pair("MR", "last"));
+		val president		= leaf(pair("N", "president"));
 		//  of
 		//  the
-		val european	= leaf(pair("MR", "European"));
-		val commission	= leaf(pair("N", "Commission"));
+		val european		= leaf(pair("MR", "European"));
+		val commission		= leaf(pair("N", "Commission"));
 
 		// HYPOTHESIS:
 		// 	romano
 		// 	prodi
-		val is			= leaf(pair("IS", "is"));
-		val a			= leaf(pair("A", "a"));
-		val former		= leaf(pair("MR", "former"));
+		val is				= leaf(pair("IS", "is"));
+		val a				= leaf(pair("A", "a"));
+		val former			= leaf(pair("MR", "former"));
 		//	president
 		//  of
 		//  the
@@ -62,28 +61,39 @@ public class TestCaseRTE2test410 extends ATestCase {
 		
 		// ANNOTATION:
 		val tree1 =
-			node(
-				node(
-					node(the,node(head,node(of,node(the,node(italian,opposition))))),
-					node(who,node(romano,prodi))
-					),
-				node(was,node(the,node(last,node(president,node(of,node(the,node(european,commission)))))))
-				);
+			node
+			(	node
+				(	node
+					(	node(the,head)
+					,	node(of,node(the,node(italian,opposition)))
+					)
+				,	node(who,romano_prodi)
+				)
+			,	node
+				(	was
+				,	node
+					( 	node(the,node(last,president))
+					, 	node(of,node(the,node(european,commission)))
+					)
+				)
+			);
 
 		
 		val tree2 = 
-			node(
-				node(romano,prodi),
-				node(is,
-					node(a,
-						node(former,
-							node(president,
-								node(of,
-									node(the,
-										node(european,commission)))))))
-				);
+			node
+			(	romano_prodi
+			, 	node
+				(	is
+				,	node
+					( 	node(a,node(former,president))	
+					,	node(of,node(the,node(european,commission)))
+					)
+				)
+			);
 		
-		aPair = new IEntailment(tree1, tree2, "");
+		val subs = "all x (last_president(x) -> former_president(x)).";
+		
+		aPair = new IEntailment(tree1, tree2, subs);
 	}
 
 }

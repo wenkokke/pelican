@@ -14,8 +14,8 @@ PIPELINE    = struct(
   :api     => 'pipeline:pipeline-api:jar:2.0.1',
   :util    => 'pipeline:pipeline-util:jar:2.0.1')
 
-task 'deploy-lexicon' => 'pipeline:pelican:lexicon:deploy'
-task 'render-lexicon' => 'pipeline:pelican:lexicon:render'
+task 'deploy-lexicon' => 'pelican:lexicon:deploy'
+task 'render-lexicon' => 'pelican:lexicon:render'
 
 define 'pelican' do
   project.version = '1.0.0'
