@@ -61,7 +61,7 @@ public class ILambda2Pred<T extends TSymbol> implements Lambda2Pred<T> {
 		
 		// If we ran into iotas, add their uniqueness to the beginning
 		if (!pragmaticsList.isEmpty()) {
-			return new IFOLForm(semantics, pragmaticsList);
+			return new IFOLForm(semantics, new ArrayList<Formula>(pragmaticsList));
 		} else {
 			return new IFOLForm(semantics, new ArrayList<Formula>());
 		}
