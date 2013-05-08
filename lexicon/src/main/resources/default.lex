@@ -96,7 +96,7 @@ below definitions are pr... whatevers.
   the dog of john ran
   ix. (ran(x) /\ of(x,john))
 
-> P_R   \P:(et)t.\A:et.\B:et.IOTA:(et)e (\z:e.AND:ttt (B:et z:e) (P:(et)t (\x:e.WORD:eet z:e x:e)))
+> P_R   \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (WORD:eet z:e x:e))) 
 % P_R   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:eet x:e y:e))
 
 simple lexical binding of numbers as quantifiers, barring numerical inferences.

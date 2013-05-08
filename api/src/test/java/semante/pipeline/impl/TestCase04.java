@@ -42,7 +42,10 @@ public final class TestCase04 extends ATestCase {
 		val tree1	= node(jan,node(is,node(a,node(short_a,node(dutch,man)))));
 		val tree2	= node(jan,node(is,node(a,node(short_a,man))));
 		
-		aPair = new IEntailment(tree1, tree2);		
+		// subsumption relations
+		val subs = "all x (short_dutch_man(x) -> short_man(x)).";
+		
+		aPair = new IEntailment(tree1, tree2, subs);		
 	}
 
 }

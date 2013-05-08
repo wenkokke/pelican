@@ -55,7 +55,7 @@ public final class ILexicon implements Lexicon<TSymbol> {
 	public final Word<TSymbol> getCategory(String name, String wordName) {
 		val cat = cMap.get(name);
 		if (cat != null) {
-			return cat.apply(wordName);
+			return cat.apply(wordName.replace(' ','_'));
 		}
 		else {
 			return null;
