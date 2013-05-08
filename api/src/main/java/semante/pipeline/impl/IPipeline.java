@@ -127,15 +127,6 @@ public final class IPipeline implements Pipeline {
 		val foltxt = transform(nubtxt,smash);
 		val folhyp = transform(nubhyp,smash);
 		
-		for (val nub: foltxt) {
-			System.err.println("txt:");
-			System.err.println(fol.format(nub));
-		}
-		for (val nub: folhyp) {
-			System.err.println("hyp:");
-			System.err.println(fol.format(nub));
-		}
-		
 		// iterate and see if any analysis can be proven.
 		for (val proptxt : foltxt) {
 			for (val prophyp : folhyp) {
