@@ -117,10 +117,6 @@ public final class IPipeline implements Pipeline {
 			@Override
 			public final FOLForm apply(Expr<TSymbol> input) {
 				val folform = stl2fol.smash(input);
-				for (Formula prg : folform.getPragmatics()) {
-					System.err.println("prg:"+fol.format(prg));
-				}
-				System.err.println("sem:"+fol.format(folform.getSemantics()));
 				return folform;
 			}
 		};
@@ -131,6 +127,7 @@ public final class IPipeline implements Pipeline {
 		for (val proptxt : foltxt) {
 			for (val prophyp : folhyp) {
 				try {
+					
 					if (fol.prove(proptxt, prophyp, subsumptions)) {
 						return new IResult$Proof<ID>();
 					}
