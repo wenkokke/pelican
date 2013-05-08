@@ -16,6 +16,7 @@ import semante.lambdacalc.impl.ITypes;
 import semante.predcalc.FOLExpr;
 import semante.predcalc.FOLExpr.Formula;
 import semante.predcalc.FOLExpr.Term;
+import semante.predcalc.FOLForm;
 import semante.predcalc.Lambda2Pred;
 import semante.predcalc.PredCalc;
 import semante.predcalc.util.IFOLExpr.Connective;
@@ -48,25 +49,21 @@ public class ILambda2Pred<T extends TSymbol> implements Lambda2Pred<T> {
 	protected PredCalc pcalc;
 	protected TLambdaCalc<T> lcalc;
 	
-	private List<IFOLExpr.Formula> pragmatics = new ArrayList<IFOLExpr.Formula>();
+	private List<IFOLExpr.Formula> pragmaticsList = new ArrayList<IFOLExpr.Formula>();
 
 	@Override
-	public final Formula smash(final Expr<T> expr) {
-		pragmatics.clear();
-		AnonymousVar.reset();
+	public final FOLForm smash(final Expr<T> expr) {
+		pragmaticsList.clear();
+		//AnonymousVar.reset();
 
 		// Smash the expression
-		Formula out = (Formula) expr.accept(smash(new Stack<FOLExpr>()));
+		Formula semantics = (Formula) expr.accept(smash(new Stack<FOLExpr>()));
 		
 		// If we ran into iotas, add their uniqueness to the beginning
-		if (!pragmatics.isEmpty()) {
-			Formula top = pragmatics.remove(0);
-			for (IFOLExpr.Formula p : pragmatics) {
-				top = new IFOLExpr.Connective(".", Arrays.asList(new Formula[] { top, p}));
-			}
-			return new IFOLExpr.Connective(".", Arrays.asList(new Formula[] { top, out }));
+		if (!pragmaticsList.isEmpty()) {
+			return new IFOLForm(semantics, pragmaticsList);
 		} else {
-			return out;
+			return new IFOLForm(semantics, new ArrayList<Formula>());
 		}
 	}
 
@@ -142,7 +139,7 @@ public class ILambda2Pred<T extends TSymbol> implements Lambda2Pred<T> {
 							new IFOLExpr.Connective("->", Arrays.asList(new Formula[] {
 									(Formula) b.accept(smash(args2)),
 									new IFOLExpr.Predicate("=", Arrays.asList(new Term[] {x, v}))})));
-					pragmatics.add(new Connective("&", Arrays.asList(new Formula[] { unique, body })));
+					pragmaticsList.add(new Connective("&", Arrays.asList(new Formula[] { unique, body })));
 					
 					return v;
 				} else {

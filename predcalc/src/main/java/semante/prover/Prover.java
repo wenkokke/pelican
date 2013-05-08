@@ -1,8 +1,8 @@
 package semante.prover;
 
-import semante.predcalc.FOLExpr.Formula;
+import semante.predcalc.FOLForm;
 
 public interface Prover {
-	boolean prove(Formula text, Formula hypothesis) throws ProverException;
-	boolean prove(Formula text, Formula hypothesis, String subsumptionRules) throws ProverException;
+	boolean prove(FOLForm text, FOLForm hypothesis) throws ProverException;
+	boolean prove(FOLForm text, FOLForm hypothesis, String subsumptionRules) throws ProverException;
 }

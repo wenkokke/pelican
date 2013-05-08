@@ -21,6 +21,7 @@ import semante.pipeline.Category;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result;
 import semante.pipeline.util.impl.ICategory;
+import semante.predcalc.FOLForm;
 import semante.predcalc.FOLExpr.Formula;
 import semante.predcalc.impl.IPredCalc;
 import semante.predcalc.util.ILambda2Pred;
@@ -112,10 +113,15 @@ public final class IPipeline implements Pipeline {
 		val fol = new IPredCalc();
 		val stl2fol = new ILambda2Pred<TSymbol>(fol, lambdacalc);
 		val smash =
-		new Function<Expr<TSymbol>,Formula>() {
+		new Function<Expr<TSymbol>,FOLForm>() {
 			@Override
-			public final Formula apply(Expr<TSymbol> input) {
-				return stl2fol.smash(input);
+			public final FOLForm apply(Expr<TSymbol> input) {
+				val folform = stl2fol.smash(input);
+				for (Formula prg : folform.getPragmatics()) {
+					System.err.println("prg:"+fol.format(prg));
+				}
+				System.err.println("sem:"+fol.format(folform.getSemantics()));
+				return folform;
 			}
 		};
 		val foltxt = transform(nubtxt,smash);
