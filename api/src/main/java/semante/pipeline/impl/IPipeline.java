@@ -9,7 +9,6 @@ import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.val;
 import lombok.experimental.Value;
-import lombok.extern.slf4j.Slf4j;
 import semante.lambdacalc.Expr;
 import semante.lambdacalc.TLambdaCalc;
 import semante.lambdacalc.TSymbol;
@@ -22,7 +21,6 @@ import semante.pipeline.Pipeline;
 import semante.pipeline.Result;
 import semante.pipeline.util.impl.ICategory;
 import semante.predcalc.FOLForm;
-import semante.predcalc.FOLExpr.Formula;
 import semante.predcalc.impl.IPredCalc;
 import semante.predcalc.util.ILambda2Pred;
 import semante.prover.ProverException;
@@ -34,7 +32,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
-@Slf4j
 @Value
 @EqualsAndHashCode(callSuper = false)
 public final class IPipeline implements Pipeline {
