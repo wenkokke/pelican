@@ -59,7 +59,8 @@ below definition is equality IS.
 
 below definition is predicative IS.
 
-> IS    \M:(et)et.\x:e.M:(et)et (\y:e.T:t) x:e
+> IS    \PRED:et.\x:e.PRED:et x:e
+> IS    \MOD:(et)et.\x:e.MOD:(et)et (\y:e.T:t) x:e
 
 > A     \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
 > THE   \A:et.\B:et.B:et (IOTA:(et)e A:et)
@@ -78,7 +79,7 @@ as right now the definition is equivalent to A and SOME.
 
 below definition is equivalent to MI.
 
-> WHO_R \B:et.\A:et.\x:e.AND:ttt (A:et x:e) (B:et x:e)
+> WHO_R \PRED:et.\A:et.\x:e.AND:ttt (A:et x:e) (PRED:et x:e)
 
 below definition is equivalent to MA_PR.
 
@@ -96,12 +97,14 @@ below definitions are pr... whatevers.
   the dog of john ran
   ix. (ran(x) /\ of(x,john))
 
-> P_R   \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (WORD:eet z:e x:e))) 
-% P_R   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:eet x:e y:e))
+> P_R   \P:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (P:(et)t (\y:e.WORD:eet (IOTA:(et)e A:et) y:e))
+> P_R   \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (WORD:eet z:e x:e)))
+> GEN   \P:(et)t.\A:et.\B:et.P:(et)t (\x:e.B:et (IOTA:(et)e (\z:e.AND:ttt (A:et z:e) (OF:eet z:e x:e))))  
 
 simple lexical binding of numbers as quantifiers, barring numerical inferences.
+therefore it is equivalent to SOME.
 
-> NUMBER WORD:(et)t
+> NUMBER \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
 
 dates are implemented as a special case of $NP$s, which includes date clusters.
 
