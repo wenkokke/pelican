@@ -1,12 +1,11 @@
 package semante.pipeline.impl;
 
-import static semante.pipeline.util.impl.IPair.pair;
-import static semante.pipeline.util.impl.ISimpleBinaryTree.leaf;
-import static semante.pipeline.util.impl.ISimpleBinaryTree.node;
 import lombok.val;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.google.common.base.Joiner;
 
 import semante.pipeline.Entailment;
 
@@ -23,36 +22,37 @@ public class TestCaseRTE2test410 extends ATestCase {
 	
 	@Before
 	public final void setUpPair() {
+		
 		// text: 		The head of the Italian opposition, Romano Prodi, was the last president of the European Commission.
 		// hypothesis: 	Romano Prodi is a former president of the European Commission.
 		
 		// TEXT:
-		val the  			= leaf(pair("THE", "the"));
-		val head 			= leaf(pair("N", "head"));
-		val of	 			= leaf(pair("P_R", "of"));
+		val the  			= word("THE", "the");
+		val head 			= word("N", "head");
+		val of	 			= word("P_R", "of");
 		//  the
-		val italian    		= leaf(pair("MR", "Italian"));
-		val opposition 		= leaf(pair("N", "opposition"));
+		val italian    		= word("MR", "Italian");
+		val opposition 		= word("N", "opposition");
 		//  ,
-		val who				= leaf(pair("WHO_A", "APP"));
+		val who				= word("WHO_A", "APP");
 		//  is
-		val romano_prodi  	= leaf(pair("NP", "Romano Prodi"));
+		val romano_prodi  	= word("NP", "Romano Prodi");
 		//  ,
-		val was		 		= leaf(pair("IS", "was"));
+		val was		 		= word("IS", "was");
 		//  the
-		val last			= leaf(pair("MR", "last"));
-		val president		= leaf(pair("N", "president"));
+		val last			= word("MR", "last");
+		val president		= word("N", "president");
 		//  of
 		//  the
-		val european		= leaf(pair("MR", "European"));
-		val commission		= leaf(pair("N", "Commission"));
+		val european		= word("MR", "European");
+		val commission		= word("N", "Commission");
 
 		// HYPOTHESIS:
 		// 	romano
 		// 	prodi
-		val is				= leaf(pair("IS", "is"));
-		val a				= leaf(pair("A", "a"));
-		val former			= leaf(pair("MR", "former"));
+		val is				= word("IS", "is");
+		val a				= word("A", "a");
+		val former			= word("MR", "former");
 		//	president
 		//  of
 		//  the
@@ -60,40 +60,25 @@ public class TestCaseRTE2test410 extends ATestCase {
 		// 	commission
 		
 		// ANNOTATION:
-		val tree1 =
-			node
-			(	node
-				(	node
-					(	node(the,head)
-					,	node(of,node(the,node(italian,opposition)))
-					)
-				,	node(who,romano_prodi)
-				)
-			,	node
-				(	was
-				,	node
-					( 	node(the,node(last,president))
-					, 	node(of,node(the,node(european,commission)))
-					)
-				)
+		val np =
+			_(
+				_(the,_(head,_(of,_(the,_(italian,opposition))))),
+				_(who,romano_prodi)
 			);
-
+		val vp =
+			_(was,_(the,_(last,_(president,_(of,_(the,_(european,commission)))))));
+		val t1 =
+			_(np,vp);
 		
-		val tree2 = 
-			node
-			(	romano_prodi
-			, 	node
-				(	is
-				,	node
-					( 	node(a,node(former,president))	
-					,	node(of,node(the,node(european,commission)))
-					)
-				)
-			);
+		val t2 = 
+			_(romano_prodi,_(is,_(a,_(former,_(president,_(of,_(the,_(european,commission))))))));
+			
 		
-		val subs = "all x (last_president(x) -> former_president(x)).";
+		val subs = new String[] {
+			"all x (last_of_president_president(x) -> former_of_president_president(x))."
+		};
 		
-		aPair = new IEntailment(tree1, tree2, subs);
+		aPair = new IEntailment(t1, t2, Joiner.on('\n').join(subs));
 	}
 
 }

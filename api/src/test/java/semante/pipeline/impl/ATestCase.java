@@ -24,6 +24,8 @@ import semante.pipeline.util.SimpleBinaryTree;
 import semante.pipeline.util.binarytree.impl.ILabeller;
 import semante.pipeline.util.impl.IAnnotation;
 import semante.pipeline.util.impl.IBinaryTree;
+import semante.pipeline.util.impl.IPair;
+import semante.pipeline.util.impl.ISimpleBinaryTree;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -39,6 +41,16 @@ public abstract class ATestCase {
 		val settings   = new ISettings();
 		val lexicon    = new IRichLexicon(settings,lambdacalc);
 		pipeline = new IPipeline(settings,lambdacalc,lexicon);
+	}
+	
+	protected final SimpleBinaryTree<Pair<String,String>> _(
+			        SimpleBinaryTree<Pair<String,String>> l,
+			        SimpleBinaryTree<Pair<String,String>> r) {
+		return ISimpleBinaryTree.node(l, r);
+	}
+	
+	protected final SimpleBinaryTree<Pair<String,String>> word(String ann, String txt) {
+		return ISimpleBinaryTree.leaf(IPair.pair(ann, txt));
 	}
 	
 	protected final void someTest(final Entailment ent) throws Exception {
