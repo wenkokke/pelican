@@ -9,6 +9,7 @@ import org.codehaus.jparsec.functors.Map4;
 
 import semante.lambdacalc.Expr;
 import semante.lambdacalc.ExprParser;
+import semante.lambdacalc.ParserException;
 import semante.lambdacalc.Symbol;
 import semante.lambdacalc.impl.IExpr.Abstraction;
 import semante.lambdacalc.impl.IExpr.Application;
@@ -18,7 +19,12 @@ abstract class AExprParser<S extends Symbol> extends AParser<Expr<S>> implements
 
 	@Override
 	public final Expr<S> parse(final String exprString) {
-		return build().parse(exprString);
+		try {
+			return build().parse(exprString);
+		}
+		catch (org.codehaus.jparsec.error.ParserException e) {
+			throw new ParserException(e.getErrorDetails());
+		}
 	}
 	
 	// implementation
