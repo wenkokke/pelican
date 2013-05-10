@@ -69,9 +69,9 @@ public class TestCaseRTE1dev63 extends ATestCase {
 			node(node(some,node(british,servicemen)),node(were,detained));
 
 		// subsumption rules
-		val subsumptionRules = "";
+		val subs = "";
 
-		aPair = new IEntailment(tree1, tree2, subsumptionRules);
+		aPair = new IEntailment(tree1, tree2, subs);
 	}
 }
 

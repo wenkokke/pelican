@@ -43,7 +43,10 @@ below definition allows for predicative usage of ditransitive verbs, as in "jan,
 
 > MR    \A:et.\x:e.AND:ttt (A:et x:e) (WORD:(et)et A:et x:e)
 > MR    \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t (WORD:(et)et A:et))
-> MOD_R \A:et.\x:e.AND:ttt (A:et x:e) (WORD:(et)et A:et x:e)
+
+> MOD_R \A:et.\z:e.AND:ttt (A:et z:e) (WORD:(et)et A:et z:e)
+> MOD_R \A:eet.\x:e.\z:e.AND:ttt (A:eet z:e x:e) (WORD:(eet)eet A:eet z:e x:e)
+> MOD_R \A:eeet.\x:e.\y:e.\z:e.AND:ttt (A:eeet z:e x:e y:e) (WORD:(eeet)eeet A:eeet z:e x:e y:e)
 > MOD_R \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t (WORD:(et)et A:et))
 
 below definition is a true lovecraftian horror, and should be killed with fire as soon as a new solution allows it.
@@ -109,16 +112,27 @@ below definitions are pr... whatevers.
 
 "'s" for non-relational nouns, e.g. "John's dog."
 
-> S     \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (R:eet z:e x:e)))
-> GEN   \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (R:eet z:e x:e)))
+> S     \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (R2:eet z:e x:e)))
+> GEN   \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (R2:eet z:e x:e)))
 
 prepositions for modifications of noun phrases, e.g. "The man in the car." 
 
-> P_R   \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (WORD:eet z:e x:e)))
+% P_R   \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (WORD:eet z:e x:e)))
 
 prepositions for modification of predicates, e.g. "John walked in the park."
 
-> P_R   \P:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (P:(et)t (\y:e.WORD:eet (IOTA:(et)e A:et) y:e))
+% P_R   \P:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (P:(et)t (\y:e.WORD:eet (IOTA:(et)e A:et) y:e))
+% P_R   \P:(et)t.\A:et.\DET:(et)(et)t.\B:et.
+
+[John [walks [in Boston]]]
+in : NP -> N -> N
+in(walk,john,boston) /\ walk(john)
+
+[[The [man [in Boston]]] walks]
+in : NP -> N -> N
+ix. in(man,x,boston) /\ walk(x)
+
+> P_R   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:(et)eet A:et x:e y:e))
 
 % GEN   \P:(et)t.\A:et.\B:et.P:(et)t (\x:e.B:et (IOTA:(et)e (\z:e.AND:ttt (A:et z:e) (OF:eet z:e x:e))))  
 
