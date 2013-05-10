@@ -2,7 +2,8 @@
 
 simple implementation of transitive nouns.
 
-> N     WORD:((et)t)et
+> N_2   WORD:eet
+> N_2   \P:(et)t.\y:e.P:(et)t (\x:e.WORD:eet x:e y:e)
 
 the $NP_D$ annotation is now deprecated, to be replaced by the $NP$ annotation.
 the reason for this is that the $NP_I$ annotation was completely useless, as we decided not to annotate nodes.
@@ -97,9 +98,29 @@ below definitions are pr... whatevers.
   the dog of john ran
   ix. (ran(x) /\ of(x,john))
 
-> P_R   \P:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (P:(et)t (\y:e.WORD:eet (IOTA:(et)e A:et) y:e))
+"of" for relational nouns, e.g. "The widow of John".
+
+> OF    \P:(et)t.\R:eet.\z:e.P:(et)t (\x:e.R:eet z:e x:e)
+
+"'s" for relational nouns, e.g. "John's wife.", use "OF".
+
+> S     \P:(et)t.\R:eet.\z:e.P:(et)t (\x:e.R:eet z:e x:e)
+> GEN   \P:(et)t.\R:eet.\z:e.P:(et)t (\x:e.R:eet z:e x:e)
+
+"'s" for non-relational nouns, e.g. "John's dog."
+
+> S     \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (R:eet z:e x:e)))
+> GEN   \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (R:eet z:e x:e)))
+
+prepositions for modifications of noun phrases, e.g. "The man in the car." 
+
 > P_R   \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (WORD:eet z:e x:e)))
-> GEN   \P:(et)t.\A:et.\B:et.P:(et)t (\x:e.B:et (IOTA:(et)e (\z:e.AND:ttt (A:et z:e) (OF:eet z:e x:e))))  
+
+prepositions for modification of predicates, e.g. "John walked in the park."
+
+> P_R   \P:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (P:(et)t (\y:e.WORD:eet (IOTA:(et)e A:et) y:e))
+
+% GEN   \P:(et)t.\A:et.\B:et.P:(et)t (\x:e.B:et (IOTA:(et)e (\z:e.AND:ttt (A:et z:e) (OF:eet z:e x:e))))  
 
 simple lexical binding of numbers as quantifiers, barring numerical inferences.
 therefore it is equivalent to SOME.
@@ -112,11 +133,14 @@ dates are implemented as a special case of $NP$s, which includes date clusters.
 
 below definition is auxilliary verbs.
 
-> V_AUX \x:e.x:e
 > V_AUX \A:et.A:et
-> V_AUX \P:(et)t.P:(et)t
-> V_AUX \GQ:(et)(et)t.GQ:(et)(et)t
-> V_AUX \M:(et)et.M:(et)et
+> V_AUX \A:eet.A:eet
+> V_AUX \A:eeet.A:eeet
+> V_AUX \A:((et)t)et.A:((et)t)et
+> V_AUX \A:((et)t)((et)t)t.A:((et)t)((et)t)t
+> V_AUX \A:((et)t)eet.A:((et)t)eet
+> V_AUX \A:((et)t)((et)t)et.A:((et)t)((et)t)et
+> V_AUX \A:((et)t)((et)t)((et)t)t.A:((et)t)((et)t)((et)t)t
 
 below definition is equal to an identity function.
 

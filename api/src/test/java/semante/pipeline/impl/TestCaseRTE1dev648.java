@@ -31,8 +31,8 @@ public class TestCaseRTE1dev648 extends ATestCase {
 		val yoko_ono 	= leaf(pair("NP","Yoko Ono"));
 		val who			= leaf(pair("WHO_A","who"));
 		val is			= leaf(pair("IS","is"));
-		val widow 		= leaf(pair("N","widow"));
-		val of 			= leaf(pair("P_R","of"));
+		val widow 		= leaf(pair("N_2","widow"));
+		val of 			= leaf(pair("OF","of"));
 		val murdered 	= leaf(pair("MR","murdered"));
 		val beatles 	= leaf(pair("MR","beatles"));
 		val star 		= leaf(pair("N","star"));
@@ -65,7 +65,7 @@ public class TestCaseRTE1dev648 extends ATestCase {
 				),
 				node(
 					node(
-						plastered,
+						node(has,plastered),
 						node(
 							node(the,node(small,node(german,town))),
 							node(which,node(is,langenhagen))
@@ -76,16 +76,16 @@ public class TestCaseRTE1dev648 extends ATestCase {
 			);
 
 		// Hypothesis part
-		val was = leaf(pair("IS","was"));
-		val s = leaf(pair("GEN","'s"));
-		val wife = leaf(pair("N","wife"));
+		val was  = leaf(pair("IS"  , "was"));
+		val s    = leaf(pair("GEN" , "'s"));
+		val wife = leaf(pair("N_2" , "wife"));
 
 		val tree2 = 
 			node(yoko_ono,node(was,node(node(john_lennon,s),wife)));
 
 		// subsumption rules
-		val subsumptionRules = "";
+		val subs = "all x (all y (widow(x,y) -> wife(x,y))).";
 
-		aPair = new IEntailment(tree1, tree2, subsumptionRules);
+		aPair = new IEntailment(tree1, tree2, subs);
 	}
 }
