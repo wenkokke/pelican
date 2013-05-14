@@ -18,8 +18,6 @@ public interface FOLExpr {
 		}
 		
 		public interface Identity extends Visitor<Term> {}
-
-		Term replace(FOLExpr a, FOLExpr b);
 	}
 
 	public interface Formula extends FOLExpr {
@@ -32,9 +30,7 @@ public interface FOLExpr {
 		}
 		
 		public interface Identity extends Visitor<Formula> {}
-		
-		Formula replace(FOLExpr a, FOLExpr b);
 	}
 
-	FOLExpr replace(FOLExpr a, FOLExpr b);
+	FOLExpr add(FOLExpr accept);
 }

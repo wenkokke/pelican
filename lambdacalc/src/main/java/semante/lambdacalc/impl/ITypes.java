@@ -16,7 +16,8 @@ public enum ITypes implements Type {
 	ET_T(new IType.Function(ET,IType.T)),		// quantifier
 	ET_E(new IType.Function(ET,IType.E)), 		// iota
 	ET_ET(new IType.Function(ET,ET)),			// modifier
-	ET_ET_T(new IType.Function(ET,ET_T));		// gq
+	ET_ET_T(new IType.Function(ET,ET_T)),		// gq
+	TTT(new IType.Function(T, new IType.Function(T, T))); // connective
 	
 	@Delegate
 	Type type;
