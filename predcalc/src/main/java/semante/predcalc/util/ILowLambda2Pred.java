@@ -11,6 +11,7 @@ import semante.lambdacalc.TSymbol;
 import semante.lambdacalc.Type;
 import semante.lambdacalc.impl.ITypes;
 import semante.predcalc.FOLExpr;
+import semante.predcalc.LowLambda2Pred;
 import semante.predcalc.FOLExpr.Formula;
 import semante.predcalc.FOLExpr.Term;
 import semante.predcalc.PredCalc;
@@ -27,12 +28,64 @@ public class ILowLambda2Pred<T extends TSymbol> implements LowLambda2Pred<T> {
 	protected PredCalc pcalc;
 	protected TLambdaCalc<T> lcalc;
 	
+	private Visitor<T,FOLExpr> smash = new Visitor<T, FOLExpr>() {
+		@Override public FOLExpr variable(T s) {
+			if (typeIs(s.getType(), ITypes.E)) {
+				// Variable
+				return new IFOLExpr.Variable(s.getName());
+			} else if (typeVector(s.getType(), ITypes.T, ITypes.T)) {
+				// Connective
+				return new IFOLExpr.Connective(lookup(s.getName()), new ArrayList<Formula>());
+			} else if (typeVector(s.getType(), ITypes.E, ITypes.T)) {
+				// Predicate
+				return new IFOLExpr.Predicate(lookup(s.getName()), new ArrayList<Term>());
+			} else if (typeVector(s.getType(), ITypes.E, ITypes.E)) {
+				// Function
+				return new IFOLExpr.Function(lookup(s.getName()), new ArrayList<Term>());
+			} else {
+				throw new UnsupportedOperationException("Unknown type: "+ s.getType());
+			}
+		}
+		
+		@Override public FOLExpr application(final Expr<T> f, final Expr<T> b) {
+			// Look for a quantifier
+			return b.accept(new Visitor<T,FOLExpr>(){
+				// Abstraction -> quantifier
+				@Override public FOLExpr abstraction(final T s2, final Expr<T> body2) {
+					// .. if the right is an abstraction, return a new abstraction
+					if (typeIs(lcalc.typeOf(f), ITypes.ET_T)) {
+						Term v = new IFOLExpr.Variable(s2.getName());
+						return new IFOLExpr.Quantifier(f.accept(getName), v, (Formula) convert(body2));
+					} else {
+						{ throw new Error("Abstractions are higher order: " + s2 + " " + body2); }
+					}
+				}
+				// Normal Application
+				@Override public FOLExpr application(Expr<T> f2, Expr<T> arg2)
+					{ return f.accept(smash).add(b.accept(smash)); }
+				@Override public FOLExpr variable(T s2)
+					{ return f.accept(smash).add(b.accept(smash)); }
+			});
+		}
+		
+		@Override public FOLExpr abstraction(T s, Expr<T> arg) {
+			throw new Error("Abstractions are higher order: " + s + " " + arg);
+		}
+
+		Visitor<T,String> getName = new Visitor<T,String>() {
+			@Override public String abstraction(T s, Expr<T> arg) { return null; }
+			@Override public String application(Expr<T> f, Expr<T> arg) { return null; }
+			@Override public String variable(T s) { return s.getName(); }
+		};
+		
+	};
+	
 	@Override
 	public final FOLExpr convert(final Expr<T> expr) {
-		return null;
+		return expr.accept(smash);
 	}
 
-	static String lookup(String in) {
+	private static String lookup(String in) {
 		if (in.equals("EXISTS")) {
 			return "exists";
 		} else if (in.equals("FORALL")) {
@@ -44,7 +97,7 @@ public class ILowLambda2Pred<T extends TSymbol> implements LowLambda2Pred<T> {
 		} else if (in.equals("IMPLIES")) {
 			return "->";
 		} else if (in.equals("EQUIVALENCES")) {
-			return "->";
+			return "<->";
 		} else if (in.equals("EQ")) {
 			return "=";
 		} else if (in.equals("NOT")) {
@@ -54,68 +107,15 @@ public class ILowLambda2Pred<T extends TSymbol> implements LowLambda2Pred<T> {
 		} else if (in.equals("F")) {
 			return "$F";
 		} else {
-			return in.replaceAll(" ", "_");
+			return in.toLowerCase().replaceAll(" ", "_");
 		}
 	}
-
-	Visitor<T,FOLExpr> smash() {
-		return new Visitor<T, FOLExpr>() {
-			@Override public FOLExpr variable(T s) {
-				if (typeIs(s.getType(), ITypes.E)) {
-					// Variable
-					return new IFOLExpr.Variable(s.getName());
-				} else if (typeVector(s.getType(), ITypes.T, ITypes.T)) {
-					// Connective
-					return new IFOLExpr.Connective(lookup(s.getName()), new ArrayList<Formula>());
-				} else if (typeVector(s.getType(), ITypes.E, ITypes.T)) {
-					// Predicate
-					return new IFOLExpr.Predicate(lookup(s.getName()), new ArrayList<Term>());
-				} else if (typeVector(s.getType(), ITypes.E, ITypes.E)) {
-					// Function
-					return new IFOLExpr.Function(lookup(s.getName()), new ArrayList<Term>());
-				} else {
-					throw new UnsupportedOperationException("Unknown type: "+ s.getType());
-				}
-			}
-			
-			@Override public FOLExpr application(final Expr<T> f, Expr<T> b) {
-				if (typeIs(lcalc.typeOf(f), ITypes.ET_T)) {
-					// Quantifier
-					return b.accept(new Visitor<T,FOLExpr>(){
-						@Override public FOLExpr abstraction(final T s2, final Expr<T> body2) {
-							// .. if the right is an abstraction, return a new abstraction
-							Term v = new IFOLExpr.Variable(s2.getName());
-							return new IFOLExpr.Quantifier(f.accept(getName), v, (Formula) convert(body2));
-						}
-						@Override public FOLExpr application(Expr<T> f2, Expr<T> arg2)
-							{ throw new Error("Non-abstraction in quantifier: " + f2 + " " + arg2); }
-						@Override public FOLExpr variable(T s2)
-							{ throw new Error("Non-abstraction in quantifier: " + s2); }
-					});
-				} else {
-					// Any application
-					return f.accept(smash()).add(b.accept(smash()));
-				}
-			}
-			
-			@Override public FOLExpr abstraction(T s, Expr<T> arg) {
-				throw new Error("Abstractions are higher order: " + s + " " + arg);
-			}
-
-			Visitor<T,String> getName = new Visitor<T,String>() {
-				@Override public String abstraction(T s, Expr<T> arg) { return null; }
-				@Override public String application(Expr<T> f, Expr<T> arg) { return null; }
-				@Override public String variable(T s) { return s.getName(); }
-			};
-			
-		};
-	}
 	
-	Boolean typeIs(Type s, Type t) {
+	private Boolean typeIs(Type s, Type t) {
 		return lcalc.eqType().apply(s, t);
 	}
 	
-	Boolean typeVector(final Type t, final Type vector, final Type end) {
+	private Boolean typeVector(final Type t, final Type vector, final Type end) {
 		if (lcalc.eqType().apply(t, end)) {
 			return true;
 		} else {
@@ -124,7 +124,7 @@ public class ILowLambda2Pred<T extends TSymbol> implements LowLambda2Pred<T> {
 					return false;
 				}
 				@Override public Boolean typeFunction(Type a, Type b) {
-					return lcalc.eqType().apply(a, vector) && typeVector(t, b, end);
+					return lcalc.eqType().apply(a, vector) && typeVector(b, vector, end);
 				}
 			});
 		}		

@@ -1,7 +1,8 @@
 package semante.predcalc;
 
 import semante.lambdacalc.TSymbol;
+import semante.predcalc.FOLExpr.Formula;
 
 public interface Lambda2Pred<T extends TSymbol> {
-	FOLForm smash(semante.lambdacalc.Expr<T> expr);
+	ExprForm<Formula> smash(semante.lambdacalc.Expr<T> expr);
 }
