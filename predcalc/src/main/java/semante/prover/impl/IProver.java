@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 import semante.predcalc.FOLExpr.Formula;
-import semante.predcalc.FOLForm;
+import semante.predcalc.ExprForm;
 import semante.predcalc.PredCalc;
 import semante.prover.OutputParser;
 import semante.prover.Prover;
@@ -38,12 +38,12 @@ public class IProver implements Prover {
 	}
 
 	@Override
-	public boolean prove(FOLForm text, FOLForm hypothesis) throws ProverException {
+	public boolean prove(ExprForm<Formula> text, ExprForm<Formula> hypothesis) throws ProverException {
 		return prove(text, hypothesis, "");
 	}	
 	
 	@Override
-	public boolean prove(FOLForm txt, FOLForm hyp, String subsumptionRules) throws ProverException  {
+	public boolean prove(ExprForm<Formula> txt, ExprForm<Formula> hyp, String subsumptionRules) throws ProverException  {
 
 		IProverArgs proverArgs = null;
 		File tempFile = null;
@@ -212,7 +212,7 @@ public class IProver implements Prover {
 		}
 	}
 
-	public String toProofInput(FOLForm txt, FOLForm hyp, String subs) {
+	public String toProofInput(ExprForm<Formula> txt, ExprForm<Formula> hyp, String subs) {
 		val out = new StringBuilder();
 		out.append("formulas(assumptions).\n");
 		out.append("% Pragmatics:\n");
