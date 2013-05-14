@@ -12,7 +12,7 @@ import semante.lambdacalc.Symbol;
 import semante.lambdacalc.util.ISExprPrinter;
 
 @FieldDefaults(makeFinal=true,level=PRIVATE)
-abstract class IExpr<S extends Symbol> implements Expr<S> {
+public abstract class IExpr<S extends Symbol> implements Expr<S> {
 	
 	private final ExprPrinter<S> PRINTER = new ISExprPrinter<S>(); 
 	
@@ -25,7 +25,7 @@ abstract class IExpr<S extends Symbol> implements Expr<S> {
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
-	static final class Abstraction<S extends Symbol> extends IExpr<S> {
+	public static final class Abstraction<S extends Symbol> extends IExpr<S> {
 		S s; Expr<S> arg;
 		
 		@Override
@@ -38,7 +38,7 @@ abstract class IExpr<S extends Symbol> implements Expr<S> {
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
-	static final class Application<S extends Symbol> extends IExpr<S> {
+	public static final class Application<S extends Symbol> extends IExpr<S> {
 		Expr<S> f; Expr<S> arg;
 		
 		@Override
@@ -51,7 +51,7 @@ abstract class IExpr<S extends Symbol> implements Expr<S> {
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
-	static final class Variable<S extends Symbol> extends IExpr<S> {
+	public static final class Variable<S extends Symbol> extends IExpr<S> {
 		S s;
 
 		@Override

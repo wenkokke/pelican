@@ -3,8 +3,6 @@ package semante.predcalc.util;
 import static lombok.AccessLevel.PUBLIC;
 
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Stack;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,22 +28,13 @@ abstract class IFOLExpr implements FOLExpr {
 		@Override public <X> X accept(Visitor<X> v) {
 			return v.function(name, args);
 		}
-		public FOLExpr apply(Stack<FOLExpr> arg) {
-			if (arg.empty()) {
+		@Override
+		public FOLExpr add(FOLExpr accept) {
+			if (accept instanceof Term) {
+				args.add((Term) accept);
 				return this;
 			} else {
-				FOLExpr t = arg.pop();
-				if (t instanceof Term) { args.add((Term) t); } // else throw error?
-				return this.apply(arg);
-			}
-		}
-		@Override public Function replace(FOLExpr a, FOLExpr b) {
-			if (this.equals(a)) {
-				return (Function) b;
-			} else {
-				ListIterator<Term> litr = args.listIterator();
-				while(litr.hasNext()) {	litr.set(litr.next().replace(a,b)); }
-				return this;
+				throw new Error("Cannot add non-term to function: " + accept);
 			}
 		}
 	}
@@ -55,12 +44,9 @@ abstract class IFOLExpr implements FOLExpr {
 		@Override public <X> X accept(Visitor<X> v) {
 			return v.variable(name);
 		}
-		@Override public Variable replace(FOLExpr a, FOLExpr b) {
-			if (this.equals(a)) {
-				return (Variable) b;
-			} else {
-				return this;
-			}
+		@Override
+		public FOLExpr add(FOLExpr accept) {
+			throw new Error("Cannot add anything to variable: " + accept);
 		}
 	}
 	
@@ -71,40 +57,13 @@ abstract class IFOLExpr implements FOLExpr {
 		@Override public <X> X accept(Visitor<X> v) {
 			return v.predicate(name, terms);
 		}
-		@Override public Predicate replace(FOLExpr a, FOLExpr b) {
-			if (this.equals(a)) {
-				if (null == b) { return null; }
-				else { return (Predicate) b; }
-			} else {
-				ListIterator<Term> litr = terms.listIterator();
-				while(litr.hasNext()) {
-					Term out = litr.next().replace(a,b);
-					if (out == null) { litr.remove(); }
-					else { litr.set(out); }
-				}
-				return this;
-			}
-		}
-		public FOLExpr apply(Stack<FOLExpr> arg) {
-			if (arg.empty()) {
+		@Override
+		public FOLExpr add(FOLExpr accept) {
+			if (accept instanceof Term) {
+				terms.add((Term) accept);
 				return this;
 			} else {
-				FOLExpr t = arg.pop();
-				if (t instanceof Term) {
-					terms.add((Term) t);
-					return this.apply(arg);
-				} else if (t instanceof Predicate) {
-					Predicate tp = (Predicate) t;
-					return (new Predicate(name + "_" + tp.getName(), tp.getTerms())).apply(arg);
-				} if (t instanceof Connective) {
-					Connective tc = (Connective) t;
-					for (Formula f : tc.getFormulas()) {
-						arg.push(f);
-					}
-					return (this.apply(arg));
-				} else {
-					throw new UnsupportedOperationException("Can't apply " + t);
-				}
+				throw new Error("Cannot add non-term to predicate: " + accept);
 			}
 		}
 	}
@@ -114,9 +73,9 @@ abstract class IFOLExpr implements FOLExpr {
 		@Override public <X> X accept(Visitor<X> v) {
 			return v.quantifier(name, var, body);
 		}
-		@Override public Quantifier replace(FOLExpr a, FOLExpr b) {
-			body.replace(a, b);
-			return this;
+		@Override
+		public FOLExpr add(FOLExpr accept) {
+			throw new Error("Cannot add anything to quantifier: " + accept);
 		}
 	}
 	@Value @EqualsAndHashCode(callSuper=false)
@@ -125,22 +84,13 @@ abstract class IFOLExpr implements FOLExpr {
 		@Override public <X> X accept(Visitor<X> v) {
 			return v.connective(name, formulas);
 		}
-		@Override public Connective replace(FOLExpr a, FOLExpr b) {
-			if (this.equals(a)) {
-				return (Connective) b;
-			} else {
-				ListIterator<Formula> litr = formulas.listIterator();
-				while(litr.hasNext()) {	litr.set(litr.next().replace(a,b)); }
-				return this;
-			}
-		}
-		public FOLExpr apply(Stack<FOLExpr> arg) {
-			if (arg.empty()) {
+		@Override
+		public FOLExpr add(FOLExpr accept) {
+			if (accept instanceof Formula) {
+				formulas.add((Formula) accept);
 				return this;
 			} else {
-				FOLExpr t = arg.pop();
-				if (t instanceof Formula) { formulas.add((Formula) t); } // else throw error?
-				return this.apply(arg);
+				throw new Error("Cannot add non-formula to connective: " + accept);
 			}
 		}
 	}
