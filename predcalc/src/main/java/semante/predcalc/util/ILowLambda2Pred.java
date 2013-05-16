@@ -55,7 +55,7 @@ public class ILowLambda2Pred<T extends TSymbol> implements LowLambda2Pred<T> {
 					// .. if the right is an abstraction, return a new abstraction
 					if (typeIs(lcalc.typeOf(f), ITypes.ET_T)) {
 						Term v = new IFOLExpr.Variable(s2.getName());
-						return new IFOLExpr.Quantifier(f.accept(getName), v, (Formula) convert(body2));
+						return new IFOLExpr.Quantifier(lookup(f.accept(getName)), v, (Formula) convert(body2));
 					} else {
 						{ throw new Error("Abstractions are higher order: " + s2 + " " + body2); }
 					}
