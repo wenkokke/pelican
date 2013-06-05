@@ -20,7 +20,6 @@ import semante.pipeline.Category;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result;
 import semante.pipeline.util.impl.ICategory;
-import semante.predcalc.FOLForm;
 import semante.predcalc.impl.IPredCalc;
 import semante.predcalc.util.ILambda2Pred;
 import semante.prover.ProverException;
