@@ -21,8 +21,8 @@ define 'pelican' do
   project.version = '1.0.0'
 
   eclipse.natures :java
-  compile.options.source = '1.8'
-  compile.options.target = '1.5'
+  compile.options.source = '1.7'
+  compile.options.target = '1.7'
 
   # implementation of pipeline-api
   define 'api' do

@@ -1,16 +1,11 @@
 package semante.pipeline.impl;
 
-import static semante.pipeline.util.impl.IPair.pair;
-import static semante.pipeline.util.impl.ISimpleBinaryTree.leaf;
-import static semante.pipeline.util.impl.ISimpleBinaryTree.node;
 import lombok.val;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import semante.pipeline.Entailment;
-import semante.pipeline.util.Pair;
-import semante.pipeline.util.SimpleBinaryTree;
 
 public class TestCaseRTE4test955 extends ATestCase {
 
