@@ -21,7 +21,7 @@ define 'pelican' do
   project.version = '1.0.0'
 
   eclipse.natures :java
-  compile.options.source = '1.5'
+  compile.options.source = '1.8'
   compile.options.target = '1.5'
 
   # implementation of pipeline-api
@@ -32,12 +32,16 @@ define 'pelican' do
     package :jar
   end
 
+  # implementation of lexicon file rendering
+  define 'lex2tex' do
+  end
+
   # implementation of lexicon file parsing
   define 'lexicon' do
     compile.with LOMBOK,GUAVA,PIPELINE.api,
       projects('lambdacalc','settings')
     package :jar
-    
+
     task :deploy do
       path = SemAnTE['Lexicon','Default']
       host = SemAnTE['Server','Hostname']
@@ -45,21 +49,21 @@ define 'pelican' do
       puts pscp = "pscp #{path} #{user}@#{host}:/#{user}/.semante/#{File.basename(path)}"
       fail unless system pscp
     end
-    
+
     pdffile = _(:target,'lexicon.pdf')
     lexicon = _(:src,:main,:resources,'default.lex')
     headers = _(:src,:main,:resources,'default.preamble')
-    
+
     file pdffile => ['lex2tex:compile',lexicon,headers] do
       mkdir_p _(:target)
-      convert = project('lex2tex')._(:target,exe('LeX2TeX'))
+      convert = project('lex2tex')._(:target,'lex2tex')
       texfile = _(:target,'lexicon.tex')
       puts render = "#{convert} < #{lexicon} > #{texfile}"
       fail unless system render
-      puts pandoc = "pandoc -H #{headers} -o #{pdffile} #{texfile}"
+      puts pandoc = "pandoc -N -H #{headers} -o #{pdffile} #{texfile}"
       fail unless system pandoc
     end
-    
+
     task :render => pdffile
   end
 

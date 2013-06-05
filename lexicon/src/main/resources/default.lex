@@ -1,29 +1,38 @@
+\section{Stable Annotations}
+
+\subsection{Nouns and Noun Phrases}
+
+Nouns are annotated as `N` or `N_2` depending on their transitivity.
+
 > N     WORD:et
-
-simple implementation of transitive nouns.
-
 > N_2   WORD:eet
 > N_2   \P:(et)t.\y:e.P:(et)t (\x:e.WORD:eet x:e y:e)
 
-the $NP_D$ annotation is now deprecated, to be replaced by the $NP$ annotation.
-the reason for this is that the $NP_I$ annotation was completely useless, as we decided not to annotate nodes.
+The $\text{NP}_D$ annotation is now deprecated, to be replaced by the $\text{NP}$ annotation.
+The reason for this is that $\text{NP}_I$ was deprecated several versions ago; therefore the
+suffix no longer carries any meaning.
 
 > NP_D  \A:et.A:et WORD:e
+
+Noun Phrases are represented as words of type $e$, lifted to their usual pessimistic
+Montague type of $(et)t$.
+
 > NP    \A:et.A:et WORD:e
+
+\subsection{Verbs and Verb Phrases}
+
+Verbs are annotated based on their transitivity. The ambiguous definitions allow verbs
+to be lifted to accept pessimisticly typed noun phrases as their arguments. Because
+of this, $V_1$ either has the type $et$ or the type $((et)t)t$.
+
+The variable names associated with the quantifiers $Sub$, $Obj$ or $Ob1$ and $Ob2$ are
+$z$, $x$ and $y$ respectively.
 
 > V_1   WORD:et
 > V_1   \Sub:(et)t.Sub:(et)t WORD:et
 
-variable names for [sub,ob1] are [z,x] respectively.
-
 > V_2   \Obj:(et)t.\Sub:(et)t.Obj:(et)t (\x:e.Sub:(et)t (\z:e.WORD:eet z:e x:e))
 % V_2   \Obj:(et)t.\Sub:(et)t.Sub:(et)t (\z:e.Obj:(et)t (\x:e.WORD:eet z:e x:e))
-
-below definition allows for predicative usage of transitive verbs.
-
-> V_2   \Obj:(et)t.\z:e.Obj:(et)t (\x:e.WORD:eet z:e x:e)
-
-variable names for [sub,ob1,ob2] are [z,x,y] respectively.
 
 > V_3   \Obj1:(et)t.\Obj2:(et)t.\Sub:(et)t.Sub:(et)t (\z:e.Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e)))
 % V_3   \Obj1:(et)t.\Obj2:(et)t.\Sub:(et)t.Sub:(et)t (\z:e.Obj2:(et)t (\y:e.Obj1:(et)t (\x:e.WORD:eeet z:e x:e y:e)))
@@ -32,9 +41,17 @@ variable names for [sub,ob1,ob2] are [z,x,y] respectively.
 % V_3   \Obj1:(et)t.\Obj2:(et)t.\Sub:(et)t.Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.Sub:(et)t (\z:e.WORD:eeet z:e x:e y:e)))
 % V_3   \Obj1:(et)t.\Obj2:(et)t.\Sub:(et)t.Obj2:(et)t (\y:e.Obj1:(et)t (\x:e.Sub:(et)t (\z:e.WORD:eeet z:e x:e y:e)))
 
-below definition allows for predicative usage of ditransitive verbs, as in "jan, who ran, sat".
+The below definitions allow for the predicative usage of transitive and ditransitive verbs.
+For instance, as "ran" in in "Jan, who ran, sat".
 
+> V_2   \Obj:(et)t.\z:e.Obj:(et)t (\x:e.WORD:eet z:e x:e)
 > V_3   \Obj1:(et)t.\Obj2:(et)t.\z:e.Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e))
+
+\subsection{Modifiers}
+
+Modifiers are annotated as $\text{MI}$ or $\text{MR}$ depending on whether they
+are \textit{intersective} or \textit{restrictive}. The aliases or $\text{MOD}_I$ and
+$\text{MOD}_R$ are also available.
 
 > MI    \A:et.\x:e.AND:ttt (A:et x:e) (WORD:et x:e)
 > MI    \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t WORD:et)
@@ -43,109 +60,137 @@ below definition allows for predicative usage of ditransitive verbs, as in "jan,
 
 > MR    \A:et.\x:e.AND:ttt (A:et x:e) (WORD:(et)et A:et x:e)
 > MR    \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t (WORD:(et)et A:et))
-
 > MOD_R \A:et.\z:e.AND:ttt (A:et z:e) (WORD:(et)et A:et z:e)
 > MOD_R \A:eet.\x:e.\z:e.AND:ttt (A:eet z:e x:e) (WORD:(eet)eet A:eet z:e x:e)
 > MOD_R \A:eeet.\x:e.\y:e.\z:e.AND:ttt (A:eeet z:e x:e y:e) (WORD:(eeet)eeet A:eeet z:e x:e y:e)
 > MOD_R \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t (WORD:(et)et A:et))
 
-below definition is a true lovecraftian horror, and should be killed with fire as soon as a new solution allows it.
-
-> MR    \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t (WORD:(et)et A:et))
-
-below definition is equality IS.
-
-> IS    \x:e.\y:e.EQ:eet x:e y:e
-> IS    \Sub:(et)t.\y:e.Sub:(et)t (\x:e.EQ:eet x:e y:e)
-> IS    \x:e.\Obj:(et)t.Obj:(et)t (\y:e.EQ:eet x:e y:e)
-> IS    \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
-> IS    \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
-
-below definition is predicative IS.
-
-> IS    \PRED:et.\x:e.PRED:et x:e
-> IS    \MOD:(et)et.\x:e.MOD:(et)et (\y:e.T:t) x:e
-
-> A     \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
-> THE   \A:et.\B:et.B:et (IOTA:(et)e A:et)
-> THE   \P:(et)t.\B:et.P:(et)t B:et
-
-below definition is equivalent to A.
-
-> SOME  \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
-> EVERY \A:et.\B:et.FORALL:(et)t (\x:e.IMPLIES:ttt (A:et x:e) (B:et x:e))
-
-below definitions is a superset of what we would actually like posessives to mean,
-as right now the definition is equivalent to A and SOME.
-
-> POSS  \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
-> OWN   \A:et.A:et
-
-below definition is equivalent to MI.
+Furthermore, $\text{WHO}_R$ returns an application of $\text{MOD}_I$.
 
 > WHO_R \PRED:et.\A:et.\x:e.AND:ttt (A:et x:e) (PRED:et x:e)
 
-below definition is equivalent to MA_PR.
+And lastly, $\text{WHO}_A$ handles appositive modification.
 
 > WHO_A \B:et.\P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t B:et)
 > WHO_A \Q:(et)t.\P:(et)t.\A:et.EXISTS:(et)t (\x:e.AND:ttt (P:(et)t A:et) (AND:ttt (P:(et)t (EQ:eet x:e)) (Q:(et)t (EQ:eet x:e))))
+
+\subsection{Generalized Quantifiers}
+
+The definite article introduces an application of the $\iota$-function.
+
+> THE   \A:et.\B:et.B:et (IOTA:(et)e A:et)
+> THE   \P:(et)t.\B:et.P:(et)t B:et
+
+The indefinite article introduces an existential quantifier, and can be
+approached through the annotation $A$ and its alias $\text{SOME}$
+
+> A       \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
+> SOME    \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
+
+Finally, the annotation $\text{EVERY}$ introduces a univeral quantifier.
+
+> EVERY \A:et.\B:et.FORALL:(et)t (\x:e.IMPLIES:ttt (A:et x:e) (B:et x:e))
+
+\subsection{The $\text{AND}$ Annotation}
+
+The $\text{AND}$ annotation implements a polymorphic conjunction, that
+reduces down to usage of the first-order primitive $(\land)$.
 
 > AND   AND:ttt
 > AND   \A:et.\B:et.\x:e.AND:ttt (A:et x:e) (B:et x:e)
 > AND   \P:(et)t.\Q:(et)t.\A:et.AND:ttt (P:(et)t A:et) (Q:(et)t A:et)
 
-below definitions are pr... whatevers.
+\subsection{The $\text{IS}$ Annotation}
 
-> TO    \P:(et)t.P:(et)t
+The annotation $\text{IS}$ unfolds either to $\text{IS}_{EQ}$ or
+$\text{IS}_{PRED}$, depending on the types.
 
-  the dog of john ran
-  ix. (ran(x) /\ of(x,john))
+The first definition of $\text{IS}$ creates an equality relation.
 
-"of" for relational nouns, e.g. "The widow of John".
+> IS      \x:e.\y:e.EQ:eet x:e y:e
+> IS      \Sub:(et)t.\y:e.Sub:(et)t (\x:e.EQ:eet x:e y:e)
+> IS      \x:e.\Obj:(et)t.Obj:(et)t (\y:e.EQ:eet x:e y:e)
+> IS      \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
+> IS      \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
+> IS_EQ   \x:e.\y:e.EQ:eet x:e y:e
+> IS_EQ   \Sub:(et)t.\y:e.Sub:(et)t (\x:e.EQ:eet x:e y:e)
+> IS_EQ   \x:e.\Obj:(et)t.Obj:(et)t (\y:e.EQ:eet x:e y:e)
+> IS_EQ   \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
+> IS_EQ   \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
+
+The second definition of $\text{IS}$ is an identity function on predicates.
+
+> IS      \PRED:et.\x:e.PRED:et x:e
+> IS      \MOD:(et)et.\x:e.MOD:(et)et (\y:e.T:t) x:e
+> IS_PRED \PRED:et.\x:e.PRED:et x:e
+> IS_PRED \MOD:(et)et.\x:e.MOD:(et)et (\y:e.T:t) x:e
+
+\section{Experimental Annotations}
+
+\subsection{Prepositions}
+
+The $\text{OF}$ annotation handles "of" for relational nouns, e.g. "The widow of John".
+This means that when used in sentences such as "The dog of John ran", it will raise a
+type error.\footnote{
+  I feel that this is the correct behaviour, as the sentence is not in fact grammatical,
+  and other uses of "of" are far to complext to handle at this stage.
+}
+
+Use of this annotation will assume that the noun in the sentence is a transitive noun---at
+the moment that means that it has to be explicitly annotated with with $N_2$---and apply
+the transitive noun, i.e $\iota x. widow(John)(x)$.
 
 > OF    \P:(et)t.\R:eet.\z:e.P:(et)t (\x:e.R:eet z:e x:e)
 
-"'s" for relational nouns, e.g. "John's wife.", use "OF".
+The annotation $S$ or $\text{GEN}$ is to be used for annotating "'s"; its meaning is determined
+based on the type of the noun.
 
-> S     \P:(et)t.\R:eet.\z:e.P:(et)t (\x:e.R:eet z:e x:e)
-> GEN   \P:(et)t.\R:eet.\z:e.P:(et)t (\x:e.R:eet z:e x:e)
+For relational nouns, it behaves as $\text{OF}$, e.g. "John's wife" becomes $\iota x. wife(John)(x)$.
 
-"'s" for non-relational nouns, e.g. "John's dog."
+> S     \P:(et)t.\R:eet.\A:et.IOTA:(et)e (\z:e.AND:ttt (P:(et)t (\x:e.R:eet x:e z:e)) (A:et z:e))
+> GEN   \P:(et)t.\R:eet.\A:et.IOTA:(et)e (\z:e.AND:ttt (P:(et)t (\x:e.R:eet x:e z:e)) (A:et z:e))
+
+For non-relational nouns, e.g. in "John's dog", it behaves as the general $P_R$ discussed below.
 
 > S     \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (R2:eet z:e x:e)))
 > GEN   \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (R2:eet z:e x:e)))
 
-prepositions for modifications of noun phrases, e.g. "The man in the car." 
-
+% prepositions for modifications of noun phrases, e.g. "The man in the car." 
 % P_R   \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (WORD:eet z:e x:e)))
 
-prepositions for modification of predicates, e.g. "John walked in the park."
-
+% prepositions for modification of predicates, e.g. "John walked in the park."
 % P_R   \P:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (P:(et)t (\y:e.WORD:eet (IOTA:(et)e A:et) y:e))
 % P_R   \P:(et)t.\A:et.\DET:(et)(et)t.\B:et.
 
-[John [walks [in Boston]]]
-in : NP -> N -> N
-in(walk,john,boston) /\ walk(john)
+% [John [walks [in Boston]]]
+% in : NP -> N -> N
+% in(walk,john,boston) /\ walk(john)
 
-[[The [man [in Boston]]] walks]
-in : NP -> N -> N
-ix. in(man,x,boston) /\ walk(x)
+% [[The [man [in Boston]]] walks]
+% in : NP -> N -> N
+% ix. in(man,x,boston) /\ walk(x)
+
+Other prepositions are denoted by triples. For instance, in "John walks in Boston" is treated
+as $\text{walk}(\text{John}) \land \text{in}(\text{walk},\text{John},\text{boston})$; whereas "The man
+in Boston walks" is treated as $\iota x. \text{man}(x) \land \text{in}(\text{man},x,\text{boston})
+\land \text{walks}(x)$.
 
 > P_R   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:(et)eet A:et x:e y:e))
 
-% GEN   \P:(et)t.\A:et.\B:et.P:(et)t (\x:e.B:et (IOTA:(et)e (\z:e.AND:ttt (A:et z:e) (OF:eet z:e x:e))))  
+Finally, there is a special-case annotation for $\text{TO}$ when used to denote the object of
+a ditransitive verb, which is simply the identity function.\footnote{
+  Note that this definition depends on double-object resolution, which at this moment is not
+  yet performed. Therefore, it should instead alter an object such that it will bind itself to
+  the correct argument-position of a ditransitive verb.
+}.
 
-simple lexical binding of numbers as quantifiers, barring numerical inferences.
-therefore it is equivalent to SOME.
+> TO    \P:(et)t.P:(et)t
 
-> NUMBER \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
+\subsection{Auxilliary Verbs}
 
-dates are implemented as a special case of $NP$s, which includes date clusters.
-
-> DATE   \A:et.A:et WORD:e
-
-below definition is auxilliary verbs.
+At the moment, auxilliary verbs are simply interpreted as identity functions, which means
+that all information contained within them is lost. This is not a problem, as we decided
+that the problem of voice was out of the scope of the project.
 
 > V_AUX \A:et.A:et
 > V_AUX \A:eet.A:eet
@@ -156,7 +201,39 @@ below definition is auxilliary verbs.
 > V_AUX \A:((et)t)((et)t)et.A:((et)t)((et)t)et
 > V_AUX \A:((et)t)((et)t)((et)t)t.A:((et)t)((et)t)((et)t)t
 
-below definition is equal to an identity function.
+\section{Annotations That Should Not Be...}
+
+\subsection{Possessives}
+
+The below annotation contains only some of the meaning of an acual possesive,
+as right now the definition is equivalent to the indefinite article $\text{SOME}$.
+
+> POSS  \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
+
+The accompanying word-specific annotation $\text{OWN}$ is also simply an identity
+function that gets rid of the word "own" in sentences.
+
+> OWN   \A:et.A:et
+
+\subsection{Numbers}
+
+Numbers are simply interpreted as existentials, which bars any numerical inferences.
+The definition is equivalent to $\text{SOME}$, but may change in the future.
+
+> NUMBER \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
+
+\subsection{Dates}
+
+Dates are implemented as a special case of $NP$s. Therefore any temporal inferences
+based on dates are barred.
+
+> DATE   \A:et.A:et WORD:e
+
+\subsection{The $\text{IGNORE}$ Annotation}
+
+The $\text{IGNORE}$ annotation is equal to an identity function. It should not be
+used with the exception of experimentation and temporary solutions. It is may be
+subject to removal at any time.
 
 > IGNORE \x:e.x:e
 > IGNORE \A:et.A:et
