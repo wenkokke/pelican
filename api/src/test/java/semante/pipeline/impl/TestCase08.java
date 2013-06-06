@@ -31,11 +31,11 @@ public final class TestCase08 extends ATestCase {
 		val jan		= leaf(pair("NP", "jan"));
 		val is		= leaf(pair("IS", "is"));
 		val a		= leaf(pair("A", "a"));
-		val tall	= leaf(pair("MR", "tall"));
-		val black	= leaf(pair("MI", "black"));
-		val fat		= leaf(pair("MR", "fat"));
-		val dutch	= leaf(pair("MI", "dutch"));
-		val man 	= leaf(pair("N", "man"));
+		val tall	= leaf(pair("MOD_R", "tall"));
+		val black	= leaf(pair("MOD_I", "black"));
+		val fat		= leaf(pair("MOD_R", "fat"));
+		val dutch	= leaf(pair("MOD_I", "dutch"));
+		val man 	= leaf(pair("N_1", "man"));
 			
 		// build the annotation trees.
 		val tree1	= 	node(jan,node(is,node(a,node(tall,node(black,node(fat,node(dutch,man)))))));	

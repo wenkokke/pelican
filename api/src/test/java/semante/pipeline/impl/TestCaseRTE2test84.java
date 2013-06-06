@@ -28,31 +28,31 @@ public class TestCaseRTE2test84 extends ATestCase {
 		// Entailment=True
 
 		// Text part
-		val salvadoran = leaf(pair("MR","salvadoran"));
-		val reporter = leaf(pair("N","reporter"));
+		val salvadoran = leaf(pair("MOD_R","salvadoran"));
+		val reporter = leaf(pair("N_1","reporter"));
 		val mauricio_pineda = leaf(pair("NP","mauricio pineda"));
 		val a = leaf(pair("A","a"));
-		val sound = leaf(pair("MR","sound"));
-		val technician = leaf(pair("N","technician"));
+		val sound = leaf(pair("MOD_R","sound"));
+		val technician = leaf(pair("N_1","technician"));
 		val _for = leaf(pair("P_R","for"));
 		val the = leaf(pair("THE","the"));
-		val local = leaf(pair("MR","local"));
-		val canal = leaf(pair("N","canal"));
+		val local = leaf(pair("MOD_R","local"));
+		val canal = leaf(pair("N_1","canal"));
 		val Doce = leaf(pair("NP","Doce"));
-		val television = leaf(pair("N","television"));
-		val station = leaf(pair("N","station"));
+		val television = leaf(pair("N_1","television"));
+		val station = leaf(pair("N_1","station"));
 		val was = leaf(pair("IS","was"));
 		val shot = leaf(pair("V_1","shot"));
 		val and = leaf(pair("AND","and"));
 		val killed = leaf(pair("V_1","killed"));
-		val today = leaf(pair("N","today"));
+		val today = leaf(pair("N_1","today"));
 		val in = leaf(pair("P_R","in"));
 		val morazan = leaf(pair("NP","morazan"));
-		val department = leaf(pair("N","department"));
-		val eastern = leaf(pair("MR","eastern"));
-		val part = leaf(pair("N","part"));
+		val department = leaf(pair("N_1","department"));
+		val eastern = leaf(pair("MOD_R","eastern"));
+		val part = leaf(pair("N_1","part"));
 		val of = leaf(pair("P_R","of"));
-		val country = leaf(pair("N","country"));
+		val country = leaf(pair("N_1","country"));
 
 		val tree1 = 
 			node(

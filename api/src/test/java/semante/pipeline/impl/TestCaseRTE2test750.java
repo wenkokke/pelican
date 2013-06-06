@@ -29,63 +29,44 @@ public class TestCaseRTE2test750 extends ATestCase {
 
 		// Text part
 		val the 			= leaf(pair("THE","the"));
-		val zulu 			= leaf(pair("N","zulu"));
+		val zulu 			= leaf(pair("N_1","zulu"));
 		val are 			= leaf(pair("IS","are"));
 		val an 				= leaf(pair("A","an"));
-		val african 		= leaf(pair("MR","african"));
-		val ethnic 			= leaf(pair("MR","ethnic"));
-		val group 			= leaf(pair("N","group"));
+		val african 		= leaf(pair("MOD_R","african"));
+		val ethnic 			= leaf(pair("MOD_R","ethnic"));
+		val group 			= leaf(pair("N_1","group"));
 		val of 				= leaf(pair("P_R","of"));
-		val about 			= leaf(pair("MR","about"));
+		val about 			= leaf(pair("MOD_R","about"));
 		val _11_million 	= leaf(pair("NUMBER","11 million"));
-		val people 			= leaf(pair("N","people"));
+		val people 			= leaf(pair("N_1","people"));
 		val who 			= leaf(pair("WHO_R","who"));
 		val live 			= leaf(pair("V_1","live"));
-		val mainly 			= leaf(pair("MR","mainly"));
+		val mainly 			= leaf(pair("MOD_R","mainly"));
 		val in 				= leaf(pair("P_R","in"));
-		val kwazulu_natal 	= leaf(pair("MR","kwazulu natal"));
-		val province 		= leaf(pair("NP","province"));
-		val south 			= leaf(pair("MR","south"));
-		val africa 			= leaf(pair("NP","africa"));
+		// the
+		val kwazulu_natal 	= leaf(pair("MOD_R","kwazulu natal"));
+		val province 		= leaf(pair("N_1","province"));
+		val south_africa = leaf(pair("NP","south_africa"));
 
 		val tree1 = 
-			node(
-				node(the,
-					node(
-						zulu,
-						node(who,
-							node(
-								live,
-								node(in,
-									node(
-										node(kwazulu_natal,province),
-										node(of,node(south,africa))
-									)
-								)
-							)
-						)
-					)
-				),
-				node(are,
-					node(
-						node(an,
-							node(african,
-								node(ethnic,group))),
-						node(of,
-							node(about,
-								node(_11_million,people))))
+			_(
+				_(the,_(zulu,
+          _(who,_(live,_(in,_(the,_(_(kwazulu_natal,province),_(of,south_africa)))))))
+        ),
+				_(are,
+          _(an,
+            _(
+              _(african,_(ethnic,group)),
+              _(of,_(about,_(_11_million,people)))
+            )
+          )
 				)
 			);
 
 		// Hypothesis part
 		val zulus = leaf(pair("NP","zulus"));
 		
-		val tree2 = 
-			node(
-				zulus,
-				node(live,
-					node(in,
-						node(kwazulu_natal,province))));
+		val tree2 = _(zulus,_(live,_(in,_(the,_(kwazulu_natal,province)))));
 
 		// subsumption rules
 		val subsumptionRules = "all x ((zulu(x) & live(x)) -> live(zulus)).";

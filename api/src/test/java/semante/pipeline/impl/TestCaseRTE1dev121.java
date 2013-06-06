@@ -27,19 +27,19 @@ public class TestCaseRTE1dev121 extends ATestCase {
 
 		// Text part
 		val a = leaf(pair("A","a"));
-		val syrian = leaf(pair("MR","syrian"));
-		val airman = leaf(pair("N","airman"));
+		val syrian = leaf(pair("MOD_R","syrian"));
+		val airman = leaf(pair("N_1","airman"));
 		val accused = leaf(pair("V_1","accused"));
 		val of = leaf(pair("P_R","of"));
-		val espionage = leaf(pair("N","espionage"));
+		val espionage = leaf(pair("N_1","espionage"));
 		val complained = leaf(pair("V_1","complained"));
 		val about = leaf(pair("P_R","about"));
-		val prisoner = leaf(pair("N","prisoner"));
-		val treatment = leaf(pair("N","treatment"));
+		val prisoner = leaf(pair("N_1","prisoner"));
+		val treatment = leaf(pair("N_1","treatment"));
 		val at = leaf(pair("P_R","at"));
 		val the = leaf(pair("THE","the"));
 		val us = leaf(pair("NP","us"));
-		val base = leaf(pair("N","base"));
+		val base = leaf(pair("N_1","base"));
 		val in = leaf(pair("P_R","in"));
 		val guantanamo = leaf(pair("NP","guantanamo"));
 		val cuba = leaf(pair("NP","cuba"));
@@ -64,7 +64,7 @@ public class TestCaseRTE1dev121 extends ATestCase {
                   node(in,cuba)))))));
 
 		// Hypothesis part
-		val american = leaf(pair("MR","american"));
+		val american = leaf(pair("MOD_R","american"));
 
 		val tree2 = 
 			node(american,

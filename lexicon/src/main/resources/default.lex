@@ -2,17 +2,15 @@
 
 \subsection{Nouns and Noun Phrases}
 
-Nouns are annotated as `N` or `N_2` depending on their transitivity.
+Nouns are annotated as $N$ or $N_2$ depending on their transitivity.
 
-> N     WORD:et
+% N     WORD:et
+% N     WORD:eet
+% N     \P:(et)t.\y:e.P:(et)t (\x:e.WORD:eet x:e y:e)
+
+> N_1   WORD:et
 > N_2   WORD:eet
 > N_2   \P:(et)t.\y:e.P:(et)t (\x:e.WORD:eet x:e y:e)
-
-The $\text{NP}_D$ annotation is now deprecated, to be replaced by the $\text{NP}$ annotation.
-The reason for this is that $\text{NP}_I$ was deprecated several versions ago; therefore the
-suffix no longer carries any meaning.
-
-> NP_D  \A:et.A:et WORD:e
 
 Noun Phrases are represented as words of type $e$, lifted to their usual pessimistic
 Montague type of $(et)t$.
@@ -25,44 +23,29 @@ Verbs are annotated based on their transitivity. The ambiguous definitions allow
 to be lifted to accept pessimisticly typed noun phrases as their arguments. Because
 of this, $V_1$ either has the type $et$ or the type $((et)t)t$.
 
-The variable names associated with the quantifiers $Sub$, $Obj$ or $Ob1$ and $Ob2$ are
+The variable names associated with the quantifiers $Sub$, $Obj$ or $Obj^1$ and $Obj^2$ are
 $z$, $x$ and $y$ respectively.
 
 > V_1   WORD:et
-> V_1   \Sub:(et)t.Sub:(et)t WORD:et
-
-> V_2   \Obj:(et)t.\Sub:(et)t.Obj:(et)t (\x:e.Sub:(et)t (\z:e.WORD:eet z:e x:e))
-% V_2   \Obj:(et)t.\Sub:(et)t.Sub:(et)t (\z:e.Obj:(et)t (\x:e.WORD:eet z:e x:e))
-
-> V_3   \Obj1:(et)t.\Obj2:(et)t.\Sub:(et)t.Sub:(et)t (\z:e.Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e)))
-% V_3   \Obj1:(et)t.\Obj2:(et)t.\Sub:(et)t.Sub:(et)t (\z:e.Obj2:(et)t (\y:e.Obj1:(et)t (\x:e.WORD:eeet z:e x:e y:e)))
-% V_3   \Obj1:(et)t.\Obj2:(et)t.\Sub:(et)t.Obj1:(et)t (\x:e.Sub:(et)t (\z:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e)))
-% V_3   \Obj1:(et)t.\Obj2:(et)t.\Sub:(et)t.Obj2:(et)t (\y:e.Sub:(et)t (\z:e.Obj1:(et)t (\x:e.WORD:eeet z:e x:e y:e)))
-% V_3   \Obj1:(et)t.\Obj2:(et)t.\Sub:(et)t.Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.Sub:(et)t (\z:e.WORD:eeet z:e x:e y:e)))
-% V_3   \Obj1:(et)t.\Obj2:(et)t.\Sub:(et)t.Obj2:(et)t (\y:e.Obj1:(et)t (\x:e.Sub:(et)t (\z:e.WORD:eeet z:e x:e y:e)))
-
-The below definitions allow for the predicative usage of transitive and ditransitive verbs.
-For instance, as "ran" in in "Jan, who ran, sat".
-
 > V_2   \Obj:(et)t.\z:e.Obj:(et)t (\x:e.WORD:eet z:e x:e)
 > V_3   \Obj1:(et)t.\Obj2:(et)t.\z:e.Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e))
 
 \subsection{Modifiers}
 
-Modifiers are annotated as $\text{MI}$ or $\text{MR}$ depending on whether they
-are \textit{intersective} or \textit{restrictive}. The aliases or $\text{MOD}_I$ and
-$\text{MOD}_R$ are also available.
+Modifiers are annotated as $\text{MOD_I}$ or $\text{MOD_R}$ depending on whether they
+are \textit{intersective} or \textit{restrictive}.
 
-> MI    \A:et.\x:e.AND:ttt (A:et x:e) (WORD:et x:e)
-> MI    \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t WORD:et)
 > MOD_I \A:et.\x:e.AND:ttt (A:et x:e) (WORD:et x:e)
-> MOD_I \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t WORD:et)
 
-> MR    \A:et.\x:e.AND:ttt (A:et x:e) (WORD:(et)et A:et x:e)
-> MR    \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t (WORD:(et)et A:et))
 > MOD_R \A:et.\z:e.AND:ttt (A:et z:e) (WORD:(et)et A:et z:e)
 > MOD_R \A:eet.\x:e.\z:e.AND:ttt (A:eet z:e x:e) (WORD:(eet)eet A:eet z:e x:e)
 > MOD_R \A:eeet.\x:e.\y:e.\z:e.AND:ttt (A:eeet z:e x:e y:e) (WORD:(eeet)eeet A:eeet z:e x:e y:e)
+
+Two specialized versions of $\text{MOD_I}$ and $\text{MOD_R}$\footnote{
+  \textbf{TODO}: provide examples in which these versions are needed.
+}.
+
+> MOD_I \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t WORD:et)
 > MOD_R \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t (WORD:(et)et A:et))
 
 Furthermore, $\text{WHO}_R$ returns an application of $\text{MOD}_I$.
@@ -72,6 +55,11 @@ Furthermore, $\text{WHO}_R$ returns an application of $\text{MOD}_I$.
 And lastly, $\text{WHO}_A$ handles appositive modification.
 
 > WHO_A \B:et.\P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t B:et)
+
+This special instance of appositive modification handles sentences such as "Jan, a man, ran",
+in which a noun phrase is modified by a noun phrase. This could be solved by the insertion
+of "who is", which is exactly what this instance of $\text{WHO}_A$ does.
+
 > WHO_A \Q:(et)t.\P:(et)t.\A:et.EXISTS:(et)t (\x:e.AND:ttt (P:(et)t A:et) (AND:ttt (P:(et)t (EQ:eet x:e)) (Q:(et)t (EQ:eet x:e))))
 
 \subsection{Generalized Quantifiers}
@@ -79,6 +67,13 @@ And lastly, $\text{WHO}_A$ handles appositive modification.
 The definite article introduces an application of the $\iota$-function.
 
 > THE   \A:et.\B:et.B:et (IOTA:(et)e A:et)
+
+Though it may look a bit strange, this version of the definite article allows
+constructions such as "The John Lennon", where it is applied to something that
+is already a definite\footnote{
+  \textbf{TODO} perhaps this version should be renamed, to avoid accidental usage of $NP$ instead of $N$.
+}.
+
 > THE   \P:(et)t.\B:et.P:(et)t B:et
 
 The indefinite article introduces an existential quantifier, and can be
@@ -112,20 +107,18 @@ The first definition of $\text{IS}$ creates an equality relation.
 > IS      \x:e.\Obj:(et)t.Obj:(et)t (\y:e.EQ:eet x:e y:e)
 > IS      \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
 > IS      \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
-> IS_EQ   \x:e.\y:e.EQ:eet x:e y:e
-> IS_EQ   \Sub:(et)t.\y:e.Sub:(et)t (\x:e.EQ:eet x:e y:e)
-> IS_EQ   \x:e.\Obj:(et)t.Obj:(et)t (\y:e.EQ:eet x:e y:e)
-> IS_EQ   \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
-> IS_EQ   \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
+% IS_EQ   \x:e.\y:e.EQ:eet x:e y:e
+% IS_EQ   \Sub:(et)t.\y:e.Sub:(et)t (\x:e.EQ:eet x:e y:e)
+% IS_EQ   \x:e.\Obj:(et)t.Obj:(et)t (\y:e.EQ:eet x:e y:e)
+% IS_EQ   \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
+% IS_EQ   \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
 
 The second definition of $\text{IS}$ is an identity function on predicates.
 
 > IS      \PRED:et.\x:e.PRED:et x:e
 > IS      \MOD:(et)et.\x:e.MOD:(et)et (\y:e.T:t) x:e
-> IS_PRED \PRED:et.\x:e.PRED:et x:e
-> IS_PRED \MOD:(et)et.\x:e.MOD:(et)et (\y:e.T:t) x:e
-
-\section{Experimental Annotations}
+% IS_PRED \PRED:et.\x:e.PRED:et x:e
+% IS_PRED \MOD:(et)et.\x:e.MOD:(et)et (\y:e.T:t) x:e
 
 \subsection{Prepositions}
 
@@ -201,9 +194,9 @@ that the problem of voice was out of the scope of the project.
 > V_AUX \A:((et)t)((et)t)et.A:((et)t)((et)t)et
 > V_AUX \A:((et)t)((et)t)((et)t)t.A:((et)t)((et)t)((et)t)t
 
-\section{Annotations That Should Not Be...}
+\section{Experimental Annotations}
 
-\subsection{Possessives}
+\subsection{Possessive Pronouns}
 
 The below annotation contains only some of the meaning of an acual possesive,
 as right now the definition is equivalent to the indefinite article $\text{SOME}$.
@@ -218,7 +211,10 @@ function that gets rid of the word "own" in sentences.
 \subsection{Numbers}
 
 Numbers are simply interpreted as existentials, which bars any numerical inferences.
-The definition is equivalent to $\text{SOME}$, but may change in the future.
+The definition is equivalent to $\text{SOME}$, but may change in the future\footnote{
+  \textbf{TODO} technically this annotation gives incorrect results when applied to the
+  number zero, and this would be equivalent to $NONE$ instead of $SOME$.
+}.
 
 > NUMBER \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
 

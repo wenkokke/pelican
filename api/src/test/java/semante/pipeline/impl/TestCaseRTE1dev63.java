@@ -30,17 +30,17 @@ public class TestCaseRTE1dev63 extends ATestCase {
 		// Text part
 		val iran = leaf(pair("NP","iran"));
 		val will = leaf(pair("V_AUX","will"));
-		val soon = leaf(pair("MR","soon"));
+		val soon = leaf(pair("MOD_R","soon"));
 		val release = leaf(pair("V_2","release"));
 		val eight = leaf(pair("NUMBER","eight"));
-		val british = leaf(pair("MR","british"));
-		val servicemen = leaf(pair("N","servicemen"));
+		val british = leaf(pair("MOD_R","british"));
+		val servicemen = leaf(pair("N_1","servicemen"));
 		val who = leaf(pair("WHO_R","who"));
 		val were = leaf(pair("V_AUX","were"));
 		val detained = leaf(pair("V_1","detained"));
 		val along_with = leaf(pair("P_R","along with"));
 		val three = leaf(pair("NUMBER","three"));
-		val vessels = leaf(pair("N","vessels"));
+		val vessels = leaf(pair("N_1","vessels"));
 		
 		// TODO restrictive modification of verbs seems to be a painfull issue
 

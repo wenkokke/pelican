@@ -31,12 +31,12 @@ public final class TestCase07 extends ATestCase {
 		val dan			= leaf(pair("NP", "dan"));
 		val who			= leaf(pair("WHO_A", "who"));
 		val is			= leaf(pair("IS", "is"));
-		val kind		= leaf(pair("MR", "kind"));
+		val kind		= leaf(pair("MOD_R", "kind"));
 		val gave		= leaf(pair("V_3", "gave"));
 		val mary		= leaf(pair("NP", "mary"));	
 		val a			= leaf(pair("A", "a"));
-		val brand_new	= leaf(pair("MI", "brand new"));
-		val book		= leaf(pair("N", "book"));
+		val brand_new	= leaf(pair("MOD_I", "brand new"));
+		val book		= leaf(pair("N_1", "book"));
 			
 		// build the annotation trees.
 		val tree1	= 	node(node(dan,node(who,node(is,kind))),node(node(gave,mary),node(a,node(brand_new,book))));	

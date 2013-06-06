@@ -33,19 +33,19 @@ public class TestCaseRTE1dev648 extends ATestCase {
 		val is			= leaf(pair("IS","is"));
 		val widow 		= leaf(pair("N_2","widow"));
 		val of 			= leaf(pair("OF","of"));
-		val murdered 	= leaf(pair("MR","murdered"));
-		val beatles 	= leaf(pair("MR","beatles"));
-		val star 		= leaf(pair("N","star"));
+		val murdered 	= leaf(pair("MOD_R","murdered"));
+		val beatles 	= leaf(pair("MOD_R","beatles"));
+		val star 		= leaf(pair("N_1","star"));
 		val john_lennon = leaf(pair("NP","John Lennon"));
 		val has 		= leaf(pair("V_AUX","has"));
 		val plastered 	= leaf(pair("V_2","plastered"));
 		val the 		= leaf(pair("THE","the"));
-		val small 		= leaf(pair("MR","small"));
-		val german 		= leaf(pair("MR","german"));
-		val town 		= leaf(pair("N","town"));
+		val small 		= leaf(pair("MOD_R","small"));
+		val german 		= leaf(pair("MOD_R","german"));
+		val town 		= leaf(pair("N_1","town"));
 		val which		= leaf(pair("WHO_A","which"));
 		// is
-		val langenhagen = leaf(pair("N","langenhagen"));
+		val langenhagen = leaf(pair("N_1","langenhagen"));
 		val with 		= leaf(pair("P_R","with"));
 		val backsides 	= leaf(pair("NP","backsides"));
 		

@@ -31,8 +31,8 @@ public final class TestCase10 extends ATestCase {
 		
 		// build the annotated words.
 		val the		= leaf(pair("THE", "the"));
-		val man 	= leaf(pair("N", "man"));
-		val woman 	= leaf(pair("N", "woman"));
+		val man 	= leaf(pair("N_1", "man"));
+		val woman 	= leaf(pair("N_1", "woman"));
 		val who		= leaf(pair("WHO_R", "who"));
 		val killed	= leaf(pair("V_2", "killed"));
 		val loves	= leaf(pair("V_2", "loves"));
