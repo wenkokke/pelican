@@ -28,8 +28,8 @@ public class TestCaseRTE2test103 extends ATestCase {
 
 		// Text part
 		val an 					= word("A","an");
-		val everest 			= word("MR","everest");
-		val summiter 			= word("N","summiter");
+		val everest 			= word("MOD_R","everest");
+		val summiter 			= word("N_1","summiter");
 		val who					= word("WHO_A","who");
 		val is					= word("IS","is");
 		val david_hiddleston 	= word("NP","david hiddleston");
@@ -37,7 +37,7 @@ public class TestCaseRTE2test103 extends ATestCase {
 		val passed_away			= word("V_1","passed away");
 		val in 					= word("P_R","in");
 		// an
-		val avalanche 			= word("N","avalanche");
+		val avalanche 			= word("N_1","avalanche");
 		val of 					= word("P_R","of");
 		val mt_tasman 			= word("NP","mt tasman");
 		
@@ -56,7 +56,7 @@ public class TestCaseRTE2test103 extends ATestCase {
 
 		// Hypothesis part
 		val a 		= word("A","a");
-		val person 	= word("N","person");
+		val person 	= word("N_1","person");
 		val died 	= word("V_1","died");
 		// in
 		// an

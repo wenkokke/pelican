@@ -23,51 +23,29 @@ public class TestCaseRTE4test955 extends ATestCase {
 		val the              = word("THE"    , "The");
 		val largest          = word("MOD_R"  , "largest");
 		val search           = word("MOD_R"  , "search");
-		val engine           = word("N"      , "engine");
+		val engine           = word("N_1"    , "engine");
 		val on               = word("P_R"    , "on");
-		val web              = word("N"      , "web");
+		val web              = word("N_1"    , "web");
 		val which            = word("WHO_A"  , "which");
 		val is               = word("IS"     , "is");
 		val google           = word("NP"     , "google");
 		val receives         = word("V_2"    , "receives");
 		val over_200_million = word("NUMBER" , "over 200 million");
-		val queries          = word("N"      , "queries");
-		val each_day         = word("MOD_R"  , "each_day");
-		val through          = word("P_R"    , "through");
-		val its              = word("POSS"   , "its");
-		val various          = word("MOD_R"  , "various");
-		val services         = word("N"      , "services");
+		val queries          = word("N_1"    , "queries");
+//		val each_day         = word("MOD_R"  , "each_day");
+//		val through          = word("P_R"    , "through");
+//		val its              = word("POSS"   , "its");
+//		val various          = word("MOD_R"  , "various");
+//		val services         = word("N_1"    , "services");
 
-		val np =
-			_(
-				_(the,
-					_(largest,
-						_(
-							_(search,engine),
-							_(on,_(the,web))
-						)
-					)
-				),
-				_(which,_(is,google))
-			);
-		val vp =
-			_(
-//				_(
-//					_(
-						receives,
-						_(over_200_million,queries)
-//					),
-//					each_day
-//				),
-//				_(through,_(its,_(various,services)))
-			);
+		val np = _(_(the,_(largest,_(_(search,engine),_(on,_(the,web))))),_(which,_(is,google)));
+		val vp = _(receives,_(over_200_million,queries));
 		val t1 = _(np,vp);
 
 		// Hypothesis part
 		val operates = word("V_1","operates");
 
-		val t2 = 
-			_(google,_(operates,_(on,_(the,web))));
+		val t2 = _(google,_(operates,_(on,_(the,web))));
 
 		// subsumption rules
 		val sr1 = "all x (all y (on_operates(x,y) -> operates(x))).";

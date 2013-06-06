@@ -31,11 +31,11 @@ public final class TestCase09 extends ATestCase {
 		val jan		= leaf(pair("NP", "jan"));
 		val found	= leaf(pair("V_2", "found"));
 		val the		= leaf(pair("THE", "the"));
-		val book 	= leaf(pair("N", "book"));
+		val book 	= leaf(pair("N_1", "book"));
 		val and		= leaf(pair("AND", "and"));
 		val every	= leaf(pair("EVERY", "every"));
 		val is		= leaf(pair("IS", "is"));
-		val blue	= leaf(pair("MI", "blue"));
+		val blue	= leaf(pair("MOD_I", "blue"));
 			
 		// build the annotation trees.
 		val tree1	= 	node(node(jan,node(found,node(the,book))),node(and,node(node(every,book),node(is,blue))));	

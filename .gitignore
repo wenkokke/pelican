@@ -11,3 +11,8 @@
 *.exe
 
 *.class
+
+/lex2tex/dist/build/autogen/Paths_lex2tex.hs
+/lex2tex/dist/build/autogen/cabal_macros.h
+/lex2tex/dist/package.conf.inplace
+/lex2tex/dist/setup-config

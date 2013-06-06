@@ -27,9 +27,9 @@ public class TestCaseRTE1test48 extends ATestCase {
 	val clinton     = leaf(pair("NP"	, "clinton"));
 	val is          = leaf(pair("IS"	, "is"));
 	val a           = leaf(pair("A"		, "a"));
-	val very        = leaf(pair("MR"	, "very"));
-	val charismatic = leaf(pair("MI"	, "charismatic"));
-	val person      = leaf(pair("N"		, "person"));
+	val very        = leaf(pair("MOD_R"	, "very"));
+	val charismatic = leaf(pair("MOD_I"	, "charismatic"));
+	val person      = leaf(pair("N_1"		, "person"));
 	
 	val tree1 = 
 		node(clinton,
@@ -41,7 +41,7 @@ public class TestCaseRTE1test48 extends ATestCase {
 	// Hypothesis part
 	//  clinton
 	//  is
-	val articulate  = leaf(pair("MI"	, "articulate"));
+	val articulate  = leaf(pair("MOD_I"	, "articulate"));
 	
 	val tree2 =
 		node(clinton,

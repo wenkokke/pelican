@@ -29,12 +29,12 @@ public final class TestCase06 extends ATestCase {
 				
 		// build the annotated words.
 		val the				= leaf(pair("THE", "the"));
-		val largest			= leaf(pair("MR", "largest"));
-		val search_engine	= leaf(pair("N", "search_engine"));
-		val on_the_web		= leaf(pair("MI", "on_the_web"));
+		val largest			= leaf(pair("MOD_R", "largest"));
+		val search_engine	= leaf(pair("N_1", "search_engine"));
+		val on_the_web		= leaf(pair("MOD_I", "on_the_web"));
 		val google			= leaf(pair("NP", "google"));	
 		val is				= leaf(pair("IS", "is"));
-		val popular			= leaf(pair("MR", "popular"));
+		val popular			= leaf(pair("MOD_R", "popular"));
 		val which			= leaf(pair("WHO_A", "who"));
 		
 		// build the annotation trees.

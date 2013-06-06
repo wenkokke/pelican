@@ -27,32 +27,32 @@ public class TestCaseRTE2test410 extends ATestCase {
 		// hypothesis: 	Romano Prodi is a former president of the European Commission.
 		
 		// TEXT:
-		val the  			= word("THE", "the");
-		val head 			= word("N", "head");
-		val of	 			= word("P_R", "of");
-		//  the
-		val italian    		= word("MR", "Italian");
-		val opposition 		= word("N", "opposition");
-		//  ,
-		val who				= word("WHO_A", "APP");
-		//  is
-		val romano_prodi  	= word("NP", "Romano Prodi");
-		//  ,
-		val was		 		= word("IS", "was");
-		//  the
-		val last			= word("MR", "last");
-		val president		= word("N", "president");
-		//  of
-		//  the
-		val european		= word("MR", "European");
-		val commission		= word("N", "Commission");
+    val the         = word("THE", "the");
+    val head        = word("N_1", "head");
+    val of          = word("P_R", "of");
+    //  the
+    val italian     = word("MOD_R", "Italian");
+    val opposition  = word("N_1", "opposition");
+    //  ,
+    val who         = word("WHO_A", "APP");
+    //  is
+    val romano_prodi= word("NP", "Romano Prodi");
+    //  ,
+    val was         = word("IS", "was");
+    //  the
+    val last        = word("MOD_R", "last");
+    val president   = word("N_1", "president");
+    //  of
+    //  the
+    val european    = word("MOD_R", "European");
+    val commission  = word("N_1", "Commission");
 
-		// HYPOTHESIS:
-		// 	romano
-		// 	prodi
-		val is				= word("IS", "is");
-		val a				= word("A", "a");
-		val former			= word("MR", "former");
+    // HYPOTHESIS:
+    //  romano
+    //  prodi
+    val is          = word("IS", "is");
+    val a           = word("A", "a");
+    val former      = word("MOD_R", "former");
 		//	president
 		//  of
 		//  the
@@ -75,7 +75,8 @@ public class TestCaseRTE2test410 extends ATestCase {
 			
 		
 		val subs = new String[] {
-			"all x (last_of_president_president(x) -> former_of_president_president(x))."
+			"all x (last_president(x) -> former_president(x)).",
+			"all x (all y (last_of_president(x,y) -> former_of_president(x,y)))."
 		};
 		
 		aPair = new IEntailment(t1, t2, Joiner.on('\n').join(subs));

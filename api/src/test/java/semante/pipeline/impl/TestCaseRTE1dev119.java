@@ -29,8 +29,8 @@ public class TestCaseRTE1dev119 extends ATestCase {
 
 		// Text part
 		val a 				= leaf(pair("A","a"));
-		val cuban 			= leaf(pair("MR","cuban"));
-		val american 		= leaf(pair("N","american"));
+		val cuban 			= leaf(pair("MOD_R","cuban"));
+		val american 		= leaf(pair("N_1","american"));
 		val who 			= leaf(pair("WHO_R","who"));
 		val is 				= leaf(pair("IS","is"));
 		val accused 		= leaf(pair("V_1","accused"));
@@ -53,7 +53,7 @@ public class TestCaseRTE1dev119 extends ATestCase {
 		val an = leaf(pair("A","an"));
 		val is1 = leaf(pair("V_AUX","is"));
 		
-		// TODO ambiguity problem with "is" as COPULA, EQ or V_AUX
+		// TODO ambiguity problem with "is" as COPULA, APP_EQ, APP_PRED or V_AUX.
 
 		val tree2 =
 			node(
