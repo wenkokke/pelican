@@ -142,7 +142,6 @@ public final class ILexicon implements Lexicon<TSymbol> {
 
 		// process the lexicon file.
 		String line;
-		int linenumber = 0;
 		while ((line = rd.readLine()) != null) {
 			try {
 				parse(line);
@@ -150,7 +149,6 @@ public final class ILexicon implements Lexicon<TSymbol> {
 			catch (Exception e) {
 				
 			}
-			linenumber += 1;
 		}
 	}
 
