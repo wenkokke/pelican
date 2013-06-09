@@ -1,4 +1,4 @@
-package semante.stl;
+package lambdacalc;
 
 
 public final class TypeError extends IllegalArgumentException {
