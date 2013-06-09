@@ -1,6 +1,4 @@
-package semante.stl;
-
-
+package lambdacalc;
 
 public interface Type {
 
@@ -9,8 +7,5 @@ public interface Type {
 	public interface Visitor<X> {
 		X constant(String name);
 		X function(Type a, Type b);
-	}
-
-	public interface Identity extends Visitor<Type> {	
 	}
 }
