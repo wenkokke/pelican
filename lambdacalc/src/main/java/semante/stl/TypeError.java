@@ -11,7 +11,7 @@ public final class TypeError extends IllegalArgumentException {
 	public TypeError(final Symbol s1, final Symbol s2) {
 		super(); //TODO write meaningfull error message
 	}
-	public TypeError(final Expr$DeBruijn e1, final Expr$DeBruijn e2) {
+	public TypeError(final DeBruijn e1, final DeBruijn e2) {
 		super(); //TODO write meaningfull error message
 	}
 }

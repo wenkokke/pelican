@@ -18,7 +18,7 @@ abstract class AParser<T> {
 	abstract protected Parser<?> tokenizer();
 
 	@Getter(lazy=true,value=PROTECTED)
-	Parser<T> build = buildParser();
+	TypeParser<T> build = buildParser();
 	
 	private final Parser<T> buildParser() {
 		return parser().from(tokenizer(),ignored());
