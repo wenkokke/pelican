@@ -32,7 +32,7 @@ $z$, $x$ and $y$ respectively.
 
 \subsection{Modifiers}
 
-Modifiers are annotated as $\text{MOD_I}$ or $\text{MOD_R}$ depending on whether they
+Modifiers are annotated as $\text{MOD}_I$ or $\text{MOD}_R$ depending on whether they
 are \textit{intersective} or \textit{restrictive}.
 
 > MOD_I \A:et.\x:e.AND:ttt (A:et x:e) (WORD:et x:e)
@@ -41,7 +41,7 @@ are \textit{intersective} or \textit{restrictive}.
 > MOD_R \A:eet.\x:e.\z:e.AND:ttt (A:eet z:e x:e) (WORD:(eet)eet A:eet z:e x:e)
 > MOD_R \A:eeet.\x:e.\y:e.\z:e.AND:ttt (A:eeet z:e x:e y:e) (WORD:(eeet)eeet A:eeet z:e x:e y:e)
 
-Two specialized versions of $\text{MOD_I}$ and $\text{MOD_R}$\footnote{
+Two specialized versions of $\text{MOD}_I$ and $\text{MOD}_R$\footnote{
   \textbf{TODO}: provide examples in which these versions are needed.
 }.
 
