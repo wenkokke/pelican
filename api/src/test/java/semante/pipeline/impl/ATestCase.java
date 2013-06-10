@@ -5,20 +5,18 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
+import lambdacalc.STL;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 
 import org.junit.Before;
 
-import semante.lambdacalc.impl.IT;
 import semante.lexicon.impl.IRichLexicon;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
 import semante.pipeline.Entailment;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result.Visitor;
-import semante.settings.SettingsException;
-import semante.settings.impl.ISettings;
 import semante.pipeline.util.Pair;
 import semante.pipeline.util.SimpleBinaryTree;
 import semante.pipeline.util.binarytree.impl.ILabeller;
@@ -26,6 +24,8 @@ import semante.pipeline.util.impl.IAnnotation;
 import semante.pipeline.util.impl.IBinaryTree;
 import semante.pipeline.util.impl.IPair;
 import semante.pipeline.util.impl.ISimpleBinaryTree;
+import semante.settings.SettingsException;
+import semante.settings.impl.ISettings;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -37,10 +37,10 @@ public abstract class ATestCase {
 	
 	@Before
 	public final void setUpPipeline() throws SettingsException, IOException {
-		val lambdacalc = IT.LambdaCalc();
+		val lambdacalc = new STL();
 		val settings   = new ISettings();
 		val lexicon    = new IRichLexicon(settings,lambdacalc);
-		pipeline = new IPipeline(settings,lambdacalc,lexicon);
+		    pipeline   = new IPipeline(settings,lambdacalc,lexicon);
 	}
 	
 	protected final SimpleBinaryTree<Pair<String,String>> _(

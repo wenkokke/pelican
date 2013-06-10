@@ -15,7 +15,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(makeFinal=true,level=PRIVATE)
 public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
 		IndexPrinter, ExprPrinter, DeBruijnPrinter, DeBruijnSubstituter,
-		Expr2DeBruijn, Expr2FreeNames, DeBruijn2Expr, DeBruijn2FreeNames {
+		Expr2DeBruijn, Expr2FreeNames, DeBruijn2Expr, DeBruijn2FreeNames,
+		DeBruijnTypeChecker, DeBruijn2Type {
 
 	// parsing functions
 	@Delegate ExprParser			exprParser			= new IExprParser();
@@ -41,6 +42,7 @@ public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
 	@Delegate DeBruijnPrinter   	deBruijnPrinter 	= new IDeBruijnPrinter(typePrinter,indexPrinter,symbolPrinter);
 	
 	// builder functions
+	@Getter   TypeBuilder			typeBuilder			= new ITypeBuilder();
 	@Getter   ExprBuilder			exprBuilder			= new IExprBuilder();
 	@Getter   DeBruijnBuilder		deBruijnBuilder		= new IDeBruijnBuilder();
 	
@@ -49,6 +51,8 @@ public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
 	@Delegate DeBruijn2FreeNames	deBruijn2FreeNames	= new IDeBruijn2FreeNames();
 	@Delegate Expr2DeBruijn			expr2DeBruijn		= new IExpr2DeBruijn(deBruijnBuilder);
 	@Delegate DeBruijn2Expr			deBruijn2Expr		= new IDeBruijn2Expr(exprBuilder,namingConventions,deBruijn2FreeNames);
+	@Delegate DeBruijn2Type			deBruijn2Type		= new IDeBruijn2Type(typeBuilder);
+	@Delegate DeBruijnTypeChecker	deBruijnTypeChecker	= new IDeBruijnTypeChecker(typeBuilder);
 	
 	// reduction functions
 	@Delegate DeBruijnSubstituter 	deBruijnSubstituter	= new IDeBruijnSubstituter(deBruijnBuilder);
