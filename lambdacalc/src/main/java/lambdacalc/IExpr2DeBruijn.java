@@ -41,7 +41,7 @@ public final class IExpr2DeBruijn implements Visitor<DeBruijn>, Expr2DeBruijn {
 	@Override
 	public final DeBruijn variable(Symbol sym) {
 		if (env.contains(sym)) {
-			return builder.variable(env.indexOf(sym));
+			return builder.variable(new IIndex(env.indexOf(sym),sym.getType()));
 		}
 		else {
 			return builder.constant(sym);

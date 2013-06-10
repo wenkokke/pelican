@@ -31,8 +31,8 @@ public final class IDeBruijnPrinter implements Visitor<String>, DeBruijnPrinter 
 	}
 
 	@Override
-	public final String variable(Integer s) {
-		return s.toString();
+	public final String variable(Index i) {
+		return i.toString();
 	}
 
 	@Override

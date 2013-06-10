@@ -6,7 +6,7 @@ public interface DeBruijn {
 	public interface Visitor<X> {
 		X abstraction(Type type, DeBruijn body); // expression body
 		X application(DeBruijn fun, DeBruijn arg); // function and arguments
-		X variable(Integer s); // a debruijn index
+		X variable(Index i); // a debruijn index
 		X constant(Symbol s); // a typed symbol
 	}
 }

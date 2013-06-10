@@ -41,7 +41,7 @@ public abstract class IDeBruijn implements DeBruijn {
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
 	public static final class IVariable extends IDeBruijn {
-		Integer i;
+		Index i;
 
 		@Override
 		public final <X> X accept(Visitor<X> v) {
