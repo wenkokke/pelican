@@ -2,15 +2,13 @@ package semante.lexicon;
 
 import java.util.List;
 
-import semante.lambdacalc.TSymbol;
-
-public interface Lexicon<T extends TSymbol> {
+public interface Lexicon {
 	
 	List<String> getEntries();
 	
-	Word<T> getWord(String name);
-	Word<T> getCategory(String name, String wordName);
+	Word getWord(String name);
+	Word getCategory(String name, String wordName);
 	
-	List<Word<TSymbol>> getWords();
-	List<Category<TSymbol>> getCategories();
+	List<Word> getWords();
+	List<Category> getCategories();
 }

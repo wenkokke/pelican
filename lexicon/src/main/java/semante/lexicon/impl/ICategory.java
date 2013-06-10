@@ -4,12 +4,12 @@ import static com.google.common.collect.Lists.transform;
 
 import java.util.List;
 
+import lambdacalc.DeBruijn;
+import lambdacalc.DeBruijnSubstituter;
+import lambdacalc.Expr;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.Value;
-import semante.lambdacalc.AlphaConverter2;
-import semante.lambdacalc.Expr;
-import semante.lambdacalc.TSymbol;
 import semante.lexicon.Category;
 import semante.lexicon.Word;
 
@@ -18,24 +18,24 @@ import com.google.common.collect.ImmutableList;
 
 @Value
 @RequiredArgsConstructor
-public final class ICategory implements Category<TSymbol> {
+public final class ICategory implements Category {
 
-	String						name;
-	List<Expr<TSymbol>>			expr;
-	AlphaConverter2<TSymbol>	alphaConv2;
+	String				name;
+	List<DeBruijn>		denotations;
+	DeBruijnSubstituter	substituter;
 	
-	public final ICategory addExpr(final Expr<TSymbol> newExpr) {
-		val builder = ImmutableList.<Expr<TSymbol>>builder();
-		builder.addAll(getExpr());
-		builder.add(newExpr);
-		return withExpr(builder.build());
+	public final ICategory addDenotation(final DeBruijn denotation) {
+		val builder = ImmutableList.<DeBruijn> builder();
+		builder.addAll(getDenotations());
+		builder.add(denotation);
+		return withDenotations(builder.build());
 	}
 	
-	public final ICategory addAllExpr(final List<Expr<TSymbol>> newExpr) {
-		val builder = ImmutableList.<Expr<TSymbol>>builder();
-		builder.addAll(getExpr());
-		builder.addAll(newExpr);
-		return withExpr(builder.build());
+	public final ICategory addDenotations(final List<DeBruijn> denotations) {
+		val builder = ImmutableList.<DeBruijn> builder();
+		builder.addAll(getDenotations());
+		builder.addAll(denotations);
+		return withDenotations(builder.build());
 	}
 	
 	/**
@@ -44,18 +44,17 @@ public final class ICategory implements Category<TSymbol> {
 	 * @param name {@link String} representation of the {@link Word}.
 	 * @param expr meaning of the {@link Word} as an {@link Expr}.
 	 */
-	public ICategory(final String name, final Expr<TSymbol> expr, final AlphaConverter2<TSymbol> withWord) {
-		this(name, (List<Expr<TSymbol>>) ImmutableList.of(expr), withWord);
+	public ICategory(final String name, final DeBruijn expr, final DeBruijnSubstituter substituter) {
+		this(name, (List<DeBruijn>) ImmutableList.of(expr), substituter);
 	}
 	
 	@Override
-	public final Word<TSymbol> apply(final String text) {
-		return new IWord(name, text,
-			transform(expr,
-				new Function<Expr<TSymbol>,Expr<TSymbol>>() {
+	public final Word apply(final String text) {
+		return new IWord(name, text, transform(denotations,
+				new Function<DeBruijn, DeBruijn>() {
 					@Override
-					public final Expr<TSymbol> apply(final Expr<TSymbol> input) {
-						return alphaConv2.alphaConvert(WordSymbol, text, input);
+					public final DeBruijn apply(final DeBruijn expr) {
+						return substituter.renameFree(WordSymbol, text, expr);
 					}
 				}));
 	}

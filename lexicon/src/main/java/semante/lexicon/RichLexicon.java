@@ -1,11 +1,11 @@
 package semante.lexicon;
 
-import semante.lambdacalc.TLambdaCalc;
-import semante.lambdacalc.TSymbol;
+import lambdacalc.STL;
 
-public interface RichLexicon extends Lexicon<TSymbol> {
+public interface RichLexicon extends Lexicon {
 
-	Word<TSymbol> getEntry(String annotation, String text);
-	TLambdaCalc<TSymbol> getSTL();
-	
+	Word getEntry(String annotation, String text);
+
+	STL getSTL();
+
 }

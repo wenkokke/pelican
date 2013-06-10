@@ -2,35 +2,35 @@ package semante.lexicon.impl;
 
 import java.util.List;
 
+import lambdacalc.DeBruijn;
+import lambdacalc.Expr;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.Value;
-import semante.lambdacalc.Expr;
-import semante.lambdacalc.TSymbol;
 import semante.lexicon.Word;
 
 import com.google.common.collect.ImmutableList;
 
 @Value
 @RequiredArgsConstructor
-public final class IWord implements Word<TSymbol> {
+public final class IWord implements Word {
 	
-	String				name;
-	String				text;
-	List<Expr<TSymbol>>	expr;
+	String			name;
+	String			text;
+	List<DeBruijn>	denotations;
 	
-	public final IWord addExpr(final Expr<TSymbol> newExpr) {
-		val builder = ImmutableList.<Expr<TSymbol>>builder();
-		builder.addAll(getExpr());
-		builder.add(newExpr);
-		return withExpr(builder.build());
+	public final IWord addDenotation(final DeBruijn denotation) {
+		val builder = ImmutableList.<DeBruijn> builder();
+		builder.addAll(getDenotations());
+		builder.add(denotation);
+		return withDenotations(builder.build());
 	}
 	
-	public final IWord addAllExpr(final List<Expr<TSymbol>> newExpr) {
-		val builder = ImmutableList.<Expr<TSymbol>>builder();
-		builder.addAll(getExpr());
-		builder.addAll(newExpr);
-		return withExpr(builder.build());
+	public final IWord addDenotations(final List<DeBruijn> denotations) {
+		val builder = ImmutableList.<DeBruijn> builder();
+		builder.addAll(getDenotations());
+		builder.addAll(denotations);
+		return withDenotations(builder.build());
 	}
 	
 	/**
@@ -39,8 +39,8 @@ public final class IWord implements Word<TSymbol> {
 	 * @param name {@link String} representation of the {@link Word}.
 	 * @param expr meaning of the {@link Word} as an {@link Expr}.
 	 */
-	public IWord(final String name, final String text, final Expr<TSymbol> expr) {
-		this(name, text, (List<Expr<TSymbol>>) ImmutableList.of(expr));
+	public IWord(final String name, final String text, final DeBruijn expr) {
+		this(name, text, (List<DeBruijn>) ImmutableList.of(expr));
 	}
 	
 }
