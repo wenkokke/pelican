@@ -52,14 +52,14 @@ public final class IFlattenTree<ID> implements FlattenTree<ID> {
 						val rType = stl.typeOf(elemR);
 						
 						// check if (L R) is well-typed.
-						if (stl.isCompatible(lType, rType)) {
+						if (stl.canApply(lType, rType)) {
 							builder.add(stl.getDeBruijnBuilder().application(elemL, elemR));
 							any |= true;
 						}
 						else
 						
 						// check if (R L) is well-typed.
-						if (stl.isCompatible(rType, lType)) {
+						if (stl.canApply(rType, lType)) {
 							builder.add(stl.getDeBruijnBuilder().application(elemR, elemL));
 							any |= true;
 						}

@@ -53,7 +53,7 @@ public final class IExprParser implements ExprParser {
 	static final ExprBuilder  	ExprBuilder   = new IExprBuilder();
 	static final Parser<Expr>   ExprParser    = exprParser().from(ExprTokenizer, Ignored); 
 	
-	static final TypeIdentity   TypeBuilder   = new ITypeIdentity();
+	static final TypeBuilder   TypeBuilder   = new ITypeBuilder();
 	static final Parser<Type>   TypeParser    = typeParser().from(ExprTokenizer, Ignored);
 	
 	static final Parser<Symbol> SymbolParser  = symbolParser().from(ExprTokenizer, Ignored);

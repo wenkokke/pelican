@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true,level=PRIVATE)
-public class ITypeIdentity implements TypeIdentity {
+public class ITypeBuilder implements TypeBuilder {
 	
 	@Override
 	public Type constant(String name) {
