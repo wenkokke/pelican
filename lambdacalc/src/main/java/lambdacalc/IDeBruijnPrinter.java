@@ -13,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 public final class IDeBruijnPrinter implements Visitor<String>, DeBruijnPrinter {
 	
 	TypePrinter typePrinter;
+	IndexPrinter indexPrinter;
 	SymbolPrinter symbolPrinter;
 
 	@Override
@@ -32,7 +33,7 @@ public final class IDeBruijnPrinter implements Visitor<String>, DeBruijnPrinter 
 
 	@Override
 	public final String variable(Index i) {
-		return i.toString();
+		return indexPrinter.format(i);
 	}
 
 	@Override

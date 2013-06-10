@@ -2,14 +2,16 @@ package semante.lexicon;
 
 import java.util.List;
 
-import semante.lambdacalc.Expr;
-import semante.lambdacalc.TSymbol;
+import lambdacalc.DeBruijn;
 
-public interface Word<T extends TSymbol> {
+public interface Word {
 
-	String 			getName();
-	String          getText();
-	List<Expr<T>> 	getExpr();
-	Word<T>			addExpr(Expr<T> expr);
+	String getName();
+
+	String getText();
+
+	List<DeBruijn> getDenotations();
+
+	Word addDenotation(DeBruijn expr);
 
 }

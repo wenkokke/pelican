@@ -1,12 +1,14 @@
 package lambdacalc;
 
-import lambdacalc.ExprBuilder;
+import static lombok.AccessLevel.PRIVATE;
 import lambdacalc.IExpr.IAbstraction;
 import lambdacalc.IExpr.IApplication;
 import lambdacalc.IExpr.IVariable;
-import lombok.experimental.Value;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
-@Value
+@RequiredArgsConstructor
+@FieldDefaults(makeFinal=true,level=PRIVATE)
 public class IExprBuilder implements ExprBuilder {
 
 	@Override

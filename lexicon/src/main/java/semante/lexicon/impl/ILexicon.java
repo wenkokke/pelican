@@ -14,13 +14,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
+import lambdacalc.STL;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
-import semante.lambdacalc.AlphaConverter2;
-import semante.lambdacalc.ExprParser;
-import semante.lambdacalc.TSymbol;
 import semante.lexicon.Category;
 import semante.lexicon.Lexicon;
 import semante.lexicon.Word;
@@ -29,30 +27,29 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 @FieldDefaults(makeFinal=true,level=PRIVATE)
-public final class ILexicon implements Lexicon<TSymbol> {
+public final class ILexicon implements Lexicon {
 
-	ExprParser<TSymbol>			parser;
-	AlphaConverter2<TSymbol>	alphaconv;
-	Map<String, IWord>			words;
-	Map<String, ICategory>		categories;
+	STL						stl;
+	Map<String, IWord>		words;
+	Map<String, ICategory>	categories;
 
 	@Override
-	public final List<Word<TSymbol>> getWords() {
-		return ImmutableList.<Word<TSymbol>> copyOf(words.values());
+	public final List<Word> getWords() {
+		return ImmutableList.<Word> copyOf(words.values());
 	}
 
 	@Override
-	public final List<Category<TSymbol>> getCategories() {
-		return ImmutableList.<Category<TSymbol>> copyOf(categories.values());
+	public final List<Category> getCategories() {
+		return ImmutableList.<Category> copyOf(categories.values());
 	}
 
 	@Override
-	public final Word<TSymbol> getWord(String name) {
+	public final Word getWord(String name) {
 		return words.get(name);
 	}
 
 	@Override
-	public final Word<TSymbol> getCategory(String name, String wordName) {
+	public final Word getCategory(String name, String wordName) {
 		val category = categories.get(name);
 		if (category != null) {
 			return category.apply(wordName.replace(' ','_'));
@@ -72,29 +69,30 @@ public final class ILexicon implements Lexicon<TSymbol> {
 	private final void parse(final String line) {
 		if (isEntry(line)) {
 			// try to parse the line.
-			val tokens = line.split("\\s+");
-			val tag    = tokens[TAG];
-			val term   = on(' ').join(copyOfRange(tokens, TERM, tokens.length));
-			val expr   = parser.parse(term);
+			val tokens   = line.split("\\s+");
+			val tag      = tokens[TAG];
+			val raw      = on(' ').join(copyOfRange(tokens, TERM, tokens.length));
+			val simpl    = stl.parse(raw);
+			val deBruijn = stl.toDeBruijn(simpl);
 			
 			if (isCategory(line)) {
 
 				// check if category exists.
 				if (categories.containsKey(tag)) {
-					categories.put(tag, categories.get(tag).addExpr(expr));
+					categories.put(tag, categories.get(tag).addDenotation(deBruijn));
 				}
 				else {
-					categories.put(tag, new ICategory(tag,expr,alphaconv));
+					categories.put(tag, new ICategory(tag,deBruijn,stl));
 				}
 			}
 			else {
 
 				// check if word exists.
 				if (words.containsKey(tag)) {
-					words.put(tag, words.get(tag).addExpr(expr));
+					words.put(tag, words.get(tag).addDenotation(deBruijn));
 				}
 				else {
-					words.put(tag, new IWord(tag,tag,expr));
+					words.put(tag, new IWord(tag,tag,deBruijn));
 				}
 			}
 		}
@@ -107,8 +105,8 @@ public final class ILexicon implements Lexicon<TSymbol> {
 	/**
 	 * Constructor that uses the lexicon file contained within the JAR.
 	 */
-	public ILexicon(final ExprParser<TSymbol> parser, final AlphaConverter2<TSymbol> alphaConv2) throws Exception {
-		this(Thread.currentThread().getContextClassLoader().getResourceAsStream("default.lex"), parser, alphaConv2);
+	public ILexicon(final STL stl) throws Exception {
+		this(Thread.currentThread().getContextClassLoader().getResourceAsStream("default.lex"), stl);
 	}
 
 
@@ -117,8 +115,8 @@ public final class ILexicon implements Lexicon<TSymbol> {
 	 * @throws IOException 
 	 * @throws FileNotFoundException 
 	 */
-	public ILexicon(final String fn, final ExprParser<TSymbol> pExpr, final AlphaConverter2<TSymbol> alphaConv2) throws FileNotFoundException, IOException {
-		this(new FileInputStream(fn), pExpr, alphaConv2);
+	public ILexicon(final String fn, final STL stl) throws FileNotFoundException, IOException {
+		this(new FileInputStream(fn), stl);
 	}
 
 	/**
@@ -126,11 +124,10 @@ public final class ILexicon implements Lexicon<TSymbol> {
 	 * @throws IOException 
 	 */
 	@SneakyThrows(UnsupportedEncodingException.class)
-	public ILexicon(final InputStream is, final ExprParser<TSymbol> parser, final AlphaConverter2<TSymbol> alphaconv) throws IOException {
+	public ILexicon(final InputStream is, final STL stl) throws IOException {
 
 		// assign the parsers.
-		this.parser     = parser;
-		this.alphaconv  = alphaconv;
+		this.stl        = stl;
 		this.words      = Maps.newHashMap();
 		this.categories = Maps.newHashMap();
 

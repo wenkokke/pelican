@@ -10,7 +10,7 @@ public class Main {
 		System.out.println(stl.format(exp1));
 		val exp2 = stl.toDeBruijn(exp1);
 		System.out.println(stl.format(exp2));
-		val exp3 = stl.betaReduce(exp2);
+		val exp3 = stl.fromDeBruijn(exp2);
 		System.out.println(stl.format(exp3));
 		
 	}

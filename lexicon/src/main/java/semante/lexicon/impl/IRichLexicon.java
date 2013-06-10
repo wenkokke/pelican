@@ -6,11 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
+import lambdacalc.STL;
 import lombok.Delegate;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
-import semante.lambdacalc.TLambdaCalc;
-import semante.lambdacalc.TSymbol;
 import semante.lexicon.Lexicon;
 import semante.lexicon.RichLexicon;
 import semante.lexicon.Word;
@@ -21,16 +20,16 @@ import semante.settings.SettingsException;
 public class IRichLexicon implements RichLexicon {
 	
 	@Delegate
-	Lexicon<TSymbol>		lex;
-	TLambdaCalc<TSymbol>	stl;
+	Lexicon	lex;
+	STL		stl;
 
-	public IRichLexicon(final Settings settings, final TLambdaCalc<TSymbol> stl) throws FileNotFoundException, SettingsException, IOException {
+	public IRichLexicon(final Settings settings, final STL stl) throws FileNotFoundException, SettingsException, IOException {
 		this.stl = stl;
-		this.lex = new ILexicon(settings.get("SemAnTE","Lexicon","Default"),stl,stl);
+		this.lex = new ILexicon(settings.get("SemAnTE","Lexicon","Default"),stl);
 	}
 
 	@Override
-	public Word<TSymbol> getEntry(String key, String text) {
+	public Word getEntry(String key, String text) {
 		
 		// try words then categories.
 		val cat1 = lex.getWord(key);
@@ -49,7 +48,7 @@ public class IRichLexicon implements RichLexicon {
 	}
 
 	@Override
-	public TLambdaCalc<TSymbol> getSTL() {
+	public final STL getSTL() {
 		return this.stl;
 	}
 
