@@ -2,11 +2,10 @@ package semante.pipeline;
 
 import java.util.List;
 
-import semante.lambdacalc.Expr;
-import semante.lambdacalc.TSymbol;
+import lambdacalc.DeBruijn;
 import semante.lexicon.Word;
 import semante.pipeline.util.Either;
 
-public interface FlattenTree<ID, T extends TSymbol> {
-	Either<Result<ID>,List<Expr<T>>> flatten(BinaryTree<ID, Word<T>> tree);
+public interface FlattenTree<ID> {
+	Either<Result<ID>, List<DeBruijn>> flatten(BinaryTree<ID, Word> tree);
 }

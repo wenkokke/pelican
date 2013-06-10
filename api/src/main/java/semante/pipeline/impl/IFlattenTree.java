@@ -4,11 +4,10 @@ import static java.lang.String.format;
 
 import java.util.List;
 
+import lambdacalc.DeBruijn;
+import lambdacalc.STL;
 import lombok.val;
 import lombok.experimental.Value;
-import semante.lambdacalc.Expr;
-import semante.lambdacalc.TLambdaCalc;
-import semante.lambdacalc.TSymbol;
 import semante.lexicon.Word;
 import semante.pipeline.BinaryTree;
 import semante.pipeline.FlattenTree;
@@ -20,21 +19,21 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 @Value
-public final class IFlattenTree<ID,T extends TSymbol> implements FlattenTree<ID,T> {
+public final class IFlattenTree<ID> implements FlattenTree<ID> {
 
-	TLambdaCalc<T> lambdacalc;
+	STL stl;
 	
 	@Override
-	public final Either<Result<ID>,List<Expr<T>>> flatten(final BinaryTree<ID, Word<T>> tree) {
+	public final Either<Result<ID>,List<DeBruijn>> flatten(final BinaryTree<ID, Word> tree) {
 		return tree.accept(
-			new BinaryTree.Visitor<ID, Word<T>, Either<Result<ID>,List<Expr<T>>>>() {
+			new BinaryTree.Visitor<ID, Word, Either<Result<ID>,List<DeBruijn>>>() {
 
 			@Override
-			public final Either<Result<ID>,List<Expr<T>>> node(
+			public final Either<Result<ID>,List<DeBruijn>> node(
 					final ID id,
-					final BinaryTree<ID, Word<T>> treeL,
-					final BinaryTree<ID, Word<T>> treeR) {
-				val builder = ImmutableList.<Expr<T>> builder();
+					final BinaryTree<ID, Word> treeL,
+					final BinaryTree<ID, Word> treeR) {
+				val builder = ImmutableList.<DeBruijn> builder();
 				val eitherL = treeL.accept(this);
 				val eitherR = treeR.accept(this);
 				
@@ -49,19 +48,19 @@ public final class IFlattenTree<ID,T extends TSymbol> implements FlattenTree<ID,
 					for (val elemR: eitherR.getRight()) {
 						
 						// get types of L and R.
-						val lType = lambdacalc.typeOf(elemL);
-						val rType = lambdacalc.typeOf(elemR);
+						val lType = stl.typeOf(elemL);
+						val rType = stl.typeOf(elemR);
 						
 						// check if (L R) is well-typed.
-						if (lambdacalc.isCompatible(lType, rType)) {
-							builder.add(lambdacalc.exprBuilder().application(elemL, elemR));
+						if (stl.isCompatible(lType, rType)) {
+							builder.add(stl.getDeBruijnBuilder().application(elemL, elemR));
 							any |= true;
 						}
 						else
 						
 						// check if (R L) is well-typed.
-						if (lambdacalc.isCompatible(rType, lType)) {
-							builder.add(lambdacalc.exprBuilder().application(elemR, elemL));
+						if (stl.isCompatible(rType, lType)) {
+							builder.add(stl.getDeBruijnBuilder().application(elemR, elemL));
 							any |= true;
 						}
 					}
@@ -69,7 +68,7 @@ public final class IFlattenTree<ID,T extends TSymbol> implements FlattenTree<ID,
 				
 				// if no expr is well-typed, throw a typeerror.
 				if (!any) {
-					val printer = new ITreePrinter<ID,T>(lambdacalc);
+					val printer = new ITreePrinter<ID>(stl);
 					val errorL = treeL.accept(printer);
 					val typesL = ImmutableSet.copyOf(errorL.getSecond());
 					val errorR = treeR.accept(printer);
@@ -81,12 +80,12 @@ public final class IFlattenTree<ID,T extends TSymbol> implements FlattenTree<ID,
 				}
 				
 				// else return the well-typed expr.
-				return IEither.right((List<Expr<T>>) builder.build());
+				return IEither.right((List<DeBruijn>) builder.build());
 			}
 
 			@Override
-			public final Either<Result<ID>, List<Expr<T>>> leaf(Word<T> word) {
-				return IEither.right(word.getExpr());
+			public final Either<Result<ID>, List<DeBruijn>> leaf(Word word) {
+				return IEither.right(word.getDenotations());
 			}
 		});
 	}
