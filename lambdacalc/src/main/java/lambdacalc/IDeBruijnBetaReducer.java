@@ -35,7 +35,7 @@ public final class IDeBruijnBetaReducer extends IDeBruijnBuilder implements DeBr
 				return super.application(fun1, arg1); // reconstruct application
 			}
 			@Override
-			public final DeBruijn variable(Integer _) {
+			public final DeBruijn variable(Index _) {
 				return super.application(fun1, arg1); // reconstruct application
 			}
 			@Override

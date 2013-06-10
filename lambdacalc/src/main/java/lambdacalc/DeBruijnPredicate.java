@@ -7,14 +7,14 @@ public abstract class DeBruijnPredicate implements Visitor<Boolean> {
 		public static class True extends DeBruijnPredicate {
 			@Override public Boolean abstraction(Type type, DeBruijn body)          { return true; }
 			@Override public Boolean application(DeBruijn fun, DeBruijn arg) { return true; }
-			@Override public Boolean variable(Integer i)             { return true; }
+			@Override public Boolean variable(Index i)             { return true; }
 			@Override public Boolean constant(Symbol s)              { return true; }
 		}
 		
 		public static class False extends DeBruijnPredicate {
 			@Override public Boolean abstraction(Type type, DeBruijn body)          { return false; }
 			@Override public Boolean application(DeBruijn fun, DeBruijn arg) { return false; }
-			@Override public Boolean variable(Integer i)             { return false; }
+			@Override public Boolean variable(Index i)             { return false; }
 			@Override public Boolean constant(Symbol s)              { return false; }
 		}
 		
@@ -34,7 +34,7 @@ public abstract class DeBruijnPredicate implements Visitor<Boolean> {
 		
 		public static final DeBruijnPredicate IsVariable = new False() {
 			@Override
-			public final Boolean variable(Integer i) {
+			public final Boolean variable(Index i) {
 				return true;
 			}
 		};

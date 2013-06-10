@@ -20,11 +20,11 @@ public final class IDeBruijnSubstituter implements DeBruijnSubstituter {
 	private final class ISubstituteTop implements DeBruijnBuilder {
 
 		DeBruijn expr;
-		Integer index;
+		Integer n;
 		
 		@Override
 		public final DeBruijn abstraction(Type type, DeBruijn body) {
-			return builder.abstraction(type, body.accept(withIndex(index + 1)));
+			return builder.abstraction(type, body.accept(withN(n + 1)));
 		}
 		
 		@Override
@@ -33,12 +33,12 @@ public final class IDeBruijnSubstituter implements DeBruijnSubstituter {
 		}
 		
 		@Override
-		public final DeBruijn variable(Integer i) {
-			if (i.equals(index)) {
+		public final DeBruijn variable(Index index) {
+			if (index.getIndex().equals(n)) {
 				return expr;
 			}
 			else {
-				return builder.variable(i);
+				return builder.variable(index);
 			}
 		}
 		

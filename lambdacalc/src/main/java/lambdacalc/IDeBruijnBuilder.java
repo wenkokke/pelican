@@ -23,13 +23,13 @@ public class IDeBruijnBuilder implements DeBruijnBuilder {
 	}
 
 	@Override
-	public DeBruijn variable(Integer i) {
+	public DeBruijn variable(Index i) {
 		return new IVariable(i);
 	}
 
 	@Override
-	public DeBruijn constant(Symbol s) {
-		return new IConstant(s);
+	public DeBruijn constant(Symbol symbol) {
+		return new IConstant(symbol);
 	}
 
 }

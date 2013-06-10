@@ -20,8 +20,8 @@ public final class IDeBruijnEtaReducer extends IDeBruijnBuilder implements DeBru
 			public final DeBruijn application(final DeBruijn fun, final DeBruijn arg) {
 				return arg.accept(new IDeBruijnBuilder() {
 					@Override
-					public final DeBruijn variable(final Integer index) {
-						if (index.equals(0)) {
+					public final DeBruijn variable(final Index i) {
+						if (i.equals(0)) {
 							return etaReduce(fun);
 						}
 						else {
