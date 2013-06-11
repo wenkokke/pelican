@@ -18,7 +18,7 @@ task 'deploy-lexicon' => 'pelican:lexicon:deploy'
 task 'render-lexicon' => 'pelican:lexicon:render'
 
 define 'pelican' do
-  project.version = '1.0.0'
+  project.version = '1.1.0'
 
   eclipse.natures :java
   compile.options.source = '1.5'
