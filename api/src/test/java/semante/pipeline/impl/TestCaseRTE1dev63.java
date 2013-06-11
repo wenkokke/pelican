@@ -1,77 +1,123 @@
 package semante.pipeline.impl;
 
-import static semante.pipeline.util.impl.IPair.pair;
-import static semante.pipeline.util.impl.ISimpleBinaryTree.leaf;
-import static semante.pipeline.util.impl.ISimpleBinaryTree.node;
+import semante.pipeline.Entailment;
+import org.junit.Test;
 import lombok.val;
 
-import org.junit.Before;
-import org.junit.Test;
+public final class TestCaseRTE1dev63 extends ATestCase {
 
-import semante.pipeline.Entailment;
+		@Test
+		public final void prove() throws Exception {
+			proveEntailment(createRTE1dev63());
+		}
 
-public class TestCaseRTE1dev63 extends ATestCase {
+		@Test
+		public final void createTestCase() throws Exception {
+			createTestCase("RTE1dev63",createRTE1dev63());
+		}
 
-	@Test
-	public final void testEverything() throws Exception {
-		proveEntailment(aPair);
-	}
+		public final Entailment createRTE1dev63() throws Exception {
 
-	private Entailment aPair;
+			// create the vocabulary for the text;
+			val t00_iran = word("NP","iran");
+			val t01_will = word("V_AUX","will");
+			val t02_release = word("V_2","release");
+			val t03_eight = word("NUMBER","eight");
+			val t04_british = word("MOD_R","british");
+			val t05_servicemen = word("N_1","servicemen");
+			val t06_who = word("WHO_R","who");
+			val t07_were = word("V_AUX","were");
+			val t08_detained = word("V_1","detained");
+			val t09_along_with = word("P_R","along with");
+			val t10_three = word("NUMBER","three");
+			val t11_vessels = word("N_1","vessels");
 
-	@Before
-	public final void setUpPair() {
+			// create the vocabulary for the hypothesis;
+			val h00_some = word("SOME","some");
+			val h01_british = word("MOD_R","british");
+			val h02_servicemen = word("N_1","servicemen");
+			val h03_were = word("V_AUX","were");
+			val h04_detained = word("V_1","detained");
 
-		// Dataset=RTE1dev, id=63
-		// Text=iran will soon release eight british servicemen detained along with three vessels
-		// Hypothesis=british servicemen detained
-		// Entailment=True
-
-		// Text part
-		val iran = leaf(pair("NP","iran"));
-		val will = leaf(pair("V_AUX","will"));
-		val soon = leaf(pair("MOD_R","soon"));
-		val release = leaf(pair("V_2","release"));
-		val eight = leaf(pair("NUMBER","eight"));
-		val british = leaf(pair("MOD_R","british"));
-		val servicemen = leaf(pair("N_1","servicemen"));
-		val who = leaf(pair("WHO_R","who"));
-		val were = leaf(pair("V_AUX","were"));
-		val detained = leaf(pair("V_1","detained"));
-		val along_with = leaf(pair("P_R","along with"));
-		val three = leaf(pair("NUMBER","three"));
-		val vessels = leaf(pair("N_1","vessels"));
-		
-		// TODO restrictive modification of verbs seems to be a painfull issue
-
-		val tree1 = 
-			node(iran,
-				node(will,
-//					node(soon,
-				node(release,
-					node(eight,
-						node(
-							node(british,servicemen),
-							node(who,node(were,
-								node(detained,
-								node(along_with,node(three,vessels)))))
+			// create the tree structure for the text;
+			val tt =
+			_(
+				t00_iran
+				,
+				_(
+					t01_will
+					,
+					_(
+						t02_release
+						,
+						_(
+							t03_eight
+							,
+							_(
+								_(
+									t04_british
+									,
+									t05_servicemen
+								)
+								,
+								_(
+									t06_who
+									,
+									_(
+										t07_were
+										,
+										_(
+											t08_detained
+											,
+											_(
+												t09_along_with
+												,
+												_(
+													t10_three
+													,
+													t11_vessels
+												)
+											)
+										)
+									)
+								)
+							)
 						)
 					)
 				)
-//					)
+			)
+			;
+
+			// create the tree structure for the hypothesis;
+			val th =
+			_(
+				_(
+					h00_some
+					,
+					_(
+						h01_british
+						,
+						h02_servicemen
+					)
 				)
-			);
+				,
+				_(
+					h03_were
+					,
+					h04_detained
+				)
+			)
+			;
 
-		// Hypothesis part
-		val some = leaf(pair("SOME","some"));
-		
-		val tree2 = 
-			node(node(some,node(british,servicemen)),node(were,detained));
+			// create the subsumption relations;
+			val ss =
+			new String[] {
+				""
+			};
 
-		// subsumption rules
-		val subs = "";
+			// return the new entailment;
+			return new IEntailment(tt, th, ss);
+		}
 
-		aPair = new IEntailment(tree1, tree2, subs);
-	}
 }
 

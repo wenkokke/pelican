@@ -4,37 +4,41 @@ import semante.pipeline.Entailment;
 import org.junit.Test;
 import lombok.val;
 
-public final class TestCaseRTE1test48 extends ATestCase {
+public final class TestCaseJan08 extends ATestCase {
 
 		@Test
 		public final void prove() throws Exception {
-			proveEntailment(createRTE1test48());
+			proveEntailment(createJan08());
 		}
 
 		@Test
 		public final void createTestCase() throws Exception {
-			createTestCase("RTE1test48",createRTE1test48());
+			createTestCase("Jan08",createJan08());
 		}
 
-		public final Entailment createRTE1test48() throws Exception {
+		public final Entailment createJan08() throws Exception {
 
 			// create the vocabulary for the text;
-			val t00_clinton = word("NP","clinton");
+			val t00_jan = word("NP","jan");
 			val t01_is = word("IS","is");
 			val t02_a = word("A","a");
-			val t03_very = word("MOD_R","very");
-			val t04_charismatic = word("MOD_I","charismatic");
-			val t05_person = word("N_1","person");
+			val t03_tall = word("MOD_R","tall");
+			val t04_black = word("MOD_I","black");
+			val t05_fat = word("MOD_R","fat");
+			val t06_dutch = word("MOD_I","dutch");
+			val t07_man = word("N_1","man");
 
 			// create the vocabulary for the hypothesis;
-			val h00_clinton = word("NP","clinton");
+			val h00_jan = word("NP","jan");
 			val h01_is = word("IS","is");
-			val h02_articulate = word("MOD_I","articulate");
+			val h02_a = word("A","a");
+			val h03_black = word("MOD_I","black");
+			val h04_man = word("N_1","man");
 
 			// create the tree structure for the text;
 			val tt =
 			_(
-				t00_clinton
+				t00_jan
 				,
 				_(
 					t01_is
@@ -43,12 +47,20 @@ public final class TestCaseRTE1test48 extends ATestCase {
 						t02_a
 						,
 						_(
-							t03_very
+							t03_tall
 							,
 							_(
-								t04_charismatic
+								t04_black
 								,
-								t05_person
+								_(
+									t05_fat
+									,
+									_(
+										t06_dutch
+										,
+										t07_man
+									)
+								)
 							)
 						)
 					)
@@ -59,12 +71,20 @@ public final class TestCaseRTE1test48 extends ATestCase {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				h00_clinton
+				h00_jan
 				,
 				_(
 					h01_is
 					,
-					h02_articulate
+					_(
+						h02_a
+						,
+						_(
+							h03_black
+							,
+							h04_man
+						)
+					)
 				)
 			)
 			;
@@ -72,7 +92,7 @@ public final class TestCaseRTE1test48 extends ATestCase {
 			// create the subsumption relations;
 			val ss =
 			new String[] {
-				"all x (charismatic(x) -> articulate(x))."
+				""
 			};
 
 			// return the new entailment;
