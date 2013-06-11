@@ -1,6 +1,12 @@
-package lambdacalc;
+package lambdacalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
+import lambdacalc.DeBruijn;
+import lambdacalc.DeBruijnBuilder;
+import lambdacalc.DeBruijnSubstituter;
+import lambdacalc.Index;
+import lambdacalc.Symbol;
+import lambdacalc.Type;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.Value;

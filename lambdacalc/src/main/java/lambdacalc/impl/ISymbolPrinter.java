@@ -1,6 +1,9 @@
-package lambdacalc;
+package lambdacalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
+import lambdacalc.Symbol;
+import lambdacalc.SymbolPrinter;
+import lambdacalc.TypePrinter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 

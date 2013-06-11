@@ -1,10 +1,15 @@
-package lambdacalc;
+package lambdacalc.impl;
 
 import static com.google.common.collect.ImmutableSet.of;
 import static com.google.common.collect.Sets.union;
 
 import java.util.Set;
 
+import lambdacalc.DeBruijn;
+import lambdacalc.DeBruijn2FreeNames;
+import lambdacalc.Index;
+import lambdacalc.Symbol;
+import lambdacalc.Type;
 import lambdacalc.DeBruijn.Visitor;
 
 public final class IDeBruijn2FreeNames implements Visitor<Set<String>>, DeBruijn2FreeNames {
