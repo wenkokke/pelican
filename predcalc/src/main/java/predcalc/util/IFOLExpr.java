@@ -1,14 +1,15 @@
-package semante.predcalc.util;
+package predcalc.util;
 
 import static lombok.AccessLevel.PUBLIC;
 
 import java.util.List;
 
+import predcalc.FOLExpr;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.Value;
-import semante.predcalc.FOLExpr;
 
 /*
  * Predicate = Pred String [Term] -- e*t

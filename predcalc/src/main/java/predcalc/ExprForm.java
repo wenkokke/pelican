@@ -1,4 +1,4 @@
-package semante.predcalc;
+package predcalc;
 
 import java.util.List;
 

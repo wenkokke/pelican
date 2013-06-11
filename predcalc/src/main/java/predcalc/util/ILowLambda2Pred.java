@@ -1,45 +1,46 @@
-package semante.predcalc.util;
+package predcalc.util;
 
 import java.util.ArrayList;
 
+import predcalc.FOLExpr;
+import predcalc.LowLambda2Pred;
+import predcalc.PredCalc;
+import predcalc.FOLExpr.Formula;
+import predcalc.FOLExpr.Term;
+
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import semante.lambdacalc.Expr;
-import semante.lambdacalc.Expr.Visitor;
-import semante.lambdacalc.TLambdaCalc;
-import semante.lambdacalc.TSymbol;
-import semante.lambdacalc.Type;
-import semante.lambdacalc.impl.ITypes;
-import semante.predcalc.FOLExpr;
-import semante.predcalc.LowLambda2Pred;
-import semante.predcalc.FOLExpr.Formula;
-import semante.predcalc.FOLExpr.Term;
-import semante.predcalc.PredCalc;
+import lambdacalc.Expr;
+import lambdacalc.Expr.Visitor;
+import lambdacalc.STL;
+import lambdacalc.Symbol;
+import lambdacalc.Type;
+import lambdacalc.IType;
 
 /*
  * Convert a first-order lambda expression to predicate logic
- * types: <e>t, <t>, <e>, (et)t
+ * types: <e>t, , <e>, (et)t
  */
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true)
-public class ILowLambda2Pred<T extends TSymbol> implements LowLambda2Pred<T> {
+public class ILowLambda2Pred implements LowLambda2Pred {
 
 	protected PredCalc pcalc;
-	protected TLambdaCalc<T> lcalc;
+	protected STL lcalc;
 	
 	private Visitor<T,FOLExpr> smash = new Visitor<T, FOLExpr>() {
 		@Override public FOLExpr variable(T s) {
-			if (typeIs(s.getType(), ITypes.E)) {
+			if (typeIs(s.getType(), IType.E)) {
 				// Variable
 				return new IFOLExpr.Variable(s.getName());
-			} else if (typeVector(s.getType(), ITypes.T, ITypes.T)) {
+			} else if (typeVector(s.getType(), IType.T, IType.T)) {
 				// Connective
 				return new IFOLExpr.Connective(lookup(s.getName()), new ArrayList<Formula>());
-			} else if (typeVector(s.getType(), ITypes.E, ITypes.T)) {
+			} else if (typeVector(s.getType(), IType.E, IType.T)) {
 				// Predicate
 				return new IFOLExpr.Predicate(lookup(s.getName()), new ArrayList<Term>());
-			} else if (typeVector(s.getType(), ITypes.E, ITypes.E)) {
+			} else if (typeVector(s.getType(), IType.E, IType.E)) {
 				// Function
 				return new IFOLExpr.Function(lookup(s.getName()), new ArrayList<Term>());
 			} else {
@@ -47,13 +48,13 @@ public class ILowLambda2Pred<T extends TSymbol> implements LowLambda2Pred<T> {
 			}
 		}
 		
-		@Override public FOLExpr application(final Expr<T> f, final Expr<T> b) {
+		@Override public FOLExpr application(final Expr f, final Expr b) {
 			// Look for a quantifier
 			return b.accept(new Visitor<T,FOLExpr>(){
 				// Abstraction -> quantifier
-				@Override public FOLExpr abstraction(final T s2, final Expr<T> body2) {
+				@Override public FOLExpr abstraction(final T s2, final Expr body2) {
 					// .. if the right is an abstraction, return a new abstraction
-					if (typeIs(lcalc.typeOf(f), ITypes.ET_T)) {
+					if (typeIs(lcalc.typeOf(f), IType.ET_T)) {
 						Term v = new IFOLExpr.Variable(s2.getName());
 						return new IFOLExpr.Quantifier(lookup(f.accept(getName)), v, (Formula) convert(body2));
 					} else {
@@ -61,27 +62,27 @@ public class ILowLambda2Pred<T extends TSymbol> implements LowLambda2Pred<T> {
 					}
 				}
 				// Normal Application
-				@Override public FOLExpr application(Expr<T> f2, Expr<T> arg2)
+				@Override public FOLExpr application(Expr f2, Expr arg2)
 					{ return f.accept(smash).add(b.accept(smash)); }
 				@Override public FOLExpr variable(T s2)
 					{ return f.accept(smash).add(b.accept(smash)); }
 			});
 		}
 		
-		@Override public FOLExpr abstraction(T s, Expr<T> arg) {
+		@Override public FOLExpr abstraction(T s, Expr arg) {
 			throw new Error("Abstractions are higher order: " + s + " " + arg);
 		}
 
 		Visitor<T,String> getName = new Visitor<T,String>() {
-			@Override public String abstraction(T s, Expr<T> arg) { return null; }
-			@Override public String application(Expr<T> f, Expr<T> arg) { return null; }
+			@Override public String abstraction(T s, Expr arg) { return null; }
+			@Override public String application(Expr f, Expr arg) { return null; }
 			@Override public String variable(T s) { return s.getName(); }
 		};
 		
 	};
 	
 	@Override
-	public final FOLExpr convert(final Expr<T> expr) {
+	public final FOLExpr convert(final Expr expr) {
 		return expr.accept(smash);
 	}
 
