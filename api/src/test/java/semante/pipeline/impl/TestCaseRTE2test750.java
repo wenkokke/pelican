@@ -2,7 +2,6 @@ package semante.pipeline.impl;
 
 import static semante.pipeline.util.impl.IPair.pair;
 import static semante.pipeline.util.impl.ISimpleBinaryTree.leaf;
-import static semante.pipeline.util.impl.ISimpleBinaryTree.node;
 import lombok.val;
 
 import org.junit.Before;
@@ -14,7 +13,7 @@ public class TestCaseRTE2test750 extends ATestCase {
 
 	@Test
 	public final void testEverything() throws Exception {
-		someTest(aPair);
+		proveEntailment(aPair);
 	}
 
 	private Entailment aPair;

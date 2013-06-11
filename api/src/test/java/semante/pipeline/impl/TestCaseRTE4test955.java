@@ -1,56 +1,129 @@
 package semante.pipeline.impl;
 
+import semante.pipeline.Entailment;
+import org.junit.Test;
 import lombok.val;
 
-import org.junit.Before;
-import org.junit.Test;
+public final class TestCaseRTE4test955 extends ATestCase {
 
-import semante.pipeline.Entailment;
+		@Test
+		public final void prove() throws Exception {
+			proveEntailment(createRTE4test955());
+		}
 
-public class TestCaseRTE4test955 extends ATestCase {
+		@Test
+		public final void createTestCase() throws Exception {
+			createTestCase("RTE4test955",createRTE4test955());
+		}
 
-	@Test
-	public final void testEverything() throws Exception {
-		someTest(aPair);
-	}
+		public final Entailment createRTE4test955() throws Exception {
 
-	private Entailment aPair;
+			// create the vocabulary for the text;
+			val t00_the = word("THE","The");
+			val t01_largest = word("MOD_R","largest");
+			val t02_search = word("MOD_R","search");
+			val t03_engine = word("N_1","engine");
+			val t04_on = word("P_R","on");
+			val t05_the = word("THE","The");
+			val t06_web = word("N_1","web");
+			val t07_which = word("WHO_A","which");
+			val t08_is = word("IS","is");
+			val t09_google = word("NP","google");
+			val t10_receives = word("V_2","receives");
+			val t11_over_200_million = word("NUMBER","over 200 million");
+			val t12_queries = word("N_1","queries");
 
-	@Before
-	public final void setUpPair() {
+			// create the vocabulary for the hypothesis;
+			val h00_google = word("NP","google");
+			val h01_operates = word("V_1","operates");
+			val h02_on = word("P_R","on");
+			val h03_the = word("THE","The");
+			val h04_web = word("N_1","web");
 
-		// Text part
-		val the              = word("THE"    , "The");
-		val largest          = word("MOD_R"  , "largest");
-		val search           = word("MOD_R"  , "search");
-		val engine           = word("N_1"    , "engine");
-		val on               = word("P_R"    , "on");
-		val web              = word("N_1"    , "web");
-		val which            = word("WHO_A"  , "which");
-		val is               = word("IS"     , "is");
-		val google           = word("NP"     , "google");
-		val receives         = word("V_2"    , "receives");
-		val over_200_million = word("NUMBER" , "over 200 million");
-		val queries          = word("N_1"    , "queries");
-//		val each_day         = word("MOD_R"  , "each_day");
-//		val through          = word("P_R"    , "through");
-//		val its              = word("POSS"   , "its");
-//		val various          = word("MOD_R"  , "various");
-//		val services         = word("N_1"    , "services");
+			// create the tree structure for the text;
+			val tt =
+			_(
+				_(
+					_(
+						t00_the
+						,
+						_(
+							t01_largest
+							,
+							_(
+								_(
+									t02_search
+									,
+									t03_engine
+								)
+								,
+								_(
+									t04_on
+									,
+									_(
+										t05_the
+										,
+										t06_web
+									)
+								)
+							)
+						)
+					)
+					,
+					_(
+						t07_which
+						,
+						_(
+							t08_is
+							,
+							t09_google
+						)
+					)
+				)
+				,
+				_(
+					t10_receives
+					,
+					_(
+						t11_over_200_million
+						,
+						t12_queries
+					)
+				)
+			)
+			;
 
-		val np = _(_(the,_(largest,_(_(search,engine),_(on,_(the,web))))),_(which,_(is,google)));
-		val vp = _(receives,_(over_200_million,queries));
-		val t1 = _(np,vp);
+			// create the tree structure for the hypothesis;
+			val th =
+			_(
+				h00_google
+				,
+				_(
+					h01_operates
+					,
+					_(
+						h02_on
+						,
+						_(
+							h03_the
+							,
+							h04_web
+						)
+					)
+				)
+			)
+			;
 
-		// Hypothesis part
-		val operates = word("V_1","operates");
+			// create the subsumption relations;
+			val ss =
+			new String[] {
+				"all x (all y (on_operates(x,y) -> operates(x))).",
+				"all x (all y ((web(y) & on_search_engine_engine(x,y)) -> on_operates(x,y)))."
+			};
 
-		val t2 = _(google,_(operates,_(on,_(the,web))));
+			// return the new entailment;
+			return new IEntailment(tt, th, ss);
+		}
 
-		// subsumption rules
-		val sr1 = "all x (all y (on_operates(x,y) -> operates(x))).";
-		val sr2 = "all x (all y ((web(y) & on_search_engine_engine(x,y)) -> on_operates(x,y))).";
-
-		aPair = new IEntailment(t1, t2, sr1+'\n'+sr2);
-	}
 }
+
