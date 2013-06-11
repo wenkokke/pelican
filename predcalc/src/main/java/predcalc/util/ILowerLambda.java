@@ -3,19 +3,18 @@ package predcalc.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import predcalc.ExprForm;
-import predcalc.LowerLambda;
-
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lambdacalc.Expr;
 import lambdacalc.ExprBuilder;
+import lambdacalc.IType;
+import lambdacalc.IType.IFunction;
 import lambdacalc.STL;
 import lambdacalc.Symbol;
 import lambdacalc.Type;
-import lambdacalc.IExpr;
-import lambdacalc.IType;
-import lambdacalc.IType.IFunction;
+import lambdacalc.TypeBuilder;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import predcalc.ExprForm;
+import predcalc.LowerLambda;
 
 
 @RequiredArgsConstructor
@@ -25,6 +24,9 @@ public class ILowerLambda implements LowerLambda {
 	protected STL lcalc;
 	private Counter counter = new Counter();
 	private List<Expr> pragmatics = new ArrayList<Expr>();
+	
+	static Type TTT = new IFunction(new IFunction(IType.T, IType.T), IType.T);
+	static Type ET_E = new IFunction(IType.ET, IType.E);
 	
 	// use a pragmatics list state, reset every call
 	private ExprBuilder rewrite = new ExprBuilder() {
@@ -50,28 +52,28 @@ public class ILowerLambda implements LowerLambda {
 								@Override public Expr variable(Symbol s2)
 									{ throw new Error("Non-abstraction in quantifier: " + s2); }
 							}));
-						} else if (s1.getType().equals(new IFunction(IType.ET, IType.E))) {
+						} else if (s1.getType().equals(ET_E)) {
 							// iota (return a new constant)
 							ExprBuilder b = lcalc.getExprBuilder();
 							Expr c = b.variable(buildSymbol("c"+counter.get(), IType.E));
 							Expr e =
 								b.application(
-									b.variable(buildSymbol("EQUIVALENCES".equals(IType.TTT)),
+									b.variable(buildSymbol("EQUIVALENCES", TTT)),
 									b.application(
 											arg,
-											b.variable(buildSymbol("x", IType.E)))));
+											b.variable(buildSymbol("x", IType.E))));
 							Expr i =
 									b.application(
 										b.application(
-												b.variable(buildSymbol("EQ", lcalc.typeBuilder().typeFunction(IType.E.equals(IType.ET))),
-												b.variable(buildSymbol("x", IType.E)))), 
+												b.variable(buildSymbol("EQ", IType.EET)),
+												b.variable(buildSymbol("x", IType.E))), 
 										c);
 							Expr q =
 									b.application(
-										b.variable(buildSymbol("FORALL".equals(IType.ET_T)),
+										b.variable(buildSymbol("FORALL", IType.ET_T)),
 										b.abstraction(
 												buildSymbol("x", IType.E),
-												b.application(e, i))));
+												b.application(e, i)));
 							pragmatics.add(lcalc.betaReduce(lcalc.betaReduce(q).accept(rewrite)));
 							return c;
 						} else {
@@ -79,7 +81,7 @@ public class ILowerLambda implements LowerLambda {
 						}						
 					}
 					@Override public Expr abstraction(final Symbol s1, final Expr body1)	{ return null; }
-					@Override public Expr application(Expr f1, Expr arg1)			{ return null; }
+					@Override public Expr application(Expr f1, Expr arg1)					{ return null; }
 				});
 				if (null != left) {
 					return left;
@@ -101,7 +103,7 @@ public class ILowerLambda implements LowerLambda {
 		private Expr compound(final Expr a, final Expr b) {
 			return b.accept(new ExprBuilder(){
 				@Override public Expr variable(final Symbol sb) {
-					if (typeAll(sb.getType().equals(IType.E) || typeAll(sb.getType(), IType.T))) {
+					if (typeAll(sb.getType(), IType.E) || typeAll(sb.getType(), IType.T)) {
 						// a + b:<e> = b   ,   a + b: = b
 						return lcalc.getExprBuilder().variable(sb);
 					} else {
@@ -123,16 +125,6 @@ public class ILowerLambda implements LowerLambda {
 								// (f g) + b = (f+b g)
 								return lcalc.getExprBuilder().application(compound(fa, b), arga);
 							}
-							@Override
-							public Expr abstraction(Symbol s, Expr body) {
-								// TODO Auto-generated method stub
-								return null;
-							}
-							@Override
-							public Expr variable(Symbol s) {
-								// TODO Auto-generated method stub
-								return null;
-							}
 						});
 					}
 					
@@ -151,16 +143,6 @@ public class ILowerLambda implements LowerLambda {
 							// (f g) + \x.b = ((\x.f+b) g)
 							return lcalc.getExprBuilder().application(lcalc.getExprBuilder().abstraction(sb, compound(fa, bodyb)), arga);
 						}
-						@Override
-						public Expr abstraction(Symbol s, Expr body) {
-							// TODO Auto-generated method stub
-							return null;
-						}
-						@Override
-						public Expr variable(Symbol s) {
-							// TODO Auto-generated method stub
-							return null;
-						}
 					});
 				}
 				@Override public Expr application(Expr fb, Expr argb) {
@@ -170,7 +152,6 @@ public class ILowerLambda implements LowerLambda {
 			});
 		}
 		
-		@SuppressWarnings("unchecked")
 		Symbol buildSymbol(final String name, final Type type) {
 			return new Symbol() {
 				@Override public String getName() { return name; }
@@ -181,19 +162,9 @@ public class ILowerLambda implements LowerLambda {
 		// Is this type just applications of "all" ?
 		Boolean typeAll(final Type t, final Type all) {
 			return t.equals(all) || t.accept(new Type.Visitor<Boolean>() {
-				@Override public Boolean typeConstant(String name) { return false; }
-				@Override public Boolean typeFunction(Type a, Type b) {
+				@Override public Boolean constant(String name) { return false; }
+				@Override public Boolean function(Type a, Type b) {
 					return a.equals(all) && typeAll(b, all);
-				}
-				@Override
-				public Boolean constant(String name) {
-					// TODO Auto-generated method stub
-					return null;
-				}
-				@Override
-				public Boolean function(Type a, Type b) {
-					// TODO Auto-generated method stub
-					return null;
 				}
 			});
 		};
@@ -201,25 +172,15 @@ public class ILowerLambda implements LowerLambda {
 		// all the e's in a eeeeeeet type
 		String ETStr(final Type t) {
 			return t.equals(IType.T)? "" : t.accept(new Type.Visitor<String>() {
-				@Override public String typeConstant(String name)
+				@Override public String constant(String name)
 					{ return null; }
-				@Override public String typeFunction(Type a, Type b) {
+				@Override public String function(Type a, Type b) {
 					if (a.equals(IType.E)) {
 						String etstr = ETStr(b);
 						return (null == etstr)? null : "e" + etstr;
 					} else {
 						return null;
 					}
-				}
-				@Override
-				public String constant(String name) {
-					// TODO Auto-generated method stub
-					return null;
-				}
-				@Override
-				public String function(Type a, Type b) {
-					// TODO Auto-generated method stub
-					return null;
 				}
 			});
 		};
@@ -229,28 +190,18 @@ public class ILowerLambda implements LowerLambda {
 		// and g is the number of e's from a, and a is the number of e's from the (et)
 		// (It's complicated)
 		private Type.Visitor<Type> walka(final Type b) {
-			final lambdacalc.Type.Identity tb = lcalc.typeBuilder();
+			final TypeBuilder tb = lcalc.getTypeBuilder();
 			return new Type.Visitor<Type>(){
-				@Override public Type typeConstant(String name) { return null; }
-				@Override public Type typeFunction(Type l, final Type r) {
+				@Override public Type constant(String name) { return null; }
+				@Override public Type function(Type l, final Type r) {
 					if (l.equals(IType.E)) {
 						Type wb = r.accept(walka(b));
-						return (null == wb)? null : tb.typeFunction(IType.E, wb);									
+						return (null == wb)? null : tb.function(IType.E, wb);									
 					} else {
 						return r.accept(new Type.Visitor<Type>() {
-							@Override public Type typeConstant(String name) { return r; }
-							@Override public Type typeFunction(Type a, Type x) {
+							@Override public Type constant(String name) { return r; }
+							@Override public Type function(Type a, Type x) {
 								return b.accept(rmb(a, x));
-							}
-							@Override
-							public Type constant(String name) {
-								// TODO Auto-generated method stub
-								return null;
-							}
-							@Override
-							public Type function(Type a, Type b) {
-								// TODO Auto-generated method stub
-								return null;
 							}
 						});
 					}
@@ -260,16 +211,16 @@ public class ILowerLambda implements LowerLambda {
 				// perfectly clear astoundingly legible
 				private Type.Visitor<Type> rmb(final Type a, final Type x) {
 					return new Type.Visitor<Type>(){
-						@Override public Type typeConstant(String name) { return x; }
-						@Override public Type typeFunction(Type l, final Type r) {
+						@Override public Type constant(String name) { return x; }
+						@Override public Type function(Type l, final Type r) {
 							if (l.equals(IType.E)) {
 								// if we're looking at an e in m
 								return a.accept(new Type.Visitor<Type>(){
-									@Override public Type typeConstant(String name) {
+									@Override public Type constant(String name) {
 										// if we're at the end of a, add an e to the front of x
-										return tb.typeFunction(IType.E, r.accept(rmb(a, x)));
+										return tb.function(IType.E, r.accept(rmb(a, x)));
 									}
-									@Override public Type typeFunction(Type a1, Type a2) {
+									@Override public Type function(Type a1, Type a2) {
 										// if we're stripping the e's off b (and off a)
 										if (a1.equals(IType.E)) {
 											return r.accept(rmb(a1, x));
@@ -277,60 +228,22 @@ public class ILowerLambda implements LowerLambda {
 											throw new Error("a is not an application of an e-type to anything!");
 										}
 									}
-									@Override
-									public Type constant(String name) {
-										// TODO Auto-generated method stub
-										return null;
-									}
-									@Override
-									public Type function(Type a, Type b) {
-										// TODO Auto-generated method stub
-										return null;
-									}
 								});									
 							} else {
 								// if the last of m is T, return x (the rest)
 								return x;
 							}
 						}
-						@Override
-						public Type constant(String name) {
-							// TODO Auto-generated method stub
-							return null;
-						}
-						@Override
-						public Type function(Type a, Type b) {
-							// TODO Auto-generated method stub
-							return null;
-						}
 					};
-				}
-				@Override
-				public Type constant(String name) {
-					// TODO Auto-generated method stub
-					return null;
-				}
-				@Override
-				public Type function(Type a, Type b) {
-					// TODO Auto-generated method stub
-					return null;
 				}
 			};
 		}
 
 		@Override
-		public Expr abstraction(Symbol s, Expr body) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public Expr variable(Symbol s) {
-			// TODO Auto-generated method stub
+			// TODO throw error
 			return null;
 		}
-		
-		
 	};
 	
 	Expr newPredicate(String l, String r) {

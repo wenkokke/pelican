@@ -29,12 +29,12 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 	protected PredCalc pcalc;
 	protected STL lcalc;
 	
-	private Visitor<T,FOLExpr> smash = new Visitor<T, FOLExpr>() {
-		@Override public FOLExpr variable(T s) {
+	private Visitor<FOLExpr> smash = new Visitor<FOLExpr>() {
+		@Override public FOLExpr variable(Symbol s) {
 			if (typeIs(s.getType(), IType.E)) {
 				// Variable
 				return new IFOLExpr.Variable(s.getName());
-			} else if (typeVector(s.getType(), IType.T, IType.T)) {
+			} else if (typeVector(s.getType(), IType.T,  IType.T)) {
 				// Connective
 				return new IFOLExpr.Connective(lookup(s.getName()), new ArrayList<Formula>());
 			} else if (typeVector(s.getType(), IType.E, IType.T)) {
@@ -50,9 +50,9 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 		
 		@Override public FOLExpr application(final Expr f, final Expr b) {
 			// Look for a quantifier
-			return b.accept(new Visitor<T,FOLExpr>(){
+			return b.accept(new Visitor<FOLExpr>(){
 				// Abstraction -> quantifier
-				@Override public FOLExpr abstraction(final T s2, final Expr body2) {
+				@Override public FOLExpr abstraction(final Symbol s2, final Expr body2) {
 					// .. if the right is an abstraction, return a new abstraction
 					if (typeIs(lcalc.typeOf(f), IType.ET_T)) {
 						Term v = new IFOLExpr.Variable(s2.getName());
@@ -64,19 +64,19 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 				// Normal Application
 				@Override public FOLExpr application(Expr f2, Expr arg2)
 					{ return f.accept(smash).add(b.accept(smash)); }
-				@Override public FOLExpr variable(T s2)
+				@Override public FOLExpr variable(Symbol s2)
 					{ return f.accept(smash).add(b.accept(smash)); }
 			});
 		}
 		
-		@Override public FOLExpr abstraction(T s, Expr arg) {
+		@Override public FOLExpr abstraction(Symbol s, Expr arg) {
 			throw new Error("Abstractions are higher order: " + s + " " + arg);
 		}
 
-		Visitor<T,String> getName = new Visitor<T,String>() {
-			@Override public String abstraction(T s, Expr arg) { return null; }
+		Visitor<String> getName = new Visitor<String>() {
+			@Override public String abstraction(Symbol s, Expr arg) { return null; }
 			@Override public String application(Expr f, Expr arg) { return null; }
-			@Override public String variable(T s) { return s.getName(); }
+			@Override public String variable(Symbol s) { return s.getName(); }
 		};
 		
 	};
@@ -113,19 +113,19 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 	}
 	
 	private Boolean typeIs(Type s, Type t) {
-		return lcalc.eqType().apply(s, t);
+		return s.equals(t);
 	}
 	
 	private Boolean typeVector(final Type t, final Type vector, final Type end) {
-		if (lcalc.eqType().apply(t, end)) {
+		if (t.equals(end)) {
 			return true;
 		} else {
 			return t.accept(new Type.Visitor<Boolean>() {
-				@Override public Boolean typeConstant(String name) {
+				@Override public Boolean constant(String name) {
 					return false;
 				}
-				@Override public Boolean typeFunction(Type a, Type b) {
-					return lcalc.eqType().apply(a, vector) && typeVector(b, vector, end);
+				@Override public Boolean function(Type a, Type b) {
+					return a.equals(vector) && typeVector(b, vector, end);
 				}
 			});
 		}		
