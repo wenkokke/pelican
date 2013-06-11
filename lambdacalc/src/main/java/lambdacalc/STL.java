@@ -15,8 +15,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(makeFinal=true,level=PRIVATE)
 public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
 		IndexPrinter, ExprPrinter, DeBruijnPrinter, DeBruijnSubstituter,
-		Expr2DeBruijn, Expr2FreeNames, DeBruijn2Expr, DeBruijn2FreeNames,
-		DeBruijnTypeChecker, DeBruijn2Type {
+		Expr2Type, Expr2DeBruijn, Expr2FreeNames, DeBruijn2Expr,
+		DeBruijn2FreeNames, DeBruijnTypeChecker, DeBruijn2Type,
+		DeBruijnEtaReducer, DeBruijnBetaReducer, ExprBetaReducer,
+		ExprEtaReducer {
 
 	// parsing functions
 	@Delegate ExprParser			exprParser			= new IExprParser();
@@ -58,5 +60,8 @@ public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
 	// reduction functions
 	@Delegate DeBruijnSubstituter 	deBruijnSubstituter	= new IDeBruijnSubstituter(deBruijnBuilder);
 	@Delegate DeBruijnBetaReducer	deBruijnBetaReducer = new IDeBruijnBetaReducer(deBruijnSubstituter);
+	@Delegate DeBruijnEtaReducer	deBruijnEtaReducer	= new IDeBruijnEtaReducer();
+	@Delegate ExprBetaReducer		exprBetaReducer		= new IExprBetaReducer(expr2DeBruijn,deBruijnBetaReducer,deBruijn2Expr);
+	@Delegate ExprEtaReducer		exprEtaReducer		= new IExprEtaReducer(expr2DeBruijn,deBruijnEtaReducer,deBruijn2Expr);
 	
 }
