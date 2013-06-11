@@ -16,7 +16,7 @@ public final class TestCase02 extends ATestCase {
 	@Test
 	public final void testEverything() throws Exception {
 		System.err.println("tst:2");
-		someTest(aPair);
+		proveEntailment(aPair);
 	}
 
 	private Entailment aPair;

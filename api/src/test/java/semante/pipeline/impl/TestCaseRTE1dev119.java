@@ -14,7 +14,7 @@ public class TestCaseRTE1dev119 extends ATestCase {
 
 	@Test
 	public final void testEverything() throws Exception {
-		someTest(aPair);
+		proveEntailment(aPair);
 	}
 
 	private Entailment aPair;

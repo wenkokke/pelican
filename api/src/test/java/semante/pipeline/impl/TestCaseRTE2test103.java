@@ -13,7 +13,7 @@ public class TestCaseRTE2test103 extends ATestCase {
 
 	@Test
 	public final void testEverything() throws Exception {
-		someTest(aPair);
+		proveEntailment(aPair);
 	}
 
 	private Entailment aPair;

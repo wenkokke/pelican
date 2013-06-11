@@ -11,8 +11,8 @@ SLF4J       = struct(
   :api     => 'org.slf4j:slf4j-api:jar:1.7.3',
   :simple  => 'org.slf4j:slf4j-simple:jar:1.7.3')
 PIPELINE    = struct(
-  :api     => 'pipeline:pipeline-api:jar:2.0.1',
-  :util    => 'pipeline:pipeline-util:jar:2.0.1')
+  :api     => 'pipeline:pipeline-api:jar:2.0.2',
+  :util    => 'pipeline:pipeline-util:jar:2.0.2')
 
 task 'deploy-lexicon' => 'pelican:lexicon:deploy'
 task 'render-lexicon' => 'pelican:lexicon:render'
