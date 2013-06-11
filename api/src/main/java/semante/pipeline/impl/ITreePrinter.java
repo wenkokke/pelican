@@ -12,9 +12,8 @@ import lombok.val;
 import lombok.experimental.Value;
 import semante.lexicon.Word;
 import semante.pipeline.BinaryTree;
+import semante.pipeline.Pair;
 import semante.pipeline.TreePrinter;
-import semante.pipeline.util.Pair;
-import semante.pipeline.util.impl.IPair;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;

@@ -1,16 +1,17 @@
 package semante.pipeline.impl;
 
 import static com.google.common.collect.Lists.transform;
-import static semante.pipeline.util.impl.IBinaryTree.functor;
+import static lombok.AccessLevel.PRIVATE;
 
 import java.io.FileNotFoundException;
 import java.util.List;
 
 import lambdacalc.DeBruijn;
 import lambdacalc.STL;
-import lombok.EqualsAndHashCode;
+import lombok.Delegate;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.experimental.Value;
+import lombok.experimental.FieldDefaults;
 import semante.lexicon.RichLexicon;
 import semante.lexicon.Word;
 import semante.pipeline.Annotation;
@@ -18,7 +19,7 @@ import semante.pipeline.BinaryTree;
 import semante.pipeline.Category;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result;
-import semante.pipeline.util.impl.ICategory;
+import semante.pipeline.TestCaseCreator;
 import semante.settings.Settings;
 
 import com.google.common.base.Function;
@@ -27,24 +28,15 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
-@Value
-@EqualsAndHashCode(callSuper = false)
+@RequiredArgsConstructor
+@FieldDefaults(makeFinal=true,level=PRIVATE)
 public final class IPipeline implements Pipeline {
 	
-	Settings	settings;
-	STL			stl;
-	RichLexicon	lexicon;
-	
-	@Override
-	public final List<Category> getCategories() {
-		return Lists.transform(lexicon.getEntries(), new Function<String,Category>() {
-			
-			@Override
-			public final Category apply(final String input) {
-				return new ICategory(input);
-			}
-		});
-	}
+	@Delegate
+	TestCaseCreator	testcase = new ITestCaseCreator();
+	Settings		settings;
+	STL				stl;
+	RichLexicon		lexicon;
 	
 	@Override
 	public final <ID> Result<ID> prove(
@@ -53,7 +45,7 @@ public final class IPipeline implements Pipeline {
 		final String subsumptions) throws FileNotFoundException {
 		
 		// lookup annotations in the lexicon.
-		val lookup = functor(
+		val lookup = IBinaryTree.functor(
 			Functions.<ID> identity(), 
 			new Function<Annotation,Word>() {
 				
@@ -104,5 +96,15 @@ public final class IPipeline implements Pipeline {
 		// TODO implement smasher and prover9 parts of pipeline
 		
 		return new IResult$Unknown<ID>();
+	}
+	
+	@Override
+	public final List<Category> getCategories() {
+		return Lists.transform(lexicon.getEntries(), new Function<String,Category>() {
+			@Override
+			public final Category apply(final String input) {
+				return new ICategory(input);
+			}
+		});
 	}
 }

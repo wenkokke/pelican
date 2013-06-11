@@ -1,102 +1,203 @@
 package semante.pipeline.impl;
 
-import static semante.pipeline.util.impl.IPair.pair;
-import static semante.pipeline.util.impl.ISimpleBinaryTree.leaf;
-import static semante.pipeline.util.impl.ISimpleBinaryTree.node;
+import semante.pipeline.Entailment;
+import org.junit.Test;
 import lombok.val;
 
-import org.junit.Before;
-import org.junit.Test;
+public final class TestCaseRTE2test84 extends ATestCase {
 
-import semante.pipeline.Entailment;
+		@Test
+		public final void prove() throws Exception {
+			proveEntailment(createRTE2test84());
+		}
 
-public class TestCaseRTE2test84 extends ATestCase {
+		@Test
+		public final void createTestCase() throws Exception {
+			createTestCase("RTE2test84",createRTE2test84());
+		}
 
-	@Test
-	public final void testEverything() throws Exception {
-		someTest(aPair);
-	}
+		public final Entailment createRTE2test84() throws Exception {
 
-	private Entailment aPair;
+			// create the vocabulary for the text;
+			val t00_salvadoran = word("MOD_R","salvadoran");
+			val t01_reporter = word("N_1","reporter");
+			val t02_mauricio_pineda = word("NP","mauricio pineda");
+			val t03_a = word("A","a");
+			val t04_sound = word("MOD_R","sound");
+			val t05_technician = word("N_1","technician");
+			val t06_for = word("P_R","for");
+			val t07_the = word("THE","the");
+			val t08_local = word("MOD_R","local");
+			val t09_canal = word("N_1","canal");
+			val t10_doce = word("NP","Doce");
+			val t11_television = word("N_1","television");
+			val t12_station = word("N_1","station");
+			val t13_was = word("IS","was");
+			val t14_shot = word("V_1","shot");
+			val t15_and = word("AND","and");
+			val t16_killed = word("V_1","killed");
+			val t17_today = word("N_1","today");
+			val t18_in = word("P_R","in");
+			val t19_morazan = word("NP","morazan");
+			val t20_department = word("N_1","department");
+			val t21_in = word("P_R","in");
+			val t22_the = word("THE","the");
+			val t23_eastern = word("MOD_R","eastern");
+			val t24_part = word("N_1","part");
+			val t25_of = word("P_R","of");
+			val t26_the = word("THE","the");
+			val t27_country = word("N_1","country");
 
-	@Before
-	public final void setUpPair() {
+			// create the vocabulary for the hypothesis;
+			val h00_mauricio_pineda = word("NP","mauricio pineda");
+			val h01_was = word("IS","was");
+			val h02_killed = word("V_1","killed");
+			val h03_in = word("P_R","in");
+			val h04_morazan = word("NP","morazan");
 
-		// Dataset=RTE2test, id=84
-		// Text=salvadoran reporter mauricio pineda, a sound technician for the local canal Doce television station, was shot and killed today in morazan department in the eastern part of the country.
-		// Hypothesis=mauricio pineda was killed in morazan.
-		// Entailment=True
+			// create the tree structure for the text;
+			val tt =
+			_(
+				_(
+					_(
+						t00_salvadoran
+						,
+						_(
+							t01_reporter
+							,
+							t02_mauricio_pineda
+						)
+					)
+					,
+					_(
+						_(
+							_(
+								t03_a
+								,
+								_(
+									t04_sound
+									,
+									t05_technician
+								)
+							)
+							,
+							_(
+								t06_for
+								,
+								_(
+									t07_the
+									,
+									_(
+										t08_local
+										,
+										t09_canal
+									)
+								)
+							)
+						)
+						,
+						_(
+							t10_doce
+							,
+							_(
+								t11_television
+								,
+								t12_station
+							)
+						)
+					)
+				)
+				,
+				_(
+					t13_was
+					,
+					_(
+						_(
+							_(
+								_(
+									t14_shot
+									,
+									t15_and
+								)
+								,
+								t16_killed
+							)
+							,
+							_(
+								t17_today
+								,
+								_(
+									t18_in
+									,
+									_(
+										t19_morazan
+										,
+										t20_department
+									)
+								)
+							)
+						)
+						,
+						_(
+							t21_in
+							,
+							_(
+								_(
+									t22_the
+									,
+									_(
+										t23_eastern
+										,
+										t24_part
+									)
+								)
+								,
+								_(
+									t25_of
+									,
+									_(
+										t26_the
+										,
+										t27_country
+									)
+								)
+							)
+						)
+					)
+				)
+			)
+			;
 
-		// Text part
-		val salvadoran = leaf(pair("MOD_R","salvadoran"));
-		val reporter = leaf(pair("N_1","reporter"));
-		val mauricio_pineda = leaf(pair("NP","mauricio pineda"));
-		val a = leaf(pair("A","a"));
-		val sound = leaf(pair("MOD_R","sound"));
-		val technician = leaf(pair("N_1","technician"));
-		val _for = leaf(pair("P_R","for"));
-		val the = leaf(pair("THE","the"));
-		val local = leaf(pair("MOD_R","local"));
-		val canal = leaf(pair("N_1","canal"));
-		val Doce = leaf(pair("NP","Doce"));
-		val television = leaf(pair("N_1","television"));
-		val station = leaf(pair("N_1","station"));
-		val was = leaf(pair("IS","was"));
-		val shot = leaf(pair("V_1","shot"));
-		val and = leaf(pair("AND","and"));
-		val killed = leaf(pair("V_1","killed"));
-		val today = leaf(pair("N_1","today"));
-		val in = leaf(pair("P_R","in"));
-		val morazan = leaf(pair("NP","morazan"));
-		val department = leaf(pair("N_1","department"));
-		val eastern = leaf(pair("MOD_R","eastern"));
-		val part = leaf(pair("N_1","part"));
-		val of = leaf(pair("P_R","of"));
-		val country = leaf(pair("N_1","country"));
+			// create the tree structure for the hypothesis;
+			val th =
+			_(
+				h00_mauricio_pineda
+				,
+				_(
+					h01_was
+					,
+					_(
+						h02_killed
+						,
+						_(
+							h03_in
+							,
+							h04_morazan
+						)
+					)
+				)
+			)
+			;
 
-		val tree1 = 
-			node(
-				node(
-					node(salvadoran,
-						node(reporter,
-							mauricio_pineda)),
-					node(
-						node(
-							node(a,
-								node(sound,technician)),
-							node(_for,
-								node(the,
-									node(local,canal)))),
-						node(Doce,
-							node(television,station)))),
-				node(was,
-					node(
-						node(
-							node(
-								node(shot,and),killed),
-							node(today,
-								node(in,
-									node(morazan,department)))),
-						node(in,
-							node(
-								node(the,
-									node(eastern,part)),
-								node(of,
-									node(the,country)))))));
+			// create the subsumption relations;
+			val ss =
+			new String[] {
+				""
+			};
 
-		// Hypothesis part
+			// return the new entailment;
+			return new IEntailment(tt, th, ss);
+		}
 
-		val tree2 = 
-			node(
-				mauricio_pineda,
-				node(was,
-					node(killed,
-						node(in,morazan))));
-
-		// subsumption rules
-		val subsumptionRules = "";
-
-		aPair = new IEntailment(tree1, tree2, subsumptionRules);
-	}
 }
 

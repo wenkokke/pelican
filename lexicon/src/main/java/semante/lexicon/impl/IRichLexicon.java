@@ -21,10 +21,8 @@ public class IRichLexicon implements RichLexicon {
 	
 	@Delegate
 	Lexicon	lex;
-	STL		stl;
 
 	public IRichLexicon(final Settings settings, final STL stl) throws FileNotFoundException, SettingsException, IOException {
-		this.stl = stl;
 		this.lex = new ILexicon(settings.get("SemAnTE","Lexicon","Default"),stl);
 	}
 
@@ -46,11 +44,4 @@ public class IRichLexicon implements RichLexicon {
 			}
 		}
 	}
-
-	@Override
-	public final STL getSTL() {
-		return this.stl;
-	}
-
-
 }

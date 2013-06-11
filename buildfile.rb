@@ -11,14 +11,14 @@ SLF4J       = struct(
   :api     => 'org.slf4j:slf4j-api:jar:1.7.3',
   :simple  => 'org.slf4j:slf4j-simple:jar:1.7.3')
 PIPELINE    = struct(
-  :api     => 'pipeline:pipeline-api:jar:2.0.1',
-  :util    => 'pipeline:pipeline-util:jar:2.0.1')
+  :api     => 'pipeline:pipeline-api:jar:2.1.0',
+  :util    => 'pipeline:pipeline-util:jar:2.1.0')
 
 task 'deploy-lexicon' => 'pelican:lexicon:deploy'
 task 'render-lexicon' => 'pelican:lexicon:render'
 
 define 'pelican' do
-  project.version = '1.0.0'
+  project.version = '1.1.1'
 
   eclipse.natures :java
   compile.options.source = '1.5'
@@ -27,7 +27,7 @@ define 'pelican' do
   # implementation of pipeline-api
   define 'api' do
     compile.with LOMBOK,GUAVA,PIPELINE,
-      projects('lexicon','lambdacalc','predcalc','settings')
+      projects('lexicon','lambdacalc','settings')
     test.with LOMBOK,JPARSEC,GUAVA,SNAKE_YAML,SLF4J,PIPELINE
     package :jar
   end
@@ -74,10 +74,10 @@ define 'pelican' do
   end
 
   # implementation of first order logic and smashing from hol to fol
-  define 'predcalc' do
-    compile.with LOMBOK,SLF4J,projects('lambdacalc','settings')
-    package :jar
-  end
+  #define 'predcalc' do
+  #  compile.with LOMBOK,SLF4J,projects('lambdacalc','settings')
+  #  package :jar
+  #end
 
   # implementation of configuration files
   define 'settings' do
