@@ -15,15 +15,10 @@ import semante.lexicon.impl.IRichLexicon;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
 import semante.pipeline.Entailment;
+import semante.pipeline.Pair;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result.Visitor;
-import semante.pipeline.util.Pair;
-import semante.pipeline.util.SimpleBinaryTree;
-import semante.pipeline.util.binarytree.impl.ILabeller;
-import semante.pipeline.util.impl.IAnnotation;
-import semante.pipeline.util.impl.IBinaryTree;
-import semante.pipeline.util.impl.IPair;
-import semante.pipeline.util.impl.ISimpleBinaryTree;
+import semante.pipeline.SimpleBinaryTree;
 import semante.settings.SettingsException;
 import semante.settings.impl.ISettings;
 
@@ -43,6 +38,20 @@ public abstract class ATestCase {
 		    pipeline   = new IPipeline(settings,lambdacalc,lexicon);
 	}
 	
+	protected final SimpleBinaryTree<Pair<String,String>> node(
+	        SimpleBinaryTree<Pair<String,String>> l,
+	        SimpleBinaryTree<Pair<String,String>> r) {
+		return ISimpleBinaryTree.node(l, r);
+	}
+	
+	protected final SimpleBinaryTree<Pair<String,String>> leaf(Pair<String,String> pair) {
+		return ISimpleBinaryTree.leaf(pair);
+	}
+	
+	protected final Pair<String,String> pair(String ann, String txt) {
+		return IPair.pair(ann, txt);
+	}
+	
 	protected final SimpleBinaryTree<Pair<String,String>> _(
 			        SimpleBinaryTree<Pair<String,String>> l,
 			        SimpleBinaryTree<Pair<String,String>> r) {
@@ -53,11 +62,52 @@ public abstract class ATestCase {
 		return ISimpleBinaryTree.leaf(IPair.pair(ann, txt));
 	}
 	
-	protected final void someTest(final Entailment ent) throws Exception {
-		someTest(ent.getText(),ent.getHypothesis(),ent.getSubsumptions());
+	protected final void createTestCase(
+			final String name,
+			final Entailment ent) throws Exception {
+		createTestCase(name, ent.getText(),ent.getHypothesis(),ent.getSubsumptions());
 	}
 	
-	protected final void someTest(
+	private void createTestCase(
+			final String name,
+			final SimpleBinaryTree<Pair<String, String>> text,
+			final SimpleBinaryTree<Pair<String, String>> hypothesis,
+			final String subsumptions) {
+		
+		// label the annotation trees.
+		val lbl = new ILabeller();
+		val lbltxt = lbl.label(text);
+		val lblhyp = lbl.label(hypothesis);
+		
+		createTestCase(name,lbltxt,lblhyp,subsumptions);
+	}
+
+	private void createTestCase(
+			final String name,
+			final BinaryTree<Integer, Pair<String, String>> lbltxt,
+			final BinaryTree<Integer, Pair<String, String>> lblhyp,
+			final String subsumptions) {
+		
+		// convert pairs to annotations.
+		val ann = IBinaryTree.functor(
+			Functions.<Integer> identity(),
+			new Function<Pair<String,String>,Annotation>() {
+				@Override
+				public final Annotation apply(final Pair<String,String> pair) {
+					return new IAnnotation(pair.getFirst(),pair.getSecond());
+				}
+			});
+		val anntxt = lbltxt.accept(ann);
+		val annhyp = lblhyp.accept(ann);
+		
+		pipeline.createTestCase(name, "", anntxt, annhyp, subsumptions);
+	}
+
+	protected final void proveEntailment(final Entailment ent) throws Exception {
+		proveEntailment(ent.getText(),ent.getHypothesis(),ent.getSubsumptions());
+	}
+	
+	protected final void proveEntailment(
 			final SimpleBinaryTree<Pair<String,String>> txt,
 			final SimpleBinaryTree<Pair<String,String>> hyp,
 			final String subs) throws Exception {
@@ -67,10 +117,10 @@ public abstract class ATestCase {
 		val lbltxt = lbl.label(txt);
 		val lblhyp = lbl.label(hyp);
 		
-		someTest(lbltxt,lblhyp,subs);
+		proveEntailment(lbltxt,lblhyp,subs);
 	}
 		
-	protected final void someTest(
+	protected final void proveEntailment(
 				final BinaryTree<Integer,Pair<String,String>> lbltxt,
 				final BinaryTree<Integer,Pair<String,String>> lblhyp,
 				final String subs) throws Exception {

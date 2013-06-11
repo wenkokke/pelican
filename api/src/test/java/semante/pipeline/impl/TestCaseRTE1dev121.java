@@ -1,79 +1,148 @@
 package semante.pipeline.impl;
 
-import static semante.pipeline.util.impl.IPair.pair;
-import static semante.pipeline.util.impl.ISimpleBinaryTree.leaf;
-import static semante.pipeline.util.impl.ISimpleBinaryTree.node;
-import lombok.val;
 import semante.pipeline.Entailment;
+import org.junit.Test;
+import lombok.val;
 
-public class TestCaseRTE1dev121 extends ATestCase {
+public final class TestCaseRTE1dev121 extends ATestCase {
 
-//	@Test
-	public final void testEverything() throws Exception {
-		someTest(aPair);
-	}
+		@Test
+		public final void prove() throws Exception {
+			proveEntailment(createRTE1dev121());
+		}
 
-	private Entailment aPair;
+		@Test
+		public final void createTestCase() throws Exception {
+			createTestCase("RTE1dev121",createRTE1dev121());
+		}
 
-//	@Before
-	public final void setUpPair() {
+		public final Entailment createRTE1dev121() throws Exception {
 
-		// Dataset=RTE1dev, id=121
-		// Text=A Syrian-american airman accused of espionage complained about prisoner treatment at the US base in guantanamo, cuba.
-		// Hypothesis=american accused of espionage
-		// Entailment=True
-		
-		// TODO cannot deal with the inference syrian_american_airman(x) -> american(x). 
+			// create the vocabulary for the text;
+			val t00_a = word("A","a");
+			val t01_syrian = word("MOD_R","syrian");
+			val t02_airman = word("N_1","airman");
+			val t03_accused = word("V_1","accused");
+			val t04_of = word("P_R","of");
+			val t05_espionage = word("N_1","espionage");
+			val t06_complained = word("V_1","complained");
+			val t07_about = word("P_R","about");
+			val t08_prisoner = word("N_1","prisoner");
+			val t09_treatment = word("N_1","treatment");
+			val t10_at = word("P_R","at");
+			val t11_the = word("THE","the");
+			val t12_us = word("NP","us");
+			val t13_base = word("N_1","base");
+			val t14_in = word("P_R","in");
+			val t15_guantanamo = word("NP","guantanamo");
+			val t16_in = word("P_R","in");
+			val t17_cuba = word("NP","cuba");
 
-		// Text part
-		val a = leaf(pair("A","a"));
-		val syrian = leaf(pair("MOD_R","syrian"));
-		val airman = leaf(pair("N_1","airman"));
-		val accused = leaf(pair("V_1","accused"));
-		val of = leaf(pair("P_R","of"));
-		val espionage = leaf(pair("N_1","espionage"));
-		val complained = leaf(pair("V_1","complained"));
-		val about = leaf(pair("P_R","about"));
-		val prisoner = leaf(pair("N_1","prisoner"));
-		val treatment = leaf(pair("N_1","treatment"));
-		val at = leaf(pair("P_R","at"));
-		val the = leaf(pair("THE","the"));
-		val us = leaf(pair("NP","us"));
-		val base = leaf(pair("N_1","base"));
-		val in = leaf(pair("P_R","in"));
-		val guantanamo = leaf(pair("NP","guantanamo"));
-		val cuba = leaf(pair("NP","cuba"));
+			// create the vocabulary for the hypothesis;
+			val h00_american = word("MOD_R","american");
+			val h01_accused = word("V_1","accused");
+			val h02_of = word("P_R","of");
+			val h03_espionage = word("N_1","espionage");
 
-		val tree1 = 
-			node(
-				node(
-					node(a,
-						node(syrian,airman)),
-					node(accused,
-						node(of,espionage))),
-				node(
-					node(complained,
-						node(about,
-							node(prisoner,treatment))),
-					node(at,
-						node(
-							node(the,
-								node(us,base)),
-							node(in,
-								node(guantanamo,
-                  node(in,cuba)))))));
+			// create the tree structure for the text;
+			val tt =
+			_(
+				_(
+					_(
+						t00_a
+						,
+						_(
+							t01_syrian
+							,
+							t02_airman
+						)
+					)
+					,
+					_(
+						t03_accused
+						,
+						_(
+							t04_of
+							,
+							t05_espionage
+						)
+					)
+				)
+				,
+				_(
+					_(
+						t06_complained
+						,
+						_(
+							t07_about
+							,
+							_(
+								t08_prisoner
+								,
+								t09_treatment
+							)
+						)
+					)
+					,
+					_(
+						t10_at
+						,
+						_(
+							_(
+								t11_the
+								,
+								_(
+									t12_us
+									,
+									t13_base
+								)
+							)
+							,
+							_(
+								t14_in
+								,
+								_(
+									t15_guantanamo
+									,
+									_(
+										t16_in
+										,
+										t17_cuba
+									)
+								)
+							)
+						)
+					)
+				)
+			)
+			;
 
-		// Hypothesis part
-		val american = leaf(pair("MOD_R","american"));
+			// create the tree structure for the hypothesis;
+			val th =
+			_(
+				h00_american
+				,
+				_(
+					h01_accused
+					,
+					_(
+						h02_of
+						,
+						h03_espionage
+					)
+				)
+			)
+			;
 
-		val tree2 = 
-			node(american,
-				node(accused,
-					node(of,espionage)));
+			// create the subsumption relations;
+			val ss =
+			new String[] {
+				""
+			};
 
-		// subsumption rules
-		val subsumptionRules = "";
+			// return the new entailment;
+			return new IEntailment(tt, th, ss);
+		}
 
-		aPair = new IEntailment(tree1, tree2, subsumptionRules);
-	}
 }
+
