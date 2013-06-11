@@ -1,4 +1,4 @@
-package lambdacalc;
+package lambdacalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -7,6 +7,15 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 
+import lambdacalc.DeBruijn;
+import lambdacalc.DeBruijn2Expr;
+import lambdacalc.DeBruijn2FreeNames;
+import lambdacalc.Expr;
+import lambdacalc.ExprBuilder;
+import lambdacalc.FreshNameSupplier;
+import lambdacalc.Index;
+import lambdacalc.Symbol;
+import lambdacalc.Type;
 import lambdacalc.DeBruijn.Visitor;
 import lombok.RequiredArgsConstructor;
 import lombok.val;

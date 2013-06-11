@@ -1,7 +1,9 @@
-package lambdacalc;
+package lambdacalc.impl;
 
-import static lambdacalc.TypePredicate.*;
+import static lambdacalc.TypePredicate.IsFunction;
 import static lombok.AccessLevel.PRIVATE;
+import lambdacalc.Type;
+import lambdacalc.TypePrinter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 

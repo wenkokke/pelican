@@ -1,9 +1,11 @@
-package lambdacalc;
+package lambdacalc.impl;
 
+import lambdacalc.Symbol;
+import lambdacalc.Type;
 import lombok.experimental.Value;
 
 @Value
 public final class ISymbol implements Symbol {
-	String		name;
+	String	name;
 	Type	type;
 }

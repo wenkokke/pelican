@@ -1,10 +1,13 @@
-package lambdacalc;
+package lambdacalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
 
 import java.util.Map;
 import java.util.Set;
 
+import lambdacalc.FreshNameSupplier;
+import lambdacalc.Symbol;
+import lambdacalc.Type;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;

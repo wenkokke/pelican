@@ -1,6 +1,11 @@
-package lambdacalc;
+package lambdacalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
+import lambdacalc.DeBruijn2Expr;
+import lambdacalc.DeBruijnBetaReducer;
+import lambdacalc.Expr;
+import lambdacalc.Expr2DeBruijn;
+import lambdacalc.ExprBetaReducer;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 

@@ -1,6 +1,13 @@
-package lambdacalc;
+package lambdacalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
+import lambdacalc.Expr;
+import lambdacalc.ExprBuilder;
+import lambdacalc.ExprParser;
+import lambdacalc.Symbol;
+import lambdacalc.Type;
+import lambdacalc.TypeBuilder;
+import lambdacalc.Types;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
@@ -67,8 +74,8 @@ public final class IExprParser implements ExprParser {
 	 */
 	private static final Parser<Type> typeParser() {
 		val refType = Parser.<Type> newReference();
-		val pEType  = getToken("e").retn((Type) IType.E);
-		val pTType  = getToken("t").retn((Type) IType.T);
+		val pEType  = getToken("e").retn((Type) Types.E);
+		val pTType  = getToken("t").retn((Type) Types.T);
 		val pAtom   = Parsers.or(pEType,pTType,refType.lazy().between(getToken("("), getToken(")"))); 
 		val pType   = new OperatorTable<Type>()
 		    .infixr(Parsers.always().retn(new Binary<Type>() {
