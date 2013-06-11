@@ -1,9 +1,10 @@
-package semante.predcalc.util;
+package predcalc.util;
 
 import java.util.List;
 
+import predcalc.ExprForm;
+
 import lombok.experimental.Value;
-import semante.predcalc.ExprForm;
 
 @Value
 public class IExprForm<Kind> implements ExprForm<Kind> {

@@ -9,13 +9,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import predcalc.ExprForm;
+import predcalc.PredCalc;
+import predcalc.FOLExpr.Formula;
+
 import lombok.Cleanup;
 import lombok.Getter;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
-import semante.predcalc.FOLExpr.Formula;
-import semante.predcalc.ExprForm;
-import semante.predcalc.PredCalc;
 import semante.prover.OutputParser;
 import semante.prover.Prover;
 import semante.prover.ProverArgs.ResultType;

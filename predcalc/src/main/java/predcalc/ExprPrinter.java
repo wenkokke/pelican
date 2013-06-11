@@ -1,6 +1,6 @@
-package semante.predcalc;
+package predcalc;
 
-import semante.predcalc.FOLExpr.Formula;
+import predcalc.FOLExpr.Formula;
 
 
 public interface ExprPrinter {
