@@ -7,14 +7,32 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
+import semante.pipeline.SimpleBinaryTree;
 import semante.pipeline.TestCaseCreator;
-import semante.pipeline.util.impl.IBinaryTree;
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true,level=PRIVATE)
 public final class ITestCaseCreator implements TestCaseCreator {
 	
 	@NonFinal StringBuilder test;
+	
+	@Override
+	public final String createTestCase(
+			final String name,
+			final String comment,
+			final SimpleBinaryTree<Annotation> text,
+			final SimpleBinaryTree<Annotation> hypothesis,
+			final String subsumptions) {
+		
+		// create a labeller;
+		val lbl = ILabeller.labeller();
+		
+		// label the pair trees and forward;
+		return createTestCase(name, comment,
+			lbl.label(text),
+			lbl.label(hypothesis),
+			subsumptions);
+	}
 
 	@Override
 	public final <ID> String createTestCase(

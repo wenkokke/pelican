@@ -1,8 +1,10 @@
 package semante.pipeline.impl;
 
-import semante.pipeline.Entailment;
-import org.junit.Test;
 import lombok.val;
+
+import org.junit.Test;
+
+import semante.pipeline.Entailment;
 
 public final class TestCaseRTE4test955 extends ATestCase {
 

@@ -2,7 +2,6 @@ package semante.pipeline.impl;
 
 import static com.google.common.collect.Lists.transform;
 import static lombok.AccessLevel.PRIVATE;
-import static semante.pipeline.util.impl.IBinaryTree.functor;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -21,7 +20,6 @@ import semante.pipeline.Category;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result;
 import semante.pipeline.TestCaseCreator;
-import semante.pipeline.util.impl.ICategory;
 import semante.settings.Settings;
 
 import com.google.common.base.Function;
@@ -41,23 +39,13 @@ public final class IPipeline implements Pipeline {
 	RichLexicon		lexicon;
 	
 	@Override
-	public final List<Category> getCategories() {
-		return Lists.transform(lexicon.getEntries(), new Function<String,Category>() {
-			@Override
-			public final Category apply(final String input) {
-				return new ICategory(input);
-			}
-		});
-	}
-	
-	@Override
 	public final <ID> Result<ID> prove(
 		final BinaryTree<ID, Annotation> txt,
 		final BinaryTree<ID, Annotation> hyp,
 		final String subsumptions) throws FileNotFoundException {
 		
 		// lookup annotations in the lexicon.
-		val lookup = functor(
+		val lookup = IBinaryTree.functor(
 			Functions.<ID> identity(), 
 			new Function<Annotation,Word>() {
 				
@@ -108,5 +96,15 @@ public final class IPipeline implements Pipeline {
 		// TODO implement smasher and prover9 parts of pipeline
 		
 		return new IResult$Unknown<ID>();
+	}
+	
+	@Override
+	public final List<Category> getCategories() {
+		return Lists.transform(lexicon.getEntries(), new Function<String,Category>() {
+			@Override
+			public final Category apply(final String input) {
+				return new ICategory(input);
+			}
+		});
 	}
 }

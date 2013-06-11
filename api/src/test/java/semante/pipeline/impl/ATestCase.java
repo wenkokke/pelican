@@ -15,15 +15,10 @@ import semante.lexicon.impl.IRichLexicon;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
 import semante.pipeline.Entailment;
+import semante.pipeline.Pair;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result.Visitor;
-import semante.pipeline.util.Pair;
-import semante.pipeline.util.SimpleBinaryTree;
-import semante.pipeline.util.binarytree.impl.ILabeller;
-import semante.pipeline.util.impl.IAnnotation;
-import semante.pipeline.util.impl.IBinaryTree;
-import semante.pipeline.util.impl.IPair;
-import semante.pipeline.util.impl.ISimpleBinaryTree;
+import semante.pipeline.SimpleBinaryTree;
 import semante.settings.SettingsException;
 import semante.settings.impl.ISettings;
 
@@ -41,6 +36,20 @@ public abstract class ATestCase {
 		val settings   = new ISettings();
 		val lexicon    = new IRichLexicon(settings,lambdacalc);
 		    pipeline   = new IPipeline(settings,lambdacalc,lexicon);
+	}
+	
+	protected final SimpleBinaryTree<Pair<String,String>> node(
+	        SimpleBinaryTree<Pair<String,String>> l,
+	        SimpleBinaryTree<Pair<String,String>> r) {
+		return ISimpleBinaryTree.node(l, r);
+	}
+	
+	protected final SimpleBinaryTree<Pair<String,String>> leaf(Pair<String,String> pair) {
+		return ISimpleBinaryTree.leaf(pair);
+	}
+	
+	protected final Pair<String,String> pair(String ann, String txt) {
+		return IPair.pair(ann, txt);
 	}
 	
 	protected final SimpleBinaryTree<Pair<String,String>> _(
@@ -91,7 +100,7 @@ public abstract class ATestCase {
 		val anntxt = lbltxt.accept(ann);
 		val annhyp = lblhyp.accept(ann);
 		
-		System.err.println(pipeline.createTestCase(name, "", anntxt, annhyp, subsumptions));
+		pipeline.createTestCase(name, "", anntxt, annhyp, subsumptions);
 	}
 
 	protected final void proveEntailment(final Entailment ent) throws Exception {

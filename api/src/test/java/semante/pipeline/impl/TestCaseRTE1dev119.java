@@ -1,68 +1,113 @@
 package semante.pipeline.impl;
 
-import static semante.pipeline.util.impl.IPair.pair;
-import static semante.pipeline.util.impl.ISimpleBinaryTree.leaf;
-import static semante.pipeline.util.impl.ISimpleBinaryTree.node;
+import semante.pipeline.Entailment;
+import org.junit.Test;
 import lombok.val;
 
-import org.junit.Before;
-import org.junit.Test;
+public final class TestCaseRTE1dev119 extends ATestCase {
 
-import semante.pipeline.Entailment;
+		@Test
+		public final void prove() throws Exception {
+			proveEntailment(createRTE1dev119());
+		}
 
-public class TestCaseRTE1dev119 extends ATestCase {
+		@Test
+		public final void createTestCase() throws Exception {
+			createTestCase("RTE1dev119",createRTE1dev119());
+		}
 
-	@Test
-	public final void testEverything() throws Exception {
-		proveEntailment(aPair);
-	}
+		public final Entailment createRTE1dev119() throws Exception {
 
-	private Entailment aPair;
+			// create the vocabulary for the text;
+			val t00_a = word("A","a");
+			val t01_cuban = word("MOD_R","cuban");
+			val t02_american = word("N_1","american");
+			val t03_who = word("WHO_R","who");
+			val t04_is = word("IS","is");
+			val t05_accused = word("V_1","accused");
+			val t06_of = word("P_R","of");
+			val t07_espionage = word("NP","espionage");
+			val t08_pleads_innocent = word("V_1","pleads innocent");
 
-	@Before
-	public final void setUpPair() {
+			// create the vocabulary for the hypothesis;
+			val h00_an = word("A","an");
+			val h01_american = word("N_1","american");
+			val h02_is = word("V_AUX","is");
+			val h03_accused = word("V_1","accused");
+			val h04_of = word("P_R","of");
+			val h05_espionage = word("NP","espionage");
 
-		// Dataset=RTE1dev, id=119
-		// Text=A cuban american who is accused of espionage pleads innocent.
-		// Hypothesis=american accused of espionage
-		// Entailment=True
-
-		// Text part
-		val a 				= leaf(pair("A","a"));
-		val cuban 			= leaf(pair("MOD_R","cuban"));
-		val american 		= leaf(pair("N_1","american"));
-		val who 			= leaf(pair("WHO_R","who"));
-		val is 				= leaf(pair("IS","is"));
-		val accused 		= leaf(pair("V_1","accused"));
-		val of 				= leaf(pair("P_R","of"));
-		val espionage 		= leaf(pair("NP","espionage"));
-		val pleads_innocent	= leaf(pair("V_1","pleads innocent"));
-		
-		val tree1 =
-			node(
-				node(a,
-					node(
-						node(cuban,american),
-						node(who,node(is,node(accused,node(of,espionage))))
+			// create the tree structure for the text;
+			val tt =
+			_(
+				_(
+					t00_a
+					,
+					_(
+						_(
+							t01_cuban
+							,
+							t02_american
+						)
+						,
+						_(
+							t03_who
+							,
+							_(
+								t04_is
+								,
+								_(
+									t05_accused
+									,
+									_(
+										t06_of
+										,
+										t07_espionage
+									)
+								)
+							)
+						)
 					)
-				),
-				pleads_innocent
-			);
+				)
+				,
+				t08_pleads_innocent
+			)
+			;
 
-		// Hypothesis part
-		val an = leaf(pair("A","an"));
-		val is1 = leaf(pair("V_AUX","is"));
-		
-		// TODO ambiguity problem with "is" as COPULA, APP_EQ, APP_PRED or V_AUX.
+			// create the tree structure for the hypothesis;
+			val th =
+			_(
+				_(
+					h00_an
+					,
+					h01_american
+				)
+				,
+				_(
+					h02_is
+					,
+					_(
+						h03_accused
+						,
+						_(
+							h04_of
+							,
+							h05_espionage
+						)
+					)
+				)
+			)
+			;
 
-		val tree2 =
-			node(
-				node(an,american),
-				node(is1,node(accused,node(of,espionage))));
+			// create the subsumption relations;
+			val ss =
+			new String[] {
+				""
+			};
 
-		// subsumption rules
-		val subs = "";
+			// return the new entailment;
+			return new IEntailment(tt, th, ss);
+		}
 
-		aPair = new IEntailment(tree1, tree2, subs);
-	}
 }
+

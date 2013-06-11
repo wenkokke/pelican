@@ -1,12 +1,12 @@
 package semante.pipeline.impl;
 
-import com.google.common.base.Joiner;
-
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Value;
 import semante.pipeline.Entailment;
-import semante.pipeline.util.Pair;
-import semante.pipeline.util.SimpleBinaryTree;
+import semante.pipeline.Pair;
+import semante.pipeline.SimpleBinaryTree;
+
+import com.google.common.base.Joiner;
 
 @Value
 @RequiredArgsConstructor
