@@ -15,7 +15,7 @@ import lambdacalc.Expr.Visitor;
 import lambdacalc.STL;
 import lambdacalc.Symbol;
 import lambdacalc.Type;
-import lambdacalc.IType;
+import lambdacalc.Types;
 
 /*
  * Convert a first-order lambda expression to predicate logic
@@ -31,16 +31,16 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 	
 	private Visitor<FOLExpr> smash = new Visitor<FOLExpr>() {
 		@Override public FOLExpr variable(Symbol s) {
-			if (typeIs(s.getType(), IType.E)) {
+			if (typeIs(s.getType(), Types.E)) {
 				// Variable
 				return new IFOLExpr.Variable(s.getName());
-			} else if (typeVector(s.getType(), IType.T,  IType.T)) {
+			} else if (typeVector(s.getType(), Types.T,  Types.T)) {
 				// Connective
 				return new IFOLExpr.Connective(lookup(s.getName()), new ArrayList<Formula>());
-			} else if (typeVector(s.getType(), IType.E, IType.T)) {
+			} else if (typeVector(s.getType(), Types.E, Types.T)) {
 				// Predicate
 				return new IFOLExpr.Predicate(lookup(s.getName()), new ArrayList<Term>());
-			} else if (typeVector(s.getType(), IType.E, IType.E)) {
+			} else if (typeVector(s.getType(), Types.E, Types.E)) {
 				// Function
 				return new IFOLExpr.Function(lookup(s.getName()), new ArrayList<Term>());
 			} else {
@@ -54,7 +54,7 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 				// Abstraction -> quantifier
 				@Override public FOLExpr abstraction(final Symbol s2, final Expr body2) {
 					// .. if the right is an abstraction, return a new abstraction
-					if (typeIs(lcalc.typeOf(f), IType.ET_T)) {
+					if (typeIs(lcalc.typeOf(f), Types.ET_T)) {
 						Term v = new IFOLExpr.Variable(s2.getName());
 						return new IFOLExpr.Quantifier(lookup(f.accept(getName)), v, (Formula) convert(body2));
 					} else {
