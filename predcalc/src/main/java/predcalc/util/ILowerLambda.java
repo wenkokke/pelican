@@ -5,8 +5,7 @@ import java.util.List;
 
 import lambdacalc.Expr;
 import lambdacalc.ExprBuilder;
-import lambdacalc.IType;
-import lambdacalc.IType.IFunction;
+import lambdacalc.Types;
 import lambdacalc.STL;
 import lambdacalc.Symbol;
 import lambdacalc.Type;
@@ -25,14 +24,11 @@ public class ILowerLambda implements LowerLambda {
 	private Counter counter = new Counter();
 	private List<Expr> pragmatics = new ArrayList<Expr>();
 	
-	static Type TTT = new IFunction(new IFunction(IType.T, IType.T), IType.T);
-	static Type ET_E = new IFunction(IType.ET, IType.E);
-	
 	// use a pragmatics list state, reset every call
 	private ExprBuilder rewrite = new ExprBuilder() {
 		@Override
 		public Expr application(final Expr f, final Expr arg) {
-			if (lcalc.typeOf(arg).equals(IType.E) || lcalc.typeOf(arg).equals(IType.T)) {
+			if (lcalc.typeOf(arg).equals(Types.E) || lcalc.typeOf(arg).equals(Types.T)) {
 				// Recursive for e and t types
 				return lcalc.getExprBuilder().application(f.accept(rewrite), arg.accept(rewrite));
 			} else if (ETStr(lcalc.typeOf(arg)).length() > 0) {
@@ -40,7 +36,7 @@ public class ILowerLambda implements LowerLambda {
 				Expr left = f.accept(new ExprBuilder(){
 					@Override public Expr variable(Symbol s1) {
 						// f is a quantifier or iota
-						if (s1.getType().equals(IType.ET_T)) {
+						if (s1.getType().equals(Types.ET_T)) {
 							// quantifier (leave it in place)
 							return lcalc.getExprBuilder().application(f, arg.accept(new ExprBuilder(){
 								@Override public Expr abstraction(final Symbol s2, final Expr body2) {
@@ -52,27 +48,27 @@ public class ILowerLambda implements LowerLambda {
 								@Override public Expr variable(Symbol s2)
 									{ throw new Error("Non-abstraction in quantifier: " + s2); }
 							}));
-						} else if (s1.getType().equals(ET_E)) {
+						} else if (s1.getType().equals(Types.ET_E)) {
 							// iota (return a new constant)
 							ExprBuilder b = lcalc.getExprBuilder();
-							Expr c = b.variable(buildSymbol("c"+counter.get(), IType.E));
+							Expr c = b.variable(buildSymbol("c"+counter.get(), Types.E));
 							Expr e =
 								b.application(
-									b.variable(buildSymbol("EQUIVALENCES", TTT)),
+									b.variable(buildSymbol("EQUIVALENCES", Types.TTT)),
 									b.application(
 											arg,
-											b.variable(buildSymbol("x", IType.E))));
+											b.variable(buildSymbol("x", Types.E))));
 							Expr i =
 									b.application(
 										b.application(
-												b.variable(buildSymbol("EQ", IType.EET)),
-												b.variable(buildSymbol("x", IType.E))), 
+												b.variable(buildSymbol("EQ", Types.EET)),
+												b.variable(buildSymbol("x", Types.E))), 
 										c);
 							Expr q =
 									b.application(
-										b.variable(buildSymbol("FORALL", IType.ET_T)),
+										b.variable(buildSymbol("FORALL", Types.ET_T)),
 										b.abstraction(
-												buildSymbol("x", IType.E),
+												buildSymbol("x", Types.E),
 												b.application(e, i)));
 							pragmatics.add(lcalc.betaReduce(lcalc.betaReduce(q).accept(rewrite)));
 							return c;
@@ -103,7 +99,7 @@ public class ILowerLambda implements LowerLambda {
 		private Expr compound(final Expr a, final Expr b) {
 			return b.accept(new ExprBuilder(){
 				@Override public Expr variable(final Symbol sb) {
-					if (typeAll(sb.getType(), IType.E) || typeAll(sb.getType(), IType.T)) {
+					if (typeAll(sb.getType(), Types.E) || typeAll(sb.getType(), Types.T)) {
 						// a + b:<e> = b   ,   a + b: = b
 						return lcalc.getExprBuilder().variable(sb);
 					} else {
@@ -171,11 +167,11 @@ public class ILowerLambda implements LowerLambda {
 		
 		// all the e's in a eeeeeeet type
 		String ETStr(final Type t) {
-			return t.equals(IType.T)? "" : t.accept(new Type.Visitor<String>() {
+			return t.equals(Types.T)? "" : t.accept(new Type.Visitor<String>() {
 				@Override public String constant(String name)
 					{ return null; }
 				@Override public String function(Type a, Type b) {
-					if (a.equals(IType.E)) {
+					if (a.equals(Types.E)) {
 						String etstr = ETStr(b);
 						return (null == etstr)? null : "e" + etstr;
 					} else {
@@ -194,9 +190,9 @@ public class ILowerLambda implements LowerLambda {
 			return new Type.Visitor<Type>(){
 				@Override public Type constant(String name) { return null; }
 				@Override public Type function(Type l, final Type r) {
-					if (l.equals(IType.E)) {
+					if (l.equals(Types.E)) {
 						Type wb = r.accept(walka(b));
-						return (null == wb)? null : tb.function(IType.E, wb);									
+						return (null == wb)? null : tb.function(Types.E, wb);									
 					} else {
 						return r.accept(new Type.Visitor<Type>() {
 							@Override public Type constant(String name) { return r; }
@@ -213,16 +209,16 @@ public class ILowerLambda implements LowerLambda {
 					return new Type.Visitor<Type>(){
 						@Override public Type constant(String name) { return x; }
 						@Override public Type function(Type l, final Type r) {
-							if (l.equals(IType.E)) {
+							if (l.equals(Types.E)) {
 								// if we're looking at an e in m
 								return a.accept(new Type.Visitor<Type>(){
 									@Override public Type constant(String name) {
 										// if we're at the end of a, add an e to the front of x
-										return tb.function(IType.E, r.accept(rmb(a, x)));
+										return tb.function(Types.E, r.accept(rmb(a, x)));
 									}
 									@Override public Type function(Type a1, Type a2) {
 										// if we're stripping the e's off b (and off a)
-										if (a1.equals(IType.E)) {
+										if (a1.equals(Types.E)) {
 											return r.accept(rmb(a1, x));
 										} else {
 											throw new Error("a is not an application of an e-type to anything!");
