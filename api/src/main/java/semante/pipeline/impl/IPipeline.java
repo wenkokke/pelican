@@ -87,10 +87,10 @@ public final class IPipeline implements Pipeline {
 		val uniqueHyp = ImmutableList.copyOf(ImmutableSet.copyOf(reducedHyp));
 		
 		for (val nub: uniqueTxt) {
-			System.err.println("txt:"+nub);
+			System.err.println("txt:"+stl.format(nub));
 		}
 		for (val nub: uniqueHyp) {
-			System.err.println("hyp:"+nub);
+			System.err.println("hyp:"+stl.format(nub));
 		}
 		
 		// TODO implement smasher and prover9 parts of pipeline
