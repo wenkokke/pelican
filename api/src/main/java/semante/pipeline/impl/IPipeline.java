@@ -7,11 +7,14 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import lambdacalc.DeBruijn;
+import lambdacalc.Expr;
 import lambdacalc.STL;
 import lombok.Delegate;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
+import predcalc.ExprForm;
+import predcalc.util.ILowerLambda;
 import semante.lexicon.RichLexicon;
 import semante.lexicon.Word;
 import semante.pipeline.Annotation;
@@ -87,10 +90,10 @@ public final class IPipeline implements Pipeline {
 		val uniqueHyp = ImmutableList.copyOf(ImmutableSet.copyOf(reducedHyp));
 		
 		for (val nub: uniqueTxt) {
-			System.err.println("txt:"+stl.format(nub));
+			System.err.println("txt:"+stl.format(stl.betaReduce(stl.fromDeBruijn(nub))));
 		}
 		for (val nub: uniqueHyp) {
-			System.err.println("hyp:"+stl.format(nub));
+			System.err.println("hyp:"+stl.format(stl.betaReduce(stl.fromDeBruijn(nub))));
 		}
 		
 		// TODO implement smasher and prover9 parts of pipeline
