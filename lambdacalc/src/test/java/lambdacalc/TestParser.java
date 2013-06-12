@@ -2,7 +2,6 @@ package lambdacalc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import lambdacalc.IType;
 
 import org.junit.Test;
 
@@ -10,8 +9,8 @@ public final class TestParser extends TestLambdaCalc {
 	
 	@Test
 	public final void primitiveTypes() {
-		assertSame(IType.E, stl.parseType("e"));
-		assertSame(IType.T, stl.parseType("t"));
+		assertSame(Types.E, stl.parseType("e"));
+		assertSame(Types.T, stl.parseType("t"));
 	}
 	
 	@Test

@@ -1,10 +1,15 @@
-package lambdacalc;
+package lambdacalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
-import lambdacalc.IDeBruijn.IAbstraction;
-import lambdacalc.IDeBruijn.IApplication;
-import lambdacalc.IDeBruijn.IConstant;
-import lambdacalc.IDeBruijn.IVariable;
+import lambdacalc.DeBruijn;
+import lambdacalc.DeBruijnBuilder;
+import lambdacalc.Index;
+import lambdacalc.Symbol;
+import lambdacalc.Type;
+import lambdacalc.impl.IDeBruijn.IAbstraction;
+import lambdacalc.impl.IDeBruijn.IApplication;
+import lambdacalc.impl.IDeBruijn.IConstant;
+import lambdacalc.impl.IDeBruijn.IVariable;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 

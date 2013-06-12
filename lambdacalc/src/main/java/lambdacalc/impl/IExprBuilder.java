@@ -1,9 +1,12 @@
-package lambdacalc;
+package lambdacalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
-import lambdacalc.IExpr.IAbstraction;
-import lambdacalc.IExpr.IApplication;
-import lambdacalc.IExpr.IVariable;
+import lambdacalc.Expr;
+import lambdacalc.ExprBuilder;
+import lambdacalc.Symbol;
+import lambdacalc.impl.IExpr.IAbstraction;
+import lambdacalc.impl.IExpr.IApplication;
+import lambdacalc.impl.IExpr.IVariable;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
