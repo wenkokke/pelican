@@ -18,11 +18,11 @@ task 'deploy-lexicon' => 'pelican:lexicon:deploy'
 task 'render-lexicon' => 'pelican:lexicon:render'
 
 define 'pelican' do
-  project.version = '1.1.1'
+  project.version = '1.2.0'
 
   eclipse.natures :java
-  compile.options.source = '1.5'
-  compile.options.target = '1.5'
+  compile.options.source = '1.7'
+  compile.options.target = '1.7'
 
   # implementation of pipeline-api
   define 'api' do
@@ -74,10 +74,10 @@ define 'pelican' do
   end
 
   # implementation of first order logic and smashing from hol to fol
-  #define 'predcalc' do
-  #  compile.with LOMBOK,SLF4J,projects('lambdacalc','settings')
-  #  package :jar
-  #end
+  define 'predcalc' do
+    compile.with LOMBOK,SLF4J,projects('lambdacalc','settings')
+    package :jar
+  end
 
   # implementation of configuration files
   define 'settings' do
