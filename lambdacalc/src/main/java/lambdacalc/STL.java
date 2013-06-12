@@ -1,11 +1,33 @@
 package lambdacalc;
 
 import static lombok.AccessLevel.PRIVATE;
-import static lambdacalc.IType.*;
+import static lambdacalc.Types.*;
+
 import java.util.Map;
 
 import com.google.common.collect.Maps;
 
+import lambdacalc.impl.IDeBruijn2Expr;
+import lambdacalc.impl.IDeBruijn2FreeNames;
+import lambdacalc.impl.IDeBruijn2Type;
+import lambdacalc.impl.IDeBruijnBetaReducer;
+import lambdacalc.impl.IDeBruijnBuilder;
+import lambdacalc.impl.IDeBruijnEtaReducer;
+import lambdacalc.impl.IDeBruijnPrinter;
+import lambdacalc.impl.IDeBruijnSubstituter;
+import lambdacalc.impl.IDeBruijnTypeChecker;
+import lambdacalc.impl.IExpr2DeBruijn;
+import lambdacalc.impl.IExpr2FreeNames;
+import lambdacalc.impl.IExpr2Type;
+import lambdacalc.impl.IExprBetaReducer;
+import lambdacalc.impl.IExprBuilder;
+import lambdacalc.impl.IExprEtaReducer;
+import lambdacalc.impl.IExprParser;
+import lambdacalc.impl.IExprPrinter;
+import lambdacalc.impl.IIndexPrinter;
+import lambdacalc.impl.ISymbolPrinter;
+import lambdacalc.impl.ITypeBuilder;
+import lambdacalc.impl.ITypePrinter;
 import lombok.Delegate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

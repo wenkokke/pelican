@@ -1,5 +1,7 @@
-package lambdacalc;
+package lambdacalc.impl;
 
+import lambdacalc.Index;
+import lambdacalc.Type;
 import lombok.experimental.Value;
 
 @Value

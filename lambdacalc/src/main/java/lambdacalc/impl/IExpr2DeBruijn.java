@@ -1,9 +1,14 @@
-package lambdacalc;
+package lambdacalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
 
 import java.util.LinkedList;
 
+import lambdacalc.DeBruijn;
+import lambdacalc.DeBruijnBuilder;
+import lambdacalc.Expr;
+import lambdacalc.Expr2DeBruijn;
+import lambdacalc.Symbol;
 import lambdacalc.Expr.Visitor;
 import lombok.RequiredArgsConstructor;
 import lombok.val;

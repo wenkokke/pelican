@@ -1,7 +1,11 @@
-package lambdacalc;
+package lambdacalc.impl;
 
 import static lambdacalc.ExprPredicate.IsVariable;
 import static lombok.AccessLevel.PRIVATE;
+import lambdacalc.Expr;
+import lambdacalc.ExprPrinter;
+import lambdacalc.Symbol;
+import lambdacalc.SymbolPrinter;
 import lambdacalc.Expr.Visitor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

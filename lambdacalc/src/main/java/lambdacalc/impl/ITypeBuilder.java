@@ -1,8 +1,11 @@
-package lambdacalc;
+package lambdacalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
-import lambdacalc.IType.IConstant;
-import lambdacalc.IType.IFunction;
+import lambdacalc.Type;
+import lambdacalc.TypeBuilder;
+import lambdacalc.Types;
+import lambdacalc.impl.IType.IConstant;
+import lambdacalc.impl.IType.IFunction;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
@@ -13,11 +16,11 @@ public class ITypeBuilder implements TypeBuilder {
 	@Override
 	public Type constant(String name) {
 		if (name.equals("e")) {
-			return IType.E;
+			return Types.E;
 		}
 		else
 		if (name.equals("t")) {
-			return IType.T;
+			return Types.T;
 		}
 		else {
 			return new IConstant(name);

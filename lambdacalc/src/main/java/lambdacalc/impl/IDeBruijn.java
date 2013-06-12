@@ -1,6 +1,10 @@
-package lambdacalc;
+package lambdacalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
+import lambdacalc.DeBruijn;
+import lambdacalc.Index;
+import lambdacalc.Symbol;
+import lambdacalc.Type;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,19 +12,18 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.Wither;
 
 @FieldDefaults(makeFinal=true,level=PRIVATE)
-public abstract class IExpr implements Expr {
+public abstract class IDeBruijn implements DeBruijn {
 
 	@Getter @Wither
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
-	public static final class IAbstraction extends IExpr {
-		Symbol symbol;
-		Expr arg;
+	public static final class IAbstraction extends IDeBruijn {
+		Type type; DeBruijn body;
 		
 		@Override
 		public final <X> X accept(Visitor<X> v) {
-			return v.abstraction(symbol, arg);
+			return v.abstraction(type, body);
 		}
 	}
 	
@@ -28,8 +31,8 @@ public abstract class IExpr implements Expr {
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
-	public static final class IApplication extends IExpr {
-		Expr fun,arg;
+	public static final class IApplication extends IDeBruijn {
+		DeBruijn fun,arg;
 		
 		@Override
 		public final <X> X accept(Visitor<X> v) {
@@ -41,12 +44,25 @@ public abstract class IExpr implements Expr {
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
-	public static final class IVariable extends IExpr {
-		Symbol symbol;
+	public static final class IVariable extends IDeBruijn {
+		Index i;
 
 		@Override
 		public final <X> X accept(Visitor<X> v) {
-			return v.variable(symbol);
+			return v.variable(i);
+		}
+	}
+	
+	@Getter @Wither
+	@RequiredArgsConstructor
+	@EqualsAndHashCode(callSuper=false)
+	@FieldDefaults(makeFinal=true,level=PRIVATE)
+	public static final class IConstant extends IDeBruijn {
+		Symbol s;
+
+		@Override
+		public final <X> X accept(Visitor<X> v) {
+			return v.constant(s);
 		}
 	}
 }
