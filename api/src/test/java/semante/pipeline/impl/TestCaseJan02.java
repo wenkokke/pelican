@@ -19,19 +19,19 @@ public final class TestCaseJan02 extends ATestCase {
 		public final Entailment createJan02() throws Exception {
 
 			// create the vocabulary for the text;
-			val t00_jan = word("NP","jan");
-			val t01_is = word("IS","is");
-			val t02_a = word("A","a");
-			val t03_black = word("MOD_I","black");
-			val t04_dutch = word("MOD_I","dutch");
-			val t05_man = word("N_1","man");
+			val t00_jan 	= word("NP","jan");
+			val t01_is 		= word("IS","is");
+			val t02_a 		= word("A","a");
+			val t03_black 	= word("MOD_I","black");
+			val t04_dutch	= word("MOD_I","dutch");
+			val t05_man 	= word("N_1","man");
 
 			// create the vocabulary for the hypothesis;
-			val h00_jan = word("NP","jan");
-			val h01_is = word("IS","is");
-			val h02_a = word("A","a");
-			val h03_black = word("MOD_I","black");
-			val h04_man = word("N_1","man");
+			val h00_jan 	= word("NP","jan");
+			val h01_is 		= word("IS","is");
+			val h02_a 		= word("A","a");
+			val h03_black 	= word("MOD_I","black");
+			val h04_man 	= word("N_1","man");
 
 			// create the tree structure for the text;
 			val tt =

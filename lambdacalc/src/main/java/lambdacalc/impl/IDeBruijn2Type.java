@@ -8,6 +8,7 @@ import lambdacalc.Symbol;
 import lambdacalc.Type;
 import lambdacalc.TypeBuilder;
 import lambdacalc.DeBruijn.Visitor;
+import lambdacalc.TypeError;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
@@ -29,7 +30,16 @@ public final class IDeBruijn2Type implements Visitor<Type>, DeBruijn2Type {
 
 	@Override
 	public final Type application(DeBruijn fun, DeBruijn arg) {
-		return arg.accept(this);
+		return fun.accept(this).accept(new TypeBuilder() {
+			@Override
+			public Type constant(String name) {
+				throw new TypeError("cannot apply function of type '%s'", name);
+			}
+			@Override
+			public final Type function(Type a, Type b) {
+				return b;
+			}
+		});
 	}
 
 	@Override

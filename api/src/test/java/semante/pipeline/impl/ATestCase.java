@@ -38,28 +38,14 @@ public abstract class ATestCase {
 		    pipeline   = new IPipeline(settings,lambdacalc,lexicon);
 	}
 	
-	protected final SimpleBinaryTree<Pair<String,String>> node(
-	        SimpleBinaryTree<Pair<String,String>> l,
-	        SimpleBinaryTree<Pair<String,String>> r) {
-		return ISimpleBinaryTree.node(l, r);
-	}
-	
-	protected final SimpleBinaryTree<Pair<String,String>> leaf(Pair<String,String> pair) {
-		return ISimpleBinaryTree.leaf(pair);
-	}
-	
-	protected final Pair<String,String> pair(String ann, String txt) {
-		return IPair.pair(ann, txt);
-	}
-	
 	protected final SimpleBinaryTree<Pair<String,String>> _(
 			        SimpleBinaryTree<Pair<String,String>> l,
 			        SimpleBinaryTree<Pair<String,String>> r) {
 		return ISimpleBinaryTree.node(l, r);
 	}
 	
-	protected final SimpleBinaryTree<Pair<String,String>> word(String ann, String txt) {
-		return ISimpleBinaryTree.leaf(IPair.pair(ann, txt));
+	protected final SimpleBinaryTree<Pair<String,String>> word(String category, String text) {
+		return ISimpleBinaryTree.leaf(IPair.pair(text, category));
 	}
 	
 	protected final void createTestCase(
@@ -170,6 +156,5 @@ public abstract class ATestCase {
 					return null;
 				}			
 			});
-		
 	}
 }

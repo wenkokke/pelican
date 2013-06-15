@@ -27,7 +27,7 @@ The variable names associated with the quantifiers $Sub$, $Obj$ or $Obj^1$ and $
 $z$, $x$ and $y$ respectively.
 
 > V_1   WORD:et
-> V_2   \Obj:(et)t.\z:e.Obj:(et)t (\x:e.WORD:eet z:e x:e)
+> V_2   \Obj1:(et)t.\z:e.Obj1:(et)t (\x:e.WORD:eet z:e x:e)
 > V_3   \Obj1:(et)t.\Obj2:(et)t.\z:e.Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e))
 
 \subsection{Modifiers}
@@ -107,18 +107,11 @@ The first definition of $\text{IS}$ creates an equality relation.
 > IS      \x:e.\Obj:(et)t.Obj:(et)t (\y:e.EQ:eet x:e y:e)
 > IS      \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
 > IS      \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
-% IS_EQ   \x:e.\y:e.EQ:eet x:e y:e
-% IS_EQ   \Sub:(et)t.\y:e.Sub:(et)t (\x:e.EQ:eet x:e y:e)
-% IS_EQ   \x:e.\Obj:(et)t.Obj:(et)t (\y:e.EQ:eet x:e y:e)
-% IS_EQ   \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
-% IS_EQ   \Sub:(et)t.\Obj:(et)t.Sub:(et)t (\x:e.Obj:(et)t (\y:e.EQ:eet x:e y:e))
 
 The second definition of $\text{IS}$ is an identity function on predicates.
 
 > IS      \PRED:et.\x:e.PRED:et x:e
 > IS      \MOD:(et)et.\x:e.MOD:(et)et (\y:e.T:t) x:e
-% IS_PRED \PRED:et.\x:e.PRED:et x:e
-% IS_PRED \MOD:(et)et.\x:e.MOD:(et)et (\y:e.T:t) x:e
 
 \subsection{Prepositions}
 
@@ -140,13 +133,11 @@ based on the type of the noun.
 
 For relational nouns, it behaves as $\text{OF}$, e.g. "John's wife" becomes $\iota x. wife(John)(x)$.
 
-> S     \P:(et)t.\R:eet.\A:et.IOTA:(et)e (\z:e.AND:ttt (P:(et)t (\x:e.R:eet x:e z:e)) (A:et z:e))
 > GEN   \P:(et)t.\R:eet.\A:et.IOTA:(et)e (\z:e.AND:ttt (P:(et)t (\x:e.R:eet x:e z:e)) (A:et z:e))
 
 For non-relational nouns, e.g. in "John's dog", it behaves as the general $P_R$ discussed below.
 
-> S     \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (R2:eet z:e x:e)))
-> GEN   \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (R2:eet z:e x:e)))
+> GEN   \P:(et)t.\N:et.\V:et.IOTA:(et)e (\z:e.AND:ttt (V:et z:e) (P:(et)t (\x:e.R:eet z:e x:e)))
 
 % prepositions for modifications of noun phrases, e.g. "The man in the car." 
 % P_R   \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (WORD:eet z:e x:e)))
@@ -164,11 +155,11 @@ For non-relational nouns, e.g. in "John's dog", it behaves as the general $P_R$ 
 % ix. in(man,x,boston) /\ walk(x)
 
 Other prepositions are denoted by triples. For instance, in "John walks in Boston" is treated
-as $\text{walk}(\text{John}) \land \text{in}(\text{walk},\text{John},\text{boston})$; whereas "The man
-in Boston walks" is treated as $\iota x. \text{man}(x) \land \text{in}(\text{man},x,\text{boston})
+as $\text{walk}(\text{John}) \land \text{in}(\text{John},\text{walk},\text{boston})$; whereas "The man
+in Boston walks" is treated as $\iota x. \text{man}(x) \land \text{in}(x,\text{man},\text{boston})
 \land \text{walks}(x)$.
 
-> P_R   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:(et)eet A:et x:e y:e))
+> P_R   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:e(et)et x:e A:et y:e))
 
 Finally, there is a special-case annotation for $\text{TO}$ when used to denote the object of
 a ditransitive verb, which is simply the identity function.\footnote{

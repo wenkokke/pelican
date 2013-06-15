@@ -5,17 +5,15 @@ import lambdacalc.Type;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.Value;
 
-@RequiredArgsConstructor
-@FieldDefaults(makeFinal=true,level=PRIVATE)
 public abstract class IType implements Type {
 	
-	@Value
+	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
+	@FieldDefaults(makeFinal=true,level=PRIVATE)
 	public static final class IConstant extends IType {
 		
-		String name;
+		String	name;
 		
 		@Override
 		public final <X> X accept(Visitor<X> v) {
@@ -23,11 +21,13 @@ public abstract class IType implements Type {
 		}
 	}
 	
-	@Value
+	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
+	@FieldDefaults(makeFinal=true,level=PRIVATE)
 	public static final class IFunction extends IType {
 		
-		Type fun, arg;
+		Type	fun;
+		Type	arg;
 
 		@Override
 		public final <X> X accept(Visitor<X> v) {
