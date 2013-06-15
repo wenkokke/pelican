@@ -77,7 +77,7 @@ public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
 	@Delegate DeBruijn2FreeNames	deBruijn2FreeNames	= new IDeBruijn2FreeNames();
 	@Delegate DeBruijn2Expr			deBruijn2Expr		= new IDeBruijn2Expr(exprBuilder,namingConventions,deBruijn2FreeNames);
 	@Delegate DeBruijn2Type			deBruijn2Type		= new IDeBruijn2Type(typeBuilder);
-	@Delegate DeBruijnTypeChecker	deBruijnTypeChecker	= new IDeBruijnTypeChecker(typeBuilder);
+	@Delegate DeBruijnTypeChecker	deBruijnTypeChecker	= new IDeBruijnTypeChecker(typeBuilder,typePrinter,deBruijnPrinter);
 	
 	// reduction functions
 	@Delegate DeBruijnSubstituter 	deBruijnSubstituter	= new IDeBruijnSubstituter(deBruijnBuilder);

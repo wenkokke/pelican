@@ -6,20 +6,18 @@ import lambdacalc.Index;
 import lambdacalc.Symbol;
 import lambdacalc.Type;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.Wither;
 
-@FieldDefaults(makeFinal=true,level=PRIVATE)
 public abstract class IDeBruijn implements DeBruijn {
 
-	@Getter @Wither
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
 	public static final class IAbstraction extends IDeBruijn {
-		Type type; DeBruijn body;
+		
+		Type		type;
+		DeBruijn	body;
 		
 		@Override
 		public final <X> X accept(Visitor<X> v) {
@@ -27,12 +25,12 @@ public abstract class IDeBruijn implements DeBruijn {
 		}
 	}
 	
-	@Getter @Wither
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
 	public static final class IApplication extends IDeBruijn {
-		DeBruijn fun,arg;
+		
+		DeBruijn	fun, arg;
 		
 		@Override
 		public final <X> X accept(Visitor<X> v) {
@@ -40,12 +38,12 @@ public abstract class IDeBruijn implements DeBruijn {
 		}
 	}
 	
-	@Getter @Wither
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
 	public static final class IVariable extends IDeBruijn {
-		Index i;
+		
+		Index	i;
 
 		@Override
 		public final <X> X accept(Visitor<X> v) {
@@ -53,12 +51,12 @@ public abstract class IDeBruijn implements DeBruijn {
 		}
 	}
 	
-	@Getter @Wither
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
 	public static final class IConstant extends IDeBruijn {
-		Symbol s;
+		
+		Symbol	s;
 
 		@Override
 		public final <X> X accept(Visitor<X> v) {
