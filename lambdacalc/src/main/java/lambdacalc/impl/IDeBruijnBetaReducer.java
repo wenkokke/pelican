@@ -36,7 +36,6 @@ public final class IDeBruijnBetaReducer extends IDeBruijnBuilder implements DeBr
 			public final DeBruijn abstraction(final Type type, final DeBruijn body) {
 				return substituter.substituteTop(arg1, body);
 			}
-
 			@Override
 			public final DeBruijn application(DeBruijn _1, DeBruijn _2) {
 				return super.application(fun1, arg1); // reconstruct application

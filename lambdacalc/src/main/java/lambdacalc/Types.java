@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(makeFinal=true,level=PUBLIC)
 public final class Types {
 
+	static Type STAR			= new IConstant("*");
 	static Type	T				= new IConstant("t");
 	static Type TT				= new IFunction(T, T);
 	static Type TTT				= new IFunction(T, TT);
