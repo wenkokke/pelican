@@ -15,6 +15,13 @@ public final class TestBetaReducer extends TestLambdaCalc {
 	}
 	
 	@Test
+	public final void example2() {
+		reducesTo(
+			"(\\f:et.f:et john:e) (\\x:e.x:e)",
+			"john:e");
+	}
+	
+	@Test
 	public final void complex1() {
 		reducesTo(
 			"((\\x:e.\\f:et.f:et x:e) john:e) walks:et",

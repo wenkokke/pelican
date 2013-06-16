@@ -8,7 +8,7 @@ import semante.pipeline.Pair;
 import semante.pipeline.Result;
 
 @Value
-public final class IResult$ErrorMsgs<ID> implements Result<ID> {
+public final class IResult$Errors<ID> implements Result<ID> {
 
 	List<Pair<ID,String>> errors;
 	
