@@ -14,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 public final class IDeBruijnEtaReducer extends IDeBruijnBuilder implements DeBruijnBuilder, DeBruijnEtaReducer {
 	
 	@Override
-	public final DeBruijn etaReduce(DeBruijn expr) {
+	public final DeBruijn etaReduce(final DeBruijn expr) {
 		return expr.accept(this);
 	}
 
@@ -26,7 +26,7 @@ public final class IDeBruijnEtaReducer extends IDeBruijnBuilder implements DeBru
 				return arg.accept(new IDeBruijnBuilder() {
 					@Override
 					public final DeBruijn variable(final Index i) {
-						if (i.equals(0)) {
+						if (i.getIndex().equals(0)) {
 							return etaReduce(fun);
 						}
 						else {

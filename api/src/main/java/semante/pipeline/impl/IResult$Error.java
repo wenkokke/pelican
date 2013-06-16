@@ -7,10 +7,11 @@ import semante.pipeline.Result;
 public final class IResult$Error<ID> implements Result<ID> {
 
 	ID id;
+	String msg;
 	
 	@Override
 	public final <X> X accept(final Visitor<ID, X> v) {
-		return v.exception(id);
+		return v.exception(id,msg);
 	}
 
 }

@@ -37,12 +37,15 @@ public final class IFlattenTree<ID> implements FlattenTree<ID> {
 		}
 		val results = join2(builder.build());
 		if (results.isLeft()) {
+			
+			// TODO this unchecked cast is kind of ugly
+			val errors = ImmutableList.<Pair<ID,String>> builder();
 			for (val result: results.getLeft()) {
-				// TODO implement heuristic for the selection of error messages
-				val error = (IResult$ErrorMsg) result;
-				System.err.println(error.getMsg());
+				val error = (IResult$Error<ID>) result;
+				errors.add(IPair.pair(error.getId(), error.getMsg()));
 			}
-			return IEither.left(results.getLeft().get(0));
+			return IEither.left((Result<ID>) new IResult$Errors<ID>(errors.build()));
+			
 		}
 		else {
 			return IEither.right(results.getRight());
@@ -157,7 +160,7 @@ public final class IFlattenTree<ID> implements FlattenTree<ID> {
 				
 				// return a type error;
 				return IEither.<Result<ID>,Pair<String,DeBruijn>>
-					left(new IResult$ErrorMsg<ID>(id,String.format(
+					left(new IResult$Error<ID>(id,String.format(
 						"cannot apply '%s' of type '%s' to '%s' of type '%s'",
 						stl.format(stl.fromDeBruijn(exprL)),
 						stl.format(typeL),

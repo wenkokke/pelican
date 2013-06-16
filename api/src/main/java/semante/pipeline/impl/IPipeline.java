@@ -50,9 +50,7 @@ public final class IPipeline implements Pipeline {
 		val reducer = new Function<DeBruijn,DeBruijn>() {
 			@Override
 			public final DeBruijn apply(final DeBruijn expr) {
-				// TODO apparently there is a small bug in beta reduction
-				// 		as we need two reductions in the case of jan01;
-				return stl.etaReduce(stl.betaReduce(stl.betaReduce(expr)));
+				return stl.etaReduce(stl.betaReduce(expr));
 			}
 		};
 		val redTexts = Lists.transform(flatTexts, reducer);
