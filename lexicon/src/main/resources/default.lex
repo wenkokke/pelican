@@ -37,9 +37,9 @@ are \textit{intersective} or \textit{restrictive}.
 
 > MOD_I \A:et.\x:e.AND:ttt (A:et x:e) (WORD:et x:e)
 
-> MOD_R \A:et.\z:e.AND:ttt (A:et z:e) (WORD:(et)et A:et z:e)
-> MOD_R \A:eet.\x:e.\z:e.AND:ttt (A:eet z:e x:e) (WORD:(eet)eet A:eet z:e x:e)
-> MOD_R \A:eeet.\x:e.\y:e.\z:e.AND:ttt (A:eeet z:e x:e y:e) (WORD:(eeet)eeet A:eeet z:e x:e y:e)
+> MOD_R \A:et.\z:e.AND:ttt (A:et z:e) ((WORD:(et)et A:et) z:e)
+> MOD_R \A:eet.\x:e.\z:e.AND:ttt (A:eet z:e x:e) ((WORD:(et)et (\z:e.A:eet z:e x:e)) z:e)
+> MOD_R \A:eeet.\x:e.\y:e.\z:e.AND:ttt (A:eeet z:e x:e y:e) ((WORD:(et)et (\z:e.A:eeet z:e x:e y:e)) z:e)
 
 Two specialized versions of $\text{MOD}_I$ and $\text{MOD}_R$\footnote{
   \textbf{TODO}: provide examples in which these versions are needed.
@@ -138,13 +138,6 @@ For relational nouns, it behaves as $\text{OF}$, e.g. "John's wife" becomes $\io
 For non-relational nouns, e.g. in "John's dog", it behaves as the general $P_R$ discussed below.
 
 > GEN   \P:(et)t.\N:et.\V:et.IOTA:(et)e (\z:e.AND:ttt (V:et z:e) (P:(et)t (\x:e.R:eet z:e x:e)))
-
-% prepositions for modifications of noun phrases, e.g. "The man in the car." 
-% P_R   \P:(et)t.\Q:(et)t.\A:et.Q:(et)t (\z:e.P:(et)t (\x:e.AND:ttt (A:et z:e) (WORD:eet z:e x:e)))
-
-% prepositions for modification of predicates, e.g. "John walked in the park."
-% P_R   \P:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (P:(et)t (\y:e.WORD:eet (IOTA:(et)e A:et) y:e))
-% P_R   \P:(et)t.\A:et.\DET:(et)(et)t.\B:et.
 
 % [John [walks [in Boston]]]
 % in : NP -> N -> N
