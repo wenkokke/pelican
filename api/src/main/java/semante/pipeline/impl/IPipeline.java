@@ -51,7 +51,7 @@ public final class IPipeline implements Pipeline {
 		val reducer = new Function<DeBruijn,DeBruijn>() {
 			@Override
 			public final DeBruijn apply(final DeBruijn expr) {
-				return stl.betaReduce(expr);
+				return stl.etaReduce(stl.betaReduce(expr));
 			}
 		};
 		val redTexts = Lists.transform(flatTexts, reducer);
