@@ -21,6 +21,7 @@ import semante.pipeline.TestCaseCreator;
 import semante.settings.Settings;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
 @RequiredArgsConstructor
@@ -50,17 +51,20 @@ public final class IPipeline implements Pipeline {
 		val reducer = new Function<DeBruijn,DeBruijn>() {
 			@Override
 			public final DeBruijn apply(final DeBruijn expr) {
-				return stl.etaReduce(stl.betaReduce(expr));
+				return stl.betaReduce(expr);
 			}
 		};
 		val redTexts = Lists.transform(flatTexts, reducer);
 		val redHypos = Lists.transform(flatHypos, reducer);
 		
-		for (val redText: redTexts) {
-			System.out.println(stl.format(stl.fromDeBruijn(redText)));
+		val nubTexts = ImmutableSet.copyOf(redTexts);
+		val nubHypos = ImmutableSet.copyOf(redHypos);
+		
+		for (val nubText: nubTexts) {
+			System.out.println(stl.format(stl.fromDeBruijn(nubText)));
 		}
-		for (val redHypo: redHypos) {
-			System.out.println(stl.format(stl.fromDeBruijn(redHypo)));
+		for (val nubHypo: nubHypos) {
+			System.out.println(stl.format(stl.fromDeBruijn(nubHypo)));
 		}
 		
 		// TODO implement smasher and prover9 parts of pipeline
