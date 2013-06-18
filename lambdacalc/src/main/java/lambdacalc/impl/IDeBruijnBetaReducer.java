@@ -11,12 +11,15 @@ import lambdacalc.Type;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
+import lombok.experimental.Value;
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true,level=PRIVATE)
-public final class IDeBruijnBetaReducer extends IDeBruijnBuilder implements DeBruijnBuilder, DeBruijnBetaReducer {
+public final class IDeBruijnBetaReducer implements DeBruijnBuilder, DeBruijnBetaReducer {
 
-	DeBruijnSubstituter substituter;
+	DeBruijnSubstituter	substituter;
+	DeBruijnBuilder		builder;
 	
 	@Override
 	public final DeBruijn betaReduce(DeBruijn expr) {
@@ -34,24 +37,76 @@ public final class IDeBruijnBetaReducer extends IDeBruijnBuilder implements DeBr
 		return fun1.accept(new IDeBruijnBuilder() {
 			@Override
 			public final DeBruijn abstraction(final Type type, final DeBruijn body) {
-				return betaReduce(substituter.substituteTop(arg1, body));
+				
+				// apply beta-reduction to the body
+				val exp0 = substituter.substituteTop(arg1, body);
+				// decrement all indices by one to reflect that removed lambda
+				val exp1 = exp0.accept(new IDecrementer(0));
+						
+				return betaReduce(exp1);
+			}
+			
+			// recurse, and reconstruct expression
+			
+			@Override
+			public final DeBruijn application(final DeBruijn _1, final DeBruijn _2) {
+				return builder.application(fun1, arg1);
 			}
 			@Override
-			public final DeBruijn application(DeBruijn _1, DeBruijn _2) {
-				return super.application(fun1, arg1); // reconstruct application
+			public final DeBruijn variable(final Index _) {
+				return builder.application(fun1, arg1);
 			}
 			@Override
-			public final DeBruijn variable(Index _) {
-				return super.application(fun1, arg1); // reconstruct application
-			}
-			@Override
-			public final DeBruijn constant(Symbol _) {
-				return super.application(fun1, arg1); // reconstruct application
+			public final DeBruijn constant(final Symbol _) {
+				return builder.application(fun1, arg1);
 			}
 		});
 	}
+	
+	// recurse, and reconstruct expression
+	
 	@Override
 	public final DeBruijn abstraction(final Type type, final DeBruijn body) {
-		return super.abstraction(type, betaReduce(body));
+		return builder.abstraction(type, betaReduce(body));
+	}
+	@Override
+	public final DeBruijn variable(final Index i) {
+		return builder.variable(i);
+	}
+	@Override
+	public final DeBruijn constant(final Symbol s) {
+		return builder.constant(s);
+	}
+	
+	// visitor that decrements all indices by one;
+	@Value
+	private final class IDecrementer implements DeBruijnBuilder {
+
+		Integer depth;
+		
+		@Override
+		public final DeBruijn variable(final Index i) {
+			if (i.getIndex() > depth) {
+				return builder.variable(i.withIndex(i.getIndex() - 1));
+			}
+			else {
+				return builder.variable(i);
+			}
+		}
+		
+		// recurse, and reconstruct expression
+		
+		@Override
+		public final DeBruijn abstraction(final Type type, final DeBruijn body) {
+			return builder.abstraction(type, body.accept(withDepth(depth + 1)));
+		}
+		@Override
+		public final DeBruijn application(final DeBruijn fun, final DeBruijn arg) {
+			return builder.application(fun.accept(this), arg.accept(this));
+		}
+		@Override
+		public final DeBruijn constant(Symbol s) {
+			return builder.constant(s);
+		}
 	}
 }
