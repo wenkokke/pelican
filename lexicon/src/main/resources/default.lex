@@ -4,10 +4,6 @@
 
 Nouns are annotated as $N$ or $N_2$ depending on their transitivity.
 
-% N     WORD:et
-% N     WORD:eet
-% N     \P:(et)t.\y:e.P:(et)t (\x:e.WORD:eet x:e y:e)
-
 > N_1   WORD:et
 > N_2   WORD:eet
 > N_2   \P:(et)t.\y:e.P:(et)t (\x:e.WORD:eet x:e y:e)

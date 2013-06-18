@@ -11,7 +11,6 @@ import lambdacalc.Type;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import lombok.experimental.Value;
 
 @RequiredArgsConstructor
@@ -78,11 +77,14 @@ public final class IDeBruijnBetaReducer implements DeBruijnBuilder, DeBruijnBeta
 		return builder.constant(s);
 	}
 	
-	// visitor that decrements all indices by one;
+	// visitor that decrements all indices by one if they bind higher that a
+	// certain index (usually 0);
 	@Value
 	private final class IDecrementer implements DeBruijnBuilder {
 
 		Integer depth;
+		
+		// decrement variable indexes;
 		
 		@Override
 		public final DeBruijn variable(final Index i) {
@@ -94,12 +96,15 @@ public final class IDeBruijnBetaReducer implements DeBruijnBuilder, DeBruijnBeta
 			}
 		}
 		
-		// recurse, and reconstruct expression
+		// increase the depth of the context;
 		
 		@Override
 		public final DeBruijn abstraction(final Type type, final DeBruijn body) {
 			return builder.abstraction(type, body.accept(withDepth(depth + 1)));
 		}
+		
+		// recurse, and reconstruct expression;
+		
 		@Override
 		public final DeBruijn application(final DeBruijn fun, final DeBruijn arg) {
 			return builder.application(fun.accept(this), arg.accept(this));
