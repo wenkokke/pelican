@@ -72,8 +72,9 @@ public final class ILexicon implements Lexicon {
 			val tokens   = line.split("\\s+");
 			val tag      = tokens[TAG];
 			val raw      = on(' ').join(copyOfRange(tokens, TERM, tokens.length));
-			val simpl    = stl.parse(raw);
-			val deBruijn = stl.toDeBruijn(simpl);
+			val expr     = stl.parse(raw);
+			val deBruijn = stl.toDeBruijn(expr);
+			stl.checkType(deBruijn);
 			
 			if (isCategory(line)) {
 

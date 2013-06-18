@@ -51,7 +51,7 @@ public final class IPipeline implements Pipeline {
 		val reducer = new Function<DeBruijn,DeBruijn>() {
 			@Override
 			public final DeBruijn apply(final DeBruijn expr) {
-				return stl.etaReduce(stl.betaReduce(expr));
+				return expr; //stl.betaReduce(expr);
 			}
 		};
 		val redTexts = Lists.transform(flatTexts, reducer);
@@ -61,10 +61,12 @@ public final class IPipeline implements Pipeline {
 		val nubHypos = ImmutableSet.copyOf(redHypos);
 		
 		for (val nubText: nubTexts) {
-			System.out.println(stl.format(stl.fromDeBruijn(nubText)));
+			System.err.println(stl.format(nubText));
+			System.err.println(stl.format(stl.fromDeBruijn(nubText)));
 		}
 		for (val nubHypo: nubHypos) {
-			System.out.println(stl.format(stl.fromDeBruijn(nubHypo)));
+			System.err.println(stl.format(nubHypo));
+			System.err.println(stl.format(stl.fromDeBruijn(nubHypo)));
 		}
 		
 		// TODO implement smasher and prover9 parts of pipeline
