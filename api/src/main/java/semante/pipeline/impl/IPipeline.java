@@ -5,6 +5,12 @@ import static lombok.AccessLevel.PRIVATE;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import predcalc.ExprForm;
+import predcalc.FOLExpr.Formula;
+import predcalc.impl.IPredCalc;
+import predcalc.util.IExprForm;
+import predcalc.util.ILambda2Pred;
+
 import lambdacalc.DeBruijn;
 import lambdacalc.STL;
 import lombok.Delegate;
@@ -51,7 +57,7 @@ public final class IPipeline implements Pipeline {
 		val reducer = new Function<DeBruijn,DeBruijn>() {
 			@Override
 			public final DeBruijn apply(final DeBruijn expr) {
-				return expr; //stl.betaReduce(expr);
+				return stl.betaReduce(expr);
 			}
 		};
 		val redTexts = Lists.transform(flatTexts, reducer);
@@ -60,14 +66,20 @@ public final class IPipeline implements Pipeline {
 		val nubTexts = ImmutableSet.copyOf(redTexts);
 		val nubHypos = ImmutableSet.copyOf(redHypos);
 		
+		val pcalc = new IPredCalc();
+		val l2p = new ILambda2Pred(pcalc, stl);
+		
 		for (val nubText: nubTexts) {
 			System.err.println(stl.format(nubText));
 			System.err.println(stl.format(stl.fromDeBruijn(nubText)));
+			System.err.println(pcalc.format(l2p.smash(stl.fromDeBruijn(nubText)).getSemantics()));
 		}
 		for (val nubHypo: nubHypos) {
 			System.err.println(stl.format(nubHypo));
 			System.err.println(stl.format(stl.fromDeBruijn(nubHypo)));
+			System.err.println(pcalc.format(l2p.smash(stl.fromDeBruijn(nubHypo)).getSemantics()));
 		}
+		
 		
 		// TODO implement smasher and prover9 parts of pipeline
 		

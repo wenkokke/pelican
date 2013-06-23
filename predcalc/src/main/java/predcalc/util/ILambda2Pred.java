@@ -3,17 +3,16 @@ package predcalc.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import lambdacalc.Expr;
+import lambdacalc.STL;
+import lombok.experimental.FieldDefaults;
 import predcalc.ExprForm;
+import predcalc.ExtractIotas;
+import predcalc.FOLExpr.Formula;
 import predcalc.Lambda2Pred;
 import predcalc.LowLambda2Pred;
 import predcalc.LowerLambda;
 import predcalc.PredCalc;
-import predcalc.FOLExpr.Formula;
-
-import lombok.experimental.FieldDefaults;
-import lambdacalc.Expr;
-import lambdacalc.STL;
-import lambdacalc.Symbol;
 
 @FieldDefaults(makeFinal=true)
 public class ILambda2Pred implements Lambda2Pred {
@@ -21,25 +20,30 @@ public class ILambda2Pred implements Lambda2Pred {
 	protected PredCalc pcalc;
 	protected STL lcalc;
 	private LowerLambda lower;
-	LowLambda2Pred l2p;
+	private ExtractIotas ext;
+	private LowLambda2Pred l2p;
 	
 	public ILambda2Pred(PredCalc pcalc, STL lcalc) {
 		this.pcalc = pcalc;
 		this.lcalc = lcalc;
 		lower = new ILowerLambda(lcalc);
+		ext = new IExtractIotas(lcalc);
 		l2p = new ILowLambda2Pred(pcalc, lcalc);
 	}
 	
 	@Override
 	public ExprForm<Formula> smash(Expr expr) {
-		ExprForm<Expr> low = lower.rewrite(expr);
-		List<Formula> prags = new ArrayList<Formula>();
-		for (Expr p : low.getPragmatics()) {
-			System.out.println(p);
-			prags.add((Formula) l2p.convert(p));
-		}
+		// Extract the iotas
+		ExprForm<Expr> form = ext.extract(expr);
 		
-		return new IExprForm<Formula>((Formula) l2p.convert(low.getSemantics()), prags);
+		// Convert all expressions in the sentence-form to predicate logic
+		List<Formula> prags = new ArrayList<Formula>();
+		for (Expr p : form.getPragmatics()) {
+			prags.add((Formula) l2p.convert(lower.rewrite(p)));
+		}
+		Formula sem = (Formula) l2p.convert(lower.rewrite(form.getSemantics()));
+		
+		return new IExprForm<Formula>(sem, prags);
 	}
 
 }
