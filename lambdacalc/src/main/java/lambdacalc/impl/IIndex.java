@@ -1,19 +1,12 @@
 package lambdacalc.impl;
 
-import static lombok.AccessLevel.PRIVATE;
 import lambdacalc.Index;
 import lambdacalc.Type;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.Wither;
+import lombok.experimental.Value;
 
-@Getter
-@Wither
-@RequiredArgsConstructor
+@Value
 @EqualsAndHashCode(callSuper=false)
-@FieldDefaults(makeFinal=true,level=PRIVATE)
 public final class IIndex implements Index {
 	
 	Integer	index;
