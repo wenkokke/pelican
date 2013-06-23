@@ -25,22 +25,22 @@ public final class Types {
 	static Type	ET_ET			= new IFunction(ET, ET);
 	static Type	ET_ET__ET_ET	= new IFunction(ET_ET, ET_ET);
 	
-	public static final Type of(String type) {
-		switch (type) {
-		case "t"				: return T;
-		case "tt"				: return TT;
-		case "ttt"				: return TTT;
-		case "e"				: return E;
-		case "et"				: return ET;
-		case "eet"				: return EET;
-		case "eeet" 			: return EEET;
-		case "(et)t"			: return ET_T;
-		case "(et)e"			: return ET_E;
-		case "(et)et"			: return ET_ET;
-		case "((et)et)(et)et" 	: return ET_ET__ET_ET;
-		default:
-			return (new IExprParser()).parseType(type);
-		}
-	}
+//	public static final Type of(String type) {
+//		switch (type) {
+//		case "t"				: return T;
+//		case "tt"				: return TT;
+//		case "ttt"				: return TTT;
+//		case "e"				: return E;
+//		case "et"				: return ET;
+//		case "eet"				: return EET;
+//		case "eeet" 			: return EEET;
+//		case "(et)t"			: return ET_T;
+//		case "(et)e"			: return ET_E;
+//		case "(et)et"			: return ET_ET;
+//		case "((et)et)(et)et" 	: return ET_ET__ET_ET;
+//		default:
+//			return (new IExprParser()).parseType(type);
+//		}
+//	}
 	
 }
