@@ -2,7 +2,6 @@ package lambdacalc;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PUBLIC;
-import lambdacalc.impl.IExprParser;
 import lambdacalc.impl.IType.IConstant;
 import lambdacalc.impl.IType.IFunction;
 import lombok.NoArgsConstructor;

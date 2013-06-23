@@ -7,10 +7,12 @@ import lambdacalc.Symbol;
 import lambdacalc.Type;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 public abstract class IDeBruijn implements DeBruijn {
 
+	@ToString
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
@@ -25,6 +27,7 @@ public abstract class IDeBruijn implements DeBruijn {
 		}
 	}
 	
+	@ToString
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
@@ -38,6 +41,7 @@ public abstract class IDeBruijn implements DeBruijn {
 		}
 	}
 	
+	@ToString
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
@@ -51,6 +55,7 @@ public abstract class IDeBruijn implements DeBruijn {
 		}
 	}
 	
+	@ToString
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)

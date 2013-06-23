@@ -5,10 +5,12 @@ import lambdacalc.Expr;
 import lambdacalc.Symbol;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 public abstract class IExpr implements Expr {
 
+	@ToString
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
@@ -23,6 +25,7 @@ public abstract class IExpr implements Expr {
 		}
 	}
 	
+	@ToString
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
@@ -37,6 +40,7 @@ public abstract class IExpr implements Expr {
 		}
 	}
 	
+	@ToString
 	@RequiredArgsConstructor
 	@EqualsAndHashCode(callSuper=false)
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
