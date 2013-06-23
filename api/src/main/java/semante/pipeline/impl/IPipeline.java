@@ -5,12 +5,6 @@ import static lombok.AccessLevel.PRIVATE;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-import predcalc.ExprForm;
-import predcalc.FOLExpr.Formula;
-import predcalc.impl.IPredCalc;
-import predcalc.util.IExprForm;
-import predcalc.util.ILambda2Pred;
-
 import lambdacalc.DeBruijn;
 import lambdacalc.STL;
 import lombok.Delegate;
@@ -57,7 +51,7 @@ public final class IPipeline implements Pipeline {
 		val reducer = new Function<DeBruijn,DeBruijn>() {
 			@Override
 			public final DeBruijn apply(final DeBruijn expr) {
-				return expr; // stl.betaReduce(expr);
+				return stl.betaReduce(expr);
 			}
 		};
 		val redTexts = Lists.transform(flatTexts, reducer);

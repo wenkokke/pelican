@@ -1,11 +1,16 @@
 package lambdacalc;
 
+import static lambdacalc.Types.E;
+import static lambdacalc.Types.EEET;
+import static lambdacalc.Types.EET;
+import static lambdacalc.Types.ET;
+import static lambdacalc.Types.ET_ET;
+import static lambdacalc.Types.ET_ET__ET_ET;
+import static lambdacalc.Types.ET_T;
+import static lambdacalc.Types.T;
 import static lombok.AccessLevel.PRIVATE;
-import static lambdacalc.Types.*;
 
 import java.util.Map;
-
-import com.google.common.collect.Maps;
 
 import lambdacalc.impl.IDeBruijn2Expr;
 import lambdacalc.impl.IDeBruijn2FreeNames;
@@ -23,6 +28,7 @@ import lambdacalc.impl.IExprBetaReducer;
 import lambdacalc.impl.IExprBuilder;
 import lambdacalc.impl.IExprEtaReducer;
 import lambdacalc.impl.IExprParser;
+import lambdacalc.impl.IExprParserUntyped;
 import lambdacalc.impl.IExprPrinter;
 import lambdacalc.impl.IIndexPrinter;
 import lambdacalc.impl.ISymbolPrinter;
@@ -33,6 +39,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import com.google.common.collect.Maps;
+
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true,level=PRIVATE)
 public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
@@ -42,8 +50,14 @@ public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
 		DeBruijnEtaReducer, DeBruijnBetaReducer, ExprBetaReducer,
 		ExprEtaReducer {
 
+	// builder functions
+	@Getter   TypeBuilder			typeBuilder			= new ITypeBuilder();
+	@Getter   ExprBuilder			exprBuilder			= new IExprBuilder();
+	@Getter   DeBruijnBuilder		deBruijnBuilder		= new IDeBruijnBuilder();
+	
 	// parsing functions
-	@Delegate ExprParser			exprParser			= new IExprParser();
+	@Delegate ExprParser			exprParser			= new IExprParser(typeBuilder,exprBuilder);
+	@Delegate ExprParserUntyped		exprParserUntyped	= new IExprParserUntyped(exprBuilder);
 	
 	// naming conventions
 	          Map<Type,String>      namingConventions   = Maps.newHashMap();
@@ -64,11 +78,6 @@ public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
 	@Delegate IndexPrinter			indexPrinter		= new IIndexPrinter(typePrinter);
 	@Delegate ExprPrinter			exprPrinter			= new IExprPrinter(symbolPrinter);
 	@Delegate DeBruijnPrinter   	deBruijnPrinter 	= new IDeBruijnPrinter(typePrinter,indexPrinter,symbolPrinter);
-	
-	// builder functions
-	@Getter   TypeBuilder			typeBuilder			= new ITypeBuilder();
-	@Getter   ExprBuilder			exprBuilder			= new IExprBuilder();
-	@Getter   DeBruijnBuilder		deBruijnBuilder		= new IDeBruijnBuilder();
 	
 	// conversion functions
   	@Delegate Expr2FreeNames		expr2FreeNames		= new IExpr2FreeNames();
