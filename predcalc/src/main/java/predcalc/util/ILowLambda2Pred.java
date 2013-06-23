@@ -3,6 +3,7 @@ package predcalc.util;
 import java.util.ArrayList;
 
 import predcalc.FOLExpr;
+import predcalc.HigherOrderError;
 import predcalc.LowLambda2Pred;
 import predcalc.PredCalc;
 import predcalc.FOLExpr.Formula;
@@ -58,7 +59,7 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 						Term v = new IFOLExpr.Variable(s2.getName());
 						return new IFOLExpr.Quantifier(lookup(f.accept(getName)), v, (Formula) convert(body2));
 					} else {
-						{ throw new Error("Abstractions are higher order: " + s2 + " " + body2); }
+						{ throw new HigherOrderError("Abstractions are higher order: " + s2 + " " + body2); }
 					}
 				}
 				// Normal Application
@@ -70,7 +71,7 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 		}
 		
 		@Override public FOLExpr abstraction(Symbol s, Expr arg) {
-			throw new Error("Abstractions are higher order: " + s + " " + arg);
+			throw new HigherOrderError("Abstractions are higher order: " + s + " " + arg);
 		}
 
 		Visitor<String> getName = new Visitor<String>() {
@@ -130,5 +131,4 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 			});
 		}		
 	};
-	
 }
