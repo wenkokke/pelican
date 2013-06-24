@@ -1,7 +1,9 @@
 package lambdacalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
+
 import lambdacalc.DeBruijn;
+import lambdacalc.DeBruijn.Visitor;
 import lambdacalc.DeBruijn2Type;
 import lambdacalc.DeBruijnBetaReducer;
 import lambdacalc.DeBruijnBuilder;
@@ -19,46 +21,49 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true,level=PRIVATE)
-public final class IDeBruijnBetaReducer implements DeBruijnBuilder, DeBruijnBetaReducer {
+public final class IDeBruijnBetaReducer implements Visitor<IDeBruijnBetaReducer.Step>, DeBruijnBetaReducer {
 
 	STL					stl;
 	DeBruijnBuilder		builder;
 	DeBruijn2Type		typer;
 	
+	@Value
+	public final class Step {
+		DeBruijn	expr;
+		boolean		reduced;
+	}
+	
 	@Override
 	public final DeBruijn betaReduce(DeBruijn exp) {
-		val red = exp.accept(this);
-		if (red.equals(exp)) {
-			return red;
-		}
-		else {
-			return betaReduce(red);
-		}
+		Step step = exp.accept(this);
+		while (step.isReduced())
+			 step = step.getExpr().accept(this);
+		return step.getExpr();
 	}
 
 	// match e0 with (e1 e2)
 	@Override
-	public final DeBruijn application(final DeBruijn exp1, final DeBruijn exp2) {
-		return exp1.accept(new DeBruijnMatcher<DeBruijn>() {
+	public final Step application(final DeBruijn exp1, final DeBruijn exp2) {
+		return exp1.accept(new DeBruijnMatcher<Step>() {
 			
 			// match e1 with (\x:t.e1)
 			@Override
-			public final DeBruijn abstraction(final Type lambdaType, final DeBruijn exp1) {
+			public final Step abstraction(final Type lambdaType, final DeBruijn exp1) {
 				checkIfTypesAreCompatible(exp1,lambdaType,exp2);
 				val sub1 = exp1.accept(new ISubsituter(exp2,0));
-				return sub1; 
+				return new Step(sub1,true);
 			}
 			
 			// otherwise
 			@Override
-			protected final DeBruijn otherwise() {
+			protected final Step otherwise() {
 				val red1 = exp1.accept(IDeBruijnBetaReducer.this);
-				if (!red1.equals(exp1)) {
-					return builder.application(red1, exp2);
+				if (red1.isReduced()) {
+					return red1.withExpr(builder.application(red1.getExpr(),exp2));
 				}
 				else {
 					val red2 = exp2.accept(IDeBruijnBetaReducer.this);
-					return builder.application(red1, red2);
+					return red2.withExpr(builder.application(exp1,red2.getExpr()));
 				}
 			}
 		});
@@ -66,16 +71,17 @@ public final class IDeBruijnBetaReducer implements DeBruijnBuilder, DeBruijnBeta
 	
 	// otherwise recurse and reconstruct
 	@Override
-	public final DeBruijn abstraction(final Type t, final DeBruijn e1) {
-		return builder.abstraction(t, e1.accept(IDeBruijnBetaReducer.this));
+	public final Step abstraction(final Type type, final DeBruijn exp1) {
+		val red1 = exp1.accept(IDeBruijnBetaReducer.this);
+		return red1.withExpr(builder.abstraction(type, red1.getExpr()));
 	}
 	@Override
-	public final DeBruijn variable(final Index i) {
-		return builder.variable(i);
+	public final Step variable(final Index i) {
+		return new Step(builder.variable(i),false);
 	}
 	@Override
-	public final DeBruijn constant(final Symbol s) {
-		return builder.constant(s);
+	public final Step constant(final Symbol s) {
+		return new Step(builder.constant(s),false);
 	}
 	
 	@Value
