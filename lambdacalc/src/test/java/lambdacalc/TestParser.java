@@ -12,7 +12,6 @@ public final class TestParser extends TestLambdaCalc {
 		assertSame(Types.E, stl.parseType("e"));
 		assertSame(Types.T, stl.parseType("t"));
 	}
-	
 	@Test
 	public final void functionTypes() {
 		parseAndPrintType("et");
@@ -21,7 +20,6 @@ public final class TestParser extends TestLambdaCalc {
 		parseAndPrintType("(et)t");
 		parseAndPrintType("(et)et");
 	}
-	
 	@Test
 	public final void adjoinedParens() {
 		parseAndPrintType("((et)et)(et)et");
@@ -42,6 +40,14 @@ public final class TestParser extends TestLambdaCalc {
 		parseAndPrintExpr("(\\x:e.x:e) x:e");
 	}
 	
+	@Test
+	public final void termsUntyped() {
+		parseAndPrintUntypedExpr("x");
+		parseAndPrintUntypedExpr("\\x.x");
+		parseAndPrintUntypedExpr("\\x.(f x)");
+		parseAndPrintUntypedExpr("(\\x.x) x");
+	}
+	
 	private final void parseAndPrintType(String type) {
 		assertEquals(type,stl.format(stl.parseType(type)));
 	}
@@ -52,5 +58,9 @@ public final class TestParser extends TestLambdaCalc {
 	
 	private final void parseAndPrintExpr(String expr) {
 		assertEquals(expr,stl.format(stl.parseExpr(expr)));
+	}
+	
+	private final void parseAndPrintUntypedExpr(String expr) {
+		assertEquals(expr,stl.format(stl.parseUntypedExpr(expr)));
 	}
 }

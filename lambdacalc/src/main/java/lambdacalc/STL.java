@@ -12,6 +12,13 @@ import static lombok.AccessLevel.PRIVATE;
 
 import java.util.Map;
 
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
+
 import lambdacalc.impl.IDeBruijn2Expr;
 import lambdacalc.impl.IDeBruijn2FreeNames;
 import lambdacalc.impl.IDeBruijn2Type;
@@ -37,6 +44,7 @@ import lambdacalc.impl.ITypePrinter;
 import lombok.Delegate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import lombok.experimental.FieldDefaults;
 
 import com.google.common.collect.Maps;
@@ -49,6 +57,38 @@ public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
 		DeBruijn2FreeNames, DeBruijnTypeChecker, DeBruijn2Type,
 		DeBruijnEtaReducer, DeBruijnBetaReducer, ExprBetaReducer,
 		ExprEtaReducer {
+	
+	// runs various lambda reductions from the command-line;
+	public static final void main(String[] args) throws ParseException {
+		val parser = new PosixParser();
+		val options = new Options();
+		options.addOption("u", "untyped", false, "Configures the lambda parser to consume untyped terms.");
+		options.addOption("s", "simply-typed", false, "Configures the lambda parser to consume simply typed terms.");
+		options.addOption("b", "normalize", false, "Applies normal-order reduction to the given lambda expression.");
+		options.addOption("e", "expresison", true, "The lambda expression to work on.");
+		val cmds = parser.parse(options, args);
+		val stl = new STL();
+		
+		// run all commands
+		val input = cmds.getOptionValue("e");
+		
+		// parse the expression
+		Expr expr;
+		if (cmds.hasOption('s')) {
+			expr = stl.parseExpr(input);
+		}
+		else {
+			expr = stl.parseUntypedExpr(input);
+		}
+		
+		// beta-reduce the expression
+		if (cmds.hasOption('b')) {
+			expr = stl.betaReduce(expr);
+		}
+		
+		// print the expression
+		System.out.println(stl.format(expr));
+	}
 
 	// builder functions
 	@Getter   TypeBuilder			typeBuilder			= new ITypeBuilder();
