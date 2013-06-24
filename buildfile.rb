@@ -7,7 +7,7 @@ JUNIT4      = 'junit:junit:jar:4.10'
 JPARSEC     = 'jparsec:jparsec:jar:2.0.1'
 GUAVA       = 'com.google.guava:guava:jar:13.0.1'
 SNAKE_YAML  = 'org.yaml:snakeyaml:jar:1.8'
-QUICKCHECK  = 'net.java:quickcheck:jar:0.6'
+COMMONS_CLI = 'commons-cli:commons-cli:jar:1.2'
 SLF4J       = struct(
   :api     => 'org.slf4j:slf4j-api:jar:1.7.3',
   :simple  => 'org.slf4j:slf4j-simple:jar:1.7.3')
@@ -70,7 +70,7 @@ define 'pelican' do
 
   # implementation of simply typed lambda calculus
   define 'lambdacalc' do
-    compile.with LOMBOK,GUAVA,JPARSEC,QUICKCHECK
+    compile.with LOMBOK,GUAVA,JPARSEC,COMMONS_CLI
     package :jar
   end
 

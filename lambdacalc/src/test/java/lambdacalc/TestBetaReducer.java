@@ -8,22 +8,10 @@ import org.junit.Test;
 public final class TestBetaReducer extends TestLambdaCalc {
 	
 	@Test
-	public final void jan2_1() {
+	public final void nestedApplication() {
 		reducesTo(
-			"(\\A0:et.(A0:et jan:e)) "
-			+ "((\\P0:(et)t.(\\x0:e.(P0:(et)t (\\x1:e.((EQ:eet x1:e) x0:e))))) "
-			+ "((\\A1:et.(\\A2:et.(EXISTS:(et)t (\\x2:e.((AND:ttt (A1:et x2:e)) (A2:et x2:e)))))) "
-			+ "((\\A3:et.(\\x3:e.((AND:ttt (A3:et x3:e)) (black:et x3:e)))) "
-			+ "((\\A4:et.(\\x4:e.((AND:ttt (A4:et x4:e)) (dutch:et x4:e)))) man:et))))",
-			"EXISTS:(et)t (\\x2:e.AND:ttt (AND:ttt (AND:ttt (man:et x2:e) (dutch:et x2:e)) (black:et x2:e)) (EQ:eet x2:e jan:e))");
-	}
-	
-	@Test
-	public final void jan2_2() {
-		reducesTo(
-			"(\\A0:et.(A0:et jan:e)) (\\x0:e.EXISTS:(et)t (\\x2:e.AND:ttt (AND:ttt (AND:ttt (man:et x2:e) (dutch:et x2:e)) (black:et x2:e)) (EQ:eet x2:e x0:e)))",
-			"EXISTS:(et)t (\\x2:e.AND:ttt (AND:ttt (AND:ttt (man:et x2:e) (dutch:et x2:e)) (black:et x2:e)) (EQ:eet x2:e jan:e))");
-			
+			"R:eet ((\\x:e.x:e) y:e) x:e",
+			"R:eet y:e x:e");
 	}
 	
 	@Test
@@ -36,7 +24,7 @@ public final class TestBetaReducer extends TestLambdaCalc {
 	@Test
 	public final void example2() {
 		reducesTo(
-			"(\\f:et.f:et john:e) (\\x:e.x:e)",
+			"(\\f:ee.f:ee john:e) (\\x:e.x:e)",
 			"john:e");
 	}
 	
@@ -90,8 +78,6 @@ public final class TestBetaReducer extends TestLambdaCalc {
 		val exp2 = stl.toDeBruijn(stl.parse(raw2));
 		val red1 = stl.format(stl.betaReduce(exp1));
 		val red2 = stl.format(exp2);
-		System.err.println(stl.format(stl.fromDeBruijn(exp1)));
-		System.err.println(stl.format(stl.fromDeBruijn(stl.betaReduce(exp1))));
 		assertEquals(red2,red1);
 	}
 	
