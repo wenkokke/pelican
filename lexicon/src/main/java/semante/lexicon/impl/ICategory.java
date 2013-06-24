@@ -5,7 +5,7 @@ import static com.google.common.collect.Lists.transform;
 import java.util.List;
 
 import lambdacalc.DeBruijn;
-import lambdacalc.DeBruijnSubstituter;
+import lambdacalc.DeBruijnRenamer;
 import lambdacalc.Expr;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -22,7 +22,7 @@ public final class ICategory implements Category {
 
 	String				name;
 	List<DeBruijn>		denotations;
-	DeBruijnSubstituter	substituter;
+	DeBruijnRenamer	substituter;
 	
 	public final ICategory addDenotation(final DeBruijn denotation) {
 		val builder = ImmutableList.<DeBruijn> builder();
@@ -44,7 +44,7 @@ public final class ICategory implements Category {
 	 * @param name {@link String} representation of the {@link Word}.
 	 * @param expr meaning of the {@link Word} as an {@link Expr}.
 	 */
-	public ICategory(final String name, final DeBruijn expr, final DeBruijnSubstituter substituter) {
+	public ICategory(final String name, final DeBruijn expr, final DeBruijnRenamer substituter) {
 		this(name, (List<DeBruijn>) ImmutableList.of(expr), substituter);
 	}
 	
@@ -54,7 +54,7 @@ public final class ICategory implements Category {
 				new Function<DeBruijn, DeBruijn>() {
 					@Override
 					public final DeBruijn apply(final DeBruijn expr) {
-						return substituter.renameFree(WordSymbol, text, expr);
+						return substituter.rename(WordSymbol, text, expr);
 					}
 				}));
 	}

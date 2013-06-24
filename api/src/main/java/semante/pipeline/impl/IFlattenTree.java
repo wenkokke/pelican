@@ -21,6 +21,7 @@ import semante.pipeline.Result;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true,level=PRIVATE)
@@ -62,7 +63,7 @@ public final class IFlattenTree<ID> implements FlattenTree<ID> {
 				return input.accept(new Annotation.Visitor<List<Denotation>>() {
 					@Override
 					public final List<Denotation> annotation(final String text, String category) {
-						val builder = ImmutableList.<Denotation> builder();
+						final Builder<Denotation> builder = ImmutableList.<Denotation> builder();
 						for (val denotation: lexicon.getEntry(category, text).getDenotations()) {
 							builder.add(new IDenotation(text, category, denotation));
 						}
@@ -83,7 +84,9 @@ public final class IFlattenTree<ID> implements FlattenTree<ID> {
 
 			@Override
 			public final List<BinaryTree<ID, Denotation>> leaf(List<Denotation> denotations) {
-				val builder = ImmutableList.<BinaryTree<ID, Denotation>> builder();
+				final Builder<BinaryTree<ID,Denotation>> 
+				builder = ImmutableList.<BinaryTree<ID, Denotation>> builder();
+				
 				for (val denotation: denotations) {
 					builder.add(IBinaryTree.<ID,Denotation> leaf(denotation));
 				}
@@ -94,7 +97,9 @@ public final class IFlattenTree<ID> implements FlattenTree<ID> {
 			public final List<BinaryTree<ID, Denotation>> node(final ID id,
 					final BinaryTree<ID, List<Denotation>> lefts,
 					final BinaryTree<ID, List<Denotation>> rights) {
-				val builder = ImmutableList.<BinaryTree<ID, Denotation>> builder();
+				final Builder<BinaryTree<ID,Denotation>> 
+				builder = ImmutableList.<BinaryTree<ID, Denotation>> builder();
+				
 				for (val left: lefts.accept(this)) {
 					for (val right: rights.accept(this)) {
 						builder.add(IBinaryTree.<ID,Denotation> node(id,left,right));
@@ -182,8 +187,12 @@ public final class IFlattenTree<ID> implements FlattenTree<ID> {
 	}
 	
 	private final Either<List<Result<ID>>,List<DeBruijn>> join2(final List<Either<Result<ID>,DeBruijn>> list) {
-		val lefts  = ImmutableList.<Result<ID>> builder();
-		val rights = ImmutableList.<DeBruijn> builder();
+		final Builder<Result<ID>>
+		lefts = ImmutableList.<Result<ID>> builder();
+		
+		final Builder<DeBruijn> 
+		rights = ImmutableList.<DeBruijn> builder();
+		
 		for (val item: list) {
 			if (item.isLeft()) {
 				lefts.add(item.getLeft());
@@ -192,6 +201,7 @@ public final class IFlattenTree<ID> implements FlattenTree<ID> {
 				rights.add(item.getRight());
 			}
 		}
+		
 		val result = rights.build();
 		if (result.isEmpty()) {
 			return IEither.<List<Result<ID>>,List<DeBruijn>> left(lefts.build());
