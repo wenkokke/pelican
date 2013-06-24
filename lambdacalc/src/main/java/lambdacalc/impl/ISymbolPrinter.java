@@ -4,6 +4,7 @@ import static lombok.AccessLevel.PRIVATE;
 import lambdacalc.Symbol;
 import lambdacalc.SymbolPrinter;
 import lambdacalc.TypePrinter;
+import lambdacalc.Types;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
@@ -15,7 +16,12 @@ public final class ISymbolPrinter implements SymbolPrinter {
 	
 	@Override
 	public final String format(Symbol symbol) {
-		return symbol.getName() + ":" + typePrinter.format(symbol.getType());
+		if (symbol.getType().equals(Types.STAR)) {
+			return symbol.getName();
+		}
+		else {
+			return symbol.getName() + ":" + typePrinter.format(symbol.getType());
+		}
 	}
 
 }
