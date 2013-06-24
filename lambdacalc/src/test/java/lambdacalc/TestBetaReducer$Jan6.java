@@ -137,8 +137,8 @@ public final class TestBetaReducer$Jan6 extends TestLambdaCalc {
 	}
 
 	private final void reducesTo(final String raw1, final String raw2) {
-		val exp1 = stl.format(stl.betaReduce(stl.toDeBruijn(stl.parse(raw1))));
-		val exp2 = stl.format(stl.toDeBruijn(stl.parse(raw2)));
+		val exp1 = stl.format(stl.fromDeBruijn(stl.betaReduce(stl.toDeBruijn(stl.parse(raw1)))));
+		val exp2 = stl.format(stl.fromDeBruijn(stl.toDeBruijn(stl.parse(raw2))));
 		assertEquals(exp2, exp1);
 	}
 

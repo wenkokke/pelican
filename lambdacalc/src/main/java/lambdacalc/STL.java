@@ -90,7 +90,7 @@ public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
 	
 	// reduction functions
 	@Delegate DeBruijnRenamer		deBruijnRenamer		= new IDeBruijnRenamer(deBruijnBuilder);
-	@Delegate DeBruijnBetaReducer	deBruijnBetaReducer = new IDeBruijnBetaReducer(deBruijnBuilder);
+	@Delegate DeBruijnBetaReducer	deBruijnBetaReducer = new IDeBruijnBetaReducer(this,deBruijnBuilder,deBruijn2Type);
 	@Delegate DeBruijnEtaReducer	deBruijnEtaReducer	= new IDeBruijnEtaReducer(deBruijnBuilder);
 	@Delegate ExprBetaReducer		exprBetaReducer		= new IExprBetaReducer(expr2DeBruijn,deBruijnBetaReducer,deBruijn2Expr);
 	@Delegate ExprEtaReducer		exprEtaReducer		= new IExprEtaReducer(expr2DeBruijn,deBruijnEtaReducer,deBruijn2Expr);
