@@ -23,7 +23,6 @@ public final class TestEtaReducer extends TestLambdaCalc {
 
 	private final void reducesTo(final String exp1, final String exp2) {
 		val red1 = stl.format(stl.etaReduce(stl.toDeBruijn(stl.parse(exp1))));
-		System.out.println(red1);
 		val red2 = stl.format(stl.toDeBruijn(stl.parse(exp2)));
 		assertEquals(red2,red1);
 	}

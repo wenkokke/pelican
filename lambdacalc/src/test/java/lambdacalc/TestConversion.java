@@ -34,19 +34,16 @@ public final class TestConversion extends TestLambdaCalc {
 	
 	private final void identity(final String exp1) {
 		val red1 = stl.format(stl.fromDeBruijn(stl.toDeBruijn(stl.parse(exp1))));
-		System.err.println(red1);
 		assertEquals(exp1,red1);
 	}
 	
 	private final void identity(final String exp1,final String exp2) {
 		val red1 = stl.format(stl.fromDeBruijn(stl.toDeBruijn(stl.parse(exp1))));
-		System.err.println(red1);
 		assertEquals(exp2,red1);
 	}
 	
 	private final void convertsTo(final String exp1, final String exp2) {
 		val red1 = stl.format(stl.toDeBruijn(stl.parse(exp1)));
-		System.err.println(red1);
 		assertEquals(exp2,red1);
 	}
 	
