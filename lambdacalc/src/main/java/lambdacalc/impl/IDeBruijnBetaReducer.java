@@ -71,7 +71,7 @@ public final class IDeBruijnBetaReducer implements DeBruijnBuilder, DeBruijnBeta
 		}
 		@Override
 		public final DeBruijn variable(final Index i) {
-			if (i.getIndex() > depth) {
+			if (i.getIndex() > depth+1) {
 				// decrement the index to reflect the removal of a lambda;
 				return builder.variable(i.withIndex(i.getIndex() - 1));
 			}

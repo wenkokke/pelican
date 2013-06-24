@@ -48,6 +48,10 @@ public final class IPipeline implements Pipeline {
 		val flatTexts = flatTextM.getRight();
 		val flatHypos = flatTextM.getRight();
 		
+		for (val flatText: flatTexts) {
+			System.err.println(stl.format(stl.fromDeBruijn(flatText)));
+		}
+		
 		val reducer = new Function<DeBruijn,DeBruijn>() {
 			@Override
 			public final DeBruijn apply(final DeBruijn expr) {

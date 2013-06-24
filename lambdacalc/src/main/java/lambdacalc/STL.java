@@ -19,7 +19,7 @@ import lambdacalc.impl.IDeBruijnBetaReducer;
 import lambdacalc.impl.IDeBruijnBuilder;
 import lambdacalc.impl.IDeBruijnEtaReducer;
 import lambdacalc.impl.IDeBruijnPrinter;
-import lambdacalc.impl.IDeBruijnSubstituter;
+import lambdacalc.impl.IDeBruijnRenamer;
 import lambdacalc.impl.IDeBruijnTypeChecker;
 import lambdacalc.impl.IExpr2DeBruijn;
 import lambdacalc.impl.IExpr2FreeNames;
@@ -44,7 +44,7 @@ import com.google.common.collect.Maps;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true,level=PRIVATE)
 public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
-		IndexPrinter, ExprPrinter, DeBruijnPrinter, DeBruijnSubstituter,
+		IndexPrinter, ExprPrinter, DeBruijnPrinter, DeBruijnRenamer,
 		Expr2Type, Expr2DeBruijn, Expr2FreeNames, DeBruijn2Expr,
 		DeBruijn2FreeNames, DeBruijnTypeChecker, DeBruijn2Type,
 		DeBruijnEtaReducer, DeBruijnBetaReducer, ExprBetaReducer,
@@ -89,7 +89,7 @@ public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
 	@Delegate DeBruijnTypeChecker	deBruijnTypeChecker	= new IDeBruijnTypeChecker(typeBuilder,typePrinter,deBruijnPrinter);
 	
 	// reduction functions
-	@Delegate DeBruijnSubstituter 	deBruijnSubstituter	= new IDeBruijnSubstituter(deBruijnBuilder);
+	@Delegate DeBruijnRenamer		deBruijnRenamer		= new IDeBruijnRenamer(deBruijnBuilder);
 	@Delegate DeBruijnBetaReducer	deBruijnBetaReducer = new IDeBruijnBetaReducer(deBruijnBuilder);
 	@Delegate DeBruijnEtaReducer	deBruijnEtaReducer	= new IDeBruijnEtaReducer(deBruijnBuilder);
 	@Delegate ExprBetaReducer		exprBetaReducer		= new IExprBetaReducer(expr2DeBruijn,deBruijnBetaReducer,deBruijn2Expr);
