@@ -5,6 +5,9 @@ import static lombok.AccessLevel.PRIVATE;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import predcalc.impl.IPredCalc;
+import predcalc.util.ILambda2Pred;
+
 import lambdacalc.DeBruijn;
 import lambdacalc.STL;
 import lombok.Delegate;
@@ -18,6 +21,8 @@ import semante.pipeline.Category;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result;
 import semante.pipeline.TestCaseCreator;
+import semante.prover.ProverException;
+import semante.prover.impl.IProver;
 import semante.settings.Settings;
 
 import com.google.common.base.Function;
@@ -46,11 +51,11 @@ public final class IPipeline implements Pipeline {
 		val flatHypoM = flattener.flatten(hypo);
 		if (flatHypoM.isLeft()) return flatHypoM.getLeft();
 		val flatTexts = flatTextM.getRight();
-		val flatHypos = flatTextM.getRight();
+		val flatHypos = flatHypoM.getRight();
 		
-		for (val flatText: flatTexts) {
-			System.err.println(stl.format(stl.fromDeBruijn(flatText)));
-		}
+//		for (val flatText: flatTexts) {
+//			System.err.println(stl.format(stl.fromDeBruijn(flatText)));
+//		}
 		
 		val reducer = new Function<DeBruijn,DeBruijn>() {
 			@Override
@@ -64,22 +69,34 @@ public final class IPipeline implements Pipeline {
 		val nubTexts = ImmutableSet.copyOf(redTexts);
 		val nubHypos = ImmutableSet.copyOf(redHypos);
 		
-//		val pcalc = new IPredCalc();
-//		val stl2p = new ILambda2Pred(pcalc, stl);
+		val pcalc = new IPredCalc();
+		val stl2p = new ILambda2Pred(pcalc, stl);
+		val prover = new IProver(settings, pcalc);
 		
 		for (val nubText: nubTexts) {
-			System.err.println(stl.format(nubText));
-			System.err.println(stl.format(stl.fromDeBruijn(nubText)));
+//			System.err.println(stl.format(nubText));
+//			System.err.println(stl.format(stl.fromDeBruijn(nubText)));
 //			System.err.println(pcalc.format(stl2p.smash(stl.fromDeBruijn(nubText)).getSemantics()));
 		}
 		for (val nubHypo: nubHypos) {
-			System.err.println(stl.format(nubHypo));
-			System.err.println(stl.format(stl.fromDeBruijn(nubHypo)));
+//			System.err.println(stl.format(nubHypo));
+//			System.err.println(stl.format(stl.fromDeBruijn(nubHypo)));
 //			System.err.println(pcalc.format(stl2p.smash(stl.fromDeBruijn(nubHypo)).getSemantics()));
 		}
 		
-		
-		// TODO implement smasher and prover9 parts of pipeline
+		try {
+			for (val nubText: nubTexts) {
+				val t = stl2p.smash(stl.fromDeBruijn(nubText));
+				for (val nubHypo: nubHypos) {
+					val h = stl2p.smash(stl.fromDeBruijn(nubHypo));
+					if (prover.prove(t, h, subsumptions)) {
+						return new IResult$Proof<ID>();
+					}
+				}
+			}
+		} catch (ProverException e) {
+			e.printStackTrace();
+		}
 		
 		return new IResult$Unknown<ID>();
 	}
