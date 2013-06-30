@@ -24,12 +24,17 @@ import lambdacalc.Types;
  */
 
 @RequiredArgsConstructor
-@FieldDefaults(makeFinal=true)
 public class ILowLambda2Pred implements LowLambda2Pred {
 
 	protected PredCalc pcalc;
 	protected STL lcalc;
-	
+	private Expr nowsmashing;
+
+	public ILowLambda2Pred(PredCalc pcalc, STL lcalc) {
+		this.pcalc = pcalc;
+		this.lcalc = lcalc;
+	};
+
 	private Visitor<FOLExpr> smash = new Visitor<FOLExpr>() {
 		@Override public FOLExpr variable(Symbol s) {
 			if (typeIs(s.getType(), Types.E)) {
@@ -45,10 +50,10 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 				// Function
 				return new IFOLExpr.Function(lookup(s.getName()), new ArrayList<Term>());
 			} else {
-				throw new UnsupportedOperationException("Unknown type: "+ s.getType());
+				throw new UnsupportedOperationException("Unknown type: "+ lcalc.format(s.getType()));
 			}
 		}
-		
+
 		@Override public FOLExpr application(final Expr f, final Expr b) {
 			// Look for a quantifier
 			return b.accept(new Visitor<FOLExpr>(){
@@ -59,19 +64,21 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 						Term v = new IFOLExpr.Variable(s2.getName());
 						return new IFOLExpr.Quantifier(lookup(f.accept(getName)), v, (Formula) convert(body2));
 					} else {
-						{ throw new HigherOrderError("Abstractions are higher order: " + s2 + " " + body2); }
+						throw new HigherOrderError("Abstractions are higher order: " + 
+								lcalc.format(s2) + " " + lcalc.format(body2) + "\n in " + lcalc.format(nowsmashing));
 					}
 				}
 				// Normal Application
 				@Override public FOLExpr application(Expr f2, Expr arg2)
-					{ return f.accept(smash).add(b.accept(smash)); }
+				{ return f.accept(smash).add(b.accept(smash)); }
 				@Override public FOLExpr variable(Symbol s2)
-					{ return f.accept(smash).add(b.accept(smash)); }
+				{ return f.accept(smash).add(b.accept(smash)); }
 			});
 		}
-		
+
 		@Override public FOLExpr abstraction(Symbol s, Expr arg) {
-			throw new HigherOrderError("Abstractions are higher order: " + s + " " + arg);
+			throw new HigherOrderError("Abstractions are higher order: " + 
+					lcalc.format(s) + " " + lcalc.format(arg) + "\n in " + lcalc.format(nowsmashing));
 		}
 
 		Visitor<String> getName = new Visitor<String>() {
@@ -79,11 +86,12 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 			@Override public String application(Expr f, Expr arg) { return null; }
 			@Override public String variable(Symbol s) { return s.getName(); }
 		};
-		
+
 	};
-	
+
 	@Override
 	public final FOLExpr convert(final Expr expr) {
+		nowsmashing = expr;
 		return expr.accept(smash);
 	}
 
@@ -104,19 +112,19 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 			return "=";
 		} else if (in.equals("NOT")) {
 			return "-";
-		} else if (in.equals("T")) {
+		} else if (in.equals("T") || in.equals("TRUE")) {
 			return "$T";
-		} else if (in.equals("F")) {
+		} else if (in.equals("F") || in.equals("FALSE")) {
 			return "$F";
 		} else {
 			return in.toLowerCase().replaceAll(" ", "_");
 		}
 	}
-	
+
 	private Boolean typeIs(Type s, Type t) {
 		return s.equals(t);
 	}
-	
+
 	private Boolean typeVector(final Type t, final Type vector, final Type end) {
 		if (t.equals(end)) {
 			return true;
@@ -130,5 +138,5 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 				}
 			});
 		}		
-	};
+	}
 }
