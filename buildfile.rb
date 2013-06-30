@@ -2,7 +2,7 @@
 repositories.remote << 'http://repo1.maven.org/maven2'
 
 # maven dependencies
-LOMBOK      = 'org.projectlombok:lombok:jar:0.11.6'
+LOMBOK      = 'org.projectlombok:lombok:jar:0.11.8'
 JUNIT4      = 'junit:junit:jar:4.10'
 JPARSEC     = 'jparsec:jparsec:jar:2.0.1'
 GUAVA       = 'com.google.guava:guava:jar:13.0.1'
@@ -14,6 +14,7 @@ SLF4J       = struct(
 PIPELINE    = struct(
   :api     => 'pipeline:pipeline-api:jar:2.1.1',
   :util    => 'pipeline:pipeline-util:jar:2.1.1')
+LAMBDACALC  = 'lambdacalc:lambdacalc:jar:1.0.0'
 
 task 'deploy-lexicon' => 'pelican:lexicon:deploy'
 task 'render-lexicon' => 'pelican:lexicon:render'
@@ -27,8 +28,8 @@ define 'pelican' do
 
   # implementation of pipeline-api
   define 'api' do
-    compile.with LOMBOK,GUAVA,PIPELINE,
-      projects('lexicon','lambdacalc','predcalc','settings')
+    compile.with LOMBOK,GUAVA,PIPELINE,LAMBDACALC,
+      projects('lexicon','predcalc','settings')
     test.with LOMBOK,JPARSEC,GUAVA,SNAKE_YAML,SLF4J,PIPELINE
     package :jar
   end
@@ -39,8 +40,8 @@ define 'pelican' do
 
   # implementation of lexicon file parsing
   define 'lexicon' do
-    compile.with LOMBOK,GUAVA,PIPELINE.api,
-      projects('lambdacalc','settings')
+    compile.with LOMBOK,GUAVA,PIPELINE.api,LAMBDACALC,
+      projects('settings')
     package :jar
 
     task :deploy do
@@ -68,15 +69,14 @@ define 'pelican' do
     task :render => pdffile
   end
 
-  # implementation of simply typed lambda calculus
-  define 'lambdacalc' do
-    compile.with LOMBOK,GUAVA,JPARSEC,COMMONS_CLI
-    package :jar
-  end
+  #define 'lambdacalc' do
+  #  compile.with LOMBOK,GUAVA,JPARSEC,COMMONS_CLI
+  #  package :jar
+  #end
 
   # implementation of first order logic and smashing from hol to fol
   define 'predcalc' do
-    compile.with LOMBOK,SLF4J,projects('lambdacalc','settings')
+    compile.with LOMBOK,SLF4J,LAMBDACALC,projects('settings')
     package :jar
   end
 

@@ -7,9 +7,11 @@ import java.util.List;
 import lambdacalc.DeBruijn;
 import lambdacalc.DeBruijnRenamer;
 import lambdacalc.Expr;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.Value;
+import lombok.experimental.Wither;
 import semante.lexicon.Category;
 import semante.lexicon.Word;
 
@@ -20,8 +22,9 @@ import com.google.common.collect.ImmutableList;
 @RequiredArgsConstructor
 public final class ICategory implements Category {
 
-	String				name;
-	List<DeBruijn>		denotations;
+	String			name;
+	@Wither(AccessLevel.PRIVATE)
+	List<DeBruijn>	denotations;
 	DeBruijnRenamer	substituter;
 	
 	public final ICategory addDenotation(final DeBruijn denotation) {
