@@ -233,6 +233,7 @@ public class IProver implements Prover {
 		out.append("formulas(goals).\n");
 		out.append(fol.format(hyp.getSemantics()) + ".\n");
 		out.append("end_of_list.");
+		System.err.println(out);
 		return out.toString();
 	}
 	
