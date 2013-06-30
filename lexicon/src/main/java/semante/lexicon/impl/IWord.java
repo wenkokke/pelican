@@ -4,9 +4,11 @@ import java.util.List;
 
 import lambdacalc.DeBruijn;
 import lambdacalc.Expr;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.Value;
+import lombok.experimental.Wither;
 import semante.lexicon.Word;
 
 import com.google.common.collect.ImmutableList;
@@ -17,6 +19,8 @@ public final class IWord implements Word {
 	
 	String			name;
 	String			text;
+	
+	@Wither(AccessLevel.PRIVATE)
 	List<DeBruijn>	denotations;
 	
 	public final IWord addDenotation(final DeBruijn denotation) {

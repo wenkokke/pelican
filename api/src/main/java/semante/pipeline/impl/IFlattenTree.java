@@ -32,7 +32,8 @@ public final class IFlattenTree<ID> implements FlattenTree<ID> {
 
 	@Override
 	public final Either<Result<ID>, List<DeBruijn>> flatten(final BinaryTree<ID, Annotation> tree) {
-		val builder = ImmutableList.<Either<Result<ID>,DeBruijn>> builder();
+		final ImmutableList.Builder<Either<Result<ID>,DeBruijn>>
+			builder = ImmutableList.<Either<Result<ID>,DeBruijn>> builder();
 		for (val expr: join1(lookup(tree))) {
 			builder.add(compose(expr));
 		}

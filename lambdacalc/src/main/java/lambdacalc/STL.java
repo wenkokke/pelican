@@ -12,13 +12,6 @@ import static lombok.AccessLevel.PRIVATE;
 
 import java.util.Map;
 
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
-
 import lambdacalc.impl.IDeBruijn2Expr;
 import lambdacalc.impl.IDeBruijn2FreeNames;
 import lambdacalc.impl.IDeBruijn2Type;
@@ -47,6 +40,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
+
 import com.google.common.collect.Maps;
 
 @RequiredArgsConstructor
@@ -64,7 +61,7 @@ public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
 		val options = new Options();
 		options.addOption("u", "untyped", false, "Configures the lambda parser to consume untyped terms.");
 		options.addOption("s", "simply-typed", false, "Configures the lambda parser to consume simply typed terms.");
-		options.addOption("b", "normalize", false, "Applies normal-order reduction to the given lambda expression.");
+		options.addOption("n", "normalize", false, "Applies normal-order reduction to the given lambda expression.");
 		options.addOption("e", "expresison", true, "The lambda expression to work on.");
 		val cmds = parser.parse(options, args);
 		val stl = new STL();
@@ -82,8 +79,9 @@ public final class STL implements ExprParser, TypePrinter, SymbolPrinter,
 		}
 		
 		// beta-reduce the expression
-		if (cmds.hasOption('b')) {
+		if (cmds.hasOption('n')) {
 			expr = stl.betaReduce(expr);
+			expr = stl.etaReduce(expr);
 		}
 		
 		// print the expression
