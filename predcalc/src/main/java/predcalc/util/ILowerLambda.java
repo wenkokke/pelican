@@ -40,8 +40,8 @@ public class ILowerLambda implements LowerLambda {
 						public Expr application(Expr fun3, Expr arg3) {
 							// If there's a e(et)et constant applied to an e constant, we make a fresh eet constant
 							return lcalc.getExprBuilder().application(
-									lcalc.getExprBuilder().variable(buildSymbol(app.accept(namer), Types.EET)),
-									lcalc.getExprBuilder().variable(buildSymbol(arg3.accept(namer), Types.E))
+								   lcalc.getExprBuilder().variable(buildSymbol(app.accept(namer), Types.EET)),
+								   lcalc.getExprBuilder().variable(buildSymbol(arg3.accept(namer), Types.E))
 								);
 						}
 

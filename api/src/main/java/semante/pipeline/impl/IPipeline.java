@@ -53,9 +53,9 @@ public final class IPipeline implements Pipeline {
 		val flatTexts = flatTextM.getRight();
 		val flatHypos = flatHypoM.getRight();
 		
-//		for (val flatText: flatTexts) {
-//			System.err.println(stl.format(stl.fromDeBruijn(flatText)));
-//		}
+		for (val flatText: flatTexts) {
+			System.err.println(stl.format(stl.fromDeBruijn(flatText)));
+		}
 		
 		val reducer = new Function<DeBruijn,DeBruijn>() {
 			@Override
@@ -75,7 +75,7 @@ public final class IPipeline implements Pipeline {
 		
 		for (val nubText: nubTexts) {
 //			System.err.println(stl.format(nubText));
-//			System.err.println(stl.format(stl.fromDeBruijn(nubText)));
+			System.err.println(stl.format(stl.fromDeBruijn(nubText)));
 //			System.err.println(pcalc.format(stl2p.smash(stl.fromDeBruijn(nubText)).getSemantics()));
 		}
 		for (val nubHypo: nubHypos) {

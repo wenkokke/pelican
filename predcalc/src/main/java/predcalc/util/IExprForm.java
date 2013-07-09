@@ -9,7 +9,7 @@ import lombok.experimental.Value;
 @Value
 public class IExprForm<Kind> implements ExprForm<Kind> {
 
-	Kind semantics;
-	List<Kind> pragmatics;
+	Kind		semantics;
+	List<Kind>	pragmatics;
 
 }
