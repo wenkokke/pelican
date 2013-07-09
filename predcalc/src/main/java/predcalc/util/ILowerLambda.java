@@ -27,24 +27,30 @@ public class ILowerLambda implements LowerLambda {
 			val fun2 = fun.accept(rewriter);
 			val arg2 = arg.accept(rewriter);
 			val app = lcalc.getExprBuilder().application(fun2, arg2);
-			
-			val ee = lcalc.getTypeBuilder().function(Types.E, Types.E); // TODO BUGFIX
-			val e_et_et = lcalc.getTypeBuilder().function(Types.E, Types.ET_ET);
-			
-			if (lcalc.typeOf(fun2).equals(Types.ET_ET) && (lcalc.typeOf(arg2).equals(Types.ET) || lcalc.typeOf(arg2).equals(ee))) {
-				// If there's a (et)et constant applied to an et constant, we replace it by a fresh et constant
-				if (fun2.accept(isConstant) /*&& arg2.accept(isConstant)*/) {
-					return lcalc.getExprBuilder().variable(buildSymbol(app.accept(namer), Types.ET));
-				} else {
-					throw new HigherOrderError("Non-constants of type (et)et and (et): "+fun2+" "+arg2);
-				}
-			} else if (lcalc.typeOf(fun2).equals(e_et_et) && lcalc.typeOf(arg2).equals(Types.E)) {
-				// If there's a e(et)et constant applied to an e constant, we replace it by a fresh (et)et constant
-				if (fun2.accept(isConstant) && arg2.accept(isConstant)) {
-					return lcalc.getExprBuilder().variable(buildSymbol(app.accept(namer), Types.ET_ET));
-				} else {
-					throw new HigherOrderError("Non-constants of type (et)et and (et): "+fun2+" "+arg2);
-				}
+						
+			if (lcalc.typeOf(fun2).equals(Types.ET_ET) && lcalc.typeOf(arg2).equals(Types.ET)) {
+				return fun2.accept(new ExprBuilder() {
+
+						@Override
+						public Expr abstraction(Symbol s, Expr body) {
+							throw new HigherOrderError("Abstraction of type (et)et: "+lcalc.format(fun2));
+						}
+
+						@Override
+						public Expr application(Expr fun3, Expr arg3) {
+							// If there's a e(et)et constant applied to an e constant, we make a fresh eet constant
+							return lcalc.getExprBuilder().application(
+									lcalc.getExprBuilder().variable(buildSymbol(app.accept(namer), Types.EET)),
+									lcalc.getExprBuilder().variable(buildSymbol(arg3.accept(namer), Types.E))
+								);
+						}
+
+						@Override
+						public Expr variable(Symbol s) {
+							// If there's a (et)et constant applied to an et constant, we replace it by a fresh et constant
+							return lcalc.getExprBuilder().variable(buildSymbol(app.accept(namer), Types.ET));
+						}
+					});
 			} else {
 				return app;
 			}
@@ -87,6 +93,7 @@ public class ILowerLambda implements LowerLambda {
 	}
 	
 	private Visitor<String> namer = new Visitor<String>() {
+		// Concatenate all constants of not type e
 		@Override public String abstraction(Symbol s, Expr body) { return body.accept(namer); }
 		@Override public String application(Expr fun, Expr arg) {
 			if (arg.accept(new Visitor<Boolean>() {
@@ -113,7 +120,6 @@ public class ILowerLambda implements LowerLambda {
 	
 	public Expr rewrite(Expr a) {
 		Expr o = a.accept(rewriter);
-//		System.err.println("rewrote " + lcalc.format(a) + " to " + lcalc.format(o));
 		return o;
 	}
 
