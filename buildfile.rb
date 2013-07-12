@@ -14,10 +14,16 @@ SLF4J       = struct(
 PIPELINE    = struct(
   :api     => 'pipeline:pipeline-api:jar:2.1.1',
   :util    => 'pipeline:pipeline-util:jar:2.1.1')
-LAMBDACALC  = 'lambdacalc:lambdacalc:jar:1.2.0'
+LAMBDACALC  = 'lambdacalc:lambdacalc:jar:1.1.0'
 
 task 'deploy-lexicon' => 'pelican:lexicon:deploy'
 task 'render-lexicon' => 'pelican:lexicon:render'
+
+# install dependencies
+task 'install-deps' do
+  from_git 'https://github.com/pepijnkokke/LambdaCalc'
+  from_git 'https://github.com/pepijnkokke/SemAnTE-Pipeline-API'
+end
 
 define 'pelican' do
   project.version = '1.2.0'
@@ -32,10 +38,6 @@ define 'pelican' do
       projects('lexicon','predcalc','settings')
     test.with LOMBOK,JPARSEC,GUAVA,SNAKE_YAML,SLF4J,PIPELINE
     package :jar
-  end
-
-  # implementation of lexicon file rendering
-  define 'lex2tex' do
   end
 
   # implementation of lexicon file parsing
@@ -68,11 +70,6 @@ define 'pelican' do
 
     task :render => pdffile
   end
-
-  #define 'lambdacalc' do
-  #  compile.with LOMBOK,GUAVA,JPARSEC,COMMONS_CLI
-  #  package :jar
-  #end
 
   # implementation of first order logic and smashing from hol to fol
   define 'predcalc' do
