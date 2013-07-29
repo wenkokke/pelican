@@ -1,12 +1,16 @@
-package semante.pipeline.impl;
+package semante.pipeline.test.rte;
 
-import semante.pipeline.Entailment;
-import org.junit.Test;
 import lombok.val;
+
+import org.junit.Test;
+
+import semante.pipeline.test.Entailment;
+import semante.pipeline.test.impl.ATestCase;
+import semante.pipeline.test.impl.IEntailment;
 
 public final class TestCaseRTE2test84 extends ATestCase {
 
-		@Test
+//		@Test
 		public final void prove() throws Exception {
 			proveEntailment(createRTE2test84());
 		}
@@ -19,8 +23,11 @@ public final class TestCaseRTE2test84 extends ATestCase {
 		public final Entailment createRTE2test84() throws Exception {
 
 			// create the vocabulary for the text;
+			val t00_a = word("A","a");
 			val t00_salvadoran = word("MOD_R","salvadoran");
 			val t01_reporter = word("N_1","reporter");
+			val t01_who = word("WHO_A","who");
+			val t01_is = word("IS","is");
 			val t02_mauricio_pineda = word("NP","mauricio pineda");
 			val t03_a = word("A","a");
 			val t04_sound = word("MOD_R","sound");
@@ -60,13 +67,8 @@ public final class TestCaseRTE2test84 extends ATestCase {
 			_(
 				_(
 					_(
-						t00_salvadoran
-						,
-						_(
-							t01_reporter
-							,
-							t02_mauricio_pineda
-						)
+						_(t00_a, _(t00_salvadoran, t01_reporter)),
+						_(t01_who,_(t01_is,t02_mauricio_pineda))
 					)
 					,
 					_(

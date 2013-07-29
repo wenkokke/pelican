@@ -48,9 +48,10 @@ Furthermore, $\text{WHO}_R$ returns an application of $\text{MOD}_I$.
 
 > WHO_R \PRED:et.\A:et.\x:e.AND:ttt (A:et x:e) (PRED:et x:e)
 
-And lastly, $\text{WHO}_A$ handles appositive modification.
+And lastly, $\text{WHO}_A$ and $\text{MOD}_A$, which handle appositive modification.
 
 > WHO_A \B:et.\P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t B:et)
+> MOD_A \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t WORD:et)
 
 This special instance of appositive modification handles sentences such as "Jan, a man, ran",
 in which a noun phrase is modified by a noun phrase. This could be solved by the insertion
