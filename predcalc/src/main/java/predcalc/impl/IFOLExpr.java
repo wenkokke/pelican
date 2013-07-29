@@ -1,4 +1,4 @@
-package predcalc.util;
+package predcalc.impl;
 
 import static lombok.AccessLevel.PUBLIC;
 

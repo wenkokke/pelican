@@ -5,8 +5,8 @@ import static lombok.AccessLevel.PRIVATE;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import predcalc.impl.ILambda2Pred;
 import predcalc.impl.IPredCalc;
-import predcalc.util.ILambda2Pred;
 
 import lambdacalc.DeBruijn;
 import lambdacalc.STL;

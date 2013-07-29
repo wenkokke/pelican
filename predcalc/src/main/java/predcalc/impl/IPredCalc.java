@@ -4,13 +4,11 @@ import static lombok.AccessLevel.PRIVATE;
 
 import java.io.FileNotFoundException;
 
-import predcalc.ExprPrinter;
-import predcalc.PredCalc;
-
 import lombok.Delegate;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
-import lambdacalc.Type;
+import predcalc.ExprPrinter;
+import predcalc.PredCalc;
 import semante.prover.Prover;
 import semante.prover.impl.IProver;
 import semante.settings.impl.ISettings;
