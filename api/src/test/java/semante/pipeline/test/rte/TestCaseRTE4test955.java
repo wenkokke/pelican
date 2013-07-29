@@ -1,10 +1,12 @@
-package semante.pipeline.impl;
+package semante.pipeline.test.rte;
 
 import lombok.val;
 
 import org.junit.Test;
 
-import semante.pipeline.Entailment;
+import semante.pipeline.test.Entailment;
+import semante.pipeline.test.impl.ATestCase;
+import semante.pipeline.test.impl.IEntailment;
 
 public final class TestCaseRTE4test955 extends ATestCase {
 
@@ -120,7 +122,7 @@ public final class TestCaseRTE4test955 extends ATestCase {
 			val ss =
 			new String[] {
 				"all x (all y (on_operates(x,y) -> operates(x))).",
-				"all x (all y ((web(y) & on_search_engine_engine(x,y)) -> on_operates(x,y)))."
+				"all x (all y ((web(y) & on_and_engine_search_engine(x,y)) -> on_operates(x,y)))."
 			};
 
 			// return the new entailment;

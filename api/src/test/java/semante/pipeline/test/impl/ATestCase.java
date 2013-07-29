@@ -1,4 +1,4 @@
-package semante.pipeline.impl;
+package semante.pipeline.test.impl;
 
 import static lombok.AccessLevel.PRIVATE;
 import static org.junit.Assert.fail;
@@ -14,10 +14,16 @@ import org.junit.Before;
 import semante.lexicon.impl.IRichLexicon;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
-import semante.pipeline.Entailment;
 import semante.pipeline.Pair;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result.Visitor;
+import semante.pipeline.impl.IAnnotation;
+import semante.pipeline.impl.IBinaryTree;
+import semante.pipeline.impl.ILabeller;
+import semante.pipeline.impl.IPair;
+import semante.pipeline.impl.IPipeline;
+import semante.pipeline.impl.ISimpleBinaryTree;
+import semante.pipeline.test.Entailment;
 import semante.pipeline.SimpleBinaryTree;
 import semante.settings.SettingsException;
 import semante.settings.impl.ISettings;

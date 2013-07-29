@@ -1,8 +1,12 @@
-package semante.pipeline.impl;
+package semante.pipeline.test.rte;
 
-import semante.pipeline.Entailment;
-import org.junit.Test;
 import lombok.val;
+
+import org.junit.Test;
+
+import semante.pipeline.test.Entailment;
+import semante.pipeline.test.impl.ATestCase;
+import semante.pipeline.test.impl.IEntailment;
 
 public final class TestCaseRTE2test410 extends ATestCase {
 
@@ -152,8 +156,7 @@ public final class TestCaseRTE2test410 extends ATestCase {
 			// create the subsumption relations;
 			val ss =
 			new String[] {
-				"all x (last_president(x) -> former_president(x)).",
-				"all x (all y (last_of_president(x,y) -> former_of_president(x,y)))."
+				"all x (last_and_president_of_president(x) -> former_and_president_of_president(x))."
 			};
 
 			// return the new entailment;

@@ -1,8 +1,12 @@
-package semante.pipeline.impl;
+package semante.pipeline.test.jan;
 
-import semante.pipeline.Entailment;
-import org.junit.Test;
 import lombok.val;
+
+import org.junit.Test;
+
+import semante.pipeline.test.Entailment;
+import semante.pipeline.test.impl.ATestCase;
+import semante.pipeline.test.impl.IEntailment;
 
 public final class TestCaseJan03 extends ATestCase {
 

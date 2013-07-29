@@ -1,38 +1,40 @@
-package semante.pipeline.impl;
+package semante.pipeline.test.jan;
 
-import semante.pipeline.Entailment;
-import org.junit.Test;
 import lombok.val;
 
-public final class TestCaseJan08 extends ATestCase {
+import org.junit.Test;
+
+import semante.pipeline.test.Entailment;
+import semante.pipeline.test.impl.ATestCase;
+import semante.pipeline.test.impl.IEntailment;
+
+public final class TestCaseJan05 extends ATestCase {
 
 		@Test
 		public final void prove() throws Exception {
-			proveEntailment(createJan08());
+			proveEntailment(createJan05());
 		}
 
 		@Test
 		public final void createTestCase() throws Exception {
-			createTestCase("Jan08",createJan08());
+			createTestCase("Jan05",createJan05());
 		}
 
-		public final Entailment createJan08() throws Exception {
+		public final Entailment createJan05() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_jan = word("NP","jan");
 			val t01_is = word("IS","is");
 			val t02_a = word("A","a");
-			val t03_tall = word("MOD_R","tall");
-			val t04_black = word("MOD_I","black");
-			val t05_fat = word("MOD_R","fat");
-			val t06_dutch = word("MOD_I","dutch");
-			val t07_man = word("N_1","man");
+			val t03_short = word("MOD_R","short");
+			val t04_dutch = word("MOD_I","dutch");
+			val t05_man = word("N_1","man");
 
 			// create the vocabulary for the hypothesis;
 			val h00_jan = word("NP","jan");
 			val h01_is = word("IS","is");
 			val h02_a = word("A","a");
-			val h03_black = word("MOD_I","black");
+			val h03_dutch = word("MOD_I","dutch");
 			val h04_man = word("N_1","man");
 
 			// create the tree structure for the text;
@@ -47,20 +49,12 @@ public final class TestCaseJan08 extends ATestCase {
 						t02_a
 						,
 						_(
-							t03_tall
+							t03_short
 							,
 							_(
-								t04_black
+								t04_dutch
 								,
-								_(
-									t05_fat
-									,
-									_(
-										t06_dutch
-										,
-										t07_man
-									)
-								)
+								t05_man
 							)
 						)
 					)
@@ -80,7 +74,7 @@ public final class TestCaseJan08 extends ATestCase {
 						h02_a
 						,
 						_(
-							h03_black
+							h03_dutch
 							,
 							h04_man
 						)
