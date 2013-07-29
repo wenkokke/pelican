@@ -1,4 +1,4 @@
-package predcalc.util;
+package predcalc.impl;
 
 import java.util.ArrayList;
 import java.util.List;

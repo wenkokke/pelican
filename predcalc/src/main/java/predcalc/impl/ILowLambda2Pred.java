@@ -1,22 +1,20 @@
-package predcalc.util;
+package predcalc.impl;
 
 import java.util.ArrayList;
 
-import predcalc.FOLExpr;
-import predcalc.HigherOrderError;
-import predcalc.LowLambda2Pred;
-import predcalc.PredCalc;
-import predcalc.FOLExpr.Formula;
-import predcalc.FOLExpr.Term;
-
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lambdacalc.Expr;
 import lambdacalc.Expr.Visitor;
 import lambdacalc.STL;
 import lambdacalc.Symbol;
 import lambdacalc.Type;
 import lambdacalc.Types;
+import lombok.RequiredArgsConstructor;
+import predcalc.FOLExpr;
+import predcalc.FOLExpr.Formula;
+import predcalc.FOLExpr.Term;
+import predcalc.HigherOrderError;
+import predcalc.LowLambda2Pred;
+import predcalc.PredCalc;
 
 /*
  * Convert a first-order lambda expression to predicate logic
