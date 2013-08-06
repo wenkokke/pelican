@@ -65,7 +65,7 @@ public final class IFlattenTree<ID> implements FlattenTree<ID> {
 					@Override
 					public final List<Denotation> annotation(final String text, String category) {
 						final Builder<Denotation> builder = ImmutableList.<Denotation> builder();
-						for (val denotation: lexicon.getEntry(category, text).getDenotations()) {
+						for (DeBruijn denotation: lexicon.getEntry(category, text).getDenotations()) {
 							builder.add(new IDenotation(text, category, denotation));
 						}
 						return builder.build();
