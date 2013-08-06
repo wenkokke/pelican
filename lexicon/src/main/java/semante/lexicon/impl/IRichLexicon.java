@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
+import java.io.InputStream;
+
 import lambdacalc.STL;
 import lombok.Delegate;
 import lombok.val;
@@ -22,10 +24,20 @@ public class IRichLexicon implements RichLexicon {
 	@Delegate
 	Lexicon	lex;
 
+	/**
+	 * Constructor that uses a settings object to find the lexicon file.
+	 */
 	public IRichLexicon(final Settings settings, final STL stl) throws FileNotFoundException, SettingsException, IOException {
 		this.lex = new ILexicon(settings.get("SemAnTE","Lexicon","Default"),stl);
 	}
 
+	/**
+	 * Constructor that uses an opened stream to the lexicon file.
+	 */
+	public IRichLexicon(final InputStream is, final STL stl) throws IOException {
+		this.lex = new ILexicon(is,stl);
+	}
+	
 	@Override
 	public Word getEntry(String key, String text) {
 		
