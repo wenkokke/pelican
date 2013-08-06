@@ -1,220 +1,163 @@
 package semante.prover.impl;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
-import predcalc.ExprForm;
-import predcalc.PredCalc;
-import predcalc.FOLExpr.Formula;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import lombok.Cleanup;
-import lombok.Getter;
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-import semante.prover.OutputParser;
+
+import predcalc.ExprForm;
+import predcalc.FOLExpr.Formula;
+import predcalc.PredCalc;
 import semante.prover.Prover;
-import semante.prover.ProverArgs.ResultType;
-import semante.prover.ProverException;
-import semante.prover.impl.IProverRunner.ExitStatus;
+import semante.prover.ProverOutput;
+import semante.prover.ProverOutput.ResultType;
+import semante.prover.ProverResult;
+
 import semante.settings.Settings;
 
-@Slf4j
 public class IProver implements Prover {
 
-	private final static int TimeoutSeconds = 60;
-	private final static int ShortTimeoutSeconds = TimeoutSeconds/10;
+	private static final int P9_EC_MAX_PROOFS 	= 0;
+	private static final int P9_EC_FATAL 		= 1;
+	private static final int P9_EC_SOS_EMPTY 	= 2;
+	private static final int P9_EC_MAX_MEGS 	= 3;
+	private static final int P9_EC_MAX_SECONDS 	= 4;
+	private static final int P9_EC_MAX_GIVEN 	= 5;
+	private static final int P9_EC_MAX_KEPT 	= 6;
+	private static final int P9_EC_ACTION 		= 7;
+	private static final int P9_EC_SIGINT 		= 101;
+	private static final int P9_EC_SIGSEGV 		= 102;
 
-	private final String		path;
-	private final PredCalc		fol;
-	
+	private final static int FULL_TIMEOUT_SEC = 60;
+	private final static String PROVER9_EXE_NAME = "prover9";
+
+	private PredCalc fol;
+	private String proverPath;
+
 	public IProver(Settings settings, PredCalc pcalc) {
 		this.fol  = pcalc;
-		this.path = settings.get("SemAnTE","Prover","Location");
+		this.proverPath = settings.get("SemAnTE","Prover","Location");
 	}
 
 	@Override
-	public boolean prove(ExprForm<Formula> text, ExprForm<Formula> hypothesis) throws ProverException {
-		return prove(text, hypothesis, "");
-	}	
-	
+	public ProverResult prove(ExprForm<Formula> textExp, ExprForm<Formula> hypoExp) {
+		return prove(textExp,hypoExp,"");
+	}
+
 	@Override
-	public boolean prove(ExprForm<Formula> txt, ExprForm<Formula> hyp, String subsumptionRules) throws ProverException  {
+	public ProverResult prove(ExprForm<Formula> textExp, ExprForm<Formula> hypoExp,
+			String subsumptionRules) {
 
-		IProverArgs proverArgs = null;
-		File tempFile = null;
-		
-		try{
-			val proofInput = toProofInput(txt, hyp, subsumptionRules);
-			System.err.println(proofInput);
-			proverArgs = new IProverArgs(txt.toString(), hyp.toString());
+		File 			tempFile = null;
+		Process 		process = null;
+		Timer 			timer = null;
+		ProverOutput 	proverOutputPF = null;
+
+		String prooverInput = toProofInput(textExp, hypoExp, subsumptionRules);
+
+		String fileName;
+		try {
+
+			tempFile = File.createTempFile("prover",".in");
+			fileName = tempFile.getAbsolutePath();
+			@Cleanup
+			BufferedWriter out = new BufferedWriter(new FileWriter(fileName));
+			out.write(prooverInput);
+			out.close();
+
+			String 			prover9ProcessName = PROVER9_EXE_NAME;
+			int 			prover9ProcessTimeout = FULL_TIMEOUT_SEC;
+			int 			prover9ParamTimeout = prover9ProcessTimeout * 3/4;
+			String[] 		prover9Command = new String[] {proverPath + prover9ProcessName, "-t", Integer.toString(prover9ParamTimeout), "-f", fileName};
 			
-			String fileName;
-			try {
-				tempFile = File.createTempFile("prover",".in");
-				fileName = tempFile.getAbsolutePath();
-				@Cleanup
-				val out = new BufferedWriter(new FileWriter(fileName));
-				log.trace("Prover input=["+proofInput+"]");
-				out.write(proofInput);
-			} catch (IOException e) {
-				log.trace("failed to create input file for prover");
-				throw new ProverException(e);
-			}
+			StringBuffer 	prover9OutputBuffer = new StringBuffer();
 
-			ThreadController controller = new ThreadController();
+			timer = new Timer(true);
+			InterruptTimerTask interrupter = new InterruptTimerTask(Thread.currentThread());
+			timer.schedule(interrupter, prover9ProcessTimeout * 1000);
 
-			val exes = new HashMap<String, OutputParser>();
-			exes.put("prover9", new IOutputParser.IProver9OutputRecognizer()); 
-			exes.put("mace4", new IOutputParser.IMace4OutputRecognizer());
+			System.out.println("Running Prover process ["+prover9ProcessName+"]");
+			process = Runtime.getRuntime().exec(prover9Command);
 
-			val threads = new ArrayList<IProverRunner>();
-			for (val exe : exes.keySet() ) {
-				val file = new File(this.path, exe).getAbsolutePath();
-				threads.add(new IProverRunner(new String[] { file, "-f",
-						fileName }, exe, controller, TimeoutSeconds * 3 / 4,
-						exes.get(exe)));
-			}
+			System.out.println("Prover is running");
 
-			for (val thread : threads) {
-				log.trace("Running thread (" + thread.getProcessName() + ")");
-				thread.start();
+			// readers for the error and output stream (executed in separated threads)
+			StreamGobbler errorGobbler = new StreamGobbler(process.getErrorStream(), "ERROR", prover9OutputBuffer);            
+			StreamGobbler outputGobbler = new StreamGobbler(process.getInputStream(), "OUTPUT", prover9OutputBuffer);
+
+			// kick them off
+			errorGobbler.start();
+			outputGobbler.start();
+
+			System.out.println("Waiting for prover to end");
+			int exitVal = process.waitFor();
+
+			String resultDesc = prover9exitCodeToString(exitVal);
+			ResultType resultType = prover9exitCodeToResultEnum(exitVal);
+			
+			// the process has ended gracefully (otherwise - the InterruptedException would have been thrown)
+			System.out.println("Prover ended with exit value: [" + exitVal + "], meaning: [" + resultDesc + "], type: [" + resultType + "]");
+			
+			String proverOutput = prover9OutputBuffer.toString(); 
+			
+			if (resultType==ResultType.NoProofCanBeFound && proverOutput.matches("(?s).*Exiting with [1-9]+ proofs?.*")) {
+				resultType = ResultType.ProofFound;
+				System.out.println("Prover stdout indicates that a proof WAS found; dismissing exit code indication, type is set to: [" + resultType + "]");
 			}
 			
-			log.trace("main thread executed working threads");
-			
-			// TODO some documentation on the meaning of these variables would be nice.
-			boolean isInterrupted = false;
-			boolean isTimeout     = false;
-			long currentTime      = System.currentTimeMillis();
-			long endLongTimeout   = currentTime + TimeoutSeconds*1000;
-			long endShortTimeout  = currentTime + ShortTimeoutSeconds*1000;
-			long endTimeout       = 0;
-			long timeout          = 0;
-			int numInformants     = 0; 
-			
-			log.trace("main thread goes into wait() loop");
+			proverOutputPF = new IProverOutput(proverOutput,resultType);
 
-			// we loop as long as one of the threads is still waiting for its process to finish AND we 
-			// haven't got a determined result from a finished thread AND the timeout hasn't expired
-			while ((numInformants = controller.getInformantsCount()) < 2
-				&& controller.isUndetermined() && !isTimeout) {
-				try {
-					// long timeout if none of the threads has informed yet,
-					// short if one of them has.
-					if (numInformants==0){
-						log.trace("Setting long timeout");
-						endTimeout = endLongTimeout;
-					} else {
-						log.trace("Setting short timeout");
-						endTimeout = endShortTimeout;
-					} 
-					timeout = Math.max(endTimeout - System.currentTimeMillis(), 0);
-	
-					if (timeout > 0) {
-						log.trace("main thread is going into a wait("+timeout+") call");
-						synchronized(controller) {
-							controller.wait(timeout);
-						}
-						log.trace("main thread is out of wait()");
-					} else {
-						isTimeout = true;
-						log.trace("No time to wait anymore, getting out of wait() loop");					
-					}
-				} catch (InterruptedException e) {
-					// in case we were interrupted unexpectedly we try to close the running threads (and processes) and then throw an exception
-					// (note: we are not supposed to get here regularly)
-					log.trace("main thread interrupted");
-					isInterrupted = true;
-					e.printStackTrace();
-				}
+		} catch(InterruptedException e) {
+			// in case of a timeout or interruption by the main thread
+			System.out.println("Prover process was interuppted");
+			process.destroy();
+			proverOutputPF = new IProverOutput("Prover process was interuppted" + (e.getMessage()!=null ? " - " + e.getMessage() : ""),ResultType.Interuppted);
+
+		} catch (IOException e) {
+			proverOutputPF = new IProverOutput("Failed to create input file or to execute the process - " + e.getMessage(),ResultType.Error);
+		}
+
+		finally {
+			if (timer!=null) {
+				timer.cancel(); // If the process returns within the timeout period, we have to stop the interrupter
+				// so that it does not unexpectedly interrupt some other code later.
 			}
 
-				
-			// either if we were interrupted, if a thread notified, or if a timeout expired, we will close the threads now 
-			// (although one or the two of them might ended already)
-			for (IProverRunner thread : threads) {
-				if (thread.getExitStatus()==ExitStatus.UNSET) {
-					log.trace("Interuppting a working thread (" + thread.getProcessName()+")");
-					thread.interrupt();
-				}
-				try {
-					log.trace("Waiting for the thread to end (" + thread.getProcessName()+")");
-					thread.join(TimeoutSeconds*1000);
-					log.trace("Thread seems to be ended (" + thread.getProcessName()+")");
-				} catch (InterruptedException e) {
-					// another weird case - for some reason we were interrupted ...
-					log.trace("main thread interrupted while waiting for another thread to end");
-					e.printStackTrace();
-					isInterrupted = true;
-				}
-			}
-		
-			if (isInterrupted) {
-				throw new ProverException("Error in theorem prover's main thread interupppted unexpectedly");
-			} else if (isTimeout) {
-				throw new ProverException("Timeout expired while waiting for theorem provers's processes to respond");
-			} else {
+			Thread.interrupted();   // We need to clear the interrupt flag on the current thread just in case
+			// interrupter executed after waitFor had already returned but before timer.cancel
+			// took effect. Oh, and there's also Sun bug 6420270 to worry about here.
 
-				log.trace("Both threads ended, checking for IO errors");
-				for (IProverRunner thread : threads) {
-					if (thread.getExitStatus()==ExitStatus.ERROR) {
-						log.trace("IO error found ("+thread.getProcessName()+")");
-						throw new ProverException("Error executing " + thread.getProcessName() + " executable",thread.geIOtException());
-					}
-				}
-				
-				// after both threads ended and prover processes were ended we can analyze the results
-				log.trace("No errors, now analyzing results");
-				
-				// loop over the results, finding a non-undetermined one, making sure there are no contradictory results 
-				ResultType finalRec = ResultType.Undetermined;
-				List<ResultType> resSet1 = Arrays.asList(ResultType.ProofFound,ResultType.NoCounterexampleCanBeFound);
-				List<ResultType> resSet2 = Arrays.asList(ResultType.CounterexampleFound,ResultType.NoProofCanBeFound);
-				for (ResultType currentRec : controller.getResults()) {
-					log.trace("Checking result: "+currentRec.toString());
-					if (currentRec!=finalRec && currentRec!=ResultType.Undetermined) {
-						if (finalRec==ResultType.Undetermined) {
-							finalRec = currentRec;
-							log.trace("Updating final result to: " + finalRec.toString());
-						} else {
-							// so currentRec != finalRec and both aren't Undetermined 								
-							if (resSet1.containsAll(Arrays.asList(currentRec,finalRec)) ||
-								resSet2.containsAll(Arrays.asList(currentRec,finalRec))) {
-								log.trace("Second output recognized in line with the first");
-							} else {
-								log.trace("Strangely enough we got an ambiguous recognition");
-								throw new ProverException("Ambiguous recognition by Prover9 and Mace4");
-							}
-						}						
-					}
-				}
-
-				if (finalRec==ResultType.Undetermined) {
-					log.trace("The result is undetermined for both threads"); 
-					throw new ProverException("Failed to determine result based on prover's output");
-				}
-				
-				proverArgs.setResultType(finalRec);
-				
-				log.trace("Reached a final decision: " + proverArgs.getResultType().toString());
-				
-				return 	resSet1.contains(finalRec) ? true : false;
-			}
-		} finally {
 			if (tempFile!=null) {
-				tempFile.delete();
+				boolean del = true;
+
+				if (del) { 
+					System.out.println("Deleting temp input file: " + tempFile.toString()); 
+					tempFile.delete();
+				} else {
+					System.out.println("NOT deleting temp input file: " + tempFile.toString()); 
+				}
+			}
+
+			if (proverOutputPF==null) {
+				proverOutputPF = new IProverOutput("Unknown error",ResultType.Error);
 			}
 		}
+
+		ProverOutput proverOutputCMF = new IProverOutput(null,ResultType.NotRun);
+		return new IProverResult(prooverInput, proverOutputPF, proverOutputCMF);
+
 	}
 
+
 	public String toProofInput(ExprForm<Formula> txt, ExprForm<Formula> hyp, String subs) {
-		val out = new StringBuilder();
+		StringBuilder out = new StringBuilder();
 		out.append("formulas(assumptions).\n");
 		out.append("% Pragmatics:\n");
 		for (Formula prg : txt.getPragmatics()) {
@@ -236,18 +179,87 @@ public class IProver implements Prover {
 		System.err.println(out);
 		return out.toString();
 	}
-	
-	@Getter
-	public static final class ThreadController {
-		
-		int						informantsCount	= 0;
-		boolean					undetermined	= true;
-		final List<ResultType>	results			= new ArrayList<ResultType>();
-		
-		public final synchronized void inform(final ResultType res) {
-			informantsCount++;
-			results.add(res);
-			undetermined = undetermined && (res==ResultType.Undetermined);
+
+
+	class InterruptTimerTask extends TimerTask {
+
+		private Thread thread;
+
+		public InterruptTimerTask(Thread t) {
+			this.thread = t;
+		}
+
+		public void run() {
+			System.out.println("Timeout expired!");
+			thread.interrupt();
 		}
 	}
+
+	private String prover9exitCodeToString(int exitCode) {
+		switch (exitCode){	
+		case P9_EC_MAX_PROOFS: 	return "The specified number of proofs (max_proofs) was found.";
+		case P9_EC_FATAL: 		return "A fatal error occurred (user's syntax error or Prover9's bug).";
+		case P9_EC_SOS_EMPTY: 	return "Prover9 ran out of things to do (sos list exhausted).";
+		case P9_EC_MAX_MEGS: 	return "The max_megs (memory limit) parameter was exceeded.";
+		case P9_EC_MAX_SECONDS: return "The max_seconds parameter was exceeded.";
+		case P9_EC_MAX_GIVEN: 	return "The max_given parameter was exceeded.";
+		case P9_EC_MAX_KEPT: 	return "The max_kept parameter was exceeded.";
+		case P9_EC_ACTION: 		return "A Prover9 action terminated the search.";
+		case P9_EC_SIGINT: 		return "Prover9 received an interrupt signal.";
+		case P9_EC_SIGSEGV: 	return "Prover9 crashed, most probably due to a bug.";
+		default:
+			return "Unrecognized exit code";
+		}
+	}
+
+	private ResultType prover9exitCodeToResultEnum(int exitCode) {
+		switch (exitCode){	
+		case P9_EC_MAX_PROOFS: 	return ResultType.ProofFound;
+		case P9_EC_FATAL: 		return ResultType.Error;
+		case P9_EC_SOS_EMPTY: 	return ResultType.NoProofCanBeFound;
+		case P9_EC_MAX_MEGS: 	
+		case P9_EC_MAX_SECONDS: 
+		case P9_EC_MAX_GIVEN: 	
+		case P9_EC_MAX_KEPT: 	
+		case P9_EC_ACTION: 		
+		case P9_EC_SIGINT: 		return ResultType.Interuppted;
+		case P9_EC_SIGSEGV: 	return ResultType.Error;
+		default:
+			return ResultType.Unset;
+		}
+	}
+
+	class StreamGobbler extends Thread {
+		InputStream is;
+		String type;
+		StringBuffer os;
+
+		StreamGobbler(InputStream is, String type) {
+			this(is, type, null);
+		}
+
+		StreamGobbler(InputStream is, String type, StringBuffer os) {
+			this.is = is;
+			this.type = type;
+			this.os = os;
+		}
+
+		/** creates readers to handle the text created by the external program
+		 */		
+		public void run() {
+			try {
+				InputStreamReader isr = new InputStreamReader(is);
+				BufferedReader br = new BufferedReader(isr);
+				String line=null;
+				while ( (line = br.readLine()) != null) {
+					if (os != null) {
+						os.append(line + "\n");
+					}
+				}
+			} catch (IOException ioe) {
+				ioe.printStackTrace();  
+			}
+		}
+	}
+
 }

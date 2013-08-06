@@ -5,15 +5,14 @@ import static lombok.AccessLevel.PRIVATE;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-import predcalc.impl.IPredCalc;
-import predcalc.util.ILambda2Pred;
-
 import lambdacalc.DeBruijn;
 import lambdacalc.STL;
 import lombok.Delegate;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
+import predcalc.impl.IPredCalc;
+import predcalc.util.ILambda2Pred;
 import semante.lexicon.RichLexicon;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
@@ -21,7 +20,6 @@ import semante.pipeline.Category;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result;
 import semante.pipeline.TestCaseCreator;
-import semante.prover.ProverException;
 import semante.prover.impl.IProver;
 import semante.settings.Settings;
 
@@ -80,24 +78,30 @@ public final class IPipeline implements Pipeline {
 		}
 		for (val nubHypo: nubHypos) {
 //			System.err.println(stl.format(nubHypo));
-//			System.err.println(stl.format(stl.fromDeBruijn(nubHypo)));
+			System.err.println(stl.format(stl.fromDeBruijn(nubHypo)));
 //			System.err.println(pcalc.format(stl2p.smash(stl.fromDeBruijn(nubHypo)).getSemantics()));
 		}
 		
-		try {
-			for (val nubText: nubTexts) {
-				val t = stl2p.smash(stl.fromDeBruijn(nubText));
-				for (val nubHypo: nubHypos) {
-					val h = stl2p.smash(stl.fromDeBruijn(nubHypo));
-					if (prover.prove(t, h, subsumptions)) {
-						return new IResult$Proof<ID>();
-					}
+		for (val nubText: nubTexts) {
+			val t = stl2p.smash(stl.fromDeBruijn(nubText));
+			for (val nubHypo: nubHypos) {
+				val h = stl2p.smash(stl.fromDeBruijn(nubHypo));
+				val res = prover.prove(t, h, subsumptions);
+				val resType = res.getProverOutputPF().getResultType();
+				switch (resType) {
+				case ProofFound:
+					return new IResult$Proof<ID>();
+				case NoProofCanBeFound:
+					break;
+				case Error:
+				case Interuppted:
+				case NotRun:
+				case Unset:
+				default:
+					System.err.println("Unexpected error in prover execution: " + res.getProverOutputPF().getOutput());					
 				}
 			}
-		} catch (ProverException e) {
-			e.printStackTrace();
 		}
-		
 		return new IResult$Unknown<ID>();
 	}
 	
