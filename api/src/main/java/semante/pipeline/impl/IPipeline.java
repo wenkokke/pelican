@@ -5,14 +5,15 @@ import static lombok.AccessLevel.PRIVATE;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import predcalc.impl.IPredCalc;
+import predcalc.util.ILambda2Pred;
+
 import lambdacalc.DeBruijn;
 import lambdacalc.STL;
 import lombok.Delegate;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
-import predcalc.impl.IPredCalc;
-import predcalc.util.ILambda2Pred;
 import semante.lexicon.RichLexicon;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
