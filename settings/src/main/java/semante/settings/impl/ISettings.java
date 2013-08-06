@@ -56,7 +56,10 @@ public final class ISettings implements Settings {
 	}
 	
 	public ISettings() throws FileNotFoundException {
-		this(new File(new File(System.getProperty("user.home"), ".semante"), "settings.yml"));
+		this(defaultSettingsFile());
 	}
 	
+	public static File defaultSettingsFile() {
+		return new File(new File(System.getProperty("user.home"), ".semante"), "settings.yml");
+	}
 }
