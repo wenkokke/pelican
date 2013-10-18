@@ -36,7 +36,7 @@ define 'pelican' do
   define 'api' do
     compile.with LOMBOK,GUAVA,PIPELINE,LAMBDACALC,
       projects('lexicon','predcalc','settings')
-    test.with LOMBOK,JPARSEC,GUAVA,SNAKE_YAML,SLF4J,PIPELINE
+    test.with JPARSEC,SNAKE_YAML,SLF4J,compile.dependencies
     package :jar
   end
 
