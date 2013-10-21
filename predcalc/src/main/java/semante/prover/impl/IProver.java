@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -59,12 +61,18 @@ public class IProver implements Prover {
 		Process 		process = null;
 		Timer 			timer = null;
 		ProverOutput 	proverOutputPF = null;
+		StringBuffer 	prover9OutputBuffer = new StringBuffer();
+		
+		StreamGobbler 	errorGobbler = null;
+		StreamGobbler 	outputGobbler = null;
 
+		ResultType 		resultType = null;
+		
 		String prooverInput = toProofInput(textExp, hypoExp, subsumptionRules);
 
 		String fileName;
+		
 		try {
-
 			tempFile = File.createTempFile("prover",".in");
 			fileName = tempFile.getAbsolutePath();
 			@Cleanup
@@ -77,8 +85,6 @@ public class IProver implements Prover {
 			int 			prover9ParamTimeout = prover9ProcessTimeout * 3/4;
 			String[] 		prover9Command = new String[] {proverPath + prover9ProcessName, "-t", Integer.toString(prover9ParamTimeout), "-f", fileName};
 			
-			StringBuffer 	prover9OutputBuffer = new StringBuffer();
-
 			timer = new Timer(true);
 			InterruptTimerTask interrupter = new InterruptTimerTask(Thread.currentThread());
 			timer.schedule(interrupter, prover9ProcessTimeout * 1000);
@@ -86,45 +92,71 @@ public class IProver implements Prover {
 			System.out.println("Running Prover process ["+prover9ProcessName+"]");
 			process = Runtime.getRuntime().exec(prover9Command);
 
+			
 			System.out.println("Prover is running");
 
 			// readers for the error and output stream (executed in separated threads)
-			StreamGobbler errorGobbler = new StreamGobbler(process.getErrorStream(), "ERROR", prover9OutputBuffer);            
-			StreamGobbler outputGobbler = new StreamGobbler(process.getInputStream(), "OUTPUT", prover9OutputBuffer);
+			errorGobbler = new StreamGobbler(process.getErrorStream(), "ERROR", prover9OutputBuffer);            
+			outputGobbler = new StreamGobbler(process.getInputStream(), "OUTPUT", prover9OutputBuffer);
 
 			// kick them off
 			errorGobbler.start();
 			outputGobbler.start();
-
+			
 			System.out.println("Waiting for prover to end");
 			int exitVal = process.waitFor();
 
 			String resultDesc = prover9exitCodeToString(exitVal);
-			ResultType resultType = prover9exitCodeToResultEnum(exitVal);
+			resultType = prover9exitCodeToResultEnum(exitVal);
 			
 			// the process has ended gracefully (otherwise - the InterruptedException would have been thrown)
 			System.out.println("Prover ended with exit value: [" + exitVal + "], meaning: [" + resultDesc + "], type: [" + resultType + "]");
-			
-			String proverOutput = prover9OutputBuffer.toString(); 
-			
-			if (resultType==ResultType.NoProofCanBeFound && proverOutput.matches("(?s).*Exiting with [1-9]+ proofs?.*")) {
-				resultType = ResultType.ProofFound;
-				System.out.println("Prover stdout indicates that a proof WAS found; dismissing exit code indication, type is set to: [" + resultType + "]");
-			}
-			
-			proverOutputPF = new IProverOutput(proverOutput,resultType);
 
+		} catch(IOException e) {
+			proverOutputPF = new IProverOutput("Failed to create input file or to execute the process - " + e.getMessage(),ResultType.Error);
 		} catch(InterruptedException e) {
 			// in case of a timeout or interruption by the main thread
-			System.out.println("Prover process was interuppted");
 			process.destroy();
 			proverOutputPF = new IProverOutput("Prover process was interuppted" + (e.getMessage()!=null ? " - " + e.getMessage() : ""),ResultType.Interuppted);
+		} finally {
 
-		} catch (IOException e) {
-			proverOutputPF = new IProverOutput("Failed to create input file or to execute the process - " + e.getMessage(),ResultType.Error);
-		}
+			// if the gobblers were created we will wait for them to end 
+			// (they are supposed to because the process is ended/destroyed) 
+			if (errorGobbler!=null && outputGobbler!=null) {
+				List<StreamGobbler> streamGobblers = Arrays.asList(errorGobbler,outputGobbler);
+				for (StreamGobbler streamGobbler : streamGobblers) {
+					if (streamGobbler.isAlive()) {
+						try {
+							System.out.println("Waiting for globber " + streamGobbler.type + " to end: ");
+							streamGobbler.join();
+						} catch(InterruptedException e) {
+							System.out.println("Interuppted while waiting for stream gobbler to end");
+						}
+					}
+				}
+			}
 
-		finally {
+			System.out.println("Globbers have ended");
+			
+			// if the process ended gracefully or some unknown exception was thrown
+			if (proverOutputPF==null) {
+
+				// in case of graceful termination - now that the gobblers have ended we can read the output buffer and parse it
+				if (resultType!=null) {
+					String proverOutput = prover9OutputBuffer.toString();
+					System.out.println("Output stream: ["+ proverOutput +"]");
+					if (resultType==ResultType.NoProofCanBeFound && proverOutput.matches("(?s).*Exiting with [1-9]+ proofs?.*")) {
+						resultType = ResultType.ProofFound;
+						System.out.println("Prover stdout indicates that a proof WAS found; dismissing exit code indication, type is set to: [" + resultType + "]");
+					}
+					proverOutputPF = new IProverOutput(proverOutput,resultType);
+				} else {
+					// in case of some unknown exception - report error
+					proverOutputPF = new IProverOutput("Unknown error",ResultType.Error);
+				}
+			}
+
+
 			if (timer!=null) {
 				timer.cancel(); // If the process returns within the timeout period, we have to stop the interrupter
 				// so that it does not unexpectedly interrupt some other code later.
@@ -145,14 +177,10 @@ public class IProver implements Prover {
 				}
 			}
 
-			if (proverOutputPF==null) {
-				proverOutputPF = new IProverOutput("Unknown error",ResultType.Error);
-			}
 		}
 
 		ProverOutput proverOutputCMF = new IProverOutput(null,ResultType.NotRun);
 		return new IProverResult(prooverInput, proverOutputPF, proverOutputCMF);
-
 	}
 
 
@@ -252,8 +280,10 @@ public class IProver implements Prover {
 				BufferedReader br = new BufferedReader(isr);
 				String line=null;
 				while ( (line = br.readLine()) != null) {
-					if (os != null) {
-						os.append(line + "\n");
+					synchronized (os) {
+						if (os != null) {
+							os.append(line + "\n");
+						}
 					}
 				}
 			} catch (IOException ioe) {
