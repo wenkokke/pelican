@@ -46,9 +46,12 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		test = new StringBuilder();
 		
 		// create the java source code;
-		line("package semante.pipeline.impl;");
+		line("package semante.pipeline.test.rte;");
 		line();
-		line("import semante.pipeline.Entailment;");
+		line("import semante.pipeline.test.Entailment;");
+		line("import semante.pipeline.test.impl.ATestCase;");
+		line("import semante.pipeline.test.impl.IEntailment;");
+		line();
 		line("import org.junit.Test;");
 		line("import lombok.val;");
 		line();
@@ -159,7 +162,7 @@ public final class ITestCaseCreator implements TestCaseCreator {
 							
 							val safe = text.replaceAll(" ","_").toLowerCase();
 							val name = String.format("%s%02d_%s", prefix, id, safe);
-							line(2,"val %s = word(\"%s\",\"%s\");", name, category, text);
+							line(2,"val %s = word(\"%s\",\"%s\");", name, text, category);
 							id++;
 							return name;
 							
