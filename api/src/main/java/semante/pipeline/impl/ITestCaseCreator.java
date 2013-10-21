@@ -162,7 +162,7 @@ public final class ITestCaseCreator implements TestCaseCreator {
 							
 							val safe = text.replaceAll(" ","_").toLowerCase();
 							val name = String.format("%s%02d_%s", prefix, id, safe);
-							line(2,"val %s = word(\"%s\",\"%s\");", name, text, category);
+							line(2,"val %s = word(\"%s\",\"%s\");", name, category, text);
 							id++;
 							return name;
 							
