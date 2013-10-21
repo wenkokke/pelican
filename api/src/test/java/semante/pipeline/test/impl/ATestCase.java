@@ -50,7 +50,7 @@ public abstract class ATestCase {
 		return ISimpleBinaryTree.node(l, r);
 	}
 
-	protected final SimpleBinaryTree<Pair<String,String>> word(String text, String category) {
+	protected final SimpleBinaryTree<Pair<String,String>> word(String category, String text) {
 		return ISimpleBinaryTree.leaf(IPair.pair(text, category));
 	}
 
