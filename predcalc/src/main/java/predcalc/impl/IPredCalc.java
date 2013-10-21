@@ -10,7 +10,6 @@ import predcalc.PredCalc;
 import lombok.Delegate;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
-import lambdacalc.Type;
 import semante.prover.Prover;
 import semante.prover.impl.IProver;
 import semante.settings.impl.ISettings;
