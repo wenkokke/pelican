@@ -158,7 +158,7 @@ public final class ITestCaseCreator implements TestCaseCreator {
 				return IBinaryTree.leaf(
 					ann.accept(new Annotation.Visitor<String>() {
 						@Override
-						public final String annotation(String category, String text) {
+						public final String annotation(String text, String category) {
 							
 							val safe = text.replaceAll(" ","_").toLowerCase();
 							val name = String.format("%s%02d_%s", prefix, id, safe);
