@@ -22,7 +22,7 @@ task 'render-lexicon' => 'pelican:lexicon:render'
 # install dependencies
 task 'install-deps' do
   from_git 'https://github.com/pepijnkokke/LambdaCalc'
-  from_git 'https://github.com/pepijnkokke/Pelican-API'
+  from_git 'https://github.com/pepijnkokke/pelican-api'
 end
 
 define 'pelican' do
