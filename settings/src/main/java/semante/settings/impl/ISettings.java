@@ -8,7 +8,6 @@ import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import lombok.val;
 
 import org.yaml.snakeyaml.Yaml;
 
@@ -25,7 +24,7 @@ public final class ISettings implements Settings {
 	public final String get(final Object... keys) throws SettingsException {
 		
 		// get the index for the last key.
-		val last = keys.length - 1;
+		final int last = keys.length - 1;
 		
 		// copy over the keys, converting them to strings.
 		final String[] pathTo = new String[keys.length];
