@@ -13,7 +13,6 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.ScalarStyle;
 import org.yaml.snakeyaml.Yaml;
 
-import lombok.val;
 import semante.settings.SettingsException;
 
 public class ISettingsBuilder {
@@ -34,7 +33,7 @@ public class ISettingsBuilder {
 	public final void set(final String value, final Object... keys) throws SettingsException {
 		
 		// get the index for the last key.
-		val last = keys.length - 1;
+		final int last = keys.length - 1;
 		
 		// copy over the keys, converting them to strings.
 		final String[] pathTo = new String[keys.length];
