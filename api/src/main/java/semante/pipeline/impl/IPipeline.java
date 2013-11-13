@@ -44,7 +44,7 @@ public final class IPipeline implements Pipeline {
 		final BinaryTree<ID, Annotation> hypo,
 		final String subsumptions) throws FileNotFoundException {
 		
-		val flattener = new IFlattenTree<ID>(stl,lexicon);
+		val flattener = new IFlattenTree2<ID>(stl,lexicon);
 		val flatTextM = flattener.flatten(text);
 		if (flatTextM.isLeft()) return flatTextM.getLeft();
 		val flatHypoM = flattener.flatten(hypo);
