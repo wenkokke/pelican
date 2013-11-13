@@ -72,48 +72,12 @@ public final class TestCaseRTE3dev118 extends ATestCase {
 								t02_is
 								,
 								_(
-									_(
-										t03_a
-										,
-										t04_conowner
-									)
+									t03_a
 									,
 									_(
-										t05_of
+										t04_conowner
 										,
-										_(
-											_(
-												t06_the
-												,
-												_(
-													t07_current
-													,
-													t08_company
-												)
-											)
-											,
-											_(
-												t09_which
-												,
-												_(
-													t10_is
-													,
-													_(
-														t11_carolina
-														,
-														_(
-															t12_which
-															,
-															_(
-																t13_is
-																,
-																t14_llc
-															)
-														)
-													)
-												)
-											)
-										)
+										_(t05_of,_(_(t06_the,_(t07_current,t08_company)),_(t09_which,_(t10_is,_(t11_carolina,_(t12_which,_(t13_is,t14_llc)))))))
 									)
 								)
 							)
