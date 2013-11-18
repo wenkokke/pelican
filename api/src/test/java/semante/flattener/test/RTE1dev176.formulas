@@ -1,0 +1,7 @@
+*** T/H Formulas ***
+Text:
+EXISTS:(et)t (\x0:e.((AND:ttt ((AND:ttt ((AND:ttt (Korean:et x0:e)) (((in:e(et)et x0:e) Korean:et) Iraq:e))) ((AND:ttt ((ate:eet x0:e) (IOTA:(et)e (\x1:e.((AND:ttt (meatballs:et x1:e)) ((Dutch:(et)et meatballs:et) x1:e)))))) ((later:(et)et (\x2:e.((ate:eet x2:e) (IOTA:(et)e (\x3:e.((AND:ttt (meatballs:et x3:e)) ((Dutch:(et)et meatballs:et) x3:e))))))) x0:e)))) (prayed:et x0:e)))
+
+Hypothesis:
+EXISTS:(et)t (\x0:e.((AND:ttt ((AND:ttt (Korean:et x0:e)) (((in:e(et)et x0:e) Korean:et) Iraq:e))) ((ate:eet x0:e) (IOTA:(et)e (\x1:e.((AND:ttt (meatballs:et x1:e)) ((Dutch:(et)et meatballs:et) x1:e)))))))
+

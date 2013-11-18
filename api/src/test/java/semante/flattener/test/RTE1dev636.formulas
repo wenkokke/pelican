@@ -1,0 +1,7 @@
+*** T/H Formulas ***
+Text:
+(AND:ttt (EXISTS:(et)t (\x0:e.((AND:ttt (EXISTS:(et)t (\x1:e.((AND:ttt (country:et x1:e)) (EXISTS:(et)t (\x2:e.((AND:ttt (attention:et x2:e)) ((attracts:eet x1:e) x2:e)))))))) ((AND:ttt (EXISTS:(et)t (\x3:e.((AND:ttt (country:et x3:e)) ((EQ:eet x0:e) x3:e))))) ((EQ:eet x0:e) (IOTA:(et)e VaticanCity:et))))))) (EXISTS:(et)t (\x4:e.((AND:ttt (EXISTS:(et)t (\x5:e.((AND:ttt (country:et x5:e)) ((AND:ttt T:t) ((beautiful:(et)et (\x6:e.T:t)) x5:e)))))) ((AND:ttt (EXISTS:(et)t (\x7:e.((AND:ttt (country:et x7:e)) ((EQ:eet x4:e) x7:e))))) ((EQ:eet x4:e) (IOTA:(et)e VaticanCity:et))))))
+
+Hypothesis:
+(AND:ttt T:t) ((beautiful:(et)et (\x0:e.T:t)) (IOTA:(et)e VaticanCity:et))
+
