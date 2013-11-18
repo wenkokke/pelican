@@ -1,0 +1,7 @@
+*** T/H Formulas ***
+Text:
+(AND:ttt (EXISTS:(et)t (\x0:e.((AND:ttt ((AND:ttt (doctor:et x0:e)) ((Australian:(et)et doctor:et) x0:e))) ((won:eet x0:e) (IOTA:(et)e (\x1:e.((AND:ttt ((AND:ttt (Oscar:et x1:e)) ((silver:(et)et Oscar:et) x1:e))) ((dirty:(et)et (\x2:e.((AND:ttt (Oscar:et x2:e)) ((silver:(et)et Oscar:et) x2:e)))) x1:e))))))))) (EXISTS:(et)t (\x3:e.((AND:ttt ((AND:ttt (doctor:et x3:e)) ((Australian:(et)et doctor:et) x3:e))) ((EQ:eet Warren:e) x3:e))))
+
+Hypothesis:
+EXISTS:(et)t (\x0:e.((AND:ttt (Oscar:et x0:e)) ((won:eet Warren:e) x0:e)))
+
