@@ -68,7 +68,7 @@ public class IProver implements Prover {
 
 		ResultType 		resultType = null;
 		
-		String prooverInput = toProofInput(textExp, hypoExp, subsumptionRules);
+		String prooverInput = toProverInput(textExp, hypoExp, subsumptionRules);
 
 		String fileName;
 		
@@ -184,7 +184,7 @@ public class IProver implements Prover {
 	}
 
 
-	public String toProofInput(ExprForm<Formula> txt, ExprForm<Formula> hyp, String subs) {
+	public String toProverInput(ExprForm<Formula> txt, ExprForm<Formula> hyp, String subs) {
 		StringBuilder out = new StringBuilder();
 		out.append("formulas(assumptions).\n");
 		out.append("% Pragmatics:\n");
