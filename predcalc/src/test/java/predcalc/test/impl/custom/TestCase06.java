@@ -11,7 +11,7 @@ public class TestCase06 extends ATestCase {
 
 	@Test
 	public final void createTestCase() throws Exception {
-		runTest("Test02",createTest());
+		runTest("Test06",createTest());
 	}
 	
 	public final TestData createTest() throws Exception {
