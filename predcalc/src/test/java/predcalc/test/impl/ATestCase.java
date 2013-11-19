@@ -36,6 +36,10 @@ public abstract class ATestCase {
 
 	}
 	
+	protected String betaReduce(String in) {
+		return lcalc.format(lcalc.betaReduce(lcalc.parse(in)));
+	}
+	
 	protected void runTest(String testName, TestData testData) {
 		String proverInput = prover.toProverInput(
 				stl2p.smash(lcalc.parse(testData.getReducedText())),
