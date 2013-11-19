@@ -8,10 +8,20 @@ Nouns are annotated as $N$ or $N_2$ depending on their transitivity.
 > N_2   WORD:eet
 > N_2   \P:(et)t.\y:e.P:(et)t (\x:e.WORD:eet x:e y:e)
 
+> $NC_1$ \A:et.\z:e.(WORD:(et)et A:et) z:e
+> $NC_2$ \A:et.\B:et.\z:e.((WORD:(et)((et)et) A:et) B:et) z:e
+> $NC_3$ \A:et.\B:et.\C:et.\z:e.(((WORD:(et)((et)((et)et)) A:et) B:et) C:et) z:e
+> $NC_4$ \A:et.\B:et.\C:et.\D:et.\z:e.((((WORD:(et)((et)((et)((et)et))) A:et) B:et) C:et) D:et) z:e
+
 Noun Phrases are represented as words of type $e$, lifted to their usual pessimistic
 Montague type of $(et)t$.
 
 > NP    \A:et.A:et WORD:e
+
+> $NPC_1$ \P:(et)t.\A:et.A:et (WORD:((et)t)e P:(et)t)
+> $NPC_2$ \P:(et)t.\Q:(et)t.\A:et.A:et ((WORD:((et)t)((et)t)e P:(et)t) Q:(et)t)
+> $NPC_3$ \P:(et)t.\Q:(et)t.\R:(et)t.\A:et.A:et (((WORD:((et)t)((et)t)((et)t)e P:(et)t) Q:(et)t) R:(et)t)
+> $NPC_4$ \P:(et)t.\Q:(et)t.\R:(et)t.\S:(et)t.\A:et.A:et ((((WORD:((et)t)((et)t)((et)t)((et)t)e P:(et)t) Q:(et)t) R:(et)t) S:(et)t)
 
 \subsection{Verbs and Verb Phrases}
 
@@ -23,7 +33,7 @@ The variable names associated with the quantifiers $Sub$, $Obj$ or $Obj^1$ and $
 $z$, $x$ and $y$ respectively.
 
 > V_1   WORD:et
-> V_2   \Obj1:(et)t.\z:e.Obj1:(et)t (\x:e.WORD:eet z:e x:e)
+> V_2   \Obj1:(et)t.\z:e.Obj1:(et)t (\x:e.WORD:eet x:e z:e)
 > V_3   \Obj1:(et)t.\Obj2:(et)t.\z:e.Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e))
 
 \subsection{Modifiers}

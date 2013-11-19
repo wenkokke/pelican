@@ -5,13 +5,13 @@ import java.util.List;
 
 import lambdacalc.Expr;
 import lambdacalc.Expr.Visitor;
-import lambdacalc.impl.IType.IConstant;
-import lambdacalc.impl.IType.IFunction;
 import lambdacalc.ExprBuilder;
 import lambdacalc.STL;
 import lambdacalc.Symbol;
 import lambdacalc.Type;
 import lambdacalc.Types;
+import lambdacalc.impl.IType.IConstant;
+import lambdacalc.impl.IType.IFunction;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
@@ -27,20 +27,18 @@ public class ILowerLambda implements LowerLambda {
 	
 	private ExprBuilder rewriter = new ExprBuilder() {
 
-		final LowerableFunction lowerableFunction = new LowerableFunction();
+		final LowerableFunction lowerableFunction = new LowerableFunction(Types.ET);
 		
+		final Type TypeETT = new IFunction(Types.ET,Types.T);
 		
 		@Override
 		public Expr application(Expr fun, Expr arg) {
-			
+
 			val fun2 = fun.accept(rewriter);
 			val arg2 = arg.accept(rewriter);
 			val app = lcalc.getExprBuilder().application(fun2, arg2);
 
-			//val app = lcalc.betaReduce(lcalc.getExprBuilder().application(fun2, arg2));
-			//System.out.println("NewApp - beta-reduced: " + lcalc.format(app));
-			
-			if (lcalc.typeOf(fun2).accept(lowerableFunction) && lcalc.typeOf(arg2).equals(Types.ET)) {
+			if (lcalc.typeOf(fun2).accept(lowerableFunction) && lcalc.typeOf(arg2).equals(lowerableFunction.getType())) {
 				System.out.println("Lowerable application: the function  ["+ lcalc.format(fun2) + "] is applied to an argument of type " + lcalc.format(lcalc.typeOf(arg2)) + ": [" + lcalc.format(arg2) + "]");
 				
 				return fun2.accept(new ExprBuilder() {
@@ -52,14 +50,28 @@ public class ILowerLambda implements LowerLambda {
 
 						@Override
 						public Expr application(Expr fun3, Expr arg3) {
-							// in this case the modifier is an application by itself, e.g. "in Brasil" modifeis "walks".
+							// in this case the modifier is an application by itself, e.g. "in Brasil" modifies "walks".
 							Expr e = null;
 							if (fun3.accept(isConstant)) {
 
-								// lower the modification as if the modifier is a constant (like 'tall') 
-								Expr simple = lowerModification(fun3.accept(getConstantName), Types.EET, arg2);
+								// There's a subtle point here - we apply an application ("in Brasil") to a predicate, 
+								// (e.g. "walks") and we want to have a new predicate that takes the argument of the 
+								// application (i.e. "Brasil" as an argument. So our new predicate will look like 
+								// in_walks(Brasil)(John) in the end.
+								// To do this, we ignore the argument of the application (i.e. "Brasil"), and smash the
+								// application as if it was just "in" applied to "walks". This will generate a new
+								// predicate - "in_walks". Since this new predicate needs to be applied to the argument
+								// that we ommitted - "brasil", the type of the predicate will be a function from E to
+								// the type that the original application (i.e. "in Brasil") returns after applied to 
+								// the predicate it modifies.
+							 
+								// here we decide on the type of the new predicate
+								Type newType = new IFunction(Types.E,lcalc.typeOf(fun2).accept(getFunctionReturnType));
 								
-								// apply the argument
+								// lower the modification as if the modifier is a constant (like 'tall') 
+								Expr simple = lowerModification(fun3.accept(getConstantName), newType , arg2);
+								
+								// apply the argument (e.g. 'Brasil')
 								e = lcalc.getExprBuilder().application(simple,
 										lcalc.getExprBuilder().variable(buildSymbol(arg3.accept(getConstantName), Types.E)));
 								
@@ -72,7 +84,11 @@ public class ILowerLambda implements LowerLambda {
 
 						@Override
 						public Expr variable(Symbol s) {
-							Expr e = lowerModification(s.getName(), Types.ET, arg2); 
+							// the typical case of lowering, e.g. tall(man), but also of noun compounds - and that's why
+							// we decide on the new type dynamically. It's not always 'et', because in the case of noun
+							// compounds we may have a noun of type (et)(et)(et)et applied to a noun of type et, so the 
+							// return type is (et)(et)et. Note that NP compounds are handled differently, see below.
+							Expr e = lowerModification(s.getName(), s.getType().accept(getFunctionReturnType), arg2); 
 							System.out.println("Lowered expression (direct modification):" + lcalc.format(e));
 							return e;
 						}
@@ -96,6 +112,22 @@ public class ILowerLambda implements LowerLambda {
 						}
 						
 					});
+				
+			} else if (lcalc.typeOf(fun2).accept(getFunctionArgType).equals(TypeETT) && lcalc.typeOf(arg2).equals(TypeETT)) {
+				// NP compound case - for example: John applied to Smith - John(Smith).
+				// The idea is to create a compound John_Smith with the appropriate type.
+				// Note that John might be of type ((et)t)e or ((et)t)((et)t)e, etc. if it needs to be combined with
+				// more NPs later on in the course of the derivation like in [[John Smith] Elliot].
+				if (arg2.accept(isNPConstant)) {
+					Expr e = lcalc.getExprBuilder().variable(buildSymbol(
+							fun2.accept(getConstantName) + "_" + arg2.accept(getNPConstantName),
+							lcalc.typeOf(fun2).accept(getFunctionReturnType)));
+					System.out.println("NP compound: " + lcalc.format(e));
+					return e;
+				} else {
+					throw new HigherOrderError("NP compound with a non-constant argument: " + lcalc.format(app));
+				}
+				
 			} else {
 				return app;
 			}
@@ -242,6 +274,32 @@ public class ILowerLambda implements LowerLambda {
 		@Override public String variable(Symbol s) 					{ return s.getName();}
 	};
 	
+	private Visitor<Boolean> isNPConstant = new Visitor<Boolean>() {
+
+		@Override public Boolean abstraction(Symbol s, Expr body) 	{ return body.accept(this); }
+		@Override public Boolean application(Expr fun, Expr arg) 	{ return fun.accept(this); }
+		@Override public Boolean variable(Symbol s) 				{ return true;}
+	};
+	
+	private Visitor<String> getNPConstantName = new Visitor<String>() {
+
+		@Override public String abstraction(Symbol s, Expr body) 	{ return body.accept(this); }
+		@Override public String application(Expr fun, Expr arg) 	{ return arg.accept(this); }
+		@Override public String variable(Symbol s) 					{ return s.getName();}
+	};
+
+	
+	private Type.Visitor<Type> getFunctionArgType = new Type.Visitor<Type>() {
+
+		@Override public Type constant(String name) { return new IConstant(name); }
+		@Override public Type function(Type a, Type b) { return a; }
+	};
+	
+	private Type.Visitor<Type> getFunctionReturnType = new Type.Visitor<Type>() {
+		
+		@Override public Type constant(String name) { return new IConstant(name); }
+		@Override public Type function(Type a, Type b) { return b; }
+	};
 	
 	Symbol buildSymbol(final String name, final Type type) {
 		return new Symbol() {
@@ -259,33 +317,34 @@ public class ILowerLambda implements LowerLambda {
 		return o;
 	}
 	
-	private static class FunctionArgTypeGetter implements Type.Visitor<Type> {
 
-		@Override
-		public Type constant(String name) {
-			return new IConstant(name);
-		}
-
-		@Override
-		public Type function(Type a, Type b) {
-			return a;
-		}
-		
-	}
-	
 	private class LowerableFunction implements Type.Visitor<Boolean> {
-
-		FunctionArgTypeGetter functionArgTypeGetter = new FunctionArgTypeGetter();
+	
+		Type type;
+		
+		public LowerableFunction(Type type) {
+			this.type = type;
+		}
 		
 		@Override
 		public Boolean constant(String name) {
 			return false;
 		}
+		
+		public Type getType() {
+			return type;
+		}
 
 		@Override
 		public Boolean function(Type a, Type b) {
-			boolean aTypeOK = a.equals(Types.ET);
-			boolean bTypeOK = b.equals(Types.ET) || b.accept(functionArgTypeGetter).equals(Types.ET);
+			// The function is lowerable if it takes a type X
+			// and either return type X or returns a function from type X
+			// to something else. For example, tall is of type (et)et, so
+			// it's lowerable; and also (et)(et)et (in the case of noun 
+			// compounds).
+			
+			boolean aTypeOK = a.equals(type);
+			boolean bTypeOK = b.equals(type) || b.accept(getFunctionArgType).equals(type);
 			return aTypeOK && bTypeOK;
 		}
 	}
