@@ -1,0 +1,7 @@
+*** T/H Formulas ***
+Text:
+(AND:ttt ((AND:ttt T:t) ((nice:(et)et (\x0:e.T:t)) Salesforce:e))) ((AND:ttt ((AND:ttt (trading:et Salesforce:e)) ((AND:ttt (((under:e(et)et Salesforce:e) trading:et) (IOTA:(et)e symbol:et))) ((EQ:eet CRM:e) (IOTA:(et)e symbol:et))))) (((on:e(et)et Salesforce:e) (\x1:e.((AND:ttt (trading:et x1:e)) ((AND:ttt (((under:e(et)et x1:e) trading:et) (IOTA:(et)e symbol:et))) ((EQ:eet CRM:e) (IOTA:(et)e symbol:et)))))) (IOTA:(et)e nYSE:et)))
+
+Hypothesis:
+(AND:ttt (trading:et Salesforce:e)) ((AND:ttt (((under:e(et)et Salesforce:e) trading:et) (IOTA:(et)e symbol:et))) ((EQ:eet CRM:e) (IOTA:(et)e symbol:et)))
+
