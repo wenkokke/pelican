@@ -1,4 +1,4 @@
-package predcalc.test.impl.custom;
+package predcalc.test.impl.nc;
 
 import org.junit.Test;
 
@@ -7,14 +7,14 @@ import predcalc.test.TestData.ExpectedPredCalc;
 import predcalc.test.impl.ATestCase;
 import predcalc.test.impl.ITestData;
 
-public class TestCase09 extends ATestCase {
+public class TestCaseNc01 extends ATestCase {
 
 	// This tests a noun compounds case: 
 	// T: [man [wolf dragon]], H: [man wolf]
 	
 	@Test
 	public final void createTestCase() throws Exception {
-		runTest("Test09",createTest());
+		runTest(Class.class.getSimpleName(),createTest());
 	}
 	
 	public final TestData createTest() throws Exception {
