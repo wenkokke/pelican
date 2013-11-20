@@ -159,7 +159,8 @@ as $\text{walk}(\text{John}) \land \text{in}(\text{John},\text{walk},\text{bosto
 in Boston walks" is treated as $\iota x. \text{man}(x) \land \text{in}(x,\text{man},\text{boston})
 \land \text{walks}(x)$.
 
-> P_R   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:e(et)et x:e A:et y:e))
+> P_R   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:e(et)et y:e A:et x:e))
+> P_I   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:eet y:e x:e))
 
 Finally, there is a special-case annotation for $\text{TO}$ when used to denote the object of
 a ditransitive verb, which is simply the identity function.\footnote{
