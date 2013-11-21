@@ -67,7 +67,7 @@ This special instance of appositive modification handles sentences such as "Jan,
 in which a noun phrase is modified by a noun phrase. This could be solved by the insertion
 of "who is", which is exactly what this instance of $\text{WHO}_A$ does.
 
-> WHO_A \Q:(et)t.\P:(et)t.\A:et.EXISTS:(et)t (\x:e.AND:ttt (P:(et)t A:et) (AND:ttt (P:(et)t (EQ:eet x:e)) (Q:(et)t (EQ:eet x:e))))
+> WHO_A \Q:(et)t.\P:(et)t.\A:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (AND:ttt (P:(et)t (EQ:eet x:e)) (Q:(et)t (EQ:eet x:e))))
 
 \subsection{Generalized Quantifiers}
 
@@ -154,7 +154,7 @@ For non-relational nouns, e.g. in "John's dog", it behaves as the general $P_R$ 
 % in : NP -> N -> N
 % ix. in(man,x,boston) /\ walk(x)
 
-Other prepositions are denoted by triples. For instance, in "John walks in Boston" is treated
+Other prepositions are denoted by triples. For instance, "John walks in Boston" is treated
 as $\text{walk}(\text{John}) \land \text{in}(\text{John},\text{walk},\text{boston})$; whereas "The man
 in Boston walks" is treated as $\iota x. \text{man}(x) \land \text{in}(x,\text{man},\text{boston})
 \land \text{walks}(x)$.
