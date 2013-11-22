@@ -1,4 +1,4 @@
-package predcalc.test.impl.custom;
+package predcalc.test.impl.simple;
 
 import org.junit.Test;
 
@@ -7,11 +7,11 @@ import predcalc.test.TestData.ExpectedPredCalc;
 import predcalc.test.impl.ATestCase;
 import predcalc.test.impl.ITestData;
 
-public class TestCase05 extends ATestCase {
+public class TestCaseSimple05 extends ATestCase {
 
 	@Test
 	public final void createTestCase() throws Exception {
-		runTest("Test05",createTest());
+		runTest(Class.class.getSimpleName(),createTest());
 	}
 	
 	public final TestData createTest() throws Exception {
