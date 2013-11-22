@@ -1,4 +1,4 @@
-package predcalc.test.impl.custom;
+package predcalc.test.impl.npc;
 
 import org.junit.Test;
 
@@ -7,7 +7,7 @@ import predcalc.test.TestData.ExpectedPredCalc;
 import predcalc.test.impl.ATestCase;
 import predcalc.test.impl.ITestData;
 
-public class TestCase17 extends ATestCase {
+public class TestCaseNPc05 extends ATestCase {
 
 	// Test case for:
 	// T: [[[[Jan Ferrer] Smith] Spector] David] - covers NPC_4
@@ -16,7 +16,7 @@ public class TestCase17 extends ATestCase {
 	
 	@Test
 	public final void createTestCase() throws Exception {
-		runTest("Test17",createTest());
+		runTest(Class.class.getSimpleName(),createTest());
 	}
 	
 	public final TestData createTest() throws Exception {
