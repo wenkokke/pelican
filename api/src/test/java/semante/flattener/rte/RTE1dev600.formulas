@@ -1,0 +1,7 @@
+*** T/H Formulas ***
+Text:
+EXISTS:(et)t (\x0:e.((AND:ttt (sneezed:et LP:e)) ((AND:ttt ((EQ:eet x0:e) LP:e)) ((EQ:eet x0:e) (IOTA:(et)e (\x1:e.((AND:ttt ((AND:ttt (dog:et x1:e)) ((Chinese:(et)et dog:et) x1:e))) ((AND:ttt (accused:et x1:e)) (EXISTS:(et)t (\x2:e.((AND:ttt ((AND:ttt ((AND:ttt (plot:et x2:e)) ((1971:(et)et plot:et) x2:e))) (EXISTS:(et)t (\x3:e.((AND:ttt (uprising:et x3:e)) (((of:e(et)et x2:e) (\x4:e.((AND:ttt (plot:et x4:e)) ((1971:(et)et plot:et) x4:e)))) x3:e)))))) (((of:e(et)et x1:e) accused:et) x2:e))))))))))))
+
+Hypothesis:
+EXISTS:(et)t (\x0:e.((AND:ttt ((AND:ttt (dog:et x0:e)) ((Chinese:(et)et dog:et) x0:e))) ((EQ:eet x0:e) LP:e)))
+
