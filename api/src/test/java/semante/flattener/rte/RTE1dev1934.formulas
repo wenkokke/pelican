@@ -1,0 +1,7 @@
+*** T/H Formulas ***
+Text:
+EXISTS:(et)t (\x0:e.((AND:ttt ((loves:eet Evans:e) Mary:e)) ((AND:ttt ((EQ:eet x0:e) Evans:e)) ((EQ:eet x0:e) (IOTA:(et)e (\x1:e.((AND:ttt (mayor:et x1:e)) (((of:e(et)et x1:e) mayor:et) Port_au_Prince:e))))))))
+
+Hypothesis:
+(EQ:eet (IOTA:(et)e (\x0:e.((AND:ttt (mayor:et x0:e)) (((of:e(et)et x0:e) mayor:et) Port_au_Prince:e))))) Evans:e
+
