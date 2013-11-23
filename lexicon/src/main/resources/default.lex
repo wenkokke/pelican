@@ -8,10 +8,20 @@ Nouns are annotated as $N$ or $N_2$ depending on their transitivity.
 > N_2   WORD:eet
 > N_2   \P:(et)t.\y:e.P:(et)t (\x:e.WORD:eet x:e y:e)
 
+> $NC_1$ \A:et.\z:e.(WORD:(et)et A:et) z:e
+> $NC_2$ \A:et.\B:et.\z:e.((WORD:(et)((et)et) A:et) B:et) z:e
+> $NC_3$ \A:et.\B:et.\C:et.\z:e.(((WORD:(et)((et)((et)et)) A:et) B:et) C:et) z:e
+> $NC_4$ \A:et.\B:et.\C:et.\D:et.\z:e.((((WORD:(et)((et)((et)((et)et))) A:et) B:et) C:et) D:et) z:e
+
 Noun Phrases are represented as words of type $e$, lifted to their usual pessimistic
 Montague type of $(et)t$.
 
 > NP    \A:et.A:et WORD:e
+
+> $NPC_1$ \P:(et)t.\A:et.A:et (WORD:((et)t)e P:(et)t)
+> $NPC_2$ \P:(et)t.\Q:(et)t.\A:et.A:et ((WORD:((et)t)((et)t)e P:(et)t) Q:(et)t)
+> $NPC_3$ \P:(et)t.\Q:(et)t.\R:(et)t.\A:et.A:et (((WORD:((et)t)((et)t)((et)t)e P:(et)t) Q:(et)t) R:(et)t)
+> $NPC_4$ \P:(et)t.\Q:(et)t.\R:(et)t.\S:(et)t.\A:et.A:et ((((WORD:((et)t)((et)t)((et)t)((et)t)e P:(et)t) Q:(et)t) R:(et)t) S:(et)t)
 
 \subsection{Verbs and Verb Phrases}
 
@@ -23,7 +33,7 @@ The variable names associated with the quantifiers $Sub$, $Obj$ or $Obj^1$ and $
 $z$, $x$ and $y$ respectively.
 
 > V_1   WORD:et
-> V_2   \Obj1:(et)t.\z:e.Obj1:(et)t (\x:e.WORD:eet z:e x:e)
+> V_2   \Obj1:(et)t.\z:e.Obj1:(et)t (\x:e.WORD:eet x:e z:e)
 > V_3   \Obj1:(et)t.\Obj2:(et)t.\z:e.Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e))
 
 \subsection{Modifiers}
@@ -57,7 +67,7 @@ This special instance of appositive modification handles sentences such as "Jan,
 in which a noun phrase is modified by a noun phrase. This could be solved by the insertion
 of "who is", which is exactly what this instance of $\text{WHO}_A$ does.
 
-> WHO_A \Q:(et)t.\P:(et)t.\A:et.EXISTS:(et)t (\x:e.AND:ttt (P:(et)t A:et) (AND:ttt (P:(et)t (EQ:eet x:e)) (Q:(et)t (EQ:eet x:e))))
+> WHO_A \Q:(et)t.\P:(et)t.\A:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (AND:ttt (P:(et)t (EQ:eet x:e)) (Q:(et)t (EQ:eet x:e))))
 
 \subsection{Generalized Quantifiers}
 
@@ -144,12 +154,13 @@ For non-relational nouns, e.g. in "John's dog", it behaves as the general $P_R$ 
 % in : NP -> N -> N
 % ix. in(man,x,boston) /\ walk(x)
 
-Other prepositions are denoted by triples. For instance, in "John walks in Boston" is treated
+Other prepositions are denoted by triples. For instance, "John walks in Boston" is treated
 as $\text{walk}(\text{John}) \land \text{in}(\text{John},\text{walk},\text{boston})$; whereas "The man
 in Boston walks" is treated as $\iota x. \text{man}(x) \land \text{in}(x,\text{man},\text{boston})
 \land \text{walks}(x)$.
 
-> P_R   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:e(et)et x:e A:et y:e))
+> P_R   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:e(et)et y:e A:et x:e))
+> P_I   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:eet y:e x:e))
 
 Finally, there is a special-case annotation for $\text{TO}$ when used to denote the object of
 a ditransitive verb, which is simply the identity function.\footnote{
