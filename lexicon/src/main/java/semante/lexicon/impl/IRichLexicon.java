@@ -37,6 +37,20 @@ public class IRichLexicon implements RichLexicon {
 	public IRichLexicon(final InputStream is, final STL stl) throws IOException {
 		this.lex = new ILexicon(is,stl);
 	}
+
+	/**
+	 * Constructor that uses an string containing the lexicon file.
+	 */
+	public IRichLexicon(final String fn, final STL stl) throws IOException {
+		this.lex = new ILexicon(fn,stl);
+	}
+
+	/**
+	 * Constructor that uses an string containing the lexicon file.
+	 */
+	public IRichLexicon(final String[] lines, final STL stl) throws IOException {
+		this.lex = new ILexicon(lines,stl);
+	}
 	
 	@Override
 	public Word getEntry(String key, String text) {

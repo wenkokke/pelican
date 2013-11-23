@@ -1,7 +1,0 @@
-*** T/H Formulas ***
-Text:
-EXISTS:(et)t (\x0:e.((AND:ttt ((AND:ttt ((AND:ttt (American:et x0:e)) ((Cuban:(et)et American:et) x0:e))) ((AND:ttt (accused:et x0:e)) (((of:e(et)et x0:e) accused:et) Espionage:e)))) ((AND:ttt T:t) ((innocent:(et)et (\x1:e.T:t)) x0:e))))
-
-Hypothesis:
-EXISTS:(et)t (\x0:e.((AND:ttt (American:et x0:e)) ((AND:ttt (accused:et x0:e)) (((of:e(et)et x0:e) accused:et) Espionage:e))))
-
