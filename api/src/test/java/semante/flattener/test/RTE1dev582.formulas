@@ -1,7 +1,0 @@
-*** T/H Formulas ***
-Text:
-(AND:ttt (comes:et (IOTA:(et)e visit:et))) (((amid:e(et)et (IOTA:(et)e visit:et)) comes:et) (IOTA:(et)e (\x0:e.((AND:ttt (rumors:et x0:e)) ((AND:ttt (((about:e(et)et x0:e) rumors:et) (IOTA:(et)e (\x1:e.((AND:ttt ((AND:ttt (leader:et x1:e)) ((senior:(et)et leader:et) x1:e))) (90yearOld:et x1:e)))))) ((EQ:eet Deng:e) (IOTA:(et)e (\x2:e.((AND:ttt ((AND:ttt (leader:et x2:e)) ((senior:(et)et leader:et) x2:e))) (90yearOld:et x2:e))))))))))
-
-Hypothesis:
-(AND:ttt T:t) (90yearold:et Deng:e)
-

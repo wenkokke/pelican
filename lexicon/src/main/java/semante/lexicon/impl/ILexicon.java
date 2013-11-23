@@ -149,6 +149,26 @@ public final class ILexicon implements Lexicon {
 			}
 		}
 	}
+	
+	/**
+	 * Most general constructor accepting a list of lines.
+	 * @throws IOException 
+	 */
+	public ILexicon(String[] lines, STL stl) {
+
+		// assign the parsers.
+		this.stl        = stl;
+		this.words      = Maps.newHashMap();
+		this.categories = Maps.newHashMap();
+		
+		for (final String line : lines) {
+			try {
+				parse(line);
+			}
+			catch (Exception e) {
+			}
+		}
+	}
 
 	@Override
 	public final List<String> getEntries() {

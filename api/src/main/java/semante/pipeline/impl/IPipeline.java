@@ -7,13 +7,14 @@ import java.util.List;
 
 import predcalc.impl.IPredCalc;
 import predcalc.impl.ILambda2Pred;
-
 import lambdacalc.DeBruijn;
 import lambdacalc.STL;
 import lombok.Delegate;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
+import semante.flattener.impl.ITreePrinter;
+import semante.flattener.impl.IFlattenTree;
 import semante.lexicon.RichLexicon;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
@@ -44,7 +45,7 @@ public final class IPipeline implements Pipeline {
 		final BinaryTree<ID, Annotation> hypo,
 		final String subsumptions) throws FileNotFoundException {
 		
-		val printer = new IAnnotationTreePrinter<ID>();
+		val printer = new ITreePrinter<ID>();
 		val flattener = new IFlattenTree<ID>(stl,lexicon,printer);
 		val flatTextM = flattener.flatten(text);
 		if (flatTextM.isLeft()) return flatTextM.getLeft();
