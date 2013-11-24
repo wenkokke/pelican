@@ -25,7 +25,7 @@ public final class TestCaseRTE4test955 extends APipelineTest {
 			// create the vocabulary for the text;
 			val t00_the = word("THE","The");
 			val t01_largest = word("MOD_R","largest");
-			val t02_search = word("MOD_R","search");
+			val t02_search = word("$NC_1$","search");
 			val t03_engine = word("N_1","engine");
 			val t04_on = word("P_R","on");
 			val t05_the = word("THE","The");
@@ -121,8 +121,8 @@ public final class TestCaseRTE4test955 extends APipelineTest {
 			// create the subsumption relations;
 			val ss =
 			new String[] {
-				"all x (all y (on_operates(y,x) -> operates(x))).",
-				"all x (all y ((web(y) & on_and_engine_search_engine(y,x)) -> on_operates(y,x)))."
+				"all x (search_engine(x) -> operates(x)).",
+				"all x (all y ((web(y) & on_search_engine(y,x)) -> on_operates(y,x)))."
 			};
 
 			// return the new entailment;

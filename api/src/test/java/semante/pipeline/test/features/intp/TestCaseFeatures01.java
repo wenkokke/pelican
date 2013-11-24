@@ -10,6 +10,8 @@ import semante.pipeline.APipelineTest;
 
 public final class TestCaseFeatures01 extends APipelineTest {
 
+		// test for interective modification by a preposition 
+	
 		@Test
 		public final void prove() throws Exception {
 			proveEntailment(createJan01());
