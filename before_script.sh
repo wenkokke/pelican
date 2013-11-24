@@ -5,6 +5,7 @@ SEMANTE_HOME="$HOME/.semante"
 # Install Prover9
 wget http://www.cs.unm.edu/~mccune/mace4/download/LADR-2009-11A.tar.gz
 tar xvfz LADR-2009-11A.tar.gz > /dev/null
+patch LADR-2009-11A/provers.src/Makefile Makefile.patch
 cd LADR-2009-11A
 make all >/dev/null
 if [ $? -eq 0 ]; then
