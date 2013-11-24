@@ -86,7 +86,7 @@ public final class TestCaseJan04 extends APipelineTest {
 			// create the subsumption relations;
 			val ss =
 			new String[] {
-				"all x (short_and_man_dutch(x) -> short_man(x))."
+				"all x (short_man_dutch(x) -> short_man(x))."
 			};
 
 			// return the new entailment;

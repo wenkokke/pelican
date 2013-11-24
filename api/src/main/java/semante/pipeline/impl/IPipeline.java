@@ -75,14 +75,10 @@ public final class IPipeline implements Pipeline {
 		val prover = new IProver(settings, pcalc);
 		
 		for (val nubText: nubTexts) {
-//			System.err.println(stl.format(nubText));
 			System.err.println(stl.format(stl.fromDeBruijn(nubText)));
-//			System.err.println(pcalc.format(stl2p.smash(stl.fromDeBruijn(nubText)).getSemantics()));
 		}
 		for (val nubHypo: nubHypos) {
-//			System.err.println(stl.format(nubHypo));
 			System.err.println(stl.format(stl.fromDeBruijn(nubHypo)));
-//			System.err.println(pcalc.format(stl2p.smash(stl.fromDeBruijn(nubHypo)).getSemantics()));
 		}
 		
 		for (val nubText: nubTexts) {
