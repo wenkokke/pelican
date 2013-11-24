@@ -1,4 +1,4 @@
 language      : ruby
 rvm           : jruby-19mode
-before_script : gem install buildr
-script        : buildr install-deps build test=off
+before_script : build.sh
+script        : buildr build test=off
