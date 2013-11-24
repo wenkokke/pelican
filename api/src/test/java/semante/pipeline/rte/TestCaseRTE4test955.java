@@ -122,7 +122,7 @@ public final class TestCaseRTE4test955 extends APipelineTest {
 			val ss =
 			new String[] {
 				"all x (all y (on_operates(y,x) -> operates(x))).",
-				"all x (all y ((web(y) & on_and_engine_search_engine(y,x)) -> on_operates(y,x)))."
+				"all x (all y ((web(y) & on_engine_search_engine(y,x)) -> on_operates(y,x)))."
 			};
 
 			// return the new entailment;

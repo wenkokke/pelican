@@ -156,7 +156,7 @@ public final class TestCaseRTE2test410 extends APipelineTest {
 			// create the subsumption relations;
 			val ss =
 			new String[] {
-				"all x (last_and_president_of_president(x) -> former_and_president_of_president(x))."
+				"all x (all y (last_president_of_president(y,x) -> former_president_of_president(y,x)))."
 			};
 
 			// return the new entailment;
