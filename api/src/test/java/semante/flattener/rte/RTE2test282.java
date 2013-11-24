@@ -2,22 +2,24 @@ package semante.flattener.rte;
 
 import lombok.val;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import semante.Entailment;
 import semante.IEntailment;
-import semante.pipeline.APipelineTest;
+import semante.flattener.AFlattenerTest;
 
-public final class RTE2test282 extends APipelineTest {
-
-		@Test
-		public final void prove() throws Exception {
-			proveEntailment(createRTE2test282());
+public final class RTE2test282 extends AFlattenerTest {
+	
+		@Before
+		public final void setUp() throws Exception {
+			super.setUp(getClass());
+			this.entailment = createRTE2test282();
 		}
-
+		
 		@Test
-		public final void createTestCase() throws Exception {
-			createTestCase("RTE2test282",createRTE2test282());
+		public final void flattenTest() {
+			super.flattenTest();
 		}
 
 		public final Entailment createRTE2test282() throws Exception {
@@ -30,7 +32,7 @@ public final class RTE2test282 extends APipelineTest {
 			val t04_will = word("IS","will");
 			val t05_host = word("V_2","host");
 			val t06_the = word("THE","the");
-			val t07_20th = word("MR","20th");
+			val t07_20th = word("MR","twentieth");
 			val t08_annual = word("MR","annual");
 			val t09_ausmin = word("NP_D","AUSMIN");
 			val t10_app = word("WHO_A","APP");

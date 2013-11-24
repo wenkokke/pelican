@@ -3,6 +3,9 @@ package semante.flattener;
 import java.io.IOException;
 import java.util.List;
 
+import lambdacalc.DeBruijn;
+import lambdacalc.STL;
+import lombok.val;
 import semante.ATest;
 import semante.Entailment;
 import semante.flattener.impl.IFlattenTree;
@@ -27,21 +30,17 @@ import com.google.common.collect.Iterables;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Resources;
 
-import lambdacalc.DeBruijn;
-import lambdacalc.STL;
-import lombok.val;
-
 public abstract class AFlattenerTest extends ATest {
 
 	protected STL stl;
-	protected DeBruijn textReference;
-	protected DeBruijn hypoReference;
+	protected String textReference;
+	protected String hypoReference;
 	protected RichLexicon lexicon;
 	protected Entailment entailment;
 	
 	// perform the tests
 	
-	private final void test(SimpleBinaryTree<Pair<String,String>> input0, final DeBruijn reference) {
+	private final void test(SimpleBinaryTree<Pair<String,String>> input0, final String reference) {
 		val labeller  = new ILabeller();
 		val printer   = new ITreePrinter<Integer>();
 		val flattener = new IFlattenTree<Integer>(stl, lexicon, printer);
@@ -49,6 +48,10 @@ public abstract class AFlattenerTest extends ATest {
 		val input1 = labeller.label(input0);
 		val input2 = input1.accept(ANNOTATE);
 		val input3 = flattener.flatten(input2);
+		
+		System.err.println("References:");
+		System.err.println(" - " + reference);
+		System.err.println("Results:");
 		
 		input3.accept(new Either.Visitor<Result<Integer>,List<DeBruijn>,Void>() {
 
@@ -62,8 +65,10 @@ public abstract class AFlattenerTest extends ATest {
 				if (! Iterables.any(results, new Predicate<DeBruijn>() {
 
 					@Override
-					public final boolean apply(final DeBruijn result) {
-						return result.equals(reference);
+					public final boolean apply(final DeBruijn result0) {
+						val result1 = stl.format(stl.fromDeBruijn(stl.betaReduce(result0)));
+						System.err.println(" - " + result1);
+						return result1.equals(reference);
 					}
 					
 				})) {
@@ -81,7 +86,7 @@ public abstract class AFlattenerTest extends ATest {
 		});
 	}
 	
-	protected final void flatten() {
+	protected void flattenTest() {
 		test(entailment.getText(),textReference);
 		test(entailment.getHypothesis(),hypoReference);
 	}
@@ -102,8 +107,8 @@ public abstract class AFlattenerTest extends ATest {
 		this.stl     = new STL();
 		this.lexicon = new IRichLexicon(lexicon(thisClass).split("\\n"),stl);
 		val formulas = formulas(thisClass).split("\\n");
-		this.textReference = stl.toDeBruijn(stl.parse(formulas[2]));
-		this.hypoReference = stl.toDeBruijn(stl.parse(formulas[5]));
+		this.textReference = stl.format(stl.fromDeBruijn(stl.toDeBruijn(stl.parse(formulas[2]))));
+		this.hypoReference = stl.format(stl.fromDeBruijn(stl.toDeBruijn(stl.parse(formulas[5]))));
 	}
 
 	private final String lexicon(final Class<? extends AFlattenerTest> thisClass) throws IOException {
