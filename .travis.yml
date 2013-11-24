@@ -6,4 +6,4 @@ before_script :
   - gem install buildr
   - buildr install-deps
 script :
-  - buildr build test=off
+  - buildr
