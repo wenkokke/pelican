@@ -9,10 +9,13 @@ gem install buildr --no-ri --no-rdoc
 wget http://www.cs.unm.edu/~mccune/mace4/download/LADR-2009-11A.tar.gz
 tar xvfz LADR-2009-11A.tar.gz
 cd LADR-2009-11A
-make all
-make test1
-make test2
-make test3
+make all > /dev/null
+if [ $? -eq 0 ]; then
+    echo "Prover9 was built successfully"
+else
+    echo "Prover9 failed to build"
+    exit 1
+fi
 mkdir -p "${SEMANTE_HOME}/ladr"
 mv ./bin/* "${SEMANTE_HOME}/ladr"
 cd ..
