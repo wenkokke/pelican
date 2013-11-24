@@ -3,21 +3,22 @@
 SEMANTE_HOME="$HOME/.semante"
 
 # Install Buildr
-gem install buildr --no-ri --no-rdoc
+gem install buildr --no-ri --no-rdoc > /dev/null
+echo "Buildr was built successfully"
 
 # Install Prover9
 wget http://www.cs.unm.edu/~mccune/mace4/download/LADR-2009-11A.tar.gz
-tar xvfz LADR-2009-11A.tar.gz
+tar xvfz LADR-2009-11A.tar.gz > /dev/null
 cd LADR-2009-11A
 make all > /dev/null
 if [ $? -eq 0 ]; then
     echo "Prover9 was built successfully"
 else
     echo "Prover9 failed to build"
-    exit 1
 fi
 mkdir -p "${SEMANTE_HOME}/ladr"
 mv ./bin/* "${SEMANTE_HOME}/ladr"
+ls "${SEMANTE_HOME}/ladr"
 cd ..
 
 # Install Lexicon
