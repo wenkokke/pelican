@@ -1,9 +1,9 @@
 language : c
 before_script :
-  - ./before_script.sh
   - sudo apt-get update
   - sudo apt-get install ruby
   - gem install buildr
   - buildr install-deps
+  - ./before_script.sh
 script :
   - buildr
