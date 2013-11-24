@@ -78,6 +78,7 @@ public class IProver implements Prover {
 			@Cleanup
 			BufferedWriter out = new BufferedWriter(new FileWriter(fileName));
 			out.write(prooverInput);
+			out.flush();
 			
 			val prover9 = new File(proverPath,PROVER9_EXE_NAME);
 			val timeout = FULL_TIMEOUT_SEC * 3/4;
