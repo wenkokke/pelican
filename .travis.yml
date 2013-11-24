@@ -1,4 +1,4 @@
 language      : ruby
 rvm           : jruby-19mode
-before_script : build.sh
+before_script : ./build.sh
 script        : buildr build test=off
