@@ -1,14 +1,16 @@
-package semante.pipeline.test.features;
+package semante.pipeline.test.features.intp;
 
 import lombok.val;
 
 import org.junit.Test;
 
-import semante.pipeline.test.Entailment;
-import semante.pipeline.test.impl.ATestCase;
-import semante.pipeline.test.impl.IEntailment;
+import semante.Entailment;
+import semante.IEntailment;
+import semante.pipeline.APipelineTest;
 
-public final class TestCaseFeatures01 extends ATestCase {
+public final class TestCaseFeatures02 extends APipelineTest {
+
+		// test for interective modification by a preposition 
 
 		@Test
 		public final void prove() throws Exception {
@@ -33,8 +35,8 @@ public final class TestCaseFeatures01 extends ATestCase {
 			// create the vocabulary for the hypothesis;
 			val h00_jan 	= word("NP","jan");
 			val h01_is 		= word("IS","is");
-			val h02_a 		= word("A","a");
-			val h03_man 	= word("N_1","man");
+			val h02_from 	= word("P_I","from");
+			val h03_Brasil 	= word("NP","Brasil");
 
 			
 			val tt =
@@ -70,9 +72,9 @@ public final class TestCaseFeatures01 extends ATestCase {
 					h01_is
 					,
 					_(
-						h02_a
-						,
-						h03_man
+						h02_from
+							,
+						h03_Brasil
 					)
 				)
 			)

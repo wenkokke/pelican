@@ -1,14 +1,16 @@
-package semante.pipeline.test.features;
+package semante.pipeline.test.features.intp;
 
 import lombok.val;
 
 import org.junit.Test;
 
-import semante.pipeline.test.Entailment;
-import semante.pipeline.test.impl.ATestCase;
-import semante.pipeline.test.impl.IEntailment;
+import semante.Entailment;
+import semante.IEntailment;
+import semante.pipeline.APipelineTest;
 
-public final class TestCaseFeatures03 extends ATestCase {
+public final class TestCaseFeatures04 extends APipelineTest {
+
+		// test for interective modification by a preposition 
 
 		@Test
 		public final void prove() throws Exception {
@@ -49,16 +51,16 @@ public final class TestCaseFeatures03 extends ATestCase {
 						t02_a
 						,
 						_(
-							_(
-								t03_tall
-								,
-								t04_man
-							)
+							t03_tall
 							,
 							_(
-								t05_from
+								t04_man
 								,
-								t06_Brasil
+								_(
+									t05_from
+									,
+									t06_Brasil
+								)
 							)
 						)
 					)
