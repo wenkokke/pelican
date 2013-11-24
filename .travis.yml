@@ -4,6 +4,6 @@ before_script :
   - sudo apt-get install ruby
   - gem install buildr
   - buildr install-deps
-  - before_script.sh
+  - ./before_script.sh
 script :
   - buildr build test=off
