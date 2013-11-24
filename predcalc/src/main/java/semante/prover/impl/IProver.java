@@ -88,7 +88,7 @@ public class IProver implements Prover {
 			val interrupter = new InterruptTimerTask(Thread.currentThread());
 			timer.schedule(interrupter, timeout * 1000);
 
-			System.out.println("Running Prover process ["+timeout+"]");
+			System.out.println("Running Prover process ["+prover9+"]");
 			process = Runtime.getRuntime().exec(command);
 
 			System.out.println("Prover is running");
@@ -134,7 +134,7 @@ public class IProver implements Prover {
 				}
 			}
 
-			System.out.println("Globbers have ended");
+			//System.out.println("Globbers have ended");
 			
 			// if the process ended gracefully or some unknown exception was thrown
 			if (proverOutputPF==null) {
@@ -142,7 +142,6 @@ public class IProver implements Prover {
 				// in case of graceful termination - now that the gobblers have ended we can read the output buffer and parse it
 				if (resultType!=null) {
 					String proverOutput = prover9OutputBuffer.toString();
-					System.out.println("Output stream: ["+ proverOutput +"]");
 					if (resultType==ResultType.NoProofCanBeFound && proverOutput.matches("(?s).*Exiting with [1-9]+ proofs?.*")) {
 						resultType = ResultType.ProofFound;
 						System.out.println("Prover stdout indicates that a proof WAS found; dismissing exit code indication, type is set to: [" + resultType + "]");
@@ -168,7 +167,7 @@ public class IProver implements Prover {
 				boolean del = true;
 
 				if (del) { 
-					System.out.println("Deleting temp input file: " + tempFile.toString()); 
+					//System.out.println("Deleting temp input file: " + tempFile.toString()); 
 					tempFile.delete();
 				} else {
 					System.out.println("NOT deleting temp input file: " + tempFile.toString()); 
