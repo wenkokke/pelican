@@ -126,9 +126,9 @@ public final class TestCaseRTE2test103 extends APipelineTest {
 			// create the subsumption relations;
 			val ss =
 			new String[] {
-				"all x (summiter(x) -> person(x)).",
-				"all x (all y (in_died(x,y) -> died(x))).",
-				"all x (all y (in_passed_away(x,y) -> in_died(x,y)))."
+					"all x (summiter(x) -> person(x)).",
+					"all x (passed_away(x) -> died(x)).",
+					"all x (all y (in_passed_away(y,x) -> in_died(y,x)))."
 			};
 
 			// return the new entailment;

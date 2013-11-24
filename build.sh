@@ -34,4 +34,4 @@ SemAnTE:
 EOF
 
 # Build Pelican Dependencies
-buildr install-deps
+buildr install-deps > /dev/null
