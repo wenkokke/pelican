@@ -2,9 +2,10 @@
 
 SEMANTE_HOME="$HOME/.semante"
 
-# Install Buildr
-gem install buildr --no-ri --no-rdoc > /dev/null
-echo "Buildr was built successfully"
+# Install build-essential
+apt-get update
+apt-get upgrade
+apt-get install build-essential
 
 # Install Prover9
 wget http://www.cs.unm.edu/~mccune/mace4/download/LADR-2009-11A.tar.gz
@@ -24,6 +25,10 @@ cd ../..
 
 # Install Lexicon
 mv ./lexicon/src/main/resources/default.lex "${SEMANTE_HOME}/default.lexicon"
+
+# Install Buildr
+gem install buildr --no-ri --no-rdoc > /dev/null
+echo "Buildr was built successfully"
 
 # Configure SemAnTE
 cat << 'EOF' > "${SEMANTE_HOME}/settings.yml"
