@@ -37,6 +37,7 @@ define 'pelican' do
     compile.with LOMBOK,GUAVA,PIPELINE,LAMBDACALC,
       projects('lexicon','predcalc','settings')
     test.with JPARSEC,SNAKE_YAML,SLF4J,compile.dependencies
+    test.exclude 'semante.flattener.rte.*'
     package :jar
   end
 
