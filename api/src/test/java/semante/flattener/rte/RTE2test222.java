@@ -2,22 +2,24 @@ package semante.flattener.rte;
 
 import lombok.val;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import semante.Entailment;
 import semante.IEntailment;
-import semante.pipeline.APipelineTest;
+import semante.flattener.AFlattenerTest;
 
-public final class RTE2test222 extends APipelineTest {
-
-		@Test
-		public final void prove() throws Exception {
-			proveEntailment(createRTE2test222());
+public final class RTE2test222 extends AFlattenerTest {
+	
+		@Before
+		public final void setUp() throws Exception {
+			super.setUp(getClass());
+			this.entailment = createRTE2test222();
 		}
-
+		
 		@Test
-		public final void createTestCase() throws Exception {
-			createTestCase("RTE2test222",createRTE2test222());
+		public final void flattenTest() {
+			super.flattenTest();
 		}
 
 		public final Entailment createRTE2test222() throws Exception {

@@ -65,15 +65,15 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		line();
 		line(1,"@Test");
 		line(1,"public final void prove() throws Exception {");
-		line(2,"proveEntailment(create%s());",name);
+		line(2,"proveEntailment(createEntailment());",name);
 		line(1,"}");
 		line();
 		line(1,"@Test");
 		line(1,"public final void createTestCase() throws Exception {");
-		line(2,"createTestCase(\"%s\",create%s());",name,name);
+		line(2,"createTestCase(\"%s\",createEntailment());",name,name);
 		line(1,"}");
 		line();
-		line(1,"public final Entailment create%s() throws Exception {", name);
+		line(1,"public final Entailment createEntailment() throws Exception {");
 		line();
 		line(2,"// create the vocabulary for the text;");
 		val vt = vocabulary("t", text);

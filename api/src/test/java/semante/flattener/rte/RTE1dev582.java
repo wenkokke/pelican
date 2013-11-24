@@ -2,25 +2,27 @@ package semante.flattener.rte;
 
 import lombok.val;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import semante.Entailment;
 import semante.IEntailment;
-import semante.pipeline.APipelineTest;
+import semante.flattener.AFlattenerTest;
 
-public final class RTE1dev582 extends APipelineTest {
-
-		@Test
-		public final void prove() throws Exception {
-			proveEntailment(createRTE1dev582());
-		}
-
-		@Test
-		public final void createTestCase() throws Exception {
-			createTestCase("RTE1dev582",createRTE1dev582());
-		}
-
-		public final Entailment createRTE1dev582() throws Exception {
+public final class RTE1dev582 extends AFlattenerTest {
+	
+	@Before
+	public final void setUp() throws Exception {
+		super.setUp(getClass());
+		this.entailment = createRTE1dev582();
+	}
+	
+	@Test
+	public final void flattenTest() {
+		super.flattenTest();
+	}
+	
+	public final Entailment createRTE1dev582() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_the = word("THE","The");
@@ -31,7 +33,7 @@ public final class RTE1dev582 extends APipelineTest {
 			val t05_rumors = word("N","rumors");
 			val t06_about = word("P_R","about");
 			val t07_the = word("THE","the");
-			val t08_90yearold = word("MI","90yearOld");
+			val t08_90yearold = word("MI","ninety_year_old");
 			val t09_senior = word("MR","senior");
 			val t10_leader = word("N","leader");
 			val t11_who = word("WHO_A","who");
@@ -41,7 +43,7 @@ public final class RTE1dev582 extends APipelineTest {
 			// create the vocabulary for the hypothesis;
 			val h00_deng = word("NP_D","Deng");
 			val h01_is = word("IS","is");
-			val h02_90yearold = word("MI","90yearold");
+			val h02_90yearold = word("MI","ninety_year_old");
 
 			// create the tree structure for the text;
 			val tt =

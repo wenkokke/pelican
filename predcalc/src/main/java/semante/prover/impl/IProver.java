@@ -13,7 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import lombok.Cleanup;
-
+import lombok.val;
 import predcalc.ExprForm;
 import predcalc.FOLExpr.Formula;
 import predcalc.PredCalc;
@@ -21,7 +21,6 @@ import semante.prover.Prover;
 import semante.prover.ProverOutput;
 import semante.prover.ProverOutput.ResultType;
 import semante.prover.ProverResult;
-
 import semante.settings.Settings;
 
 public class IProver implements Prover {
@@ -75,24 +74,22 @@ public class IProver implements Prover {
 		try {
 			tempFile = File.createTempFile("prover",".in");
 			fileName = tempFile.getAbsolutePath();
+			
 			@Cleanup
 			BufferedWriter out = new BufferedWriter(new FileWriter(fileName));
 			out.write(prooverInput);
-			out.close();
-
-			String 			prover9ProcessName = PROVER9_EXE_NAME;
-			int 			prover9ProcessTimeout = FULL_TIMEOUT_SEC;
-			int 			prover9ParamTimeout = prover9ProcessTimeout * 3/4;
-			String[] 		prover9Command = new String[] {proverPath + prover9ProcessName, "-t", Integer.toString(prover9ParamTimeout), "-f", fileName};
+			
+			val prover9 = new File(proverPath,PROVER9_EXE_NAME);
+			val timeout = FULL_TIMEOUT_SEC * 3/4;
+			val command = new String[] { prover9.getPath(), "-t", Integer.toString(timeout), "-f", fileName};
 			
 			timer = new Timer(true);
-			InterruptTimerTask interrupter = new InterruptTimerTask(Thread.currentThread());
-			timer.schedule(interrupter, prover9ProcessTimeout * 1000);
+			val interrupter = new InterruptTimerTask(Thread.currentThread());
+			timer.schedule(interrupter, timeout * 1000);
 
-			System.out.println("Running Prover process ["+prover9ProcessName+"]");
-			process = Runtime.getRuntime().exec(prover9Command);
+			System.out.println("Running Prover process ["+timeout+"]");
+			process = Runtime.getRuntime().exec(command);
 
-			
 			System.out.println("Prover is running");
 
 			// readers for the error and output stream (executed in separated threads)

@@ -18,8 +18,8 @@ public final class RTE1dev1005 extends AFlattenerTest {
 		}
 		
 		@Test
-		public final void flattenerTest() {
-			super.flatten();
+		public final void flattenTest() {
+			super.flattenTest();
 		}
 
 		public final Entailment createRTE1dev1005() throws Exception {

@@ -2,24 +2,26 @@ package semante.flattener.rte;
 
 import lombok.val;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import semante.Entailment;
 import semante.IEntailment;
-import semante.pipeline.APipelineTest;
+import semante.flattener.AFlattenerTest;
 
-public final class RTE1dev176 extends APipelineTest {
-
-		@Test
-		public final void prove() throws Exception {
-			proveEntailment(createRTE1dev176());
-		}
-
-		@Test
-		public final void createTestCase() throws Exception {
-			createTestCase("RTE1dev176",createRTE1dev176());
-		}
-
+public final class RTE1dev176 extends AFlattenerTest {
+	
+	@Before
+	public final void setUp() throws Exception {
+		super.setUp(getClass());
+		this.entailment = createRTE1dev176();
+	}
+	
+	@Test
+	public final void flattenTest() {
+		super.flattenTest();
+	}
+	
 		public final Entailment createRTE1dev176() throws Exception {
 
 			// create the vocabulary for the text;
