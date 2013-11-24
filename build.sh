@@ -3,9 +3,12 @@
 SEMANTE_HOME="$HOME/.semante"
 
 # Install build-essential
-apt-get update
-apt-get upgrade
-apt-get install build-essential
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install build-essential
+
+echo `gcc -v`
+echo `make -v`
 
 # Install Prover9
 wget http://www.cs.unm.edu/~mccune/mace4/download/LADR-2009-11A.tar.gz
