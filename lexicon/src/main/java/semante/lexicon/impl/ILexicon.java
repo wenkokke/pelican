@@ -14,6 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
+import lambdacalc.DeBruijn;
 import lambdacalc.STL;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
@@ -62,6 +63,9 @@ public final class ILexicon implements Lexicon {
 	private static final int TAG  = 1;
 	private static final int TERM = 2; 
 	
+	private static final int ALIAS_REFERENCE 	= 1; 
+	private static final int ALIAS_NAME  		= 2;
+	
 	private final boolean isCategory(final String line) {
 		return line.contains("WORD:");
 	}
@@ -96,9 +100,37 @@ public final class ILexicon implements Lexicon {
 					words.put(tag, new IWord(tag,tag,deBruijn));
 				}
 			}
+		} else if (isAlias(line)) {
+			val tokens    = line.split("\\s+");
+			val alias     = tokens[ALIAS_NAME];
+			val reference = tokens[ALIAS_REFERENCE];
+			
+			// check if category exists.
+			if (categories.containsKey(reference)) {
+				for (DeBruijn deBruijn : categories.get(reference).getDenotations()) {
+					if (categories.containsKey(alias)) {
+						categories.put(alias, categories.get(alias).addDenotation(deBruijn));
+					} else {
+						categories.put(alias, new ICategory(alias,deBruijn,stl));
+					}
+				}
+			} else if (words.containsKey(reference)) {
+				for (DeBruijn deBruijn : words.get(reference).getDenotations()) {
+					if (words.containsKey(alias)) {
+						words.put(alias, words.get(alias).addDenotation(deBruijn));
+					} else {
+						words.put(alias, new IWord(alias,alias,deBruijn));
+					}
+				}
+
+			} 
 		}
 	}
 
+	private final boolean isAlias(final String line) {
+		return line.startsWith("@ ");
+	}
+	
 	private final boolean isEntry(final String line) {
 		return line.startsWith("> ");
 	}
