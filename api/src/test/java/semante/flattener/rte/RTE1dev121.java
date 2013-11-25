@@ -13,8 +13,7 @@ public final class RTE1dev121 extends AFlattenerTest {
 	
 	@Before
 	public final void setUp() throws Exception {
-		super.setUp(getClass());
-		this.entailment = createRTE1dev121();
+		super.doSetUp();
 	}
 	
 	@Test
@@ -22,7 +21,12 @@ public final class RTE1dev121 extends AFlattenerTest {
 		super.flattenTest();
 	}
 	
-		public final Entailment createRTE1dev121() throws Exception {
+	protected final void setReferences() {
+		this.textReference = "EXISTS:(et)t (\\x0:e.((AND:ttt ((AND:ttt ((AND:ttt ((AND:ttt (airman:et x0:e)) (American:et x0:e))) (Syrian:et x0:e))) ((AND:ttt (accused:et x0:e)) (EXISTS:(et)t (\\x1:e.((AND:ttt (espionage:et x1:e)) (((of:e(et)et x0:e) accused:et) x1:e))))))) ((AND:ttt ((AND:ttt (complained:et x0:e)) (((about:e(et)et x0:e) complained:et) (IOTA:(et)e (\\x2:e.((AND:ttt (treatment:et x2:e)) (((at:e(et)et x2:e) treatment:et) (IOTA:(et)e (\\x3:e.((AND:ttt (base:et x3:e)) ((US:(et)et base:et) x3:e))))))))))) ((AND:ttt (((in:e(et)et x0:e) (\\x4:e.((AND:ttt (complained:et x4:e)) (((about:e(et)et x4:e) complained:et) (IOTA:(et)e (\\x5:e.((AND:ttt (treatment:et x5:e)) (((at:e(et)et x5:e) treatment:et) (IOTA:(et)e (\\x6:e.((AND:ttt (base:et x6:e)) ((US:(et)et base:et) x6:e)))))))))))) Guantanamo:e)) ((AND:ttt T:t) (((in:e(et)et Guantanamo:e) (\\x7:e.T:t)) Cuba:e))))))";
+		this.hypoReference = "EXISTS:(et)t (\\x0:e.((AND:ttt (American:et x0:e)) ((AND:ttt (accused:et x0:e)) (EXISTS:(et)t (\\x1:e.((AND:ttt (espionage:et x1:e)) (((of:e(et)et x0:e) accused:et) x1:e)))))))";
+	}
+	
+		public final Entailment createEntailment() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_a = word("A","A");

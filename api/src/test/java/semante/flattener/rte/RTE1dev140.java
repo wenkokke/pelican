@@ -13,8 +13,7 @@ public final class RTE1dev140 extends AFlattenerTest {
 	
 	@Before
 	public final void setUp() throws Exception {
-		super.setUp(getClass());
-		this.entailment = createRTE1dev140();
+		super.doSetUp();
 	}
 	
 	@Test
@@ -22,7 +21,12 @@ public final class RTE1dev140 extends AFlattenerTest {
 		super.flattenTest();
 	}
 	
-		public final Entailment createRTE1dev140() throws Exception {
+	protected final void setReferences() {
+		this.textReference = "(AND:ttt ((AND:ttt (thrown:et (IOTA:(et)e body:et))) (EXISTS:(et)t (\\x0:e.((AND:ttt (vehicle:et x0:e)) (((from:e(et)et (IOTA:(et)e body:et)) thrown:et) x0:e)))))) ((AND:ttt ((AND:ttt (found:et (IOTA:(et)e body:et))) (((by:e(et)et (IOTA:(et)e body:et)) found:et) (IOTA:(et)e (\\x1:e.((AND:ttt ((AND:ttt (police:et x1:e)) ((military:(et)et police:et) x1:e))) (US:et x1:e))))))) (((in:e(et)et (IOTA:(et)e body:et)) (\\x2:e.((AND:ttt (found:et x2:e)) (((by:e(et)et x2:e) found:et) (IOTA:(et)e (\\x3:e.((AND:ttt ((AND:ttt (police:et x3:e)) ((military:(et)et police:et) x3:e))) (US:et x3:e)))))))) (IOTA:(et)e (\\x4:e.((AND:ttt (west:et x4:e)) (((of:e(et)et x4:e) west:et) Baghdad:e))))))";
+		this.hypoReference = "EXISTS:(et)t (\\x0:e.((AND:ttt (body:et x0:e)) ((AND:ttt ((AND:ttt (found:et x0:e)) (EXISTS:(et)t (\\x1:e.((AND:ttt ((AND:ttt (police:et x1:e)) ((military:(et)et police:et) x1:e))) (((by:e(et)et x0:e) found:et) x1:e)))))) (thrown:et x0:e))))";
+	}
+	
+		protected final Entailment createEntailment() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_the = word("THE","The");

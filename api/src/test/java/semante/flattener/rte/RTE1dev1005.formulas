@@ -1,7 +1,0 @@
-*** T/H Formulas ***
-Text:
-EXISTS:(et)t (\x0:e.((AND:ttt ((AND:ttt ((AND:ttt (specialized:et Jessica:e)) (((in:e(et)et Jessica:e) specialized:et) Claw:e))) (EXISTS:(et)t (\x1:e.((AND:ttt (years:et x1:e)) (((for:e(et)et Jessica:e) (\x2:e.((AND:ttt (specialized:et x2:e)) (((in:e(et)et x2:e) specialized:et) Claw:e)))) x1:e)))))) ((AND:ttt ((EQ:eet x0:e) Jessica:e)) (EXISTS:(et)t (\x3:e.((AND:ttt ((AND:ttt (professor:et x3:e)) (((at:e(et)et x3:e) professor:et) Michigan:e))) ((EQ:eet x0:e) x3:e)))))))
-
-Hypothesis:
-EXISTS:(et)t (\x0:e.((AND:ttt (professor:et x0:e)) ((EQ:eet x0:e) Jessica:e)))
-

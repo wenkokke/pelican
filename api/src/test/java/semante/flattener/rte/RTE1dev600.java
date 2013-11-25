@@ -11,18 +11,22 @@ import semante.flattener.AFlattenerTest;
 
 public final class RTE1dev600 extends AFlattenerTest {
 	
-		@Before
-		public final void setUp() throws Exception {
-			super.setUp(getClass());
-			this.entailment = createRTE1dev600();
-		}
+	@Before
+	public final void setUp() throws Exception {
+		super.doSetUp();
+	}
+	
+	@Test
+	public final void flattenTest() {
+		super.flattenTest();
+	}
 		
-		@Test
-		public final void flattenTest() {
-			super.flattenTest();
+		protected final void setReferences() {
+			this.textReference = "EXISTS:(et)t (\\x0:e.((AND:ttt (sneezed:et LP:e)) ((AND:ttt ((EQ:eet x0:e) LP:e)) ((EQ:eet x0:e) (IOTA:(et)e (\\x1:e.((AND:ttt ((AND:ttt (dog:et x1:e)) ((Chinese:(et)et dog:et) x1:e))) ((AND:ttt (accused:et x1:e)) (EXISTS:(et)t (\\x2:e.((AND:ttt ((AND:ttt ((AND:ttt (plot:et x2:e)) ((nineteenseventyone:(et)et plot:et) x2:e))) (EXISTS:(et)t (\\x3:e.((AND:ttt (uprising:et x3:e)) (((of:e(et)et x2:e) (\\x4:e.((AND:ttt (plot:et x4:e)) ((nineteenseventyone:(et)et plot:et) x4:e)))) x3:e)))))) (((of:e(et)et x1:e) accused:et) x2:e))))))))))))";
+			this.hypoReference = "EXISTS:(et)t (\\x0:e.((AND:ttt ((AND:ttt (dog:et x0:e)) ((Chinese:(et)et dog:et) x0:e))) ((EQ:eet x0:e) LP:e)))";
 		}
 
-		public final Entailment createRTE1dev600() throws Exception {
+		protected final Entailment createEntailment() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_lp = word("NP_D","LP");

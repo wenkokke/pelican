@@ -13,8 +13,7 @@ public final class RTE1dev582 extends AFlattenerTest {
 	
 	@Before
 	public final void setUp() throws Exception {
-		super.setUp(getClass());
-		this.entailment = createRTE1dev582();
+		super.doSetUp();
 	}
 	
 	@Test
@@ -22,7 +21,12 @@ public final class RTE1dev582 extends AFlattenerTest {
 		super.flattenTest();
 	}
 	
-	public final Entailment createRTE1dev582() throws Exception {
+	protected final void setReferences() {
+		this.textReference = "(AND:ttt (comes:et (IOTA:(et)e visit:et))) (((amid:e(et)et (IOTA:(et)e visit:et)) comes:et) (IOTA:(et)e (\\x0:e.((AND:ttt (rumors:et x0:e)) ((AND:ttt (((about:e(et)et x0:e) rumors:et) (IOTA:(et)e (\\x1:e.((AND:ttt ((AND:ttt (leader:et x1:e)) ((senior:(et)et leader:et) x1:e))) (ninety_year_old:et x1:e)))))) ((EQ:eet Deng:e) (IOTA:(et)e (\\x2:e.((AND:ttt ((AND:ttt (leader:et x2:e)) ((senior:(et)et leader:et) x2:e))) (ninety_year_old:et x2:e))))))))))";
+		this.hypoReference = "(AND:ttt T:t) (ninety_year_old:et Deng:e)";
+	}
+	
+	protected final Entailment createEntailment() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_the = word("THE","The");

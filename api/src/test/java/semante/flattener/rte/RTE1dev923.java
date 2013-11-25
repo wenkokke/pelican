@@ -11,18 +11,22 @@ import semante.flattener.AFlattenerTest;
 
 public final class RTE1dev923 extends AFlattenerTest {
 	
-		@Before
-		public final void setUp() throws Exception {
-			super.setUp(getClass());
-			this.entailment = createRTE1dev923();
-		}
+	@Before
+	public final void setUp() throws Exception {
+		super.doSetUp();
+	}
+	
+	@Test
+	public final void flattenTest() {
+		super.flattenTest();
+	}
 		
-		@Test
-		public final void flattenTest() {
-			super.flattenTest();
+		protected final void setReferences() {
+			this.textReference = "EXISTS:(et)t (\\x0:e.((AND:ttt ((AND:ttt (videoclip:et x0:e)) (EXISTS:(et)t (\\x1:e.((AND:ttt (militants:et x1:e)) (((from:e(et)et x0:e) videoclip:et) x1:e)))))) ((broadcasted:eet (IOTA:(et)e (\\x2:e.((AND:ttt ((AND:ttt (network:et x2:e)) ((Arabic:(et)et network:et) x2:e))) ((EQ:eet AlJazeera:e) x2:e))))) x0:e)))";
+			this.hypoReference = "(AND:ttt (EXISTS:(et)t (\\x0:e.((AND:ttt ((AND:ttt (network:et x0:e)) ((Arabic:(et)et network:et) x0:e))) ((EQ:eet x0:e) AlJazeera:e))))) (EXISTS:(et)t (\\x1:e.((AND:ttt ((AND:ttt (network:et x1:e)) ((Arabic:(et)et network:et) x1:e))) (EXISTS:(et)t (\\x2:e.((AND:ttt ((AND:ttt (videoclip:et x2:e)) (EXISTS:(et)t (\\x3:e.((AND:ttt (militants:et x3:e)) (((from:e(et)et x2:e) videoclip:et) x3:e)))))) ((broadcasted:eet x1:e) x2:e)))))))";
 		}
 
-		public final Entailment createRTE1dev923() throws Exception {
+		protected final Entailment createEntailment() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_the = word("THE","The");

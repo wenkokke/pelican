@@ -13,16 +13,20 @@ public final class RTE1dev1934 extends AFlattenerTest {
 	
 	@Before
 	public final void setUp() throws Exception {
-		super.setUp(getClass());
-		this.entailment = createRTE1dev1934();
+		super.doSetUp();
 	}
 	
 	@Test
 	public final void flattenTest() {
 		super.flattenTest();
 	}
+	
+	protected final void setReferences() {
+		this.textReference = "EXISTS:(et)t (\\x0:e.((AND:ttt ((loves:eet Evans:e) Mary:e)) ((AND:ttt ((EQ:eet x0:e) Evans:e)) ((EQ:eet x0:e) (IOTA:(et)e (\\x1:e.((AND:ttt (mayor:et x1:e)) (((of:e(et)et x1:e) mayor:et) Port_au_Prince:e))))))))";
+		this.hypoReference = "(EQ:eet (IOTA:(et)e (\\x0:e.((AND:ttt (mayor:et x0:e)) (((of:e(et)et x0:e) mayor:et) Port_au_Prince:e))))) Evans:e";
+	}
 
-		public final Entailment createRTE1dev1934() throws Exception {
+		protected final Entailment createEntailment() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_evans = word("NP_D","Evans");

@@ -13,8 +13,7 @@ public final class RTE1dev176 extends AFlattenerTest {
 	
 	@Before
 	public final void setUp() throws Exception {
-		super.setUp(getClass());
-		this.entailment = createRTE1dev176();
+		super.doSetUp();
 	}
 	
 	@Test
@@ -22,7 +21,12 @@ public final class RTE1dev176 extends AFlattenerTest {
 		super.flattenTest();
 	}
 	
-		public final Entailment createRTE1dev176() throws Exception {
+	protected final void setReferences() {
+		this.textReference = "EXISTS:(et)t (\\x0:e.((AND:ttt ((AND:ttt ((AND:ttt (Korean:et x0:e)) (((in:e(et)et x0:e) Korean:et) Iraq:e))) ((AND:ttt ((ate:eet x0:e) (IOTA:(et)e (\\x1:e.((AND:ttt (meatballs:et x1:e)) ((Dutch:(et)et meatballs:et) x1:e)))))) ((later:(et)et (\\x2:e.((ate:eet x2:e) (IOTA:(et)e (\\x3:e.((AND:ttt (meatballs:et x3:e)) ((Dutch:(et)et meatballs:et) x3:e))))))) x0:e)))) (prayed:et x0:e)))";
+		this.hypoReference = "EXISTS:(et)t (\\x0:e.((AND:ttt ((AND:ttt (Korean:et x0:e)) (((in:e(et)et x0:e) Korean:et) Iraq:e))) ((ate:eet x0:e) (IOTA:(et)e (\\x1:e.((AND:ttt (meatballs:et x1:e)) ((Dutch:(et)et meatballs:et) x1:e)))))))";
+	}
+	
+		protected final Entailment createEntailment() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_a = word("A","A");
