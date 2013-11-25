@@ -58,7 +58,11 @@ public final class ISettings implements Settings {
 		this(defaultSettingsFile());
 	}
 	
-	public static File defaultSettingsFile() {
-		return new File(new File(System.getProperty("user.home"), ".semante"), "settings.yml");
+	public final static File defaultSettingsFile() {
+		return getSettingsFile("default");
+	}
+	
+	public final static File getSettingsFile(String name) {
+		return new File(new File(System.getProperty("user.home"), ".semante"), name + ".yml");
 	}
 }

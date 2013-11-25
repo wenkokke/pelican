@@ -20,6 +20,7 @@ import semante.pipeline.SimpleBinaryTree;
 import semante.pipeline.impl.IAnnotation;
 import semante.pipeline.impl.IBinaryTree;
 import semante.pipeline.impl.ILabeller;
+import semante.settings.impl.ISettings;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -41,10 +42,9 @@ public abstract class AFlattenerTest extends ATest {
 	protected abstract void setReferences();
 	
 	protected final void doSetUp() throws Exception {
-		val loader  = Thread.currentThread().getContextClassLoader();
-		val lexicon = loader.getResourceAsStream("./semante/flattener/AFlattenerTest.lexicon");
+		val settings    = new ISettings(ISettings.getSettingsFile("legacy"));
 		this.stl        = new STL();
-		this.lexicon    = new IRichLexicon(lexicon,stl);
+		this.lexicon    = new IRichLexicon(settings,stl);
 		this.entailment = createEntailment();
 		this.setReferences();
 	}
