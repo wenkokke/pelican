@@ -11,18 +11,22 @@ import semante.flattener.AFlattenerTest;
 
 public final class RTE2test345 extends AFlattenerTest {
 	
-		@Before
-		public final void setUp() throws Exception {
-			super.setUp(getClass());
-			this.entailment = createRTE2test345();
-		}
+	@Before
+	public final void setUp() throws Exception {
+		super.doSetUp();
+	}
+	
+	@Test
+	public final void flattenTest() {
+		super.flattenTest();
+	}
 		
-		@Test
-		public final void flattenTest() {
-			super.flattenTest();
+		protected final void setReferences() {
+			this.textReference = "(AND:ttt ((AND:ttt (plays:et Thomas:e)) (EXISTS:(et)t (\\x0:e.((AND:ttt (((for:e(et)et Thomas:e) plays:et) (IOTA:(et)e (\\x1:e.((AND:ttt (champions:et x1:e)) ((French:(et)et champions:et) x1:e)))))) ((AND:ttt ((EQ:eet x0:e) (IOTA:(et)e (\\x2:e.((AND:ttt (champions:et x2:e)) ((French:(et)et champions:et) x2:e)))))) ((EQ:eet x0:e) Toulouse:e))))))) ((AND:ttt ((captained:eet Thomas:e) Wales:e)) ((captained:eet Thomas:e) (IOTA:(et)e (\\x3:e.((AND:ttt (side:et x3:e)) ((Welsh:(et)et side:et) x3:e))))))";
+			this.hypoReference = "(captained:eet Thomas:e) (IOTA:(et)e (\\x0:e.((AND:ttt (side:et x0:e)) ((Welsh:(et)et side:et) x0:e))))";
 		}
 
-		public final Entailment createRTE2test345() throws Exception {
+		protected final Entailment createEntailment() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_thomas = word("NP_D","Thomas");

@@ -11,18 +11,22 @@ import semante.flattener.AFlattenerTest;
 
 public final class RTE2test222 extends AFlattenerTest {
 	
-		@Before
-		public final void setUp() throws Exception {
-			super.setUp(getClass());
-			this.entailment = createRTE2test222();
+	@Before
+	public final void setUp() throws Exception {
+		super.doSetUp();
+	}
+	
+	@Test
+	public final void flattenTest() {
+		super.flattenTest();
+	}
+		
+		protected final void setReferences() {
+			this.textReference = "(AND:ttt (EXISTS:(et)t (\\x0:e.((AND:ttt ((AND:ttt (doctor:et x0:e)) ((Australian:(et)et doctor:et) x0:e))) ((won:eet x0:e) (IOTA:(et)e (\\x1:e.((AND:ttt ((AND:ttt (Oscar:et x1:e)) ((silver:(et)et Oscar:et) x1:e))) ((dirty:(et)et (\\x2:e.((AND:ttt (Oscar:et x2:e)) ((silver:(et)et Oscar:et) x2:e)))) x1:e))))))))) (EXISTS:(et)t (\\x3:e.((AND:ttt ((AND:ttt (doctor:et x3:e)) ((Australian:(et)et doctor:et) x3:e))) ((EQ:eet Warren:e) x3:e))))";
+			this.hypoReference = "EXISTS:(et)t (\\x0:e.((AND:ttt (Oscar:et x0:e)) ((won:eet Warren:e) x0:e)))";
 		}
 		
-		@Test
-		public final void flattenTest() {
-			super.flattenTest();
-		}
-
-		public final Entailment createRTE2test222() throws Exception {
+		protected final Entailment createEntailment() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_an = word("A","An");

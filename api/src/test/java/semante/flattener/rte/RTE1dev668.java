@@ -11,18 +11,22 @@ import semante.flattener.AFlattenerTest;
 
 public final class RTE1dev668 extends AFlattenerTest {
 	
-		@Before
-		public final void setUp() throws Exception {
-			super.setUp(getClass());
-			this.entailment = createRTE1dev668();
-		}
+	@Before
+	public final void setUp() throws Exception {
+		super.doSetUp();
+	}
+	
+	@Test
+	public final void flattenTest() {
+		super.flattenTest();
+	}
 		
-		@Test
-		public final void flattenTest() {
-			super.flattenTest();
+		protected final void setReferences() {
+			this.textReference = "(AND:ttt ((saw:eet Dan:e) (IOTA:(et)e hall:et))) ((AND:ttt ((EQ:eet (IOTA:(et)e (\\x0:e.((AND:ttt ((AND:ttt (museum:et x0:e)) (municipal:et x0:e))) ((big:(et)et (\\x1:e.((AND:ttt (museum:et x1:e)) (municipal:et x1:e)))) x0:e))))) (IOTA:(et)e hall:et))) ((AND:ttt T:t) ((old:(et)et (\\x2:e.T:t)) (IOTA:(et)e hall:et))))";
+			this.hypoReference = "EXISTS:(et)t (\\x0:e.((AND:ttt ((AND:ttt (museum:et x0:e)) ((big:(et)et museum:et) x0:e))) ((EQ:eet x0:e) (IOTA:(et)e hall:et))))";
 		}
 
-		public final Entailment createRTE1dev668() throws Exception {
+		protected final Entailment createEntailment() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_dan = word("NP_D","Dan");

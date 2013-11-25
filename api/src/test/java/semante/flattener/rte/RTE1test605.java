@@ -11,18 +11,22 @@ import semante.flattener.AFlattenerTest;
 
 public final class RTE1test605 extends AFlattenerTest {
 	
-		@Before
-		public final void setUp() throws Exception {
-			super.setUp(getClass());
-			this.entailment = createRTE1test605();
-		}
+	@Before
+	public final void setUp() throws Exception {
+		super.doSetUp();
+	}
+	
+	@Test
+	public final void flattenTest() {
+		super.flattenTest();
+	}
 		
-		@Test
-		public final void flattenTest() {
-			super.flattenTest();
+		protected final void setReferences() {
+			this.textReference = "(AND:ttt ((EQ:eet (IOTA:(et)e (\\x0:e.((AND:ttt ((AND:ttt (nation:et x0:e)) (((in:e(et)et x0:e) nation:et) (IOTA:(et)e world:et)))) ((largest:(et)et (\\x1:e.((AND:ttt (nation:et x1:e)) (((in:e(et)et x1:e) nation:et) (IOTA:(et)e world:et))))) x0:e))))) Indonesia:e)) (EXISTS:(et)t (\\x2:e.((AND:ttt ((AND:ttt ((AND:ttt (islands:et x2:e)) ((nice:(et)et islands:et) x2:e))) (((for:e(et)et x2:e) (\\x3:e.((AND:ttt (islands:et x3:e)) ((nice:(et)et islands:et) x3:e)))) (IOTA:(et)e retires:et)))) ((has:eet Indonesia:e) x2:e))))";
+			this.hypoReference = "EXISTS:(et)t (\\x0:e.((AND:ttt (islands:et x0:e)) ((has:eet Indonesia:e) x0:e)))";
 		}
 
-		public final Entailment createRTE1test605() throws Exception {
+		protected final Entailment createEntailment() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_indonesia = word("NP_D","Indonesia");

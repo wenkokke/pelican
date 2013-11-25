@@ -1,6 +1,5 @@
 package semante.flattener;
 
-import java.io.IOException;
 import java.util.List;
 
 import lambdacalc.DeBruijn;
@@ -22,25 +21,37 @@ import semante.pipeline.impl.IAnnotation;
 import semante.pipeline.impl.IBinaryTree;
 import semante.pipeline.impl.ILabeller;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.google.common.io.CharStreams;
-import com.google.common.io.Resources;
 
 public abstract class AFlattenerTest extends ATest {
 
-	protected STL stl;
+	private STL stl;
+	private RichLexicon lexicon;
+	
 	protected String textReference;
 	protected String hypoReference;
-	protected RichLexicon lexicon;
 	protected Entailment entailment;
+	
+	// set up resources
+
+	protected abstract Entailment createEntailment() throws Exception;
+	protected abstract void setReferences();
+	
+	protected final void doSetUp() throws Exception {
+		val loader  = Thread.currentThread().getContextClassLoader();
+		val lexicon = loader.getResourceAsStream("./semante/flattener/AFlattenerTest.lexicon");
+		this.stl        = new STL();
+		this.lexicon    = new IRichLexicon(lexicon,stl);
+		this.entailment = createEntailment();
+		this.setReferences();
+	}
 	
 	// perform the tests
 	
-	private final void test(SimpleBinaryTree<Pair<String,String>> input0, final String reference) {
+	private final void runTest(SimpleBinaryTree<Pair<String,String>> input0, final String reference) {
 		val labeller  = new ILabeller();
 		val printer   = new ITreePrinter<Integer>();
 		val flattener = new IFlattenTree<Integer>(stl, lexicon, printer);
@@ -87,8 +98,8 @@ public abstract class AFlattenerTest extends ATest {
 	}
 	
 	protected void flattenTest() {
-		test(entailment.getText(),textReference);
-		test(entailment.getHypothesis(),hypoReference);
+		runTest(entailment.getText(),textReference);
+		runTest(entailment.getHypothesis(),hypoReference);
 	}
 	
 	// setup the reference files
@@ -102,37 +113,4 @@ public abstract class AFlattenerTest extends ATest {
 						return new IAnnotation(pair.getFirst(),pair.getSecond());
 					}
 			});
-	
-	protected final void setUp(final Class<? extends AFlattenerTest> thisClass) throws IOException {
-		this.stl     = new STL();
-		this.lexicon = new IRichLexicon(lexicon(thisClass).split("\\n"),stl);
-		val formulas = formulas(thisClass).split("\\n");
-		this.textReference = stl.format(stl.fromDeBruijn(stl.toDeBruijn(stl.parse(formulas[2]))));
-		this.hypoReference = stl.format(stl.fromDeBruijn(stl.toDeBruijn(stl.parse(formulas[5]))));
-	}
-
-	private final String lexicon(final Class<? extends AFlattenerTest> thisClass) throws IOException {
-		return resource(thisClass, "lexicon");
-	}
-
-	private final String formulas(final Class<? extends AFlattenerTest> thisClass) throws IOException {
-		return resource(thisClass, "formulas");
-	}
-	
-	private final String resource(
-		final Class<? extends AFlattenerTest> thisClass,
-		final String resourceName) throws IOException {
-		
-		// get the classname and loader
-		val thisName   = thisClass.getName();
-		val thisPath   = "./" + thisName.replace('.', '/') + "." + resourceName;
-		val thisLoader = thisClass.getClassLoader();
-		val thisUrl    = thisLoader.getResource(thisPath);
-		
-		return 
-			CharStreams.toString(
-				CharStreams.newReaderSupplier(
-				Resources.newInputStreamSupplier(thisUrl), Charsets.UTF_8));
-	}
-	
 }

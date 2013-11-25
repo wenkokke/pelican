@@ -11,18 +11,22 @@ import semante.flattener.AFlattenerTest;
 
 public final class RTE1dev636 extends AFlattenerTest {
 	
-		@Before
-		public final void setUp() throws Exception {
-			super.setUp(getClass());
-			this.entailment = createRTE1dev636();
+	@Before
+	public final void setUp() throws Exception {
+		super.doSetUp();
+	}
+	
+	@Test
+	public final void flattenTest() {
+		super.flattenTest();
+	}
+		
+		protected final void setReferences() {
+			this.textReference = "(AND:ttt (EXISTS:(et)t (\\x0:e.((AND:ttt (EXISTS:(et)t (\\x1:e.((AND:ttt (country:et x1:e)) (EXISTS:(et)t (\\x2:e.((AND:ttt (attention:et x2:e)) ((attracts:eet x1:e) x2:e)))))))) ((AND:ttt (EXISTS:(et)t (\\x3:e.((AND:ttt (country:et x3:e)) ((EQ:eet x0:e) x3:e))))) ((EQ:eet x0:e) (IOTA:(et)e VaticanCity:et))))))) (EXISTS:(et)t (\\x4:e.((AND:ttt (EXISTS:(et)t (\\x5:e.((AND:ttt (country:et x5:e)) ((AND:ttt T:t) ((beautiful:(et)et (\\x6:e.T:t)) x5:e)))))) ((AND:ttt (EXISTS:(et)t (\\x7:e.((AND:ttt (country:et x7:e)) ((EQ:eet x4:e) x7:e))))) ((EQ:eet x4:e) (IOTA:(et)e VaticanCity:et))))))";
+			this.hypoReference = "(AND:ttt T:t) ((beautiful:(et)et (\\x0:e.T:t)) (IOTA:(et)e VaticanCity:et))";
 		}
 		
-		@Test
-		public final void flattenTest() {
-			super.flattenTest();
-		}
-
-		public final Entailment createRTE1dev636() throws Exception {
+		protected final Entailment createEntailment() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_a = word("A","A");

@@ -13,16 +13,20 @@ public final class RTE1dev241 extends AFlattenerTest {
 	
 	@Before
 	public final void setUp() throws Exception {
-		super.setUp(getClass());
-		this.entailment = createRTE1dev241();
+		super.doSetUp();
 	}
 	
 	@Test
 	public final void flattenTest() {
 		super.flattenTest();
 	}
-
-		public final Entailment createRTE1dev241() throws Exception {
+	
+	protected final void setReferences() {
+		this.textReference = "(AND:ttt ((AND:ttt T:t) ((nice:(et)et (\\x0:e.T:t)) Salesforce:e))) ((AND:ttt ((AND:ttt (trading:et Salesforce:e)) ((AND:ttt (((under:e(et)et Salesforce:e) trading:et) (IOTA:(et)e symbol:et))) ((EQ:eet CRM:e) (IOTA:(et)e symbol:et))))) (((on:e(et)et Salesforce:e) (\\x1:e.((AND:ttt (trading:et x1:e)) ((AND:ttt (((under:e(et)et x1:e) trading:et) (IOTA:(et)e symbol:et))) ((EQ:eet CRM:e) (IOTA:(et)e symbol:et)))))) (IOTA:(et)e nYSE:et)))";
+		this.hypoReference = "(AND:ttt (trading:et Salesforce:e)) ((AND:ttt (((under:e(et)et Salesforce:e) trading:et) (IOTA:(et)e symbol:et))) ((EQ:eet CRM:e) (IOTA:(et)e symbol:et)))";
+	}
+	
+		protected final Entailment createEntailment() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_salesforce = word("NP_D","Salesforce");
