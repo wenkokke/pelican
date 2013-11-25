@@ -228,3 +228,9 @@ subject to removal at any time.
 > IGNORE \P:(et)t.P:(et)t
 > IGNORE \GQ:(et)(et)t.GQ:(et)(et)t
 > IGNORE \M:(et)et.M:(et)et
+
+\subsection{Aliases of Annotations)
+@ N_1 N
+@ NP NP_D
+@ MOD_R MR
+@ MOD_I MI
