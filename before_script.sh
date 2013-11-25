@@ -20,13 +20,21 @@ ls "${SEMANTE_HOME}/ladr"
 cd ..
 
 # Install Lexicon
-mv ./lexicon/src/main/resources/default.lex "${SEMANTE_HOME}/default.lexicon"
+mv ./lexicon/src/main/resources/default.lexicon "${SEMANTE_HOME}/default.lexicon"
+mv ./lexicon/src/main/resources/legacy.lexicon "${SEMANTE_HOME}/legacy.lexicon"
 
 # Configure SemAnTE
-cat <<EOF > "${SEMANTE_HOME}/settings.yml"
+cat <<EOF > "${SEMANTE_HOME}/default.yml"
 SemAnTE:
   Lexicon:
     Default:  '${SEMANTE_HOME}/default.lexicon'
+  Prover:
+    Location: '${SEMANTE_HOME}/ladr'
+EOF
+cat <<EOF > "${SEMANTE_HOME}/legacy.yml"
+SemAnTE:
+  Lexicon:
+    Default:  '${SEMANTE_HOME}/legacy.lexicon'
   Prover:
     Location: '${SEMANTE_HOME}/ladr'
 EOF
