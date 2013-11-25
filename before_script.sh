@@ -20,8 +20,8 @@ ls "${SEMANTE_HOME}/ladr"
 cd ..
 
 # Install Lexicon
-mv ./lexicon/src/main/resources/default.lexicon "${SEMANTE_HOME}/default.lexicon"
-mv ./lexicon/src/main/resources/legacy.lexicon "${SEMANTE_HOME}/legacy.lexicon"
+cp -f ./lexicon/src/main/resources/default.lexicon "${SEMANTE_HOME}/default.lexicon"
+cp -f ./lexicon/src/main/resources/legacy.lexicon "${SEMANTE_HOME}/legacy.lexicon"
 
 # Configure SemAnTE
 cat <<EOF > "${SEMANTE_HOME}/default.yml"
