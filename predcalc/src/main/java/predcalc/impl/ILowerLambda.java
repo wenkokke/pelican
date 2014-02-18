@@ -25,6 +25,11 @@ public class ILowerLambda implements LowerLambda {
 
 	protected STL lcalc;
 	
+	public List<String> getComments() {
+		// TODO provide actual implementation
+		return new ArrayList<String>();
+	}
+	
 	private ExprBuilder rewriter = new ExprBuilder() {
 
 		final LowerableFunction lowerableFunction = new LowerableFunction(Types.ET);
@@ -36,82 +41,94 @@ public class ILowerLambda implements LowerLambda {
 
 			val fun2 = fun.accept(rewriter);
 			val arg2 = arg.accept(rewriter);
-			val app = lcalc.getExprBuilder().application(fun2, arg2);
+			val app2 = lcalc.getExprBuilder().application(fun2, arg2);
 
 			if (lcalc.typeOf(fun2).accept(lowerableFunction) && lcalc.typeOf(arg2).equals(lowerableFunction.getType())) {
 				System.out.println("Lowerable application: the function  ["+ lcalc.format(fun2) + "] is applied to an argument of type " + lcalc.format(lcalc.typeOf(arg2)) + ": [" + lcalc.format(arg2) + "]");
 				
-				return fun2.accept(new ExprBuilder() {
+				
+				try {
+					return fun2.accept(new ExprBuilder() {
 
-						@Override
-						public Expr abstraction(Symbol s, Expr body) {
-							throw new HigherOrderError("Abstraction of type (et)et: "+lcalc.format(fun2));
-						}
-
-						@Override
-						public Expr application(Expr fun3, Expr arg3) {
-							// in this case the modifier is an application by itself, e.g. "in Brasil" modifies "walks".
-							Expr e = null;
-							if (fun3.accept(isConstant)) {
-
-								// There's a subtle point here - we apply an application ("in Brasil") to a predicate, 
-								// (e.g. "walks") and we want to have a new predicate that takes the argument of the 
-								// application (i.e. "Brasil" as an argument. So our new predicate will look like 
-								// in_walks(Brasil)(John) in the end.
-								// To do this, we ignore the argument of the application (i.e. "Brasil"), and smash the
-								// application as if it was just "in" applied to "walks". This will generate a new
-								// predicate - "in_walks". Since this new predicate needs to be applied to the argument
-								// that we ommitted - "brasil", the type of the predicate will be a function from E to
-								// the type that the original application (i.e. "in Brasil") returns after applied to 
-								// the predicate it modifies.
-							 
-								// here we decide on the type of the new predicate
-								Type newType = new IFunction(Types.E,lcalc.typeOf(fun2).accept(getFunctionReturnType));
-								
-								// lower the modification as if the modifier is a constant (like 'tall') 
-								Expr simple = lowerModification(fun3.accept(getConstantName), newType , arg2);
-								
-								// apply the argument (e.g. 'Brasil')
-								e = lcalc.getExprBuilder().application(simple,
-										lcalc.getExprBuilder().variable(buildSymbol(arg3.accept(getConstantName), Types.E)));
-								
-								System.out.println("Lowered expression (modification by application):" + lcalc.format(e));
-							} else {
-								throw new HigherOrderError("Modifier is not a constant" + lcalc.format(fun3));
+							@Override
+							public Expr abstraction(Symbol s, Expr body) {
+								throw new HigherOrderError("Abstraction of type (et)et: "+lcalc.format(fun2));
 							}
-							return e;
-						}
 
-						@Override
-						public Expr variable(Symbol s) {
-							// the typical case of lowering, e.g. tall(man), but also of noun compounds - and that's why
-							// we decide on the new type dynamically. It's not always 'et', because in the case of noun
-							// compounds we may have a noun of type (et)(et)(et)et applied to a noun of type et, so the 
-							// return type is (et)(et)et. Note that NP compounds are handled differently, see below.
-							Expr e = lowerModification(s.getName(), s.getType().accept(getFunctionReturnType), arg2); 
-							System.out.println("Lowered expression (direct modification):" + lcalc.format(e));
-							return e;
-						}
-						
-						private Expr lowerModification(String modifierName, Type modifierType, Expr e) {
-							List<Predicate> predicates = parsePredicates(e);
+							@Override
+							public Expr application(Expr fun3, Expr arg3) {
+								// in this case the modifier is an application by itself, e.g. "in Brasil" modifies "walks".
+								Expr e = null;
+								if (fun3.accept(isConstant)) {
+
+									// There's a subtle point here - we apply an application ("in Brasil") to a predicate, 
+									// (e.g. "walks") and we want to have a new predicate that takes the argument of the 
+									// application (i.e. "Brasil" as an argument. So our new predicate will look like 
+									// in_walks(Brasil)(John) in the end.
+									// To do this, we ignore the argument of the application (i.e. "Brasil"), and smash the
+									// application as if it was just "in" applied to "walks". This will generate a new
+									// predicate - "in_walks". Since this new predicate needs to be applied to the argument
+									// that we ommitted - "brasil", the type of the predicate will be a function from E to
+									// the type that the original application (i.e. "in Brasil") returns after applied to 
+									// the predicate it modifies.
+								
+									// here we decide on the type of the new predicate
+									Type newType = new IFunction(Types.E,lcalc.typeOf(fun2).accept(getFunctionReturnType));
+									
+									// lower the modification as if the modifier is a constant (like 'tall') 
+									Expr simple = lowerModification(fun3.accept(getConstantName), lcalc.typeOf(fun2), newType , arg2);
+									
+									// apply the argument (e.g. 'Brasil')
+									e = lcalc.getExprBuilder().application(simple,
+											lcalc.getExprBuilder().variable(buildSymbol(arg3.accept(getConstantName), Types.E)));
+									
+									System.out.println("Lowered expression (modification by application):" + lcalc.format(e));
+								
+								} else {
+									throw new HigherOrderError("Modifier is not a constant" + lcalc.format(fun3));
+								}
+								return e;
+							}
+
+							@Override
+							public Expr variable(Symbol s) {
+								// the typical case of lowering, e.g. tall(man), but also of noun compounds - and that's why
+								// we decide on the new type dynamically. It's not always 'et', because in the case of noun
+								// compounds we may have a noun of type (et)(et)(et)et applied to a noun of type et, so the 
+								// return type is (et)(et)et. Note that NP compounds are handled differently, see below.
+								Expr e = lowerModification(s.getName(), lcalc.typeOf(fun2), s.getType().accept(getFunctionReturnType), arg2); 
+								System.out.println("Lowered expression (direct modification):" + lcalc.format(e));
+								return e;
+							}
 							
-							String newName = modifierName + getNewPredicateName(predicates);
-							Type newType = getNewPredicateType(modifierType,predicates);
-							
-							Expr newExpr = lcalc.getExprBuilder().variable(buildSymbol(newName, newType));
-							for (Predicate p : predicates) {
-								for (String argName : p.getArguments()) {
-									newExpr = lcalc.getExprBuilder().application(
-										newExpr,
-										lcalc.getExprBuilder().variable(buildSymbol(argName, Types.E))); 									
+							private Expr lowerModification(String modifierName, Type modifierType, Type targetType, Expr arg) {
+								try {
+									List<Predicate> predicates = parsePredicates(arg);
+									
+									String newName = modifierName + getNewPredicateName(predicates);
+									Type newType = getNewPredicateType(targetType,predicates);
+									
+									Expr newExpr = lcalc.getExprBuilder().variable(buildSymbol(newName, newType));
+									for (Predicate p : predicates) {
+										for (String argName : p.getArguments()) {
+											newExpr = lcalc.getExprBuilder().application(
+												newExpr,
+												lcalc.getExprBuilder().variable(buildSymbol(argName, Types.E))); 									
+										}
+									}
+									return newExpr;
+									
+								} catch (HigherOrderError e) {
+									return hash(lcalc.getExprBuilder().application(
+											lcalc.getExprBuilder().variable(
+													buildSymbol(modifierName,modifierType)), arg));
 								}
 							}
 							
-							return newExpr;
-						}
-						
-					});
+						});
+				} catch (HigherOrderError e) {
+					return hash(app2);
+				}
 				
 			} else if (lcalc.typeOf(fun2).accept(getFunctionArgType).equals(TypeETT) && lcalc.typeOf(arg2).equals(TypeETT)) {
 				// NP compound case - for example: John applied to Smith - John(Smith).
@@ -125,12 +142,20 @@ public class ILowerLambda implements LowerLambda {
 					System.out.println("NP compound: " + lcalc.format(e));
 					return e;
 				} else {
-					throw new HigherOrderError("NP compound with a non-constant argument: " + lcalc.format(app));
+					throw new HigherOrderError("NP compound with a non-constant argument: " + lcalc.format(app2));
 				}
 				
 			} else {
-				return app;
+				return app2;
 			}
+		}
+
+		private final Expr hash(final Expr app2) {
+			val hCode = lcalc.format(lcalc.toDeBruijn(app2)).hashCode();
+			val hName = ("h_" + hCode).replaceAll("-", "_");
+			val hType = lcalc.typeOf(app2);
+			val hVar  = lcalc.getExprBuilder().variable(buildSymbol(hName, hType));
+			return hVar;
 		}
 		
 		@Override
