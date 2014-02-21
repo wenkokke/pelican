@@ -60,14 +60,14 @@ Furthermore, $\text{WHO}_R$ returns an application of $\text{MOD}_I$.
 
 And lastly, $\text{WHO}_A$ and $\text{MOD}_A$, which handle appositive modification.
 
-> WHO_A \B:et.\P:(et)t.\A:et.(P:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e)))
 > MOD_A \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t WORD:et)
 
 This special instance of appositive modification handles sentences such as "Jan, a man, ran",
 in which a noun phrase is modified by a noun phrase. This could be solved by the insertion
 of "who is", which is exactly what this instance of $\text{WHO}_A$ does.
 
-> WHO_A \Q:(et)t.\P:(et)t.\A:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (AND:ttt (P:(et)t (EQ:eet x:e)) (Q:(et)t (EQ:eet x:e))))
+> WHO_A \B:et.\P:(et)t.\A:et.(A:et (IOTA:(et)e (\x:e.AND:ttt (P:(et)t (EQ:eet x:e)) (B:et x:e))))
+> WHO_A \Q:(et)t.\P:(et)t.\A:et.(A:et (IOTA:(et)e (\x:e.AND:ttt (P:(et)t (EQ:eet x:e)) (Q:(et)t (EQ:eet x:e)))))
 
 \subsection{Generalized Quantifiers}
 
