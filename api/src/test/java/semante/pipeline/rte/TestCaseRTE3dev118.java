@@ -49,7 +49,7 @@ public final class TestCaseRTE3dev118 extends APipelineTest {
 			val t23_in = word("P_R","in");
 			val t24_the = word("THE","the");
 			val t25_early = word("MOD_R","early");
-			val t26_1990s = word("N_1","1990s");
+			val t26_1990s = word("N_1","n1990s");
 
 			// create the vocabulary for the hypothesis;
 			val h00_beavers = word("NP","Beavers");

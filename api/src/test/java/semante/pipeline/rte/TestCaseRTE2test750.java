@@ -113,13 +113,13 @@ public final class TestCaseRTE2test750 extends APipelineTest {
 								t15_of
 								,
 								_(
-									t16_about
-									,
-									_(
-										t17_11_million
-										,
-										t18_people
-									)
+									t17_11_million	// assaf: I switched the order of '11 million' and 'about'.
+									,				// the reason is that '11 million' is annotated as NUMBER, i.e. 'a'
+									_(				// and 'about' as MOD_R. So we get a sequence of: A MOD_R N. 
+										t16_about	// Otherwise we would have got this sequence: MOD_R A N - which
+										,			// we do not support. In the end, 'about 11 million' needs to be
+										t18_people  // a big numeric modifier, and nouns need to be supported without
+									)				// an explicit article, so it will be simply MOD_R N.
 								)
 							)
 						)

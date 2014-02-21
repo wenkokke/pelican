@@ -20,8 +20,8 @@ public class TestCaseSimple07 extends ATestCase {
 		
 		ExpectedPredCalc epc = new ITestData.IExpectedPredCalc(
 				"all x0 (girl(x0) <-> x0=c1).",
-				"exists x0 (((man(x0) & ((adores(Jane, x0) & loves(c1, x0)) & extremely_adores_loves(Jane, c1, x0))) & nice_man_adores_loves_extremely_adores_loves(Jane, c1, Jane, x0)) & x0=John).",
-				"exists x0 (((man(x0) & tall_man(x0)) & fat_man_tall_man(x0)) & x0=John).");
+				"exists x0 (((man(x0) & ((adores(Jane, x0) & loves(c1, x0)) & extremely_adores_loves(Jane, c1, x0))) & nice_man_extremely_adores_loves(Jane, c1, x0)) & x0=John).",
+				"exists x0 (((man(x0) & tall_man(x0)) & fat_tall_man(x0)) & x0=John).");
 		return new ITestData(text, hypothesis, epc);
 	}
 

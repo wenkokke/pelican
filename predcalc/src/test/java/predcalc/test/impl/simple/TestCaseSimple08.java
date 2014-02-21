@@ -20,7 +20,7 @@ public class TestCaseSimple08 extends ATestCase {
 		
 		ExpectedPredCalc epc = new ITestData.IExpectedPredCalc(
 				"",
-				"exists x0 (((american(x0) & cuban_american(x0)) & ((loves(Mary, x0) & accused(x0)) & of_loves_accused(Mary, espionage, x0))) & pleads_innocent(x0)).",
+				"exists x0 (((american(x0) & cuban_american(x0)) & ((loves(Mary, x0) & accused(x0)) & of_loves_accused(espionage, Mary, x0))) & pleads_innocent(x0)).",
 				"exists x0 (american(x0) & (accused(x0) & of_accused(espionage, x0))).");
 		return new ITestData(text, hypothesis, epc);
 	}
