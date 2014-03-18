@@ -1,5 +1,6 @@
 \section{Stable Annotations}
 
+
 \subsection{Nouns and Noun Phrases}
 
 Nouns are annotated as $N$ or $N_2$ depending on their transitivity.
@@ -23,6 +24,7 @@ Montague type of $(et)t$.
 > $NPC_3$ \P:(et)t.\Q:(et)t.\R:(et)t.\A:et.A:et (((WORD:((et)t)((et)t)((et)t)e P:(et)t) Q:(et)t) R:(et)t)
 > $NPC_4$ \P:(et)t.\Q:(et)t.\R:(et)t.\S:(et)t.\A:et.A:et ((((WORD:((et)t)((et)t)((et)t)((et)t)e P:(et)t) Q:(et)t) R:(et)t) S:(et)t)
 
+
 \subsection{Verbs and Verb Phrases}
 
 Verbs are annotated based on their transitivity. The ambiguous definitions allow verbs
@@ -35,6 +37,24 @@ $z$, $x$ and $y$ respectively.
 > V_1   WORD:et
 > V_2   \Obj1:(et)t.\z:e.Obj1:(et)t (\x:e.WORD:eet x:e z:e)
 > V_3   \Obj1:(et)t.\Obj2:(et)t.\z:e.Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e))
+
+
+\subsubsection{The Gerund}
+
+Usually, the gerund should be interpreted as a verb that behaves as an
+intersective modifier.
+
+> GER_1 \A:et.\z:e. AND:ttt (A:et z:e) (WORD:et z:e)
+> GER_2 \Obj1:(et)t.\A:et.\z:e. AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.WORD:eet x:e z:e))
+> GER_3 \Obj1:(et)t.\Obj2:(et)t.\A:et.\z:e. AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e)))
+
+In other cases, the gerund will syntactically behave as a noun, but
+semantically still behave as a verb. These cases are easily taken care of.
+
+@ V_1 GER_1
+@ V_2 GER_2
+@ V_3 GER_3
+
 
 \subsection{Modifiers}
 
@@ -69,6 +89,7 @@ of "who is", which is exactly what this instance of $\text{WHO}_A$ does.
 
 > WHO_A \Q:(et)t.\P:(et)t.\A:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (AND:ttt (P:(et)t (EQ:eet x:e)) (Q:(et)t (EQ:eet x:e))))
 
+
 \subsection{Generalized Quantifiers}
 
 The definite article introduces an application of the $\iota$-function.
@@ -91,7 +112,15 @@ approached through the annotation $A$ and its alias $\text{SOME}$
 
 Finally, the annotation $\text{EVERY}$ introduces a univeral quantifier.
 
-> EVERY \A:et.\B:et.FORALL:(et)t (\x:e.IMPLIES:ttt (A:et x:e) (B:et x:e))
+> EVERY   \A:et.\B:et.FORALL:(et)t (\x:e.IMPLIES:ttt (A:et x:e) (B:et x:e))
+
+Lastly, there is the possibility to annotate an "unspecified"
+quantifier, i.e. one with no given implementation. This will trigger
+the hashing algorithm when used with prover9, and will prevent the
+entailment from being used in any negative examples.
+
+> EMPTYDET \A:et.\B:et.B:et (EMPTY:(et)e A:et)
+
 
 \subsection{The $\text{AND}$ Annotation}
 
@@ -100,7 +129,8 @@ reduces down to usage of the first-order primitive $(\land)$.
 
 > AND   AND:ttt
 > AND   \A:et.\B:et.\x:e.AND:ttt (A:et x:e) (B:et x:e)
-> AND   \P:(et)t.\Q:(et)t.\A:et.AND:ttt (P:(et)t A:et) (Q:(et)t A:et)
+< AND   \P:(et)t.\Q:(et)t.\A:et.AND:ttt (P:(et)t A:et) (Q:(et)t A:et)
+
 
 \subsection{The $\text{IS}$ Annotation}
 
@@ -119,6 +149,7 @@ The second definition of $\text{IS}$ is an identity function on predicates.
 
 > IS      \PRED:et.\x:e.PRED:et x:e
 > IS      \MOD:(et)et.\x:e.MOD:(et)et (\y:e.T:t) x:e
+
 
 \subsection{Prepositions}
 
@@ -171,6 +202,7 @@ a ditransitive verb, which is simply the identity function.\footnote{
 
 > TO    \P:(et)t.P:(et)t
 
+
 \subsection{Auxilliary Verbs}
 
 At the moment, auxilliary verbs are simply interpreted as identity functions, which means
@@ -186,7 +218,11 @@ that the problem of voice was out of the scope of the project.
 > V_AUX \A:((et)t)((et)t)et.A:((et)t)((et)t)et
 > V_AUX \A:((et)t)((et)t)((et)t)t.A:((et)t)((et)t)((et)t)t
 
+
+
+
 \section{Experimental Annotations}
+
 
 \subsection{Possessive Pronouns}
 
@@ -200,6 +236,13 @@ function that gets rid of the word "own" in sentences.
 
 > OWN   \A:et.A:et
 
+
+\subsection{Statements---Factuals and Anti-Factuals}
+
+> FACT   \c:t.\z:e. AND:ttt ((WORD:tet c:t) z:e) c:t
+> NOFACT \c:t.\z:e. ((WORD:tet c:t) z:e)
+
+
 \subsection{Numbers}
 
 Numbers are simply interpreted as existentials, which bars any numerical inferences.
@@ -210,12 +253,14 @@ The definition is equivalent to $\text{SOME}$, but may change in the future\foot
 
 > NUMBER \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
 
+
 \subsection{Dates}
 
 Dates are implemented as a special case of $NP$s. Therefore any temporal inferences
 based on dates are barred.
 
 > DATE   \A:et.A:et WORD:e
+
 
 \subsection{The $\text{IGNORE}$ Annotation}
 
@@ -229,8 +274,10 @@ subject to removal at any time.
 > IGNORE \GQ:(et)(et)t.GQ:(et)(et)t
 > IGNORE \M:(et)et.M:(et)et
 
+
 \subsection{Aliases of Annotations)
-@ N_1 N
-@ NP NP_D
+
+@ N_1   N
+@ NP    NP_D
 @ MOD_R MR
 @ MOD_I MI
