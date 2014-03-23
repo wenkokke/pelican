@@ -47,25 +47,26 @@ define 'pelican' do
       projects('settings')
     package :jar
 
-    task :deploy do
-      path = SemAnTE['Lexicon','Default']
-      host = SemAnTE['Server','Hostname']
-      user = SemAnTE['Server','Username']
-      puts pscp = "pscp #{path} #{user}@#{host}:/#{user}/.semante/#{File.basename(path)}"
-      fail unless system pscp
+    task :overwrite do
+      cmd1 = "cp -f #{_(:src,:main,:resources,'default.lexicon')} #{SemAnTE["Lexicon"]["Default"]}"
+      cmd2 = "cp -f #{_(:src,:main,:resources,'legacy.lexicon')} #{SemAnTE["Lexicon"]["Legacy"]}"
+      puts cmd1
+      puts cmd2
+      system cmd1
+      system cmd2
     end
 
-    pdffile = _(:target,'lexicon.pdf')
-    lexicon = _(:src,:main,:resources,'default.lex')
-    headers = _(:src,:main,:resources,'default.preamble')
+    pdffile  = _(:target,'lexicon.pdf')
+    lexicon  = _(:src,:main,:resources,'default.lexicon')
+    preamble = _(:src,:main,:resources,'default.preamble')
+    lex2tex  = _(:lex2tex,:dist,:build,:lex2tex,'lex2tex')
 
-    file pdffile => ['lex2tex:compile',lexicon,headers] do
+    file pdffile => [lexicon,preamble,lex2tex] do
       mkdir_p _(:target)
-      convert = project('lex2tex')._(:target,'lex2tex')
       texfile = _(:target,'lexicon.tex')
-      puts render = "#{convert} < #{lexicon} > #{texfile}"
+      puts render = "#{lex2tex} < #{lexicon} > #{texfile}"
       fail unless system render
-      puts pandoc = "pandoc -N -H #{headers} -o #{pdffile} #{texfile}"
+      puts pandoc = "pandoc -N -H #{preamble} -o #{pdffile} #{texfile}"
       fail unless system pandoc
     end
 

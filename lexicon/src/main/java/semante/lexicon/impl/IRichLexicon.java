@@ -5,11 +5,11 @@ import static lombok.AccessLevel.PRIVATE;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.NoSuchElementException;
-
 import java.io.InputStream;
 
 import lambdacalc.STL;
 import lombok.Delegate;
+import lombok.ToString;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 import semante.lexicon.Lexicon;
@@ -18,6 +18,7 @@ import semante.lexicon.Word;
 import semante.settings.Settings;
 import semante.settings.SettingsException;
 
+@ToString
 @FieldDefaults(makeFinal=true, level=PRIVATE)
 public class IRichLexicon implements RichLexicon {
 	

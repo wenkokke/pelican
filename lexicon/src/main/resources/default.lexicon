@@ -44,17 +44,17 @@ $z$, $x$ and $y$ respectively.
 Usually, the gerund should be interpreted as a verb that behaves as an
 intersective modifier.
 
-> GER_1 \A:et.\z:e. AND:ttt (A:et z:e) (WORD:et z:e)
-> GER_2 \Obj1:(et)t.\A:et.\z:e. AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.WORD:eet x:e z:e))
-> GER_3 \Obj1:(et)t.\Obj2:(et)t.\A:et.\z:e. AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e)))
+% [John [travelled walking]] => walking(travelled)(john)
+> GERM_1  \A:et.\z:e. AND:ttt (WORD:(et)et A:et z:e) (A:et z:e)
+> GERM_2  \Obj1:(et)t.\A:et.\z:e. AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.WORD:eet x:e z:e))
+> GERM_3  \Obj1:(et)t.\Obj2:(et)t.\A:et.\z:e. AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e)))
 
 In other cases, the gerund will syntactically behave as a noun, but
 semantically still behave as a verb. These cases are easily taken care of.
 
-@ V_1 GER_1
-@ V_2 GER_2
-@ V_3 GER_3
-
+> GER_1  WORD:et
+> GER_2  \Obj1:(et)t.\z:e.Obj1:(et)t (\x:e.WORD:eet x:e z:e)
+> GER_3  \Obj1:(et)t.\Obj2:(et)t.\z:e.Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e))
 
 \subsection{Modifiers}
 
@@ -192,6 +192,15 @@ in Boston walks" is treated as $\iota x. \text{man}(x) \land \text{in}(x,\text{m
 
 > P_R   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:e(et)et y:e A:et x:e))
 > P_I   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:eet y:e x:e))
+
+Then there is a special-case annotation for the cases where a gerund
+is used for the prepositional modification.
+
+% [John [leaves [by walking]]]
+% by : NP -> N -> N
+% by(john,leaves,walking)
+
+> P_R   \A:et.\B:et.\x:e.AND:ttt (AND:ttt (A:et x:e) (B:et x:e)) (WORD:(et)(et)et A:et B:et x:e)
 
 Finally, there is a special-case annotation for $\text{TO}$ when used to denote the object of
 a ditransitive verb, which is simply the identity function.\footnote{

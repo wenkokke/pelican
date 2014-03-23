@@ -18,6 +18,7 @@ import lambdacalc.DeBruijn;
 import lambdacalc.STL;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
+import lombok.ToString;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 import semante.lexicon.Category;
@@ -208,5 +209,26 @@ public final class ILexicon implements Lexicon {
 		builder.addAll(words.keySet());
 		builder.addAll(categories.keySet());
 		return builder.build();
+	}
+	
+	@Override
+	public final String toString() {
+		val acc = new StringBuilder();
+		acc.append("Lexicon:\n");
+		for (val word : words.values()) {
+			acc.append(" - ");
+			acc.append(word.getName());
+			acc.append("[");
+			acc.append(word.getDenotations().size());
+			acc.append("]\n");
+		}
+		for (val category : categories.values()) {
+			acc.append(" - ");
+			acc.append(category.getName());
+			acc.append("[");
+			acc.append(category.getDenotations().size());
+			acc.append("]\n");
+		}
+		return acc.toString();
 	}
 }

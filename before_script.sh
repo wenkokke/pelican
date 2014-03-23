@@ -28,6 +28,7 @@ cat <<EOF > "${SEMANTE_HOME}/default.yml"
 SemAnTE:
   Lexicon:
     Default:  '${SEMANTE_HOME}/default.lexicon'
+    Legacy:   '${SEMANTE_HOME}/legacy.lexicon'
   Prover:
     Location: '${SEMANTE_HOME}/ladr'
 EOF
@@ -35,6 +36,7 @@ cat <<EOF > "${SEMANTE_HOME}/legacy.yml"
 SemAnTE:
   Lexicon:
     Default:  '${SEMANTE_HOME}/legacy.lexicon'
+    Legacy:   '${SEMANTE_HOME}/legacy.lexicon'
   Prover:
     Location: '${SEMANTE_HOME}/ladr'
 EOF

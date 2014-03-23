@@ -41,7 +41,7 @@ data Symbol  = Symbol Name Type deriving (Eq)
 data Type    = E | T | Type :>: Type deriving (Eq)
 
 instance Show  Tag    where show    (Tag t)  = t
-instance LaTeX Tag    where toLaTeX (Tag t)  = latexTag t
+instance LaTeX Tag    where toLaTeX (Tag t)  = latexTag (filter (/='$') t)
 instance Show  Name   where show    (N1 n) = n
                             show    (N2 n i) = n++i
 instance LaTeX Name   where toLaTeX (N1 n) = wrapText n
@@ -61,12 +61,12 @@ latexTag str = maybe plain mathm split
   -- formatting of the tag string
   plain = "\\textbf{"++str++"}"
   mathm = \(a,b) -> "\\textbf{"++a++"}$_{"++b++"}$"
-  
+
   -- splitting of the tag string
   split = do idx <- elemIndex '_' str
              let (x,_:y) = splitAt idx str
              return (x,y)
-             
+
 wrapText :: String -> String
 wrapText t = if length t <= 1 then t else "\\text{"++t++"}"
 
@@ -87,12 +87,12 @@ data Context = Ctx {
   getNeg     :: String,
   getEq      :: String,
   getIota    :: String
-  
+
   }
 
 latexCtx :: Context
 latexCtx = emptyCtx {
-  getLambda  = "\\lambda ", 
+  getLambda  = "\\lambda ",
   getSep     = ".",
   getApp     = "\\; ",
   getExists  = "\\exists ",
@@ -104,10 +104,10 @@ latexCtx = emptyCtx {
   getEq      = "\\equiv ",
   getIota    = "\\iota "
   }
-  
+
 asciiCtx :: Context
 asciiCtx = emptyCtx {
-  getLambda  = "\\", 
+  getLambda  = "\\",
   getSep     = ".",
   getApp     = " ",
   getExists  = "exists ",
@@ -119,7 +119,7 @@ asciiCtx = emptyCtx {
   getEq      = "=",
   getIota    = "iota "
   }
-  
+
 unicodeCtx :: Context
 unicodeCtx = emptyCtx {
   getLambda  = "λ",
@@ -134,7 +134,7 @@ unicodeCtx = emptyCtx {
   getEq      = "≡",
   getIota    = "ɩ"
   }
-  
+
 -- |Generic show function for semantic types.
 showTP :: (Type -> String) -> Type -> String
 showTP _ E = "e"
@@ -150,7 +150,7 @@ showLT o p ctx (Application (Variable (Symbol (N1 "IOTA") _)) x)
   = (getIota ctx) ++ wrap o p x
 showLT o p ctx (Application (Variable (Symbol (N1 "EXISTS") _)) (Abstraction s x))
   = (getExists ctx) ++ o s ++ (getSep ctx) ++ p x
-showLT o p ctx (Application (Variable (Symbol (N1 "FORALL") _)) (Abstraction s x)) 
+showLT o p ctx (Application (Variable (Symbol (N1 "FORALL") _)) (Abstraction s x))
   = (getForAll ctx) ++ o s ++ (getSep ctx) ++ p x
 showLT o p ctx (Application (Application (Variable (Symbol (N1 "EQ") _)) x) y)
   = wrap o p x ++ (getEq ctx)      ++ wrap o p y
@@ -160,7 +160,7 @@ showLT o p ctx (Application (Application (Variable (Symbol (N1 "OR") _)) x) y)
   = wrap o p x ++ (getOr ctx)      ++ wrap o p y
 showLT o p ctx (Application (Application (Variable (Symbol (N1 "IMPLIES") _)) x) y)
   = wrap o p x ++ (getImplies ctx) ++ wrap o p y
-  
+
 showLT o p ctx (Abstraction s x) = (getLambda ctx) ++ o s ++ (getSep ctx) ++ p x
 showLT o p ctx (Application f x@(Variable _)) = p f ++ (getApp ctx) ++ p x
 showLT o p ctx (Application f x)              = p f ++ (getApp ctx) ++ wrap o p x
@@ -188,11 +188,8 @@ pSymbol = Symbol <$> pName <* pColon <*> pType
 
 -- |Parse a function name.
 pTag :: Parser Tag
-pTag = Tag <$> ((:) <$> pLetter <*> pMany pOther)
-  where
-  pOther = pLetter <<|> pDigit <<|> pUS
-  pUS = pSym '_'
-  
+pTag = Tag <$> pSome (pLetter <<|> pDigit <<|> pSym '_' <<|> pSym '$')
+
 -- |Parse a function name.
 pName :: Parser Name
 pName = (N1 <$> pSome pLetter) <??> (nplus <$> pSome pDigit)
@@ -208,7 +205,7 @@ pType = pFunction <|> pAtomic
   pAtomic = pure E <* pSym 'e'
        <<|> pure T <* pSym 't'
        <<|> pParens pFunction
-  
+
   pFunction :: Parser Type
   pFunction = (:>:) <$> pAtomic <*> pType
 
@@ -225,7 +222,7 @@ pTerm = let
     pSep    = pSpace *> pSym '.'  <* pSpace
 
   in foldl Application <$> pAtomic <*> pMany (pSpace1 *> pAtomic)
-    
+
 -- |Parse a lexicon entry.
 pEntry :: Parser Entry
 pEntry = Entry <$> (pBird *> pTag <* pSpace1) <*> pTerm
