@@ -8,7 +8,7 @@ import semante.Entailment;
 import semante.IEntailment;
 import semante.pipeline.APipelineTest;
 
-public final class TestCaseJan01 extends APipelineTest {
+public final class TestCase01 extends APipelineTest {
 
 		@Test
 		public final void prove() throws Exception {
@@ -23,10 +23,10 @@ public final class TestCaseJan01 extends APipelineTest {
 		public final Entailment createJan01() throws Exception {
 
 			// create the vocabulary for the text;
-			val emptydet   = word("EMPTYDET","");
-			val people = word("N","people");
-			val ran    = word("V_1","ran");
-			val fast   = word("MOD_R","fast");
+			val emptydet = word("EMPTYDET","");
+			val people   = word("N","people");
+			val ran      = word("V_1","ran");
+			val fast     = word("MOD_R","fast");
 
 			// create the tree structure for the text;
 			val tt =
