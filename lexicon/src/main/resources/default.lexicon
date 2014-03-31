@@ -165,7 +165,7 @@ Use of this annotation will assume that the noun in the sentence is a transitive
 the moment that means that it has to be explicitly annotated with with $N_2$---and apply
 the transitive noun, i.e $\iota x. widow(John)(x)$.
 
-> OF    \P:(et)t.\R:eet.\z:e.P:(et)t (\x:e.R:eet z:e x:e)
+> OF    \P:(et)t.\R:eet.\z:e.P:(et)t (\x:e.R:eet x:e z:e)
 
 The annotation $S$ or $\text{GEN}$ is to be used for annotating "'s"; its meaning is determined
 based on the type of the noun.
@@ -176,7 +176,7 @@ For relational nouns, it behaves as $\text{OF}$, e.g. "John's wife" becomes $\io
 
 For non-relational nouns, e.g. in "John's dog", it behaves as the general $P_R$ discussed below.
 
-> GEN   \P:(et)t.\N:et.\V:et.IOTA:(et)e (\z:e.AND:ttt (V:et z:e) (P:(et)t (\x:e.R:eet z:e x:e)))
+> GEN   \P:(et)t.\N:et.\V:et.IOTA:(et)e (\z:e.AND:ttt (V:et z:e) (P:(et)t (\x:e.R:eet x:e z:e)))
 
 % [John [walks [in Boston]]]
 % in : NP -> N -> N
