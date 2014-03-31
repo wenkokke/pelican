@@ -103,6 +103,7 @@ public class IExtractIotas implements ExtractIotas {
 	public ExprForm<Expr> extract(Expr a) {
 		usedIotas.clear();
 		pragmatics.clear();
+		counter.reset();
 		return new IExprForm<Expr>(a.accept(extracter), pragmatics);
 	}
 	
@@ -116,6 +117,7 @@ public class IExtractIotas implements ExtractIotas {
 	private class Counter {
 		private int c=0;
 		private int get() { c++; return c; }
+		private void reset() {c=0; };
 	}
 
 }
