@@ -41,8 +41,9 @@ public class ILambda2Pred implements Lambda2Pred {
 		for (Expr p : form.getPragmatics()) {
 			prags.add((Formula) l2p.convert(lower.rewrite(p)));
 		}
+		// apparently, this is not safe:
+		// ClassCastException: IFOLExpr$Variable cannot be case to FOLExpr$Formula
 		Formula sem = (Formula) l2p.convert(lower.rewrite(form.getSemantics()));
-		
 		return new IExprForm<Formula>(sem, prags);
 	}
 

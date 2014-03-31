@@ -45,16 +45,17 @@ Usually, the gerund should be interpreted as a verb that behaves as an
 intersective modifier.
 
 % [John [travelled walking]] => walking(travelled)(john)
-> GERM_1  \A:et.\z:e. AND:ttt (WORD:(et)et A:et z:e) (A:et z:e)
-> GERM_2  \Obj1:(et)t.\A:et.\z:e. AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.WORD:eet x:e z:e))
-> GERM_3  \Obj1:(et)t.\Obj2:(et)t.\A:et.\z:e. AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e)))
+
+> GER_1  \A:et.\z:e.AND:ttt (WORD:(et)et A:et z:e) (A:et z:e)
+> GER_2  \Obj1:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.WORD:eet x:e z:e))
+> GER_3  \Obj1:(et)t.\Obj2:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e)))
 
 In other cases, the gerund will syntactically behave as a noun, but
 semantically still behave as a verb. These cases are easily taken care of.
 
-> GER_1  WORD:et
-> GER_2  \Obj1:(et)t.\z:e.Obj1:(et)t (\x:e.WORD:eet x:e z:e)
-> GER_3  \Obj1:(et)t.\Obj2:(et)t.\z:e.Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e))
+@ V_1 GER_1
+@ V_2 GER_2
+@ V_3 GER_3
 
 \subsection{Modifiers}
 
@@ -107,8 +108,8 @@ is already a definite\footnote{
 The indefinite article introduces an existential quantifier, and can be
 approached through the annotation $A$ and its alias $\text{SOME}$
 
-> A       \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
 > SOME    \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
+@ SOME A
 
 Finally, the annotation $\text{EVERY}$ introduces a univeral quantifier.
 
@@ -248,8 +249,8 @@ function that gets rid of the word "own" in sentences.
 
 \subsection{Statements---Factuals and Anti-Factuals}
 
-> FACT   \c:t.\z:e. AND:ttt ((WORD:tet c:t) z:e) c:t
-> NOFACT \c:t.\z:e. ((WORD:tet c:t) z:e)
+> FACT   \c:t.\z:e.AND:ttt ((WORD:tet c:t) z:e) c:t
+> NOFACT \c:t.\z:e.((WORD:tet c:t) z:e)
 
 
 \subsection{Numbers}
@@ -275,8 +276,10 @@ based on dates are barred.
 
 The $\text{IGNORE}$ annotation is equal to an identity function. It should not be
 used with the exception of experimentation and temporary solutions. It is may be
-subject to removal at any time.
+subject to removal at any time. Also, there are a lot of separate definitions, as
+we don't support polymorphism in the Java implementation.
 
+> IGNORE \c:t.c:t
 > IGNORE \x:e.x:e
 > IGNORE \A:et.A:et
 > IGNORE \P:(et)t.P:(et)t

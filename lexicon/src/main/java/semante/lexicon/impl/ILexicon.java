@@ -18,19 +18,25 @@ import lambdacalc.DeBruijn;
 import lambdacalc.STL;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
-import lombok.ToString;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import semante.lexicon.Category;
 import semante.lexicon.Lexicon;
 import semante.lexicon.Word;
 
+import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.io.CharStreams;
+import com.google.common.io.Files;
 
 @FieldDefaults(makeFinal=true,level=PRIVATE)
 public final class ILexicon implements Lexicon {
 
+	@NonFinal String filename;
+	
 	STL						stl;
 	Map<String, IWord>		words;
 	Map<String, ICategory>	categories;
@@ -151,37 +157,18 @@ public final class ILexicon implements Lexicon {
 	 */
 	public ILexicon(final String fn, final STL stl) throws FileNotFoundException, IOException {
 		this(new FileInputStream(fn), stl);
+		this.filename = fn;
 	}
 
 	/**
 	 * Most general constructor accepting an InputStream.
 	 * @throws IOException 
 	 */
-	@SneakyThrows(UnsupportedEncodingException.class)
 	public ILexicon(final InputStream is, final STL stl) throws IOException {
-
-		// assign the parsers.
-		this.stl        = stl;
-		this.words      = Maps.newHashMap();
-		this.categories = Maps.newHashMap();
-
-		// open the lexion file.
-		@Cleanup
-		val rd =
-			new BufferedReader(
-				new InputStreamReader(is, "UTF-8"));
-
-		// process the lexicon file.
-		String line;
-		while ((line = rd.readLine()) != null) {
-			try {
-				parse(line);
-			}
-			catch (Exception e) {
-				
-			}
-		}
+		this(CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8)).split("\n"),stl); 
 	}
+	
+	
 	
 	/**
 	 * Most general constructor accepting a list of lines.
@@ -199,6 +186,7 @@ public final class ILexicon implements Lexicon {
 				parse(line);
 			}
 			catch (Exception e) {
+				System.err.printf("Error in %s\n%s\n", e.getMessage().replace('\n', ' '), line);
 			}
 		}
 	}
@@ -215,6 +203,10 @@ public final class ILexicon implements Lexicon {
 	public final String toString() {
 		val acc = new StringBuilder();
 		acc.append("Lexicon:\n");
+		if (filename != null) {
+			acc.append(" file: " + filename);
+		}
+		acc.append(" words:\n");
 		for (val word : words.values()) {
 			acc.append(" - ");
 			acc.append(word.getName());
@@ -222,6 +214,7 @@ public final class ILexicon implements Lexicon {
 			acc.append(word.getDenotations().size());
 			acc.append("]\n");
 		}
+		acc.append(" categories:\n");
 		for (val category : categories.values()) {
 			acc.append(" - ");
 			acc.append(category.getName());

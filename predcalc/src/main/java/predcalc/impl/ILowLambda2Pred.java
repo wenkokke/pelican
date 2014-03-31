@@ -29,8 +29,8 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 	private Expr nowsmashing;
 
 	public ILowLambda2Pred(PredCalc pcalc, STL lcalc) {
-		this.pcalc = pcalc;
-		this.lcalc = lcalc;
+		this.pcalc     = pcalc;
+		this.lcalc     = lcalc;
 	};
 
 	private Visitor<FOLExpr> smash = new Visitor<FOLExpr>() {
@@ -46,11 +46,14 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 				return new IFOLExpr.Predicate(lookup(s.getName()), new ArrayList<Term>());
 			} else if (typeVector(s.getType(), Types.E, Types.E)) {
 				// Function
-				return new IFOLExpr.Function(lookup(s.getName()), new ArrayList<Term>());
+				return new IFOLExpr.Function(lookup(s.getName()), new ArrayList<Term>());	
 			} else {
+				// TODO
+				// 	Do we really need a case here for (non-)factives?
+				// 	We would like to compile `say:tet c:t z:e` to `say(c,z)`
 				throw new UnsupportedOperationException("Unknown type: "+ lcalc.format(s.getType()));
 			}
-		}
+		}  
 
 		@Override public FOLExpr application(final Expr f, final Expr b) {
 			// Look for a quantifier
@@ -67,10 +70,12 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 					}
 				}
 				// Normal Application
-				@Override public FOLExpr application(Expr f2, Expr arg2)
-				{ return f.accept(smash).add(b.accept(smash)); }
-				@Override public FOLExpr variable(Symbol s2)
-				{ return f.accept(smash).add(b.accept(smash)); }
+				@Override public FOLExpr application(Expr f2, Expr arg2) {
+					return f.accept(smash).add(b.accept(smash));
+				}
+				@Override public FOLExpr variable(Symbol s2) {
+					return f.accept(smash).add(b.accept(smash));
+				}
 			});
 		}
 
@@ -123,6 +128,7 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 		return s.equals(t);
 	}
 
+	// TODO please add comment describing the function
 	private Boolean typeVector(final Type t, final Type vector, final Type end) {
 		if (t.equals(end)) {
 			return true;

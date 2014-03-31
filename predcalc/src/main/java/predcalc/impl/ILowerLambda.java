@@ -23,7 +23,7 @@ import predcalc.LowerLambda;
 @FieldDefaults(makeFinal=true)
 public class ILowerLambda implements LowerLambda {
 
-	protected STL lcalc;
+	protected STL lcalc; 
 	
 	public List<String> getComments() {
 		// TODO provide actual implementation
