@@ -11,6 +11,7 @@ import lambdacalc.STL;
 import lambdacalc.Symbol;
 import lambdacalc.Type;
 import lambdacalc.Types;
+import lambdacalc.Expr.Visitor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import predcalc.ExprForm;
@@ -34,11 +35,17 @@ public class IExtractIotas implements ExtractIotas {
 	
 	private Map<String,Expr> usedIotas = new HashMap<String,Expr>();
 	
+	private Visitor<Boolean> isIOTA = new Visitor<Boolean>() {
+		@Override public Boolean abstraction(Symbol s, Expr body) 	{ return false; }
+		@Override public Boolean application(Expr fun, Expr arg) 	{ return false; }
+		@Override public Boolean variable(Symbol s) 				{ return s.getName().equals("IOTA");}
+	};
+
 	// use a pragmatics list state, reset every call
 	private ExprBuilder extracter = new ExprBuilder() {
 		@Override
 		public Expr application(final Expr f, final Expr arg) {
-			if (lcalc.typeOf(f).equals(Types.ET_E)) {
+			if (lcalc.typeOf(f).equals(Types.ET_E) && f.accept(isIOTA)) {
 				// iota (return a new constant)
 
 				ExprBuilder b = lcalc.getExprBuilder();

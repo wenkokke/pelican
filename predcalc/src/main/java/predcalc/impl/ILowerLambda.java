@@ -152,6 +152,12 @@ public class ILowerLambda implements LowerLambda {
 							hash(arg2,Types.E));
 				System.out.println("Lowering TET to T application: " + lcalc.format(e));
 				return e;
+			} else if ( fun2.accept(isConstant) &&
+					lcalc.typeOf(fun2).equals(Types.ET_E) && 
+					lcalc.typeOf(arg2).equals(Types.ET)) {
+				Expr e = hash(app2);
+				System.out.println("Lowering (ET)E to ET application: " + lcalc.format(e));
+				return e;
 			} else {
 				return app2;
 			}
