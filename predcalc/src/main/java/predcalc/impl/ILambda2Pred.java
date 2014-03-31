@@ -8,6 +8,7 @@ import lambdacalc.STL;
 import lombok.experimental.FieldDefaults;
 import predcalc.ExprForm;
 import predcalc.ExtractIotas;
+import predcalc.FOLExpr;
 import predcalc.FOLExpr.Formula;
 import predcalc.Lambda2Pred;
 import predcalc.LowLambda2Pred;
@@ -43,7 +44,17 @@ public class ILambda2Pred implements Lambda2Pred {
 		}
 		// apparently, this is not safe:
 		// ClassCastException: IFOLExpr$Variable cannot be case to FOLExpr$Formula
-		Formula sem = (Formula) l2p.convert(lower.rewrite(form.getSemantics()));
+		Expr rewritten = lower.rewrite(form.getSemantics());
+		
+		System.out.println("Rewritten: [" + lcalc.format(rewritten) + "]");
+		
+		FOLExpr converted = l2p.convert(rewritten);
+		
+		System.out.println(converted.getClass().getSimpleName());
+		
+		
+		
+		Formula sem = (Formula) converted;
 		return new IExprForm<Formula>(sem, prags);
 	}
 
