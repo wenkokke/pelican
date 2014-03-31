@@ -35,6 +35,7 @@ public class ILowerLambda implements LowerLambda {
 		final LowerableFunction lowerableFunction = new LowerableFunction(Types.ET);
 		
 		final Type TypeETT = new IFunction(Types.ET,Types.T);
+		final Type TypeTET = new IFunction(Types.T,Types.ET);
 		
 		@Override
 		public Expr application(Expr fun, Expr arg) {
@@ -45,7 +46,6 @@ public class ILowerLambda implements LowerLambda {
 
 			if (lcalc.typeOf(fun2).accept(lowerableFunction) && lcalc.typeOf(arg2).equals(lowerableFunction.getType())) {
 				System.out.println("Lowerable application: the function  ["+ lcalc.format(fun2) + "] is applied to an argument of type " + lcalc.format(lcalc.typeOf(arg2)) + ": [" + lcalc.format(arg2) + "]");
-				
 				
 				try {
 					return fun2.accept(new ExprBuilder() {
@@ -144,19 +144,30 @@ public class ILowerLambda implements LowerLambda {
 				} else {
 					throw new HigherOrderError("NP compound with a non-constant argument: " + lcalc.format(app2));
 				}
-				
+			} else if ( fun2.accept(isConstant) &&
+						lcalc.typeOf(fun2).equals(TypeTET) && 
+						lcalc.typeOf(arg2).equals(Types.T)) {
+				Expr e = lcalc.getExprBuilder().application(
+							lcalc.getExprBuilder().variable(buildSymbol(fun2.accept(getConstantName),Types.EET)),
+							hash(arg2,Types.E));
+				System.out.println("Lowering TET to T application: " + lcalc.format(e));
+				return e;
 			} else {
 				return app2;
 			}
 		}
 
-		private final Expr hash(final Expr app2) {
-			val hCode = lcalc.format(lcalc.toDeBruijn(app2)).hashCode();
+		private final Expr hash(final Expr e) {
+			return hash(e,lcalc.typeOf(e));
+		}
+		
+		private final Expr hash(final Expr e, final Type hType) {
+			val hCode = lcalc.format(lcalc.toDeBruijn(e)).hashCode();
 			val hName = ("h_" + hCode).replaceAll("-", "_");
-			val hType = lcalc.typeOf(app2);
 			val hVar  = lcalc.getExprBuilder().variable(buildSymbol(hName, hType));
 			return hVar;
 		}
+
 		
 		@Override
 		public Expr abstraction(Symbol s, Expr body) {
