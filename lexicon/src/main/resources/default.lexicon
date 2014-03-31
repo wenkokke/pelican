@@ -172,19 +172,24 @@ based on the type of the noun.
 
 For relational nouns, it behaves as $\text{OF}$, e.g. "John's wife" becomes $\iota x. wife(John)(x)$.
 
-> GEN   \P:(et)t.\R:eet.\A:et.IOTA:(et)e (\z:e.AND:ttt (P:(et)t (\x:e.R:eet x:e z:e)) (A:et z:e))
+> GEN   \P:(et)t.\R:eet.IOTA:(et)e (\z:e.P:(et)t (\x:e.R:eet x:e z:e))
+> GEN   \P:(et)t.\R:eet.\A:et.A:et (IOTA:(et)e (\z:e.P:(et)t (\x:e.R:eet x:e z:e)))
 
 For non-relational nouns, e.g. in "John's dog", it behaves as the general $P_R$ discussed below.
 
-> GEN   \P:(et)t.\N:et.\V:et.IOTA:(et)e (\z:e.AND:ttt (V:et z:e) (P:(et)t (\x:e.R:eet x:e z:e)))
+% [[The [dog [of John]]] walks]
+% of(x,dog,john) /\ walks(x)
+
+> GEN   \P:(et)t.\N:et.IOTA:(et)e (\x:e.AND:ttt (N:et x:e) (P:(et)t (\y:e.of:e(et)et y:e N:et x:e)))
+> GEN   \P:(et)t.\N:et.\A:et.A:et (IOTA:(et)e (\x:e.AND:ttt (N:et x:e) (P:(et)t (\y:e.of:e(et)et y:e N:et x:e))))
 
 % [John [walks [in Boston]]]
 % in : NP -> N -> N
-% in(walk,john,boston) /\ walk(john)
+% in(john,walk,boston) /\ walk(john)
 
 % [[The [man [in Boston]]] walks]
 % in : NP -> N -> N
-% ix. in(man,x,boston) /\ walk(x)
+% ix. in(x,man,boston) /\ walk(x)
 
 Other prepositions are denoted by triples. For instance, "John walks in Boston" is treated
 as $\text{walk}(\text{John}) \land \text{in}(\text{John},\text{walk},\text{boston})$; whereas "The man
