@@ -28,11 +28,11 @@ public abstract class ATestCase {
 
 	@Before
 	public final void setUpPipeline() throws IOException {
-		lcalc = 	new STL();
-		pcalc = 	new IPredCalc();
-		stl2p = 	new ILambda2Pred(pcalc, lcalc);
-		settings = 	new ISettings();
-		prover = 	new IProver(settings, pcalc);
+		lcalc    = new STL();
+		pcalc    = new IPredCalc();
+		stl2p    = new ILambda2Pred(pcalc, lcalc);
+		settings = new ISettings();
+		prover   = new IProver(settings, pcalc);
 
 	}
 	

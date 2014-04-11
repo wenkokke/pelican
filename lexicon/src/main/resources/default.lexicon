@@ -47,8 +47,8 @@ intersective modifier.
 % [John [travelled walking]] => walking(travelled)(john)
 
 > GER_1  \A:et.\z:e.AND:ttt (WORD:(et)et A:et z:e) (A:et z:e)
-> GER_2  \Obj1:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.WORD:eet x:e z:e))
-> GER_3  \Obj1:(et)t.\Obj2:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e)))
+> GER_2  \Obj1:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.WORD:e(et)et x:e A:et z:e))
+> GER_3  \Obj1:(et)t.\Obj2:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:ee(et)et y:e x:e A:et z:e)))
 
 In other cases, the gerund will syntactically behave as a noun, but
 semantically still behave as a verb. These cases are easily taken care of.
