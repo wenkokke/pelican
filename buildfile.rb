@@ -12,9 +12,9 @@ SLF4J       = struct(
   :api     => 'org.slf4j:slf4j-api:jar:1.7.3',
   :simple  => 'org.slf4j:slf4j-simple:jar:1.7.3')
 PIPELINE    = struct(
-  :api     => 'pipeline:pipeline-api:jar:2.1.1',
-  :util    => 'pipeline:pipeline-util:jar:2.1.1')
-LAMBDACALC  = 'lambdacalc:lambdacalc:jar:1.1.0'
+  :api     => 'pipeline:pipeline-api:jar:3.0.1',
+  :util    => 'pipeline:pipeline-util:jar:3.0.1')
+LAMBDACALC  = 'lambdacalc:lambdacalc:jar:1.1.4'
 
 task 'deploy-lexicon' => 'pelican:lexicon:deploy'
 task 'render-lexicon' => 'pelican:lexicon:render'
@@ -37,7 +37,7 @@ define 'pelican' do
     compile.with LOMBOK,GUAVA,PIPELINE,LAMBDACALC,
       projects('lexicon','predcalc','settings')
     test.with JPARSEC,SNAKE_YAML,SLF4J,compile.dependencies
-    test.exclude 'semante.flattener.rte.*'
+    test.include 'semante.pipeline.test.*'
     package :jar
   end
 
@@ -75,7 +75,7 @@ define 'pelican' do
 
   # implementation of first order logic and smashing from hol to fol
   define 'predcalc' do
-    compile.with LOMBOK,SLF4J,LAMBDACALC,projects('settings')
+    compile.with LOMBOK,GUAVA,SLF4J,LAMBDACALC,projects('settings')
     test.with JPARSEC,GUAVA,SNAKE_YAML,SLF4J,compile.dependencies
     package :jar
   end
