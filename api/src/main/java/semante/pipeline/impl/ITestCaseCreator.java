@@ -1,12 +1,18 @@
 package semante.pipeline.impl;
 
 import static lombok.AccessLevel.PRIVATE;
+import static semante.pipeline.impl.IPair.pair;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
+import semante.pipeline.Pair;
 import semante.pipeline.SimpleBinaryTree;
 import semante.pipeline.TestCaseCreator;
 
@@ -21,17 +27,22 @@ public final class ITestCaseCreator implements TestCaseCreator {
 			final String name,
 			final String comment,
 			final SimpleBinaryTree<Annotation> text,
-			final SimpleBinaryTree<Annotation> hypothesis,
-			final String subsumptions) {
+			final SimpleBinaryTree<Annotation> hypo,
+			final Iterable<Pair<SimpleBinaryTree<Annotation>,SimpleBinaryTree<Annotation>>> subs) {
 		
 		// create a labeller;
 		val lbl = ILabeller.labeller();
 		
+		val builder = ImmutableList.<Pair<BinaryTree<Integer,Annotation>,BinaryTree<Integer,Annotation>>> builder();
+		for (val sub: subs) {
+			builder.add(pair(lbl.label(sub.getFirst()),lbl.label(sub.getSecond())));
+		}
+		
 		// label the pair trees and forward;
 		return createTestCase(name, comment,
 			lbl.label(text),
-			lbl.label(hypothesis),
-			subsumptions);
+			lbl.label(hypo),
+			builder.build());
 	}
 
 	@Override
@@ -39,23 +50,21 @@ public final class ITestCaseCreator implements TestCaseCreator {
 			final String name,
 			final String comment,
 			final BinaryTree<ID, Annotation> text,
-			final BinaryTree<ID, Annotation> hypothesis,
-			final String subsumptions) {
+			final BinaryTree<ID, Annotation> hypo,
+			final Iterable<Pair<BinaryTree<ID, Annotation>,BinaryTree<ID, Annotation>>> subs) {
 		
 		// create a string buffer for the test;
 		test = new StringBuilder();
 		
 		// create the java source code;
-		line("package semante.pipeline.test.rte;");
+		line("package semante.pipeline.test;");
 		line();
-		line("import semante.pipeline.test.Entailment;");
-		line("import semante.pipeline.test.impl.ATestCase;");
-		line("import semante.pipeline.test.impl.IEntailment;");
-		line();
-		line("import org.junit.Test;");
 		line("import lombok.val;");
+		line("import org.junit.Test;");
+		line("import semante.pipeline.AbsPipelineTest;");
+		line("import static com.google.common.collect.ImmutableList.of;");
 		line();
-		line("public final class TestCase%s extends ATestCase {", name);
+		line("public final class Test%s extends AbsPipelineTest {", name);
 		if (! comment.isEmpty()) {
 			line();
 			line(1,"/*");
@@ -64,22 +73,13 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		}
 		line();
 		line(1,"@Test");
-		line(1,"public final void prove() throws Exception {");
-		line(2,"proveEntailment(createEntailment());",name);
-		line(1,"}");
-		line();
-		line(1,"@Test");
-		line(1,"public final void createTestCase() throws Exception {");
-		line(2,"createTestCase(\"%s\",createEntailment());",name,name);
-		line(1,"}");
-		line();
-		line(1,"public final Entailment createEntailment() throws Exception {");
+		line(1,"public final void test%s() throws Exception {");
 		line();
 		line(2,"// create the vocabulary for the text;");
 		val vt = vocabulary("t", text);
 		line();
 		line(2,"// create the vocabulary for the hypothesis;");
-		val vh = vocabulary("h", hypothesis);
+		val vh = vocabulary("h", hypo);
 		line();
 		line(2,"// create the tree structure for the text;");
 		line(2,"val tt ="); tree(vt);
@@ -88,7 +88,7 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		line(2,"val th ="); tree(vh);
 		line();
 		line(2,"// create the subsumption relations;");
-		line(2,"val ss ="); subs(subsumptions);
+		subs(subs);
 		line();
 		line(2,"// return the new entailment;");
 		line(2,"return new IEntailment(tt, th, ss);");
@@ -101,20 +101,25 @@ public final class ITestCaseCreator implements TestCaseCreator {
 	}
 	
 	// outputs an array of subsumption relations;
-	private final void subs(final String subsumptions) {
-		// split into newlines;
-		val subs = subsumptions.split("\n");
-		// print as a Java array;
-		line(2,"new String[] {");
-		for (int i=0; i<subs.length; i++) {
-			if (i<subs.length-1) {
-				line(3,"\"%s\",", subs[i]);
-			}
-			else {
-				line(3,"\"%s\"", subs[i]);
-			}
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private final <ID> void subs(
+		final Iterable<Pair<BinaryTree<ID,Annotation>,BinaryTree<ID,Annotation>>> subs) {
+		val arr = Iterables.toArray(subs, Pair.class);
+		for (int i = 0; i < arr.length; i++) {
+			val pt = String.format("st%d", i);
+			val ph = String.format("sh%d", i);
+			val vt = vocabulary(pt, (BinaryTree<ID, Annotation>) arr[i].getFirst());
+			val vh = vocabulary(ph, (BinaryTree<ID, Annotation>) arr[i].getFirst());
+			 
+			line("val st%d = ", i); tree(vt);
+			line("val sh%d = ", i); tree(vh);
+			line("val ss%d = subs(st%d, sh%d);", i, i, i);
 		}
-		line(2,"};");
+		line("val subs = of(");
+		for (int i = 0; i < arr.length; i++) {
+			line(2, "ss%d" + ((i != arr.length - 1 ? "," : "")), i);
+		}
+		line(");");
 	}
 	
 	// outputs a tree of variable names;

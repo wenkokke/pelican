@@ -4,11 +4,7 @@ import lombok.val;
 
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-
-import semante.Entailment;
 import semante.pipeline.AbsPipelineTest;
-import semante.pipeline.impl.IPair;
 
 public final class TestJanPhrases extends AbsPipelineTest {
 

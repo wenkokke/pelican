@@ -32,7 +32,7 @@ public class AbsPipelineTest {
             val settings   = new ISettings();
             val lexicon    = new IRichLexicon(settings,lambdacalc);
 		    pipeline       = new IPipeline(settings,lambdacalc,lexicon);
-		    labeller       = new ILabeller();
+		    labeller       = ILabeller.labeller();
 		    annotator      = IBinaryTree.functor(
 				Functions.<Integer> identity(),
 					new Function<Pair<String,String>,Annotation>() {

@@ -2,7 +2,7 @@
 repositories.remote << 'http://repo1.maven.org/maven2'
 
 # maven dependencies
-LOMBOK      = 'org.projectlombok:lombok:jar:0.11.8'
+LOMBOK      = 'org.projectlombok:lombok:jar:1.12.6'
 JUNIT4      = 'junit:junit:jar:4.10'
 JPARSEC     = 'jparsec:jparsec:jar:2.0.1'
 GUAVA       = 'com.google.guava:guava:jar:13.0.1'
@@ -12,8 +12,8 @@ SLF4J       = struct(
   :api     => 'org.slf4j:slf4j-api:jar:1.7.3',
   :simple  => 'org.slf4j:slf4j-simple:jar:1.7.3')
 PIPELINE    = struct(
-  :api     => 'pipeline:pipeline-api:jar:3.0.1',
-  :util    => 'pipeline:pipeline-util:jar:3.0.1')
+  :api     => 'pipeline:pipeline-api:jar:3.0.2',
+  :util    => 'pipeline:pipeline-util:jar:3.0.2')
 LAMBDACALC  = 'lambdacalc:lambdacalc:jar:1.1.4'
 
 task 'deploy-lexicon' => 'pelican:lexicon:deploy'

@@ -77,7 +77,7 @@ public abstract class APipelineTest extends ATest {
 		val anntxt = lbltxt.accept(ann);
 		val annhyp = lblhyp.accept(ann);
 
-		pipeline.createTestCase(name, "", anntxt, annhyp, subsumptions);
+		//pipeline.createTestCase(name, "", anntxt, annhyp, subsumptions);
 	}
 
 	protected final void proveEntailment(final Entailment ent) throws Exception {
