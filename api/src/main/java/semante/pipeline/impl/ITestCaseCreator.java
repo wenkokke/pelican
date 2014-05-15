@@ -73,7 +73,7 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		}
 		line();
 		line(1,"@Test");
-		line(1,"public final void test%s() throws Exception {");
+		line(1,"public final void test%s() throws Exception {", name);
 		line();
 		line(2,"// create the vocabulary for the text;");
 		val vt = vocabulary("t", text);
