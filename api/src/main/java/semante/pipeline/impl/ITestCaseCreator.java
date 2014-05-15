@@ -91,7 +91,7 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		subs(subs);
 		line();
 		line(2,"// return the new entailment;");
-		line(2,"return new IEntailment(tt, th, ss);");
+		line(2,"assertProof(tt, th, subs);");
 		
 		line(1,"}");
 		line();
