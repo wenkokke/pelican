@@ -14,8 +14,10 @@ import lombok.val;
 import lombok.experimental.FieldDefaults;
 import predcalc.impl.ILambda2Pred;
 import predcalc.impl.IPredCalc;
+import semante.flattener.UnambiguousAnnotation;
+import semante.flattener.impl.IAnnotationTreePrinter;
+import semante.flattener.impl.IDisambiguator;
 import semante.flattener.impl.IFlattenTree;
-import semante.flattener.impl.ITreePrinter;
 import semante.lexicon.RichLexicon;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
@@ -50,15 +52,19 @@ public final class IPipeline implements Pipeline {
 		final BinaryTree<ID, Annotation> hypo,
 		final Iterable<Pair<BinaryTree<ID, Annotation>, BinaryTree<ID, Annotation>>> subsumptions) throws FileNotFoundException {
 		
-		// FLATTEN: convert annotated trees into lambda terms
-		val printer   = new ITreePrinter<ID>();
-		val flattener = new IFlattenTree<ID>(stl,lexicon,printer);
-		val flatTextM = flattener.flatten(text);
-		if (flatTextM.isLeft()) return flatTextM.getLeft();
-		val flatHypoM = flattener.flatten(hypo);
-		if (flatHypoM.isLeft()) return flatHypoM.getLeft();
-		val flatTexts = flatTextM.getRight();
-		val flatHypos = flatHypoM.getRight();
+		// DISAMBIGUATE: convert annotated trees into lambda terms
+		val printer       = new IAnnotationTreePrinter<ID>();
+		val flattener     = new IFlattenTree(stl.getDeBruijnBuilder());
+		val treebuilder   = new ISimpleBinaryTreeBuilder<UnambiguousAnnotation>();
+		val disambiguator = new IDisambiguator<ID>(stl,lexicon,flattener,printer,treebuilder);
+		val disambTextM = disambiguator.disambiguate(text);
+		if (disambTextM.isLeft()) return disambTextM.getLeft().toResult();
+		val disambHypoM = disambiguator.disambiguate(hypo);
+		if (disambHypoM.isLeft()) return disambHypoM.getLeft().toResult();
+		val disambTexts = disambTextM.getRight();
+		val disambHypos = disambHypoM.getRight();
+		val flatTexts = flattener.flattenAll(disambTexts);
+		val flatHypos = flattener.flattenAll(disambHypos);
 		
 		for (val flatText: flatTexts) {
 			System.err.println(stl.format(stl.fromDeBruijn(flatText)));
@@ -94,14 +100,14 @@ public final class IPipeline implements Pipeline {
 			val subsRawText = subsPair.getFirst();
 			val subsRawHypo = subsPair.getSecond();
 			
-			val subsMaybeFlatText = flattener.flatten(subsRawText);
+			val subsMaybeFlatText = disambiguator.disambiguateAndFlatten(subsRawText);
 			if (subsMaybeFlatText.isLeft())
 				return subsMaybeFlatText.getLeft();
 			val subsFlatTexts = subsMaybeFlatText.getRight();
 			val subsRedTexts  = Lists.transform(subsFlatTexts, reducer);
 			val subsNubTexts  = ImmutableSet.copyOf(subsRedTexts); 
 			
-			val subsMaybeFlatHypo = flattener.flatten(subsRawHypo);
+			val subsMaybeFlatHypo = disambiguator.disambiguateAndFlatten(subsRawHypo);
 			if (subsMaybeFlatHypo.isLeft())
 				return subsMaybeFlatHypo.getLeft();
 			val subsFlatHypos = subsMaybeFlatHypo.getRight();
@@ -134,11 +140,11 @@ public final class IPipeline implements Pipeline {
 					bld.application(
 						bld.constant("AND",Types.TTT), subsExpr, subsList.get(i));
 			}
-			val builder = ImmutableList.<DeBruijn> builder();
+			val listbuilder = ImmutableList.<DeBruijn> builder();
 			for (val nubText: nubTexts) {
-				builder.add(bld.application(bld.constant("AND",Types.TTT), nubText, subsExpr));
+				listbuilder.add(bld.application(bld.constant("AND",Types.TTT), nubText, subsExpr));
 			}
-			withSubsTexts = builder.build();
+			withSubsTexts = listbuilder.build();
 		}
 		
 		for (val nubText: withSubsTexts) {

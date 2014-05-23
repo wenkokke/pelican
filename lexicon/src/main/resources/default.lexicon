@@ -260,13 +260,16 @@ function that gets rid of the word "own" in sentences.
 
 \subsection{Numbers}
 
-Numbers are simply interpreted as existentials, which bars any numerical inferences.
-The definition is equivalent to $\text{SOME}$, but may change in the future\footnote{
-  \textbf{TODO} technically this annotation gives incorrect results when applied to the
-  number zero, and this would be equivalent to $NONE$ instead of $SOME$.
-}.
+Numbers are interpreted as non-logical quantifiers, with an additional
+implication that for any number N, (N people) -> (SOME people).
+Note: This means that the number annotation can only be used with
+numbers that are \emph{positive}. "Zero people" shouls be annotated as
+"no people"---which is currently unsupported. Also, the current
+definition is a \emph{bit} lengthy. Maybe I should consider starting
+to use the compiler from SeAn to SemAnTE.
 
-> NUMBER \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
+< NUMBER \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
+> NUMBER \A:et.\B:et.AND:ttt (WORD:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))) (IMPLIES:ttt (WORD:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))) (EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))))
 
 
 \subsection{Dates}

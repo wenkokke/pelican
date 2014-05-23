@@ -1,11 +1,11 @@
 package semante.flattener.impl;
 
-import semante.flattener.TreePrinter;
+import semante.flattener.AnnotationTreePrinter;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
 import static java.lang.String.format; 
 
-public class ITreePrinter<ID> implements TreePrinter<ID> {
+public class IAnnotationTreePrinter<ID> implements AnnotationTreePrinter<ID> {
 
 	@Override
 	public String leaf(Annotation ann) {

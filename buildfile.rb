@@ -12,8 +12,8 @@ SLF4J       = struct(
   :api     => 'org.slf4j:slf4j-api:jar:1.7.3',
   :simple  => 'org.slf4j:slf4j-simple:jar:1.7.3')
 PIPELINE    = struct(
-  :api     => 'pipeline:pipeline-api:jar:3.0.2',
-  :util    => 'pipeline:pipeline-util:jar:3.0.2')
+  :api     => 'pipeline:pipeline-api:jar:3.2.0',
+  :util    => 'pipeline:pipeline-util:jar:3.2.0')
 LAMBDACALC  = 'lambdacalc:lambdacalc:jar:1.1.4'
 
 task 'deploy-lexicon' => 'pelican:lexicon:deploy'
@@ -26,7 +26,7 @@ task 'install-deps' do
 end
 
 define 'pelican' do
-  project.version = '1.2.0'
+  project.version = '1.3.0'
 
   eclipse.natures :java
   compile.options.source = '1.6'

@@ -2,14 +2,13 @@ package semante.flattener;
 
 import java.util.List;
 
-import semante.pipeline.Annotation;
-import semante.pipeline.BinaryTree;
-import semante.pipeline.Either;
-import semante.pipeline.Result;
 import lambdacalc.DeBruijn;
+import semante.pipeline.SimpleBinaryTree;
 
-public interface FlattenTree<ID> {
+public interface FlattenTree {
+
+	DeBruijn flatten(SimpleBinaryTree<UnambiguousAnnotation> tree);
 	
-	Either<Result<ID>, List<DeBruijn>> flatten(BinaryTree<ID, Annotation> tree);
+	List<DeBruijn> flattenAll(List<SimpleBinaryTree<UnambiguousAnnotation>> trees);
 	
 }
