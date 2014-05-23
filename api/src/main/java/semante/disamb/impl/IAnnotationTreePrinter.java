@@ -1,6 +1,6 @@
-package semante.flattener.impl;
+package semante.disamb.impl;
 
-import semante.flattener.AnnotationTreePrinter;
+import semante.disamb.AnnotationTreePrinter;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
 import static java.lang.String.format; 

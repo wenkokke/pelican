@@ -1,11 +1,11 @@
 package semante.abusechecker;
 
-import semante.flattener.UnambiguousAnnotation;
-import semante.pipeline.SimpleBinaryTree;
+import semante.disamb.UnambiguousAnnotation;
+import semante.pipeline.BinaryTree;
 
-public interface AbuseChecker {
+public interface AbuseChecker<ID> {
 
-	public void check(SimpleBinaryTree<UnambiguousAnnotation> tree)
+	public void check(BinaryTree<ID,UnambiguousAnnotation> tree)
 			throws IllegalAnnotationException;
 
 }

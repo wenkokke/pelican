@@ -1,4 +1,4 @@
-package semante.flattener;
+package semante.disamb;
 
 import static lombok.AccessLevel.PRIVATE;
 import semante.pipeline.Result;

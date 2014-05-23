@@ -1,4 +1,4 @@
-package semante.flattener.impl;
+package semante.disamb.impl;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -9,26 +9,26 @@ import lambdacalc.DeBruijnBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
-import semante.flattener.FlattenTree;
-import semante.flattener.UnambiguousAnnotation;
-import semante.pipeline.SimpleBinaryTree;
+import semante.disamb.FlattenTree;
+import semante.disamb.UnambiguousAnnotation;
+import semante.pipeline.BinaryTree;
 
 import com.google.common.collect.ImmutableList;
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = PRIVATE)
-public final class IFlattenTree implements FlattenTree {
+public final class IFlattenTree<ID> implements FlattenTree<ID> {
 
 	DeBruijnBuilder builder;
 	
 	@Override
-	public final DeBruijn flatten(SimpleBinaryTree<UnambiguousAnnotation> tree) {
+	public final DeBruijn flatten(BinaryTree<ID,UnambiguousAnnotation> tree) {
 		return tree.accept(new Helper());
 	}
 
 	@Override
 	public List<DeBruijn> flattenAll(
-			List<SimpleBinaryTree<UnambiguousAnnotation>> trees) {
+			List<BinaryTree<ID,UnambiguousAnnotation>> trees) {
 		val result = ImmutableList.<DeBruijn> builder();
 		for (val tree : trees) {
 			result.add(flatten(tree));
@@ -36,7 +36,7 @@ public final class IFlattenTree implements FlattenTree {
 		return result.build();
 	}
 	
-	private final class Helper implements SimpleBinaryTree.Visitor<UnambiguousAnnotation, DeBruijn> {
+	private final class Helper implements BinaryTree.Visitor<ID, UnambiguousAnnotation, DeBruijn> {
 
 		@Override
 		public final DeBruijn leaf(UnambiguousAnnotation ua) {
@@ -44,7 +44,7 @@ public final class IFlattenTree implements FlattenTree {
 		}
 
 		@Override
-		public final DeBruijn node(SimpleBinaryTree<UnambiguousAnnotation> l, SimpleBinaryTree<UnambiguousAnnotation> r) {
+		public final DeBruijn node(ID _, BinaryTree<ID,UnambiguousAnnotation> l, BinaryTree<ID,UnambiguousAnnotation> r) {
 			return builder.application(l.accept(this), r.accept(this));
 		}
 		

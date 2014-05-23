@@ -14,10 +14,11 @@ import lombok.val;
 import lombok.experimental.FieldDefaults;
 import predcalc.impl.ILambda2Pred;
 import predcalc.impl.IPredCalc;
-import semante.flattener.UnambiguousAnnotation;
-import semante.flattener.impl.IAnnotationTreePrinter;
-import semante.flattener.impl.IDisambiguator;
-import semante.flattener.impl.IFlattenTree;
+import semante.abusechecker.ICollectivityAndIotaChecker;
+import semante.disamb.UnambiguousAnnotation;
+import semante.disamb.impl.IAnnotationTreePrinter;
+import semante.disamb.impl.IDisambiguator;
+import semante.disamb.impl.IFlattenTree;
 import semante.lexicon.RichLexicon;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
@@ -46,16 +47,25 @@ public final class IPipeline implements Pipeline {
 	STL				stl;
 	RichLexicon		lexicon;
 	
+	// REDUCER: simple function wrapper around the STL beta reducer
+	Function<DeBruijn,DeBruijn> reducer
+		= new Function<DeBruijn,DeBruijn>() {
+			@Override
+			public final DeBruijn apply(final DeBruijn expr) {
+				return stl.betaReduce(expr);
+			}
+		};
+	
 	@Override
 	public final <ID> Result<ID> prove(
 		final BinaryTree<ID, Annotation> text,
 		final BinaryTree<ID, Annotation> hypo,
 		final Iterable<Pair<BinaryTree<ID, Annotation>, BinaryTree<ID, Annotation>>> subsumptions) throws FileNotFoundException {
 		
-		// DISAMBIGUATE: convert annotated trees into lambda terms
+		// DISAMBIGUATE: infer denotations and function application structure
 		val printer       = new IAnnotationTreePrinter<ID>();
-		val flattener     = new IFlattenTree(stl.getDeBruijnBuilder());
-		val treebuilder   = new ISimpleBinaryTreeBuilder<UnambiguousAnnotation>();
+		val flattener     = new IFlattenTree<ID>(stl.getDeBruijnBuilder());
+		val treebuilder   = new IBinaryTreeBuilder<ID,UnambiguousAnnotation>();
 		val disambiguator = new IDisambiguator<ID>(stl,lexicon,flattener,printer,treebuilder);
 		val disambTextM = disambiguator.disambiguate(text);
 		if (disambTextM.isLeft()) return disambTextM.getLeft().toResult();
@@ -63,6 +73,11 @@ public final class IPipeline implements Pipeline {
 		if (disambHypoM.isLeft()) return disambHypoM.getLeft().toResult();
 		val disambTexts = disambTextM.getRight();
 		val disambHypos = disambHypoM.getRight();
+		
+		// CHECK: perform a series of checks on the unambiguous annotation trees
+		val collectivityAndIota = new ICollectivityAndIotaChecker(reducer,treebuilder);
+		
+		// FLATTEN: convert unambiguous trees to lambda terms
 		val flatTexts = flattener.flattenAll(disambTexts);
 		val flatHypos = flattener.flattenAll(disambHypos);
 		
@@ -72,12 +87,6 @@ public final class IPipeline implements Pipeline {
 		
 		
 		// REDUCE: convert lambda terms to normal form
-		val reducer = new Function<DeBruijn,DeBruijn>() {
-			@Override
-			public final DeBruijn apply(final DeBruijn expr) {
-				return stl.betaReduce(expr);
-			}
-		};
 		val redTexts = Lists.transform(flatTexts, reducer);
 		val redHypos = Lists.transform(flatHypos, reducer);
 		val nubTexts = ImmutableSet.copyOf(redTexts);

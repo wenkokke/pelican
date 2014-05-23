@@ -1,4 +1,4 @@
-package semante.flattener;
+package semante.disamb;
 
 import java.util.List;
 
@@ -7,11 +7,10 @@ import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
 import semante.pipeline.Either;
 import semante.pipeline.Result;
-import semante.pipeline.SimpleBinaryTree;
 
 public interface Disambiguator<ID> {
 
-	Either<DisambiguatorException, List<SimpleBinaryTree<UnambiguousAnnotation>>>
+	Either<DisambiguatorException, List<BinaryTree<ID,UnambiguousAnnotation>>>
 		disambiguate(BinaryTree<ID, Annotation> tree);
 	
 	Either<Result<ID>, List<DeBruijn>>

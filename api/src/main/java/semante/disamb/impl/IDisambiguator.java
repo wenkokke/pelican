@@ -1,4 +1,4 @@
-package semante.flattener.impl;
+package semante.disamb.impl;
 
 import static com.google.common.collect.Lists.transform;
 import static java.lang.String.format;
@@ -15,19 +15,18 @@ import lambdacalc.Type;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
-import semante.flattener.AnnotationTreePrinter;
-import semante.flattener.Disambiguator;
-import semante.flattener.DisambiguatorException;
-import semante.flattener.FlattenTree;
-import semante.flattener.UnambiguousAnnotation;
+import semante.disamb.AnnotationTreePrinter;
+import semante.disamb.Disambiguator;
+import semante.disamb.DisambiguatorException;
+import semante.disamb.FlattenTree;
+import semante.disamb.UnambiguousAnnotation;
 import semante.lexicon.RichLexicon;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
+import semante.pipeline.BinaryTreeBuilder;
 import semante.pipeline.Either;
 import semante.pipeline.Pair;
 import semante.pipeline.Result;
-import semante.pipeline.SimpleBinaryTree;
-import semante.pipeline.SimpleBinaryTreeBuilder;
 import semante.pipeline.impl.IEither;
 
 import com.google.common.base.Function;
@@ -40,16 +39,14 @@ public final class IDisambiguator<ID> implements Disambiguator<ID> {
 	
 	STL stl;
 	RichLexicon lexicon;
-	FlattenTree flattener;
+	FlattenTree<ID> flattener;
 	AnnotationTreePrinter<ID> printer;
-	SimpleBinaryTreeBuilder<UnambiguousAnnotation> builder;
-	
-	static
-		Function<Pair<Type,SimpleBinaryTree<UnambiguousAnnotation>>,
-	                       SimpleBinaryTree<UnambiguousAnnotation>> snd = second();
+	BinaryTreeBuilder<ID,UnambiguousAnnotation> builder;
+	Function<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>,
+	                   BinaryTree<ID,UnambiguousAnnotation>> snd = second();
 
 	@Override
-	public Either<DisambiguatorException, List<SimpleBinaryTree<UnambiguousAnnotation>>> disambiguate(
+	public Either<DisambiguatorException, List<BinaryTree<ID,UnambiguousAnnotation>>> disambiguate(
 			BinaryTree<ID, Annotation> tree) {
 		try {
 			return IEither.right(transform(tree.accept(new Helper()),snd));
@@ -63,7 +60,7 @@ public final class IDisambiguator<ID> implements Disambiguator<ID> {
 	public Either<Result<ID>, List<DeBruijn>> disambiguateAndFlatten(
 			BinaryTree<ID, Annotation> tree) {
 		return disambiguate(tree)
-				.accept(new Either.Visitor<DisambiguatorException, List<SimpleBinaryTree<UnambiguousAnnotation>>, Either<Result<ID>, List<DeBruijn>>>() {
+				.accept(new Either.Visitor<DisambiguatorException, List<BinaryTree<ID,UnambiguousAnnotation>>, Either<Result<ID>, List<DeBruijn>>>() {
 
 					@Override
 					public final Either<Result<ID>, List<DeBruijn>> left(DisambiguatorException except) {
@@ -71,17 +68,17 @@ public final class IDisambiguator<ID> implements Disambiguator<ID> {
 					}
 
 					@Override
-					public final Either<Result<ID>, List<DeBruijn>> right(List<SimpleBinaryTree<UnambiguousAnnotation>> list) {
+					public final Either<Result<ID>, List<DeBruijn>> right(List<BinaryTree<ID,UnambiguousAnnotation>> list) {
 						return IEither.right(flattener.flattenAll(list));
 					}
 
 				});
 	}
 	
-	private final class Helper implements BinaryTree.Visitor<ID, Annotation, List<Pair<Type,SimpleBinaryTree<UnambiguousAnnotation>>>> {
+	private final class Helper implements BinaryTree.Visitor<ID, Annotation, List<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>>> {
 
 		@Override
-		public final List<Pair<Type,SimpleBinaryTree<UnambiguousAnnotation>>>
+		public final List<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>>
 			leaf(Annotation x) {
 			try {
 				
@@ -92,7 +89,7 @@ public final class IDisambiguator<ID> implements Disambiguator<ID> {
 				// transform denotations to unambiguous trees, or in pseudo code:
 				// map (leaf . flip IUnambiguousAnnotation x) denotations
 				val trees
-					= ImmutableList.<Pair<Type,SimpleBinaryTree<UnambiguousAnnotation>>> builder();
+					= ImmutableList.<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>> builder();
 				for (val d : denotations) {
 					trees.add(pair(stl.typeOf(d),builder.leaf(new IUnambiguousAnnotation(x,d))));
 				}
@@ -104,7 +101,7 @@ public final class IDisambiguator<ID> implements Disambiguator<ID> {
 		}
 
 		@Override
-		public final List<Pair<Type,SimpleBinaryTree<UnambiguousAnnotation>>>
+		public final List<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>>
 			node(ID id, BinaryTree<ID, Annotation> l, BinaryTree<ID, Annotation> r) {
 			
 			// recursively apply the transformation
@@ -112,9 +109,9 @@ public final class IDisambiguator<ID> implements Disambiguator<ID> {
 			val rs = r.accept(this);
 			
 			// set up variables for the results (new trees and errors)
-			val exps = ImmutableList.<Pair<Type,SimpleBinaryTree<UnambiguousAnnotation>>> builder(); 
-			val errs = ImmutableList.<Pair<Pair<Type,SimpleBinaryTree<UnambiguousAnnotation>>
-			                              ,Pair<Type,SimpleBinaryTree<UnambiguousAnnotation>>>> builder(); 
+			val exps = ImmutableList.<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>> builder(); 
+			val errs = ImmutableList.<Pair<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>
+			                              ,Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>>> builder(); 
 			
 			// try all combinations of the left and right subtrees
 			for (val tul : ls) {
@@ -131,13 +128,13 @@ public final class IDisambiguator<ID> implements Disambiguator<ID> {
 					// check both ways of function application
 					if (stl.canApply(tyl, tyr)) {
 						val ty = stl.applyType(tyl, tyr);
-						val sub = builder.node(subl, subr);
+						val sub = builder.node(id, subl, subr);
 						exps.add(pair(ty,sub));
 					}
 					else
 					if (stl.canApply(tyr, tyl)) {
 						val ty = stl.applyType(tyr, tyl);
-						val sub = builder.node(subr, subl);
+						val sub = builder.node(id, subr, subl);
 						exps.add(pair(ty,sub));
 					}
 					else {

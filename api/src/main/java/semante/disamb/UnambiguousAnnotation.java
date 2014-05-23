@@ -1,4 +1,4 @@
-package semante.flattener;
+package semante.disamb;
 
 import lambdacalc.DeBruijn;
 import semante.pipeline.Annotation;
