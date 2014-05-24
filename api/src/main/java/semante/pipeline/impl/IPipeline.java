@@ -14,7 +14,8 @@ import lombok.val;
 import lombok.experimental.FieldDefaults;
 import predcalc.impl.ILambda2Pred;
 import predcalc.impl.IPredCalc;
-import semante.abusechecker.ICollectivityAndIotaChecker;
+import semante.checker.ICollectivityAndIotaChecker;
+import semante.checker.IllegalAnnotationException;
 import semante.disamb.UnambiguousAnnotation;
 import semante.disamb.impl.IAnnotationTreePrinter;
 import semante.disamb.impl.IDisambiguator;
@@ -75,7 +76,18 @@ public final class IPipeline implements Pipeline {
 		val disambHypos = disambHypoM.getRight();
 		
 		// CHECK: perform a series of checks on the unambiguous annotation trees
-		val collectivityAndIota = new ICollectivityAndIotaChecker(reducer,treebuilder);
+		val collectivityAndIota = new ICollectivityAndIotaChecker<ID>(stl,flattener,treebuilder);
+		try {
+			// TODO: should we discard interpretations that allow for invalid inferences,
+			//       and only return an error when no valid interpretation remains?
+			for (val disambText : disambTexts)
+				collectivityAndIota.check(disambText);
+			for (val disambHypo : disambHypos)
+				collectivityAndIota.check(disambHypo);
+		}
+		catch (IllegalAnnotationException e) {
+			return e.toResult();
+		}
 		
 		// FLATTEN: convert unambiguous trees to lambda terms
 		val flatTexts = flattener.flattenAll(disambTexts);

@@ -91,7 +91,8 @@ public final class IDisambiguator<ID> implements Disambiguator<ID> {
 				val trees
 					= ImmutableList.<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>> builder();
 				for (val d : denotations) {
-					trees.add(pair(stl.typeOf(d),builder.leaf(new IUnambiguousAnnotation(x,d))));
+					val t = stl.typeOf(d);
+					trees.add(pair(t,builder.leaf(new IUnambiguousAnnotation(x,d,t))));
 				}
 				return trees.build();
 			}

@@ -1,4 +1,4 @@
-package semante.abusechecker;
+package semante.checker;
 
 import static lombok.AccessLevel.PRIVATE;
 import lombok.Getter;

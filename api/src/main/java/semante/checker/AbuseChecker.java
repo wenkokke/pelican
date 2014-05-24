@@ -1,4 +1,4 @@
-package semante.abusechecker;
+package semante.checker;
 
 import semante.disamb.UnambiguousAnnotation;
 import semante.pipeline.BinaryTree;
