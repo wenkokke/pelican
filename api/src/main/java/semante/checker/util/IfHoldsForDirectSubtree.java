@@ -11,7 +11,7 @@ import semante.pipeline.SimpleBinaryTree;
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = PRIVATE)
-public final class IfHoldsForSubtree implements SimpleBinaryTree.Visitor<UnambiguousAnnotation, Maybe<UnambiguousAnnotation>> {
+public final class IfHoldsForDirectSubtree implements SimpleBinaryTree.Visitor<UnambiguousAnnotation, Maybe<UnambiguousAnnotation>> {
 	
 	@NonNull
 	Direction direction;
