@@ -14,6 +14,8 @@ import lambdacalc.STL;
 import lambdacalc.Symbol;
 import lambdacalc.Type;
 import lambdacalc.Types;
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
@@ -22,8 +24,8 @@ import semante.checker.util.IfAnnotatedWith;
 import semante.checker.util.IfAny;
 import semante.checker.util.IfConstantWithName;
 import semante.checker.util.IfHasId;
-import semante.checker.util.IfHoldsForSubterm;
 import semante.checker.util.IfHoldsForDirectSubtree;
+import semante.checker.util.IfHoldsForSubterm;
 import semante.disamb.FlattenTree;
 import semante.disamb.UnambiguousAnnotation;
 import semante.disamb.impl.IUnambiguousAnnotation;
@@ -78,27 +80,32 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
 	private final class IfNameOccursUnderIota implements DeBruijn.Visitor<Maybe<DeBruijn>> {
 
+		@NonNull
 		List<String> usedNames;
+		
 		DeBruijnBuilder builder =
 			stl.getDeBruijnBuilder();
 		DeBruijn.Visitor<Maybe<DeBruijn>> isIOTA =
 			new IfConstantWithName(stl.getDeBruijnBuilder(), "IOTA");
-		DeBruijn.Visitor<Maybe<DeBruijn>> anyInList =
-			initializeAnyInList();
 		DeBruijn.Visitor<Maybe<DeBruijn>> forSubterm =
 			new IfHoldsForSubterm(this);
 		
+		@Getter(lazy = true)
+		DeBruijn.Visitor<Maybe<DeBruijn>> anyInList =
+			initializeAnyInList();
+		
 		private final DeBruijn.Visitor<Maybe<DeBruijn>> initializeAnyInList() {
 			val init = ImmutableList.<DeBruijn.Visitor<Maybe<DeBruijn>>> builder();
-			for (val usedName : usedNames)
+			for (val usedName : usedNames) {
 				init.add(new IfConstantWithName(stl.getDeBruijnBuilder(), usedName));
+			}
 			return new IfAny(stl.getDeBruijnBuilder(), init.build());
 		}
 		
 		@Override
 		public final Maybe<DeBruijn> application(DeBruijn arg0, DeBruijn arg1) {
 			if (arg0.accept(isIOTA).isJust()) {
-				if (arg0.accept(anyInList).isJust()) {
+				if (arg0.accept(getAnyInList()).isJust()) {
 					return just(builder.application(arg0, arg1));
 				}
 			}
