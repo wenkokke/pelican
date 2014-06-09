@@ -20,10 +20,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import semante.checker.util.Direction;
 import semante.checker.util.IfAnnotatedWith;
 import semante.checker.util.IfAny;
 import semante.checker.util.IfConstantWithName;
 import semante.checker.util.IfHasId;
+import semante.checker.util.IfHoldsForDirectSubterm;
 import semante.checker.util.IfHoldsForDirectSubtree;
 import semante.checker.util.IfHoldsForSubterm;
 import semante.disamb.FlattenTree;
@@ -58,8 +60,8 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 		// check if any of the names occurs under an iota
 		//  - traverse the expression until we encounter an application of an iota
 		//  - from there, traverse until we encounter one of the names
-		val checkUnderIota   = new IfNameOccursUnderIota(usedNames);
-		val maybeUnderIota   = flattenedTerm.accept(checkUnderIota);
+		val checkUnderIota = new IfNameOccursUnderIota(usedNames);
+		val maybeUnderIota = flattenedTerm.accept(checkUnderIota);
 		if (maybeUnderIota.isJust()) {
 			val termUnderIota = maybeUnderIota.fromJust();
 			throw new IllegalAnnotationException(null,
@@ -69,13 +71,97 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 		}
 		
 		// check if any of the names occurs equated to an iota
-		// TODO:
 		//  - traverse the expression until we encounter an application of an equality
-		//    (requires: isconstantwithname, holdsforsubterm)
 		//  - from there, traverse both subterms until we encounter one of the names
-		//    (requires: foranysubterm, isconstantwithname, an 'any' combinator)
+		val checkNextToEq = new IfNameOccursEquatedToIota(usedNames);
+		val maybeNextToEq = flattenedTerm.accept(checkNextToEq);
+		if (maybeNextToEq.isJust()) {
+			val termNextToEq = maybeNextToEq.fromJust();
+			throw new IllegalAnnotationException(null,
+					String.format(
+						"Illegal use of NP conjunction with definites, generated `%s`",
+						stl.format(stl.fromDeBruijn(termNextToEq))));
+		}
 	}
 	
+	// this helper class is a traversal of an unambiguous annotation tree which
+	// checks if a certain name occurs equated to an iota.
+	@RequiredArgsConstructor
+	@FieldDefaults(makeFinal=true,level=PRIVATE)
+	private final class IfNameOccursEquatedToIota implements DeBruijn.Visitor<Maybe<DeBruijn>> {
+		
+		@NonNull
+		List<String> usedNames;
+		
+		DeBruijnBuilder builder =
+			stl.getDeBruijnBuilder();
+		
+		@Getter(lazy = true)
+		DeBruijn.Visitor<Maybe<DeBruijn>> anyInList =
+			initializeAnyInList();
+		
+		DeBruijn.Visitor<Maybe<DeBruijn>> isEQ =
+			new IfHoldsForDirectSubterm(Direction.Left, new IfConstantWithName(builder, "EQ"));
+		DeBruijn.Visitor<Maybe<DeBruijn>> isIOTA =
+			new IfConstantWithName(builder, "IOTA");
+		DeBruijn.Visitor<Maybe<DeBruijn>> rightSubtermIsIOTA =
+			new IfHoldsForDirectSubterm(Direction.Right, isIOTA);
+		
+		@Getter(lazy = true)
+		DeBruijn.Visitor<Maybe<DeBruijn>> rightSubtermIsAnyInList =
+			initializeRightSubtermIsAnyInList();
+		
+		private final DeBruijn.Visitor<Maybe<DeBruijn>> initializeAnyInList() {
+			val init = ImmutableList.<DeBruijn.Visitor<Maybe<DeBruijn>>> builder();
+			for (val usedName : usedNames) {
+				init.add(new IfConstantWithName(builder, usedName));
+			}
+			return new IfAny(builder, init.build());
+		}
+		
+		private final DeBruijn.Visitor<Maybe<DeBruijn>> initializeRightSubtermIsAnyInList() {
+			return new IfHoldsForDirectSubterm(Direction.Right, getAnyInList()); 
+		}
+
+		@Override
+		public final Maybe<DeBruijn> application(DeBruijn arg0, DeBruijn arg1) {
+			if (arg0.accept(isEQ).isJust()) {
+				if (arg1.accept(isIOTA).isJust()) {
+					if (arg0.accept(getRightSubtermIsAnyInList()).isJust()) {
+						return just(builder.application(arg0, arg1));
+					}
+				}
+				else
+				if (arg0.accept(rightSubtermIsIOTA).isJust()) {
+					if (arg1.accept(getAnyInList()).isJust()) {
+						return just(builder.application(arg0, arg1));
+					}
+				}
+			}
+			val rec0 = arg0.accept(this);
+			if (rec0.isJust()) return rec0;
+			return arg1.accept(this);
+		}
+		
+		@Override
+		public final Maybe<DeBruijn> abstraction(Type arg0, DeBruijn arg1) {
+			return arg1.accept(this);
+		}
+
+		@Override
+		public final Maybe<DeBruijn> constant(Symbol arg0) {
+			return nothing();
+		}
+
+		@Override
+		public final Maybe<DeBruijn> variable(Index arg0) {
+			return nothing();
+		}
+
+	}
+	
+	// this helper class is a traversal of an unambiguous annotation tree which
+	// checks if a certain name occurs under an iota.
 	@RequiredArgsConstructor
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
 	private final class IfNameOccursUnderIota implements DeBruijn.Visitor<Maybe<DeBruijn>> {
@@ -83,23 +169,21 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 		@NonNull
 		List<String> usedNames;
 		
-		DeBruijnBuilder builder =
-			stl.getDeBruijnBuilder();
-		DeBruijn.Visitor<Maybe<DeBruijn>> isIOTA =
-			new IfConstantWithName(stl.getDeBruijnBuilder(), "IOTA");
-		DeBruijn.Visitor<Maybe<DeBruijn>> forSubterm =
-			new IfHoldsForSubterm(this);
-		
 		@Getter(lazy = true)
 		DeBruijn.Visitor<Maybe<DeBruijn>> anyInList =
 			initializeAnyInList();
 		
+		DeBruijnBuilder builder =
+			stl.getDeBruijnBuilder();
+		DeBruijn.Visitor<Maybe<DeBruijn>> isIOTA =
+			new IfConstantWithName(builder, "IOTA");
+		
 		private final DeBruijn.Visitor<Maybe<DeBruijn>> initializeAnyInList() {
 			val init = ImmutableList.<DeBruijn.Visitor<Maybe<DeBruijn>>> builder();
 			for (val usedName : usedNames) {
-				init.add(new IfConstantWithName(stl.getDeBruijnBuilder(), usedName));
+				init.add(new IfConstantWithName(builder, usedName));
 			}
-			return new IfAny(stl.getDeBruijnBuilder(), init.build());
+			return new IfAny(builder, init.build());
 		}
 		
 		@Override
@@ -116,7 +200,7 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 
 		@Override
 		public final Maybe<DeBruijn> abstraction(Type arg0, DeBruijn arg1) {
-			return arg1.accept(forSubterm);
+			return arg1.accept(this);
 		}
 
 		@Override

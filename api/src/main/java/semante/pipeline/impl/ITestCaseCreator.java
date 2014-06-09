@@ -2,10 +2,6 @@ package semante.pipeline.impl;
 
 import static lombok.AccessLevel.PRIVATE;
 import static semante.pipeline.impl.IPair.pair;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
@@ -15,6 +11,10 @@ import semante.pipeline.BinaryTree;
 import semante.pipeline.Pair;
 import semante.pipeline.SimpleBinaryTree;
 import semante.pipeline.TestCaseCreator;
+import semante.pipeline.ResultType;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true,level=PRIVATE)
@@ -28,7 +28,8 @@ public final class ITestCaseCreator implements TestCaseCreator {
 			final String comment,
 			final SimpleBinaryTree<Annotation> text,
 			final SimpleBinaryTree<Annotation> hypo,
-			final Iterable<Pair<SimpleBinaryTree<Annotation>,SimpleBinaryTree<Annotation>>> subs) {
+			final Iterable<Pair<SimpleBinaryTree<Annotation>,SimpleBinaryTree<Annotation>>> subs,
+			final ResultType resultType) {
 		
 		// create a labeller;
 		val lbl = ILabeller.labeller();
@@ -42,7 +43,8 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		return createTestCase(name, comment,
 			lbl.label(text),
 			lbl.label(hypo),
-			builder.build());
+			builder.build(),
+			resultType);
 	}
 
 	@Override
@@ -51,7 +53,8 @@ public final class ITestCaseCreator implements TestCaseCreator {
 			final String comment,
 			final BinaryTree<ID, Annotation> text,
 			final BinaryTree<ID, Annotation> hypo,
-			final Iterable<Pair<BinaryTree<ID, Annotation>,BinaryTree<ID, Annotation>>> subs) {
+			final Iterable<Pair<BinaryTree<ID, Annotation>,BinaryTree<ID, Annotation>>> subs,
+			final ResultType resultType) {
 		
 		// create a string buffer for the test;
 		test = new StringBuilder();
@@ -91,7 +94,17 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		subs(subs);
 		line();
 		line(2,"// return the new entailment;");
-		line(2,"assertProof(tt, th, subs);");
+		switch (resultType) {
+		case Proof:
+			line(2,"assertProof(tt, th, subs);");
+			break;
+		case NoProof:
+			line(2,"assertNoProof(tt, th, subs);");
+			break;
+		case Exception:
+			line(2,"assertException(tt, th, subs);");
+			break;
+		}
 		
 		line(1,"}");
 		line();

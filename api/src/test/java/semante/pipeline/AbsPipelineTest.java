@@ -110,6 +110,22 @@ public class AbsPipelineTest {
 		assertNoProof(text,hypo,ImmutableList.copyOf(subs));
 	}
 	
+	protected final void assertException
+		(SimpleBinaryTree<Pair<String,String>> text
+		,SimpleBinaryTree<Pair<String,String>> hypo
+		,Iterable<Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String,String>>>> subs)
+			throws Exception {
+		prove(text,hypo,subs).accept(new AssertException<Integer>());
+	}
+	
+	protected final void assertException
+		(SimpleBinaryTree<Pair<String,String>> text
+		,SimpleBinaryTree<Pair<String,String>> hypo
+		,Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String,String>>>... subs)
+				throws Exception {
+		assertException(text,hypo,ImmutableList.copyOf(subs));
+	}
+	
 	private final class AssertProof<ID> implements Result.Visitor<ID, Void> {
 
 		@Override
@@ -131,13 +147,13 @@ public class AbsPipelineTest {
 
 		@Override
 		public final Void exception(ID id) {
-			fail("type error at node "+id);
+			fail("Type error at node "+id);
 			return null;
 		}
 
 		@Override
 		public Void exception(ID id, String msg) {
-			fail("type error at node "+id+": "+msg);
+			fail("Type error at node "+id+": "+msg);
 			return null;
 		}
 		
@@ -163,13 +179,45 @@ public class AbsPipelineTest {
 
 		@Override
 		public final Void exception(ID id) {
-			fail("type error at node "+id);
+			fail("Type error at node "+id);
 			return null;
 		}
 
 		@Override
 		public Void exception(ID id, String msg) {
-			fail("type error at node "+id+": "+msg);
+			fail("Type error at node "+id+": "+msg);
+			return null;
+		}
+		
+	}
+	
+	private final class AssertException<ID> implements Result.Visitor<ID, Void> {
+
+		@Override
+		public Void counterExample() {
+			fail("Counter example found.");
+			return null;
+		}
+
+		@Override
+		public Void exception(ID arg0) {
+			return null;
+		}
+
+		@Override
+		public Void exception(ID arg0, String arg1) {
+			return null;
+		}
+
+		@Override
+		public Void proof() {
+			fail("Proof found.");
+			return null;
+		}
+
+		@Override
+		public Void unknown() {
+			fail("No proof or counterexample found.");
 			return null;
 		}
 		
