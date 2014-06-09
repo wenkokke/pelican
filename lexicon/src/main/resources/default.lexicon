@@ -130,7 +130,7 @@ reduces down to usage of the first-order primitive $(\land)$.
 
 > AND   AND:ttt
 > AND   \A:et.\B:et.\x:e.AND:ttt (A:et x:e) (B:et x:e)
-< AND   \P:(et)t.\Q:(et)t.\A:et.AND:ttt (P:(et)t A:et) (Q:(et)t A:et)
+> AND   \P:(et)t.\Q:(et)t.\A:et.AND:ttt (P:(et)t A:et) (Q:(et)t A:et)
 
 
 \subsection{The $\text{IS}$ Annotation}

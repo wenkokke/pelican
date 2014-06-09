@@ -36,6 +36,7 @@ import semante.pipeline.BinaryTreeBuilder;
 import semante.pipeline.Maybe;
 import semante.pipeline.SimpleBinaryTree;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 @RequiredArgsConstructor
@@ -45,8 +46,6 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 	STL stl;
 	FlattenTree<ID> flattener;
 	BinaryTreeBuilder<ID,UnambiguousAnnotation> builder;
-	SimpleBinaryTree.Visitor<UnambiguousAnnotation, Maybe<UnambiguousAnnotation>> nestedAnd =
-		new IfHoldsForDirectSubtree(Left, new IfHoldsForDirectSubtree(Left, new IfAnnotatedWith("AND")));
 	
 	@Override
 	public void check(BinaryTree<ID,UnambiguousAnnotation> tree)
@@ -55,13 +54,14 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 		// replace all occurrences of [[AND ...] ...] with [[AND z1] z2]
 		val replaceWithConst = new ReplaceNPsInConjunctionByConstant();
 		val flattenedTerm    = flattener.flatten(tree.accept(replaceWithConst));
+		val reducedTerm      = stl.betaReduce(flattenedTerm);
 		val usedNames        = replaceWithConst.usedNames();
 		
 		// check if any of the names occurs under an iota
 		//  - traverse the expression until we encounter an application of an iota
 		//  - from there, traverse until we encounter one of the names
 		val checkUnderIota = new IfNameOccursUnderIota(usedNames);
-		val maybeUnderIota = flattenedTerm.accept(checkUnderIota);
+		val maybeUnderIota = reducedTerm.accept(checkUnderIota);
 		if (maybeUnderIota.isJust()) {
 			val termUnderIota = maybeUnderIota.fromJust();
 			throw new IllegalAnnotationException(null,
@@ -74,7 +74,7 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 		//  - traverse the expression until we encounter an application of an equality
 		//  - from there, traverse both subterms until we encounter one of the names
 		val checkNextToEq = new IfNameOccursEquatedToIota(usedNames);
-		val maybeNextToEq = flattenedTerm.accept(checkNextToEq);
+		val maybeNextToEq = reducedTerm.accept(checkNextToEq);
 		if (maybeNextToEq.isJust()) {
 			val termNextToEq = maybeNextToEq.fromJust();
 			throw new IllegalAnnotationException(null,
@@ -100,12 +100,14 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 		DeBruijn.Visitor<Maybe<DeBruijn>> anyInList =
 			initializeAnyInList();
 		
-		DeBruijn.Visitor<Maybe<DeBruijn>> isEQ =
-			new IfHoldsForDirectSubterm(Direction.Left, new IfConstantWithName(builder, "EQ"));
+		DeBruijn.Visitor<Maybe<DeBruijn>> leftSubtermIsEQ =
+			new IfHoldsForDirectSubterm(Direction.Left,
+				new IfConstantWithName(builder, "EQ"));
 		DeBruijn.Visitor<Maybe<DeBruijn>> isIOTA =
-			new IfConstantWithName(builder, "IOTA");
+			new IfHoldsForDirectSubterm(Direction.Left,
+				new IfConstantWithName(builder, "IOTA"));
 		DeBruijn.Visitor<Maybe<DeBruijn>> rightSubtermIsIOTA =
-			new IfHoldsForDirectSubterm(Direction.Right, isIOTA);
+			new IfHoldsForDirectSubterm(Direction.Right,isIOTA);
 		
 		@Getter(lazy = true)
 		DeBruijn.Visitor<Maybe<DeBruijn>> rightSubtermIsAnyInList =
@@ -125,14 +127,17 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 
 		@Override
 		public final Maybe<DeBruijn> application(DeBruijn arg0, DeBruijn arg1) {
-			if (arg0.accept(isEQ).isJust()) {
+			if (arg0.accept(leftSubtermIsEQ).isJust()) {
+				System.err.println("MSG1: " + stl.format(builder.application(arg0, arg1)));
 				if (arg1.accept(isIOTA).isJust()) {
+					System.err.println("MSG2: " + stl.format(builder.application(arg0, arg1)));
 					if (arg0.accept(getRightSubtermIsAnyInList()).isJust()) {
 						return just(builder.application(arg0, arg1));
 					}
 				}
 				else
 				if (arg0.accept(rightSubtermIsIOTA).isJust()) {
+					System.err.println("MSG3: " + stl.format(builder.application(arg0, arg1)));
 					if (arg1.accept(getAnyInList()).isJust()) {
 						return just(builder.application(arg0, arg1));
 					}
@@ -178,6 +183,10 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 		DeBruijn.Visitor<Maybe<DeBruijn>> isIOTA =
 			new IfConstantWithName(builder, "IOTA");
 		
+		@Getter(lazy = true)
+		DeBruijn.Visitor<Maybe<DeBruijn>> anySubtermIsAnyInList =
+			initializeAnySubtermIsAnyInList();
+		
 		private final DeBruijn.Visitor<Maybe<DeBruijn>> initializeAnyInList() {
 			val init = ImmutableList.<DeBruijn.Visitor<Maybe<DeBruijn>>> builder();
 			for (val usedName : usedNames) {
@@ -186,10 +195,14 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 			return new IfAny(builder, init.build());
 		}
 		
+		private final DeBruijn.Visitor<Maybe<DeBruijn>> initializeAnySubtermIsAnyInList() {
+			return new IfHoldsForSubterm(getAnyInList()); 
+		}
+		
 		@Override
 		public final Maybe<DeBruijn> application(DeBruijn arg0, DeBruijn arg1) {
 			if (arg0.accept(isIOTA).isJust()) {
-				if (arg0.accept(getAnyInList()).isJust()) {
+				if (arg1.accept(getAnySubtermIsAnyInList()).isJust()) {
 					return just(builder.application(arg0, arg1));
 				}
 			}
@@ -227,6 +240,10 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 		
 		@NonFinal
 		int counter = 0;
+		
+		SimpleBinaryTree.Visitor<UnambiguousAnnotation, Maybe<UnambiguousAnnotation>> hasNestedAND =
+			new IfHoldsForDirectSubtree(Left, new IfAnnotatedWith("AND"));
+		
 
 		@Override
 		public final BinaryTree<ID, UnambiguousAnnotation> leaf(UnambiguousAnnotation x) {
@@ -234,18 +251,23 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 		}
 
 		@Override
-		public final BinaryTree<ID, UnambiguousAnnotation> node(ID id1, BinaryTree<ID, UnambiguousAnnotation> l, BinaryTree<ID, UnambiguousAnnotation> r) {
-			val node    = builder.node(id1, l, r);
-			val query   = node.accept(nestedAnd);
+		public final BinaryTree<ID, UnambiguousAnnotation> node(ID id1, BinaryTree<ID, UnambiguousAnnotation> l1, BinaryTree<ID, UnambiguousAnnotation> r1) {
+			
+			// recursively apply transformation:
+			val l2    = l1.accept(this);
+			val r2    = r1.accept(this);
+			
+			// query if required conditions hold:
+			val query = l2.accept(hasNestedAND);
 			if (query.isJust()) {
-				val z1  = builder.leaf(constant(counter));
-				val z2  = builder.leaf(constant(counter + 1));
+				val z1  = builder.leaf(constant(counter += 1));
+				val z2  = builder.leaf(constant(counter += 1));
 				val and = builder.leaf(query.fromJust());
-				val id2 = l.accept(new IfHasId<ID,UnambiguousAnnotation>()).fromJust();
+				val id2 = l1.accept(new IfHasId<ID,UnambiguousAnnotation>()).fromJust();
 				return builder.node(id1, builder.node(id2, and, z1), z2);
 			}
 			else {
-				return node;
+				return builder.node(id1, l2, r2);
 			}
 		}
 		

@@ -206,6 +206,7 @@ public class AbsPipelineTest {
 
 		@Override
 		public Void exception(ID arg0, String arg1) {
+			System.err.println(arg1);
 			return null;
 		}
 

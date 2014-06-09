@@ -6,11 +6,13 @@ import lambdacalc.Type;
 import lombok.Delegate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import semante.disamb.UnambiguousAnnotation;
 import semante.pipeline.Annotation;
 import semante.pipeline.impl.IAnnotation;
 
+@ToString
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true,level=PRIVATE)
 public class IUnambiguousAnnotation implements UnambiguousAnnotation {
