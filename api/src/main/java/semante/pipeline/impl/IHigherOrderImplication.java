@@ -83,26 +83,34 @@ public class IHigherOrderImplication implements HigherOrderImplication {
 		}
 		
 		// convert to implications.
-		val mutableImpl = ImmutableList.<DeBruijn> builder();
-		val arrayText = Iterables.toArray(mutableText, DeBruijn.class);
-		val arrayHypo = Iterables.toArray(mutableHypo, DeBruijn.class);
-		for (int i = 0; i < arrayText.length; i++) {
+		val size = Iterables.size(mutableText);
+		if (size > 0) {
+			
+			val mutableImpl = ImmutableList.<DeBruijn> builder();
+			val arrayText = Iterables.toArray(mutableText, DeBruijn.class);
+			val arrayHypo = Iterables.toArray(mutableHypo, DeBruijn.class);
+			for (int i = 0; i < arrayText.length; i++) {
 				mutableImpl.add(
 					bld.application(bld.constant("IMPLIES",Types.TTT), arrayText[i], arrayHypo[i]));
-		}
+			}
 		
-		// flatten with conjunction.
-		val arrayImpl = Iterables.toArray(mutableImpl.build(), DeBruijn.class);
-		DeBruijn joinImpl = arrayImpl[0];
-		for (int i = 1; i < arrayImpl.length; i++) {
-			joinImpl = bld.application(bld.constant("AND",Types.TTT), joinImpl, arrayImpl[i]);
-		}
+			val arrayImpl = Iterables.toArray(mutableImpl.build(), DeBruijn.class);
 		
-		// wrap quantifiers around.
-		for (; numQuant > 0; numQuant--) {
-			joinImpl = bld.application(bld.constant("FORALL",Types.ET_T), bld.abstraction(Types.E, joinImpl));
+			// flatten with conjunction.
+			DeBruijn joinImpl = arrayImpl[0];
+			for (int i = 1; i < arrayImpl.length; i++) {
+				joinImpl = bld.application(bld.constant("AND",Types.TTT), joinImpl, arrayImpl[i]);
+			}
+
+			// wrap quantifiers around.
+			for (; numQuant > 0; numQuant--) {
+				joinImpl = bld.application(bld.constant("FORALL",Types.ET_T), bld.abstraction(Types.E, joinImpl));
+			}
+			return joinImpl;
 		}
-		return joinImpl;
+		else {
+			return bld.constant("TRUE", Types.T);
+		}
 	}
 	
 	@RequiredArgsConstructor
@@ -135,7 +143,7 @@ public class IHigherOrderImplication implements HigherOrderImplication {
 
 		@Override
 		public final ImmutableList.Builder<Type> constant(String arg0) {
-			return ImmutableList.<Type>builder();
+			return ImmutableList.<Type> builder();
 		}
 
 		@Override

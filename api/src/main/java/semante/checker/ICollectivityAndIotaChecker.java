@@ -128,16 +128,13 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 		@Override
 		public final Maybe<DeBruijn> application(DeBruijn arg0, DeBruijn arg1) {
 			if (arg0.accept(leftSubtermIsEQ).isJust()) {
-				System.err.println("MSG1: " + stl.format(builder.application(arg0, arg1)));
 				if (arg1.accept(isIOTA).isJust()) {
-					System.err.println("MSG2: " + stl.format(builder.application(arg0, arg1)));
 					if (arg0.accept(getRightSubtermIsAnyInList()).isJust()) {
 						return just(builder.application(arg0, arg1));
 					}
 				}
 				else
 				if (arg0.accept(rightSubtermIsIOTA).isJust()) {
-					System.err.println("MSG3: " + stl.format(builder.application(arg0, arg1)));
 					if (arg1.accept(getAnyInList()).isJust()) {
 						return just(builder.application(arg0, arg1));
 					}
