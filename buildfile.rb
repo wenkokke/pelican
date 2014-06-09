@@ -26,7 +26,7 @@ task 'install-deps' do
 end
 
 define 'pelican' do
-  project.version = '1.4.0'
+  project.version = '1.5.0'
 
   eclipse.natures :java
   compile.options.source = '1.6'
