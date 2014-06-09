@@ -151,7 +151,7 @@ public final class TestGerunds extends AbsPipelineTest {
 		assertNoProof(tt, th);
 	}
 
-	@Test
+	@Test // This test is now no longer valid, due to an illegal use of NP conjunctions.
 	public final void ger06() throws Exception {
 
 		// create the vocabulary for the text;

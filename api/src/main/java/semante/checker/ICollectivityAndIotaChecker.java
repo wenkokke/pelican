@@ -260,15 +260,21 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 			// query if required conditions hold:
 			val query = l2.accept(hasNestedAND);
 			if (query.isJust()) {
-				val z1  = builder.leaf(constant(counter += 1));
-				val z2  = builder.leaf(constant(counter += 1));
-				val and = builder.leaf(query.fromJust());
-				val id2 = l1.accept(new IfHasId<ID,UnambiguousAnnotation>()).fromJust();
-				return builder.node(id1, builder.node(id2, and, z1), z2);
+				val typeOfR2 = typeOfSubtree(r2); 
+				if (typeOfR2.equals(Types.ET_T)) {
+					val z1  = builder.leaf(constant(counter += 1));
+					val z2  = builder.leaf(constant(counter += 1));
+					val and = builder.leaf(query.fromJust());
+					val id2 = l1.accept(new IfHasId<ID,UnambiguousAnnotation>()).fromJust();
+					return builder.node(id1, builder.node(id2, and, z1), z2);
+				}
 			}
-			else {
-				return builder.node(id1, l2, r2);
-			}
+			return builder.node(id1, l2, r2);
+		}
+		
+		// checks the type of a subtree
+		private final Type typeOfSubtree(BinaryTree<ID, UnambiguousAnnotation> t) {
+			return stl.typeOf(flattener.flatten(t));
 		}
 		
 		// create a name for a specific index

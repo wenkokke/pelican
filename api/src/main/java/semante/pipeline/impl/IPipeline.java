@@ -77,20 +77,27 @@ public final class IPipeline implements Pipeline {
 		
 		// CHECK: perform a series of checks on the unambiguous annotation trees
 		val collectivityAndIota = new ICollectivityAndIotaChecker<ID>(stl,flattener,treebuilder);
-		try {
-			// TODO: should we discard interpretations that allow for invalid inferences,
-			//       and only return an error when no valid interpretation remains?
-			for (val disambText : disambTexts)
+		val validTextsBuilder = ImmutableList.<BinaryTree<ID, UnambiguousAnnotation>> builder();
+		val invalidTextsBuilder = ImmutableList.<IllegalAnnotationException> builder();
+		for (val disambText: disambTexts) {
+			try {
 				collectivityAndIota.check(disambText);
-			for (val disambHypo : disambHypos)
-				collectivityAndIota.check(disambHypo);
+				validTextsBuilder.add(disambText);
+			}
+			catch (IllegalAnnotationException e) {
+				invalidTextsBuilder.add(e);
+			}
 		}
-		catch (IllegalAnnotationException e) {
-			return e.toResult();
+		val validTexts = validTextsBuilder.build();
+		if (validTexts.isEmpty()) {
+			val invalidTexts = invalidTextsBuilder.build();
+			for(val invalidText : invalidTexts)
+				return invalidText.toResult();
 		}
 		
+		
 		// FLATTEN: convert unambiguous trees to lambda terms
-		val flatTexts = flattener.flattenAll(disambTexts);
+		val flatTexts = flattener.flattenAll(validTexts);
 		val flatHypos = flattener.flattenAll(disambHypos);
 		
 		for (val flatText: flatTexts) {
