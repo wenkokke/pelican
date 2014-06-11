@@ -26,7 +26,6 @@ public class ILowerLambda implements LowerLambda {
 	protected STL lcalc; 
 	
 	public List<String> getComments() {
-		// TODO provide actual implementation
 		return new ArrayList<String>();
 	}
 	

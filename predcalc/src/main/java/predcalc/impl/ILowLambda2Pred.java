@@ -109,7 +109,7 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 			return "|";
 		} else if (in.equals("IMPLIES")) {
 			return "->";
-		} else if (in.equals("EQUIVALENCES")) {
+		} else if (in.equals("EQUIV")) {
 			return "<->";
 		} else if (in.equals("EQ")) {
 			return "=";

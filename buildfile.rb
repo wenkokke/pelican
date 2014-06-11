@@ -14,7 +14,7 @@ SLF4J       = struct(
 PIPELINE    = struct(
   :api     => 'pipeline:pipeline-api:jar:3.3.2',
   :util    => 'pipeline:pipeline-util:jar:3.3.2')
-LAMBDACALC  = 'lambdacalc:lambdacalc:jar:1.2.0'
+LAMBDACALC  = 'lambdacalc:lambdacalc:jar:1.3.0'
 
 task 'deploy-lexicon' => 'pelican:lexicon:deploy'
 task 'render-lexicon' => 'pelican:lexicon:render'
@@ -76,7 +76,7 @@ define 'pelican' do
 
   # implementation of first order logic and smashing from hol to fol
   define 'predcalc' do
-    compile.with LOMBOK,GUAVA,SLF4J,LAMBDACALC,projects('settings')
+    compile.with LOMBOK,GUAVA,SLF4J,LAMBDACALC,PIPELINE.util,projects('settings')
     test.with JPARSEC,GUAVA,SNAKE_YAML,SLF4J,compile.dependencies
     package :jar
   end

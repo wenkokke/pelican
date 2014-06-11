@@ -37,52 +37,62 @@ public class IExtractIotas implements ExtractIotas {
 	private Visitor<Boolean> isIOTA = new Visitor<Boolean>() {
 		@Override public Boolean abstraction(Symbol s, Expr body) 	{ return false; }
 		@Override public Boolean application(Expr fun, Expr arg) 	{ return false; }
-		@Override public Boolean variable(Symbol s) 				{ return s.getName().equals("IOTA");}
+		@Override public Boolean variable(Symbol s) 				{ return s.getName().equals("UNIQUE");}
 	};
 
 	// use a pragmatics list state, reset every call
 	private ExprBuilder extracter = new ExprBuilder() {
 		@Override
-		public Expr application(final Expr f, final Expr arg) {
-			if (lcalc.typeOf(f).equals(Types.ET_E) && f.accept(isIOTA)) {
-				// iota (return a new constant)
-
-				val b = lcalc.getExprBuilder();
-				Expr c;
+		public Expr application(final Expr f, final Expr pred) {
+			val b = lcalc.getExprBuilder();
+			
+			if (lcalc.typeOf(f).equals(Types.ET_T) && f.accept(isIOTA)) {
 				
-				// if we already have a constant for this argument, we use it
-				// note that we check beta-reduced expressions just because the
+				// If we already have a constant for this argument, we use it.
+				// Note that we check beta-reduced expressions just because the
 				// beta-reducer normalizes the names of the variables.
-				String argStr = lcalc.format(lcalc.betaReduce(arg)); 
+				val argStr = lcalc.format(lcalc.betaReduce(pred));
+				
 				if (usedIotas.containsKey(argStr)) {
-					c = usedIotas.get(argStr);
-				} else {
-					c = b.variable("c" + counter.get(), Types.E);
-					usedIotas.put(argStr, c);
-					val e =
-						b.application(
-							b.variable("EQUIVALENCES", Types.TTT),
-							b.application(
-									arg,
-									b.variable("x", Types.E)));
-					val i =
-						b.application(
-							b.application(
-								b.variable("EQ", Types.EET),
-								b.variable("x", Types.E)), 
-						c);
-					val q =
-						b.application(
-							b.variable("FORALL", Types.ET_T),
-								b.abstraction(
-									"x", Types.E,
-									b.application(e, i)));
 					
-					pragmatics.add(lcalc.betaReduce(lcalc.betaReduce(q).accept(extracter)));
+					// return the pre-computed constant:
+					return usedIotas.get(argStr);
+					
+				} else {
+					// create the expression that should go to the pragmatics,
+					// i.e. for P create: all x (all y (P(x) & P(y) => x = y)).
+					val prag =
+						b.application(b.variable("FORALL",Types.ET_T),b.abstraction("x",Types.E,
+						b.application(b.variable("FORALL",Types.ET_T),b.abstraction("y",Types.E,
+							b.application(
+								b.variable("IMPLIES", Types.TTT),
+								b.application(
+									b.variable("AND", Types.TTT),
+									b.application(pred, b.variable("x", Types.E)),
+									b.application(pred, b.variable("y", Types.E))
+								),
+								b.application(
+									b.variable("EQ", Types.EET),
+									b.variable("x", Types.E),
+									b.variable("y", Types.E)
+								)
+							)	
+						))));
+					System.err.println("MSG: " + lcalc.format(prag));
+					pragmatics.add(lcalc.betaReduce(lcalc.betaReduce(prag).accept(extracter)));
+					
+					// create the expression that should go to the semantics,
+					// i.e. for P and top-level expression E create: exists x. P(x) & E(x).
+					val c = b.variable("c" + counter.get(), Types.E);
+					usedIotas.put(argStr, c);
+					return c;
 				}
-				return c;
 			} else {
-				return lcalc.getExprBuilder().application(f.accept(extracter), arg.accept(extracter));
+				
+				// simply continue, as this is not an iota:
+				return b.application(
+						f.accept(extracter), pred.accept(extracter));
+
 			}
 		}
 		
@@ -96,10 +106,14 @@ public class IExtractIotas implements ExtractIotas {
 		}
 	};
 
-	public ExprForm<Expr> extract(Expr a) {
+	public ExprForm<Expr> extract(Expr a1) {
 		usedIotas.clear();
 		pragmatics.clear();
-		return new IExprForm<Expr>(a.accept(extracter), pragmatics);
+		// extract all the iota's:
+		val a2 = a1.accept(extracter);
+		// TODO wrap existential quantifiers around this here thingie,
+		// also the predicate because that has to happen you know.
+		return new IExprForm<Expr>(a2, pragmatics);
 	}
 	
 	private class Counter {
