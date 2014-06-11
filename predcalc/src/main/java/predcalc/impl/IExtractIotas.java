@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import lambdacalc.Expr;
+import lambdacalc.Expr.Visitor;
 import lambdacalc.ExprBuilder;
 import lambdacalc.STL;
 import lambdacalc.Symbol;
-import lambdacalc.Type;
 import lambdacalc.Types;
-import lambdacalc.Expr.Visitor;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import lombok.experimental.FieldDefaults;
 import predcalc.ExprForm;
 import predcalc.ExtractIotas;
@@ -32,7 +32,6 @@ public class IExtractIotas implements ExtractIotas {
 	protected STL lcalc;
 	private Counter counter = new Counter();
 	private List<Expr> pragmatics = new ArrayList<Expr>();
-	
 	private Map<String,Expr> usedIotas = new HashMap<String,Expr>();
 	
 	private Visitor<Boolean> isIOTA = new Visitor<Boolean>() {
@@ -48,39 +47,36 @@ public class IExtractIotas implements ExtractIotas {
 			if (lcalc.typeOf(f).equals(Types.ET_E) && f.accept(isIOTA)) {
 				// iota (return a new constant)
 
-				ExprBuilder b = lcalc.getExprBuilder();
+				val b = lcalc.getExprBuilder();
 				Expr c;
 				
 				// if we already have a constant for this argument, we use it
-				// note that we check beta-reduced expressions just because the beta-reducer normalizes
-				// the names of the variables.
+				// note that we check beta-reduced expressions just because the
+				// beta-reducer normalizes the names of the variables.
 				String argStr = lcalc.format(lcalc.betaReduce(arg)); 
 				if (usedIotas.containsKey(argStr)) {
 					c = usedIotas.get(argStr);
 				} else {
-					Symbol s = buildSymbol("c"+counter.get(), Types.E);
-					c = b.variable(s);
+					c = b.variable("c" + counter.get(), Types.E);
 					usedIotas.put(argStr, c);
-
-					Symbol x = buildSymbol("x", Types.E);
-					Expr e =
+					val e =
 						b.application(
-							b.variable(buildSymbol("EQUIVALENCES", Types.TTT)),
+							b.variable("EQUIVALENCES", Types.TTT),
 							b.application(
 									arg,
-									b.variable(x)));
-					Expr i =
+									b.variable("x", Types.E)));
+					val i =
+						b.application(
 							b.application(
-								b.application(
-										b.variable(buildSymbol("EQ", Types.EET)),
-										b.variable(x)), 
-								c);
-					Expr q =
-							b.application(
-								b.variable(buildSymbol("FORALL", Types.ET_T)),
+								b.variable("EQ", Types.EET),
+								b.variable("x", Types.E)), 
+						c);
+					val q =
+						b.application(
+							b.variable("FORALL", Types.ET_T),
 								b.abstraction(
-										x,
-										b.application(e, i)));
+									"x", Types.E,
+									b.application(e, i)));
 					
 					pragmatics.add(lcalc.betaReduce(lcalc.betaReduce(q).accept(extracter)));
 				}
@@ -104,13 +100,6 @@ public class IExtractIotas implements ExtractIotas {
 		usedIotas.clear();
 		pragmatics.clear();
 		return new IExprForm<Expr>(a.accept(extracter), pragmatics);
-	}
-	
-	Symbol buildSymbol(final String name, final Type type) {
-		return new Symbol() {
-			@Override public String getName() { return name; }
-			@Override public Type getType() { return type; }
-		};
 	}
 	
 	private class Counter {

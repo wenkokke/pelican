@@ -14,7 +14,7 @@ SLF4J       = struct(
 PIPELINE    = struct(
   :api     => 'pipeline:pipeline-api:jar:3.3.2',
   :util    => 'pipeline:pipeline-util:jar:3.3.2')
-LAMBDACALC  = 'lambdacalc:lambdacalc:jar:1.1.4'
+LAMBDACALC  = 'lambdacalc:lambdacalc:jar:1.2.0'
 
 task 'deploy-lexicon' => 'pelican:lexicon:deploy'
 task 'render-lexicon' => 'pelican:lexicon:render'
