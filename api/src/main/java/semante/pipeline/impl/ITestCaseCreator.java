@@ -22,9 +22,11 @@ public final class ITestCaseCreator implements TestCaseCreator {
 	
 	@NonFinal StringBuilder test;
 	
+	
 	@Override
 	public final String createTestCase(
-			final String name,
+			final String packageName,
+			final String className,
 			final String comment,
 			final SimpleBinaryTree<Annotation> text,
 			final SimpleBinaryTree<Annotation> hypo,
@@ -40,7 +42,10 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		}
 		
 		// label the pair trees and forward;
-		return createTestCase(name, comment,
+		return createTestCase(
+			packageName,
+			className,
+			comment,
 			lbl.label(text),
 			lbl.label(hypo),
 			builder.build(),
@@ -49,7 +54,8 @@ public final class ITestCaseCreator implements TestCaseCreator {
 
 	@Override
 	public final <ID> String createTestCase(
-			final String name,
+			final String packageName,
+			final String className,
 			final String comment,
 			final BinaryTree<ID, Annotation> text,
 			final BinaryTree<ID, Annotation> hypo,
@@ -60,14 +66,16 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		test = new StringBuilder();
 		
 		// create the java source code;
-		line("package semante.pipeline.test;");
-		line();
+		if (packageName != null) {
+			line("package %s;", packageName);
+			line();
+		}
 		line("import lombok.val;");
 		line("import org.junit.Test;");
 		line("import semante.pipeline.AbsPipelineTest;");
 		line("import static com.google.common.collect.ImmutableList.of;");
 		line();
-		line("public final class Test%s extends AbsPipelineTest {", name);
+		line("public final class Test%s extends AbsPipelineTest {", className);
 		if (! comment.isEmpty()) {
 			line();
 			line(1,"/*");
@@ -76,7 +84,7 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		}
 		line();
 		line(1,"@Test");
-		line(1,"public final void test%s() throws Exception {", name);
+		line(1,"public final void test%s() throws Exception {", className);
 		line();
 		line(2,"// create the vocabulary for the text;");
 		val vt = vocabulary("t", text);
