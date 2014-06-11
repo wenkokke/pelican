@@ -73,6 +73,7 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		line("import lombok.val;");
 		line("import org.junit.Test;");
 		line("import semante.pipeline.AbsPipelineTest;");
+		line("import static semante.pipeline.ResultType.*;");
 		line("import static com.google.common.collect.ImmutableList.of;");
 		line();
 		line("public final class Test%s extends AbsPipelineTest {", className);
@@ -101,7 +102,7 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		line(2,"// create the subsumption relations;");
 		subs(subs);
 		line();
-		line(2,"// return the new entailment;");
+		line(2,"// test for a proof;");
 		switch (resultType) {
 		case Proof:
 			line(2,"assertProof(tt, th, subs);");
@@ -113,6 +114,8 @@ public final class ITestCaseCreator implements TestCaseCreator {
 			line(2,"assertException(tt, th, subs);");
 			break;
 		}
+		line(2,"// test the testcasecreator;");
+		line(2,"testTestCaseCreator(tt, th, subs, %s);", resultType.toString());
 		
 		line(1,"}");
 		line();

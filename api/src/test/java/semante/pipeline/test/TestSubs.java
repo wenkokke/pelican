@@ -8,6 +8,7 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableList;
 
 import semante.pipeline.AbsPipelineTest;
+import semante.pipeline.ResultType;
 
 public class TestSubs extends AbsPipelineTest {
 	
@@ -23,6 +24,7 @@ public class TestSubs extends AbsPipelineTest {
 		val subs   = ImmutableList.of(pair(dog, animal));
 		
 		assertProof(text, hypo, subs);
+		testTestCaseCreator(text, hypo, ResultType.Proof, subs);
 	}
 
 }

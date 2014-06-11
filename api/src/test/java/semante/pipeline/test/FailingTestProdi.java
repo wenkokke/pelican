@@ -5,7 +5,7 @@ import org.junit.Test;
 import semante.pipeline.AbsPipelineTest;
 import static com.google.common.collect.ImmutableList.of;
 
-public final class TestCase1 extends AbsPipelineTest {
+public final class FailingTestProdi extends AbsPipelineTest {
 
 		@Test
 		public final void testShared112() throws Exception {

@@ -5,7 +5,7 @@ import lombok.val;
 import org.junit.Test;
 
 import semante.pipeline.AbsPipelineTest;
-import semante.pipeline.ResultType;
+import static semante.pipeline.ResultType.*;
 
 public final class TestJanPhrases extends AbsPipelineTest {
 
@@ -30,7 +30,7 @@ public final class TestJanPhrases extends AbsPipelineTest {
 
 		// return the new entailment;
 		assertProof(tt, th);
-		testTestCaseCreator(tt, th, ResultType.Proof);
+		testTestCaseCreator(tt, th, Proof);
 	}
 
 	@Test
@@ -59,7 +59,7 @@ public final class TestJanPhrases extends AbsPipelineTest {
 		val th = _(h00_jan, _(h01_is, _(h02_a, _(h03_black, h04_man))));
 
 		assertProof(tt, th);
-		testTestCaseCreator(tt, th, ResultType.Proof);
+		testTestCaseCreator(tt, th, Proof);
 	}
 
 	@Test
@@ -88,7 +88,7 @@ public final class TestJanPhrases extends AbsPipelineTest {
 		val th = _(h00_jan, _(h01_is, _(h02_a, _(h03_dutch, h04_man))));
 
 		assertProof(tt, th);
-		testTestCaseCreator(tt, th, ResultType.Proof);
+		testTestCaseCreator(tt, th, Proof);
 	}
 
 	@Test
@@ -116,7 +116,7 @@ public final class TestJanPhrases extends AbsPipelineTest {
 		val th = _(h00_jan, _(h01_is, _(h02_a, _(h03_dutch, h04_man))));
 
 		assertProof(tt, th);
-		testTestCaseCreator(tt, th, ResultType.Proof);
+		testTestCaseCreator(tt, th, Proof);
 	}
 
 	@Test
@@ -149,7 +149,7 @@ public final class TestJanPhrases extends AbsPipelineTest {
 		val th = _(h00_google, _(h01_is, h02_on_the_web));
 
 		assertProof(tt, th);
-		testTestCaseCreator(tt, th, ResultType.Proof);
+		testTestCaseCreator(tt, th, Proof);
 	}
 
 	@Test
@@ -181,7 +181,7 @@ public final class TestJanPhrases extends AbsPipelineTest {
 		val th = _(h00_dan, _(_(h01_gave, h02_mary), _(h03_a, h04_book)));
 
 		assertProof(tt, th);
-		testTestCaseCreator(tt, th, ResultType.Proof);
+		testTestCaseCreator(tt, th, Proof);
 	}
 
 	@Test
@@ -218,7 +218,7 @@ public final class TestJanPhrases extends AbsPipelineTest {
 		val th = _(h00_jan, _(h01_is, _(h02_a, _(h03_black, h04_man))));
 
 		assertProof(tt, th);
-		testTestCaseCreator(tt, th, ResultType.Proof);
+		testTestCaseCreator(tt, th, Proof);
 	}
 
 	@Test
@@ -249,7 +249,7 @@ public final class TestJanPhrases extends AbsPipelineTest {
 		val th = _(h00_jan, _(h01_found, _(h02_the, _(h03_blue, h04_book))));
 		
 		assertProof(tt, th);
-		testTestCaseCreator(tt, th, ResultType.Proof);
+		testTestCaseCreator(tt, th, Proof);
 	}
 
 	@Test
@@ -294,7 +294,7 @@ public final class TestJanPhrases extends AbsPipelineTest {
 										_(h05_who, _(h06_killed, h07_mary))))));
 
 		assertProof(tt, th);
-		testTestCaseCreator(tt, th, ResultType.Proof);
+		testTestCaseCreator(tt, th, Proof);
 	}
 
 	@Test
@@ -315,7 +315,7 @@ public final class TestJanPhrases extends AbsPipelineTest {
 		val th = _(jan, _(ate, _(an, egg)));
 
 		assertProof(tt, th);
-		testTestCaseCreator(tt, th, ResultType.Proof);
+		testTestCaseCreator(tt, th, Proof);
 	}
 
 	@Test
@@ -342,7 +342,7 @@ public final class TestJanPhrases extends AbsPipelineTest {
 		val th = _(h_jan, _(h_quickly, _(h_ate, _(h_an, h_egg))));
 
 		assertProof(tt, th);
-		testTestCaseCreator(tt, th, ResultType.Proof);
+		testTestCaseCreator(tt, th, Proof);
 	}
 
 	@Test
@@ -366,7 +366,7 @@ public final class TestJanPhrases extends AbsPipelineTest {
 		val th = _(jan, _(_(quickly, _(ate, _(an, egg))), _(in, _(a, garden))));
 		
 		assertProof(tt,th);
-		testTestCaseCreator(tt, th, ResultType.Proof);
+		testTestCaseCreator(tt, th, Proof);
 	}
 
 }
