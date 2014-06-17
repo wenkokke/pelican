@@ -17,14 +17,13 @@ import lombok.val;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 
-import org.codehaus.jparsec.util.Lists;
-
 import semante.pipeline.Pair;
 import semante.predcalc.ExprForm;
 import semante.predcalc.IotaExtractor;
 import static semante.pipeline.impl.IPair.*;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Lists;
 
 /**
  * The IOTA extraction algorithm makes the following changes to a term: at every
@@ -86,7 +85,7 @@ public final class INewIotaExtractor implements IotaExtractor {
 		ExprRichBuilder bld = stl.getExprBuilder();
 		
 		@NonFinal int counter = 0;
-		@Getter List<Expr> pragmatics = Lists.arrayList();
+		@Getter List<Expr> pragmatics = Lists.newArrayList();
 		Map<String, Pair<String,Expr>> constantNamesAndPredicates = Maps.newHashMap();
 		
 		// obtain the generated contant names and collected predicates.
