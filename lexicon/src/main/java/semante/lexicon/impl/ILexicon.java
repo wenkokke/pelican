@@ -4,20 +4,16 @@ import static com.google.common.base.Joiner.on;
 import static java.util.Arrays.copyOfRange;
 import static lombok.AccessLevel.PRIVATE;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
 import lambdacalc.DeBruijn;
 import lambdacalc.STL;
-import lombok.Cleanup;
-import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
@@ -27,10 +23,8 @@ import semante.lexicon.Word;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
-import com.google.common.io.Files;
 
 @FieldDefaults(makeFinal=true,level=PRIVATE)
 public final class ILexicon implements Lexicon {

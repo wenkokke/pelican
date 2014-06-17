@@ -14,9 +14,9 @@ import java.util.TimerTask;
 
 import lombok.Cleanup;
 import lombok.val;
-import predcalc.ExprForm;
-import predcalc.FOLExpr.Formula;
-import predcalc.PredCalc;
+import semante.predcalc.ExprForm;
+import semante.predcalc.PredCalc;
+import semante.predcalc.FOLExpr.Formula;
 import semante.prover.Prover;
 import semante.prover.ProverOutput;
 import semante.prover.ProverOutput.ResultType;

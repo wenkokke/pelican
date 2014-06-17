@@ -9,6 +9,7 @@ import lambdacalc.Type;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import semante.checker.util.Direction;
 import semante.pipeline.Maybe;
 
 @RequiredArgsConstructor

@@ -1,6 +1,7 @@
 package semante.lexicon.impl;
 
 import static com.google.common.collect.Lists.transform;
+import static lombok.AccessLevel.PRIVATE;
 
 import java.util.List;
 
@@ -8,9 +9,12 @@ import lambdacalc.DeBruijn;
 import lambdacalc.DeBruijnRenamer;
 import lambdacalc.Expr;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.val;
-import lombok.experimental.Value;
+import lombok.experimental.FieldDefaults;
 import lombok.experimental.Wither;
 import semante.lexicon.Category;
 import semante.lexicon.Word;
@@ -18,8 +22,11 @@ import semante.lexicon.Word;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 
-@Value
+@Getter
+@ToString
+@EqualsAndHashCode(callSuper = false)
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = PRIVATE)
 public final class ICategory implements Category {
 
 	String			name;

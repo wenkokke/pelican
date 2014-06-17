@@ -36,7 +36,6 @@ import semante.pipeline.BinaryTreeBuilder;
 import semante.pipeline.Maybe;
 import semante.pipeline.SimpleBinaryTree;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 @RequiredArgsConstructor

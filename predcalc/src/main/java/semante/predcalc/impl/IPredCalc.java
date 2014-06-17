@@ -1,15 +1,14 @@
-package predcalc.impl;
+package semante.predcalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
 
 import java.io.FileNotFoundException;
 
-import predcalc.ExprPrinter;
-import predcalc.PredCalc;
-
 import lombok.Delegate;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
+import semante.predcalc.ExprPrinter;
+import semante.predcalc.PredCalc;
 import semante.prover.Prover;
 import semante.prover.impl.IProver;
 import semante.settings.impl.ISettings;
@@ -22,7 +21,7 @@ public class IPredCalc implements PredCalc {
 	
 	public IPredCalc() throws FileNotFoundException {
 		val settings = new ISettings();
-		exprPrinter  = new IExprPrinter();
+		exprPrinter  = new IExprPrinterProver9();
 		prover       = new IProver(settings,this);
 	}
 }

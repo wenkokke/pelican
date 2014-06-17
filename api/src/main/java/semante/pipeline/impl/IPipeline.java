@@ -12,8 +12,6 @@ import lombok.Delegate;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
-import predcalc.impl.ILambda2Pred;
-import predcalc.impl.IPredCalc;
 import semante.checker.ICollectivityAndIotaChecker;
 import semante.checker.IllegalAnnotationException;
 import semante.disamb.UnambiguousAnnotation;
@@ -29,6 +27,8 @@ import semante.pipeline.Pair;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result;
 import semante.pipeline.TestCaseCreator;
+import semante.predcalc.impl.IPredCalc;
+import semante.predcalc.impl.ISmasher;
 import semante.prover.impl.IProver;
 import semante.settings.Settings;
 
@@ -181,7 +181,7 @@ public final class IPipeline implements Pipeline {
 		
 		// LOWER: convert normal form terms to first order logic
 		val pcalc  = new IPredCalc();
-		val stl2p  = new ILambda2Pred(pcalc, stl);
+		val stl2p  = new ISmasher(pcalc, stl);
 		val prover = new IProver(settings, pcalc);
 		
 		for (val nubText: withSubsTexts) {

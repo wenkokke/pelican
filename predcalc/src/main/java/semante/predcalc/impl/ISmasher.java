@@ -1,41 +1,47 @@
-package predcalc.impl;
+package semante.predcalc.impl;
+
+import static lombok.AccessLevel.PRIVATE;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lambdacalc.Expr;
 import lambdacalc.STL;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import predcalc.ExprForm;
-import predcalc.ExtractIotas;
-import predcalc.FOLExpr;
-import predcalc.FOLExpr.Formula;
-import predcalc.Lambda2Pred;
-import predcalc.LowLambda2Pred;
-import predcalc.LowerLambda;
-import predcalc.PredCalc;
+import semante.predcalc.Expr2FirstOrderExpr;
+import semante.predcalc.ExprForm;
+import semante.predcalc.FOLExpr;
+import semante.predcalc.IotaExtractor;
+import semante.predcalc.LowLambda2Pred;
+import semante.predcalc.PredCalc;
+import semante.predcalc.Smasher;
+import semante.predcalc.FOLExpr.Formula;
 
-@FieldDefaults(makeFinal=true)
-public class ILambda2Pred implements Lambda2Pred {
+@RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = PRIVATE)
+public final class ISmasher implements Smasher {
 	
 	protected PredCalc pcalc;
 	protected STL lcalc;
-	private LowerLambda lower;
-	private ExtractIotas ext;
+	private Expr2FirstOrderExpr lower;
+	private IotaExtractor ext;
 	private LowLambda2Pred l2p;
 	
-	public ILambda2Pred(PredCalc pcalc, STL lcalc) {
+	public ISmasher(PredCalc pcalc, STL lcalc) {
 		this.pcalc = pcalc;
 		this.lcalc = lcalc;
-		lower = new ILowerLambda(lcalc);
-		ext = new IExtractIotas(lcalc);
-		l2p = new ILowLambda2Pred(pcalc, lcalc);
+		lower = new IExpr2FirstOrderExpr(lcalc);
+		ext = new IOldIotaExtractor(lcalc);
+		l2p = new IFirstOrderExpr2Pred(pcalc, lcalc);
 	}
 	
 	@Override
 	public ExprForm<Formula> smash(Expr expr) {
 		// Extract the iotas
 		ExprForm<Expr> form = ext.extract(expr);
+		
+		System.err.println("IotaExtraction: " + lcalc.format(form.getSemantics()));
 		
 		// Convert all expressions in the sentence-form to predicate logic
 		List<Formula> prags = new ArrayList<Formula>();

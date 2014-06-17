@@ -1,15 +1,15 @@
-package predcalc.impl;
+package semante.predcalc.impl;
 
-import static lombok.AccessLevel.PUBLIC;
+import static lombok.AccessLevel.PRIVATE;
 
 import java.util.List;
 
-import predcalc.FOLExpr;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.Value;
+import semante.predcalc.FOLExpr;
 
 /*
  * Predicate = Pred String [Term] -- e*t
@@ -19,16 +19,25 @@ import lombok.experimental.Value;
  * Function = Func String [Var] -- :e*e
  */
 
-@FieldDefaults(makeFinal=true, level=PUBLIC)
+@FieldDefaults(makeFinal = true, level = PRIVATE)
 abstract class IFOLExpr implements FOLExpr {
 
 	// Term
-	@Value @EqualsAndHashCode(callSuper = false)
+	@Getter
+	@ToString
+	@EqualsAndHashCode(callSuper = false)
+	@RequiredArgsConstructor
+	@FieldDefaults(makeFinal = true, level = PRIVATE)
 	static final class Function extends IFOLExpr implements Term {
-		String name; List<Term> args;
-		@Override public <X> X accept(Visitor<X> v) {
+
+		String name;
+		List<Term> args;
+
+		@Override
+		public <X> X accept(Visitor<X> v) {
 			return v.function(name, args);
 		}
+
 		@Override
 		public FOLExpr add(FOLExpr accept) {
 			if (accept instanceof Term) {
@@ -39,25 +48,43 @@ abstract class IFOLExpr implements FOLExpr {
 			}
 		}
 	}
-	@Value @EqualsAndHashCode(callSuper = false)
+
+	@Getter
+	@ToString
+	@EqualsAndHashCode(callSuper = false)
+	@RequiredArgsConstructor
+	@FieldDefaults(makeFinal = true, level = PRIVATE)
 	static final class Variable extends IFOLExpr implements Term {
+		
 		String name;
-		@Override public <X> X accept(Visitor<X> v) {
+
+		@Override
+		public <X> X accept(Visitor<X> v) {
 			return v.variable(name);
 		}
+
 		@Override
 		public FOLExpr add(FOLExpr accept) {
 			throw new Error("Cannot add anything to variable: " + accept);
 		}
 	}
-	
+
 	// Formula
-	@Value @EqualsAndHashCode(callSuper=false)
+	@Getter
+	@ToString
+	@EqualsAndHashCode(callSuper = false)
+	@RequiredArgsConstructor
+	@FieldDefaults(makeFinal = true, level = PRIVATE)
 	static class Predicate extends IFOLExpr implements Formula {
-		@Getter String name; @Getter List<Term> terms;
-		@Override public <X> X accept(Visitor<X> v) {
+
+		String name;
+		List<Term> terms;
+
+		@Override
+		public <X> X accept(Visitor<X> v) {
 			return v.predicate(name, terms);
 		}
+
 		@Override
 		public FOLExpr add(FOLExpr accept) {
 			if (accept instanceof Term) {
@@ -68,30 +95,52 @@ abstract class IFOLExpr implements FOLExpr {
 			}
 		}
 	}
-	@Value @EqualsAndHashCode(callSuper=false)
+
+	@Getter
+	@ToString
+	@EqualsAndHashCode(callSuper = false)
+	@RequiredArgsConstructor
+	@FieldDefaults(makeFinal = true, level = PRIVATE)
 	static final class Quantifier extends IFOLExpr implements Formula {
-		@Getter String name; @Getter Term var; @Getter Formula body;
-		@Override public <X> X accept(Visitor<X> v) {
+
+		String name;
+		Term var;
+		Formula body;
+
+		@Override
+		public <X> X accept(Visitor<X> v) {
 			return v.quantifier(name, var, body);
 		}
+
 		@Override
 		public FOLExpr add(FOLExpr accept) {
 			throw new Error("Cannot add anything to quantifier: " + accept);
 		}
 	}
-	@Value @EqualsAndHashCode(callSuper=false)
+
+	@Getter
+	@ToString
+	@EqualsAndHashCode(callSuper = false)
+	@RequiredArgsConstructor
+	@FieldDefaults(makeFinal = true, level = PRIVATE)
 	static final class Connective extends IFOLExpr implements Formula {
-		@Getter String name; @Getter List<Formula> formulas;
-		@Override public <X> X accept(Visitor<X> v) {
+		
+		String name;
+		List<Formula> formulas;
+
+		@Override
+		public <X> X accept(Visitor<X> v) {
 			return v.connective(name, formulas);
 		}
+
 		@Override
 		public FOLExpr add(FOLExpr accept) {
 			if (accept instanceof Formula) {
 				formulas.add((Formula) accept);
 				return this;
 			} else {
-				throw new Error("Cannot add non-formula to connective: " + accept);
+				throw new Error("Cannot add non-formula to connective: "
+						+ accept);
 			}
 		}
 	}

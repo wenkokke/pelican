@@ -94,9 +94,7 @@ of "who is", which is exactly what this instance of $\text{WHO}_A$ does.
 \subsection{Generalized Quantifiers}
 
 The definite article introduces an application of the $\iota$-function.
-
-< THE   \A:et.\B:et.B:et (IOTA:(et)e A:et)
-> THE   \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (AND:ttt (A:et x:e) (B:et x:e)) (UNIQUE:(et)t A:et))
+> THE   \A:et.\B:et.B:et (IOTA:(et)e A:et)
 
 Though it may look a bit strange, this version of the definite article allows
 constructions such as "The John Lennon", where it is applied to something that

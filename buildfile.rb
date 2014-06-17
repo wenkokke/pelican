@@ -76,7 +76,7 @@ define 'pelican' do
 
   # implementation of first order logic and smashing from hol to fol
   define 'predcalc' do
-    compile.with LOMBOK,GUAVA,SLF4J,LAMBDACALC,PIPELINE.util,projects('settings')
+    compile.with LOMBOK,GUAVA,SLF4J,LAMBDACALC,PIPELINE,projects('settings')
     test.with JPARSEC,GUAVA,SNAKE_YAML,SLF4J,compile.dependencies
     package :jar
   end

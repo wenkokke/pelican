@@ -1,4 +1,4 @@
-package predcalc;
+package semante.predcalc;
 
 @SuppressWarnings("serial")
 public final class HigherOrderError extends IllegalArgumentException {
