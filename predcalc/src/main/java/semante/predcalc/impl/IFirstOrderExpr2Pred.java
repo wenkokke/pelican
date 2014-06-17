@@ -1,4 +1,4 @@
-package predcalc.impl;
+package semante.predcalc.impl;
 
 import java.util.ArrayList;
 
@@ -9,12 +9,12 @@ import lambdacalc.Symbol;
 import lambdacalc.Type;
 import lambdacalc.Types;
 import lombok.RequiredArgsConstructor;
-import predcalc.FOLExpr;
-import predcalc.FOLExpr.Formula;
-import predcalc.FOLExpr.Term;
-import predcalc.HigherOrderError;
-import predcalc.LowLambda2Pred;
-import predcalc.PredCalc;
+import semante.predcalc.FOLExpr;
+import semante.predcalc.HigherOrderError;
+import semante.predcalc.LowLambda2Pred;
+import semante.predcalc.PredCalc;
+import semante.predcalc.FOLExpr.Formula;
+import semante.predcalc.FOLExpr.Term;
 
 /*
  * Convert a first-order lambda expression to predicate logic
@@ -22,13 +22,13 @@ import predcalc.PredCalc;
  */
 
 @RequiredArgsConstructor
-public class ILowLambda2Pred implements LowLambda2Pred {
+public class IFirstOrderExpr2Pred implements LowLambda2Pred {
 
 	protected PredCalc pcalc;
 	protected STL lcalc;
 	private Expr nowsmashing;
 
-	public ILowLambda2Pred(PredCalc pcalc, STL lcalc) {
+	public IFirstOrderExpr2Pred(PredCalc pcalc, STL lcalc) {
 		this.pcalc     = pcalc;
 		this.lcalc     = lcalc;
 	};
@@ -109,7 +109,7 @@ public class ILowLambda2Pred implements LowLambda2Pred {
 			return "|";
 		} else if (in.equals("IMPLIES")) {
 			return "->";
-		} else if (in.equals("EQUIVALENCES")) {
+		} else if (in.equals("EQUIV")) {
 			return "<->";
 		} else if (in.equals("EQ")) {
 			return "=";

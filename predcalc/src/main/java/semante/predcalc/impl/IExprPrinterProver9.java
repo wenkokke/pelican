@@ -1,17 +1,16 @@
-package predcalc.impl;
+package semante.predcalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
 
 import java.util.List;
 
-import predcalc.ExprPrinter;
-import predcalc.FOLExpr.Formula;
-import predcalc.FOLExpr.Term;
-
+import semante.predcalc.ExprPrinter;
+import semante.predcalc.FOLExpr.Formula;
+import semante.predcalc.FOLExpr.Term;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal=true, level=PRIVATE)
-final class IExprPrinter implements ExprPrinter, Formula.Visitor<String>, Term.Visitor<String> {
+final class IExprPrinterProver9 implements ExprPrinter, Formula.Visitor<String>, Term.Visitor<String> {
 	
 	@Override
 	public String format(Formula f) {

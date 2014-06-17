@@ -8,11 +8,11 @@ import lambdacalc.STL;
 
 import org.junit.Before;
 
-import predcalc.Lambda2Pred;
-import predcalc.PredCalc;
-import predcalc.impl.ILambda2Pred;
-import predcalc.impl.IPredCalc;
 import predcalc.test.TestData;
+import semante.predcalc.PredCalc;
+import semante.predcalc.Smasher;
+import semante.predcalc.impl.IPredCalc;
+import semante.predcalc.impl.ISmasher;
 import semante.prover.Prover;
 import semante.prover.impl.IProver;
 import semante.settings.Settings;
@@ -22,7 +22,7 @@ public abstract class ATestCase {
 
 	protected STL 			lcalc;
 	protected PredCalc 		pcalc;
-	protected Lambda2Pred 	stl2p;
+	protected Smasher 	stl2p;
 	protected Settings		settings;
 	protected Prover		prover;
 
@@ -30,7 +30,7 @@ public abstract class ATestCase {
 	public final void setUpPipeline() throws IOException {
 		lcalc    = new STL();
 		pcalc    = new IPredCalc();
-		stl2p    = new ILambda2Pred(pcalc, lcalc);
+		stl2p    = new ISmasher(pcalc, lcalc);
 		settings = new ISettings();
 		prover   = new IProver(settings, pcalc);
 

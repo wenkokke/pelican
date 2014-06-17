@@ -1,4 +1,4 @@
-package predcalc.impl;
+package semante.predcalc.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,18 +15,17 @@ import lambdacalc.impl.IType.IFunction;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
-import predcalc.HigherOrderError;
-import predcalc.LowerLambda;
+import semante.predcalc.Expr2FirstOrderExpr;
+import semante.predcalc.HigherOrderError;
 
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true)
-public class ILowerLambda implements LowerLambda {
+public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 
 	protected STL lcalc; 
 	
 	public List<String> getComments() {
-		// TODO provide actual implementation
 		return new ArrayList<String>();
 	}
 	

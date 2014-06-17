@@ -1,7 +1,7 @@
 package semante.prover;
 
-import predcalc.ExprForm;
-import predcalc.FOLExpr.Formula;
+import semante.predcalc.ExprForm;
+import semante.predcalc.FOLExpr.Formula;
 
 public interface Prover {
 	ProverResult prove(ExprForm<Formula> text, ExprForm<Formula> hypothesis);

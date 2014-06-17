@@ -127,7 +127,7 @@ public final class TestJanPhrases extends AbsPipelineTest {
 		val t01_largest = word("MOD_R", "largest");
 		val t02_search_engine = word("N_1", "search_engine");
 		val t03_on_the_web = word("MOD_I", "on_the_web");
-		val t04_who = word("WHO_A", "who");
+		val t04_who = word("WHO_A", "which");
 		val t05_is = word("IS", "is");
 		val t06_google = word("NP", "google");
 		val t07_is = word("IS", "is");

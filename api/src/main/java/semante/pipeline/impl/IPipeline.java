@@ -13,11 +13,8 @@ import lombok.Delegate;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
-import predcalc.ExprForm;
-import predcalc.FOLExpr.Formula;
-import predcalc.Lambda2Pred;
-import predcalc.impl.ILambda2Pred;
-import predcalc.impl.IPredCalc;
+import semante.predcalc.ExprForm;
+import semante.predcalc.FOLExpr.Formula;
 import semante.checker.ICollectivityAndIotaChecker;
 import semante.checker.IllegalAnnotationException;
 import semante.disamb.UnambiguousAnnotation;
@@ -35,6 +32,9 @@ import semante.pipeline.Result;
 import semante.pipeline.TestCaseCreator;
 import semante.prover.Prover;
 import semante.prover.ProverResult;
+import semante.predcalc.Smasher;
+import semante.predcalc.impl.IPredCalc;
+import semante.predcalc.impl.ISmasher;
 import semante.prover.impl.IProver;
 import semante.settings.Settings;
 
@@ -130,7 +130,7 @@ public final class IPipeline implements Pipeline {
 		final BinaryTree<ID, Annotation> text,
 		final BinaryTree<ID, Annotation> hypo,
 		final Iterable<Pair<BinaryTree<ID, Annotation>, BinaryTree<ID, Annotation>>> subsumptions,
-		Lambda2Pred stl2p) throws FileNotFoundException {
+		Smasher stl2p) throws FileNotFoundException {
 		
 		// DISAMBIGUATE: infer denotations and function application structure
 		val printer       = new IAnnotationTreePrinter<ID>();
@@ -251,6 +251,7 @@ public final class IPipeline implements Pipeline {
 		
 		// LOWER: convert normal form terms to first order logic
 		List<PreparedFormula> runnableFormulas = new ArrayList<PreparedFormula>();
+		
 		for (val nubText: withSubsTexts) {
 			val tText = stl.format(stl.fromDeBruijn(nubText));
 			val tFormula = stl2p.smash(stl.fromDeBruijn(nubText));			
@@ -325,7 +326,7 @@ public final class IPipeline implements Pipeline {
 		// prepare interfaces
 		val pcalc  = new IPredCalc();
 		val prover = new IProver(settings, pcalc);
-		val stl2p  = new ILambda2Pred(pcalc, stl);
+		val stl2p  = new ISmasher(pcalc, stl);
 		
 		// prepare the formuals to try to prove (including disambiguation, flattening, etc.)
 		PreparedFormulae<ID> preparedFormulae = prepare(text, hypo, subsumptions, stl2p);

@@ -1,4 +1,4 @@
-package predcalc;
+package semante.predcalc;
 
 import lambdacalc.Expr;
 
