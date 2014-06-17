@@ -3,6 +3,7 @@ package semante.pipeline.impl;
 import static lombok.AccessLevel.PRIVATE;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 import lambdacalc.DeBruijn;
@@ -12,6 +13,9 @@ import lombok.Delegate;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
+import predcalc.ExprForm;
+import predcalc.FOLExpr.Formula;
+import predcalc.Lambda2Pred;
 import predcalc.impl.ILambda2Pred;
 import predcalc.impl.IPredCalc;
 import semante.checker.ICollectivityAndIotaChecker;
@@ -29,6 +33,8 @@ import semante.pipeline.Pair;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result;
 import semante.pipeline.TestCaseCreator;
+import semante.prover.Prover;
+import semante.prover.ProverResult;
 import semante.prover.impl.IProver;
 import semante.settings.Settings;
 
@@ -57,11 +63,74 @@ public final class IPipeline implements Pipeline {
 			}
 		};
 	
-	@Override
-	public final <ID> Result<ID> prove(
+		
+	public class PreparedFormulae<ID> {
+		
+		List<PreparedFormula> formulae;
+		Result<ID> result;
+		
+		public PreparedFormulae(List<PreparedFormula> formulae) {
+			result = null;
+			this.formulae = new ArrayList<PreparedFormula>(formulae);
+		}
+		
+		public PreparedFormulae(Result<ID> result) {
+			this.result = result;
+			this.formulae = null;
+		}
+		
+		public boolean isResultSet() {
+			return result!=null;
+		}
+		
+		public Result<ID> getResult() {
+			return result;
+		}
+
+		public List<PreparedFormula> getFormulae() {
+			return formulae;
+		}
+	
+	}
+		
+		
+	public class PreparedFormula {
+		final String tText, hText;
+		final ExprForm<Formula> tFormula, hFormula;
+		
+		public PreparedFormula(String tText, ExprForm<Formula> tFormula,
+				String hText, ExprForm<Formula> hFormula) {
+			super();
+			this.tText = tText;
+			this.hText = hText;
+			this.tFormula = tFormula;
+			this.hFormula = hFormula;
+		}
+
+		public String getTText() {
+			return tText;
+		}
+		
+		public String getHText() {
+			return hText;
+		}
+		
+		public ExprForm<Formula> getTFormula() {
+			return tFormula;
+		}
+		
+		public ExprForm<Formula> getHFormula() {
+			return hFormula;
+		}
+		
+	}
+	
+	
+	public final <ID> PreparedFormulae<ID> prepare(
 		final BinaryTree<ID, Annotation> text,
 		final BinaryTree<ID, Annotation> hypo,
-		final Iterable<Pair<BinaryTree<ID, Annotation>, BinaryTree<ID, Annotation>>> subsumptions) throws FileNotFoundException {
+		final Iterable<Pair<BinaryTree<ID, Annotation>, BinaryTree<ID, Annotation>>> subsumptions,
+		Lambda2Pred stl2p) throws FileNotFoundException {
 		
 		// DISAMBIGUATE: infer denotations and function application structure
 		val printer       = new IAnnotationTreePrinter<ID>();
@@ -69,9 +138,9 @@ public final class IPipeline implements Pipeline {
 		val treebuilder   = new IBinaryTreeBuilder<ID,UnambiguousAnnotation>();
 		val disambiguator = new IDisambiguator<ID>(stl,lexicon,flattener,printer,treebuilder);
 		val disambTextM = disambiguator.disambiguate(text);
-		if (disambTextM.isLeft()) return disambTextM.getLeft().toResult();
+		if (disambTextM.isLeft()) return new PreparedFormulae<ID>(disambTextM.getLeft().<ID>toResult());
 		val disambHypoM = disambiguator.disambiguate(hypo);
-		if (disambHypoM.isLeft()) return disambHypoM.getLeft().toResult();
+		if (disambHypoM.isLeft()) return new PreparedFormulae<ID>(disambHypoM.getLeft().<ID>toResult());
 		val disambTexts = disambTextM.getRight();
 		val disambHypos = disambHypoM.getRight();
 		
@@ -91,8 +160,9 @@ public final class IPipeline implements Pipeline {
 		val validTexts = validTextsBuilder.build();
 		if (validTexts.isEmpty()) {
 			val invalidTexts = invalidTextsBuilder.build();
-			for(val invalidText : invalidTexts)
-				return invalidText.toResult();
+			for(val invalidText : invalidTexts) {
+				return new PreparedFormulae<ID>(invalidText.<ID>toResult());
+			}
 		}
 		
 		
@@ -130,14 +200,14 @@ public final class IPipeline implements Pipeline {
 			
 			val subsMaybeFlatText = disambiguator.disambiguateAndFlatten(subsRawText);
 			if (subsMaybeFlatText.isLeft())
-				return subsMaybeFlatText.getLeft();
+				return new PreparedFormulae<ID>(subsMaybeFlatText.getLeft());
 			val subsFlatTexts = subsMaybeFlatText.getRight();
 			val subsRedTexts  = Lists.transform(subsFlatTexts, reducer);
 			val subsNubTexts  = ImmutableSet.copyOf(subsRedTexts); 
 			
 			val subsMaybeFlatHypo = disambiguator.disambiguateAndFlatten(subsRawHypo);
 			if (subsMaybeFlatHypo.isLeft())
-				return subsMaybeFlatHypo.getLeft();
+				return new PreparedFormulae<ID>(subsMaybeFlatHypo.getLeft());
 			val subsFlatHypos = subsMaybeFlatHypo.getRight();
 			val subsRedHypos  = Lists.transform(subsFlatHypos, reducer);
 			val subsNubHypos  = ImmutableSet.copyOf(subsRedHypos); 
@@ -180,35 +250,91 @@ public final class IPipeline implements Pipeline {
 		}
 		
 		// LOWER: convert normal form terms to first order logic
-		val pcalc  = new IPredCalc();
-		val stl2p  = new ILambda2Pred(pcalc, stl);
-		val prover = new IProver(settings, pcalc);
-		
+		List<PreparedFormula> runnableFormulas = new ArrayList<PreparedFormula>();
 		for (val nubText: withSubsTexts) {
-			val t = stl2p.smash(stl.fromDeBruijn(nubText));
-			
+			val tText = stl.format(stl.fromDeBruijn(nubText));
+			val tFormula = stl2p.smash(stl.fromDeBruijn(nubText));			
 			for (val nubHypo: nubHypos) {
-				val h       = stl2p.smash(stl.fromDeBruijn(nubHypo));
-				
-				// PROVE: attempt to prove the combination of text and hypothesis
-				val res     = prover.prove(t, h);
-				val resType = res.getProverOutputPF().getResultType();
-				switch (resType) {
-				case ProofFound:
-					return new IResult$Proof<ID>();
-				case NoProofCanBeFound:
-					break;
-				case Error:
-				case Interuppted:
-				case NotRun:
-				case Unset:
-				default:
-					// TODO convert this to returning IResult$Error()
-					System.err.println("Unexpected error in prover execution: " + res.getProverOutputPF().getOutput());					
-				}
+				val hText = stl.format(stl.fromDeBruijn(nubHypo));				
+				val hFormula = stl2p.smash(stl.fromDeBruijn(nubHypo));
+				runnableFormulas.add(new PreparedFormula(tText,tFormula,hText,hFormula));
 			}
 		}
-		return new IResult$Unknown<ID>();
+		return new PreparedFormulae<ID>(runnableFormulas);
+	}
+
+	public interface ResultHandler<ID> {
+		Result<ID> getFinalResult();
+		boolean handle(ProverResult result);
+	}
+	
+	private class SimpleResultHandler<ID> implements ResultHandler<ID> {
+		boolean finalResultSet = false;
+		Result<ID> finalResult;
+
+		public void setFinalResult(Result<ID> result) {
+			if (!finalResultSet) {
+				finalResult = result;
+				finalResultSet = true;
+			}
+		}
+		
+		@Override
+		public boolean handle(ProverResult result) {
+			switch (result.getProverOutputPF().getResultType()) {
+			case ProofFound:
+				setFinalResult(new IResult$Proof<ID>());
+				break;
+			case NoProofCanBeFound:
+				break;
+			case Error:
+			case Interuppted:
+			case NotRun:
+			case Unset:
+			default:
+				// TODO convert this to returning IResult$Error()
+				System.err.println("Unexpected error in prover execution: " + result.getProverOutputPF().getOutput());
+			}
+			return !finalResultSet;
+		}
+
+		@Override
+		public Result<ID> getFinalResult() {
+			return finalResultSet ? finalResult : new IResult$Unknown<ID>();  
+		}
+		
+	}
+	
+	public final <ID> Result<ID> prove(List<PreparedFormula> formulas, Prover prover, ResultHandler<ID> resultHandler) throws FileNotFoundException {
+		// PROVE: attempt to prove the combinations of text and hypothesis
+
+		boolean loop = true;
+		for (int index=0 ; index<formulas.size() && loop ; index++) {
+			PreparedFormula formula = formulas.get(index);
+			loop = resultHandler.handle(prover.prove(formula.getTFormula(), formula.getHFormula()));
+		}
+		return resultHandler.getFinalResult();
+	}	
+		
+	@Override
+	public final <ID> Result<ID> prove(
+		final BinaryTree<ID, Annotation> text,
+		final BinaryTree<ID, Annotation> hypo,
+		final Iterable<Pair<BinaryTree<ID, Annotation>, BinaryTree<ID, Annotation>>> subsumptions) throws FileNotFoundException {
+
+		// prepare interfaces
+		val pcalc  = new IPredCalc();
+		val prover = new IProver(settings, pcalc);
+		val stl2p  = new ILambda2Pred(pcalc, stl);
+		
+		// prepare the formuals to try to prove (including disambiguation, flattening, etc.)
+		PreparedFormulae<ID> preparedFormulae = prepare(text, hypo, subsumptions, stl2p);
+		
+		// if a result is already set then it's an error and we report it to the caller directly
+		// otherwise, we start the proving stage (prover loop).
+		return preparedFormulae.isResultSet() 
+				? preparedFormulae.getResult() 
+				: prove(preparedFormulae.getFormulae(),prover,new SimpleResultHandler<ID>());
 	}
 	
 	@Override
