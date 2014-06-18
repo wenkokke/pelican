@@ -104,6 +104,8 @@ public final class INewIotaExtractor implements IotaExtractor {
 			
 			// then see if we are currently dealing with an iota.
 			if (stl.typeOf(fun1).equals(Types.ET_E) && fun1.accept(isIOTA)) {
+				
+				System.err.println("Rewrite [IOTA " + stl.format(arg1) + " ]");
 
 				// We compute the string representation of the term, as equality
 				// on the string terms is considered to be more reliable than

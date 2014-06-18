@@ -11,7 +11,7 @@ import lambdacalc.Types;
 import lombok.RequiredArgsConstructor;
 import semante.predcalc.FOLExpr;
 import semante.predcalc.HigherOrderError;
-import semante.predcalc.LowLambda2Pred;
+import semante.predcalc.FirstOrderExpr2Pred;
 import semante.predcalc.PredCalc;
 import semante.predcalc.FOLExpr.Formula;
 import semante.predcalc.FOLExpr.Term;
@@ -22,7 +22,7 @@ import semante.predcalc.FOLExpr.Term;
  */
 
 @RequiredArgsConstructor
-public class IFirstOrderExpr2Pred implements LowLambda2Pred {
+public class IFirstOrderExpr2Pred implements FirstOrderExpr2Pred {
 
 	protected PredCalc pcalc;
 	protected STL lcalc;

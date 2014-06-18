@@ -2,6 +2,6 @@ package semante.predcalc;
 
 import lambdacalc.Expr;
 
-public interface LowLambda2Pred {
+public interface FirstOrderExpr2Pred {
 	public FOLExpr convert(Expr expr);
 }
