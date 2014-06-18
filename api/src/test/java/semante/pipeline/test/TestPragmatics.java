@@ -30,6 +30,6 @@ public final class TestPragmatics extends AbsPipelineTest {
 		val th = _(_(_(t03_who, _(t04_is , t05_jan)) , _(t01_the, t02_professor)) , t06_sat);
 
 		// return the new entailment;
-		assertProof(tt, th);
+		assertNoProof(tt, th);
 	}
 }
