@@ -49,7 +49,7 @@ public final class INewIotaExtractor implements IotaExtractor {
 	
 	public final ExprForm<Expr> extract(@NonFinal Expr expr) {
 		
-		System.out.println("Running new IOTA extractor on: ["+stl.format(expr)+"]");
+		System.err.println("IotaExtraction: ["+stl.format(expr)+"]");
 		
 		// Replace all IOTA applications by fresh constants.
 		val bld = stl.getExprBuilder();
@@ -63,20 +63,19 @@ public final class INewIotaExtractor implements IotaExtractor {
 			val pred    = conAndPred.getSecond();
 			
 			// Update the expression for every unbound constant c in e:
-			//   e => EXISTS c. P(c) /\ e
+			//   e => P(c) /\ e[...c...]
 			expr =
 				bld.application(
-					bld.variable("EXISTS", Types.ET_T),stl.betaReduce(
-					bld.abstraction(conName, Types.E,
-						bld.application(
-							bld.variable("AND", Types.TTT),
-							bld.application(pred,con),
-							expr))));
+					bld.variable("AND", Types.TTT),
+					bld.application(pred,con),
+					expr);
 		}
+		
+		System.err.println("            =>: ["+stl.format(expr)+"]");
 
 		// Return what basically amounts to a pair of the pragmatics section and
 		// the newly generated constant.
-		return new IExprForm<Expr>(expr, extr.getPragmatics());
+		return new IExprForm<Expr>(stl.betaReduce(expr), extr.getPragmatics());
 	}
 	
 	@RequiredArgsConstructor
@@ -104,8 +103,6 @@ public final class INewIotaExtractor implements IotaExtractor {
 			
 			// then see if we are currently dealing with an iota.
 			if (stl.typeOf(fun1).equals(Types.ET_E) && fun1.accept(isIOTA)) {
-				
-				System.err.println("Rewrite [IOTA " + stl.format(arg1) + " ]");
 
 				// We compute the string representation of the term, as equality
 				// on the string terms is considered to be more reliable than
@@ -144,6 +141,8 @@ public final class INewIotaExtractor implements IotaExtractor {
 					// entity that uniquely satisfies the predicate P.
 					val freshConstant = "$" + counter++;
 					constantNamesAndPredicates.put(argStr, pair(freshConstant,arg1));
+					System.err.println("IotaExtraction: [IOTA:(et)e " + stl.format(arg1) + "]\n"
+					                 + "            =>: " + freshConstant + " & " + stl.format(arg1));
 					return bld.variable(freshConstant, Types.E);
 				}
 			}

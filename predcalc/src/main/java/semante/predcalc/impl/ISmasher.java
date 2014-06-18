@@ -29,7 +29,7 @@ public final class ISmasher implements Smasher {
 	
 	public ISmasher(PredCalc pcalc, STL lcalc) {
 		this.lcalc = lcalc;
-		extractor  = new IOldIotaExtractor(lcalc);
+		extractor  = new INewIotaExtractor(lcalc);
 		expr2foe   = new IExpr2FirstOrderExpr(lcalc);
 		foe2pred   = new IFirstOrderExpr2Pred(pcalc, lcalc);
 	}
@@ -38,8 +38,6 @@ public final class ISmasher implements Smasher {
 	public ExprForm<Formula> smash(Expr expr) {
 		// Extract the iotas
 		ExprForm<Expr> form = extractor.extract(expr);
-		
-		System.err.println("IotaExtraction: " + lcalc.format(form.getSemantics()));
 		
 		// Convert all expressions in the sentence-form to predicate logic
 		List<Formula> prags = new ArrayList<Formula>();

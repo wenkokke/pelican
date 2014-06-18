@@ -373,19 +373,19 @@ public final class TestJanPhrases extends AbsPipelineTest {
 	public final void jan14() throws Exception {
 
 		// create the vocabulary for the text;
-		val t00_the = word("THE", "the");
-		val t01_tall = word("MOD_R", "tall");
-		val t03_dutch = word("MOD_I", "Dutch");
-		val t02_man = word("N_1", "man");
-		val t04_who = word("WHO_A", "which");
-		val t05_is = word("IS", "is");
-		val t06_john = word("NP", "John");
+		val t00_the    = word("THE", "the");
+		val t01_tall   = word("MOD_R", "tall");
+		val t03_dutch  = word("MOD_I", "Dutch");
+		val t02_man    = word("N_1", "man");
+		val t04_who    = word("WHO_A", "who");
+		val t05_is     = word("IS", "is");
+		val t06_john   = word("NP", "John");
 		val t08_smiled = word("V_1", "smiled");
 
 		// create the vocabulary for the hypothesis;
-		val h00_john = word("NP", "John");
-		val h02_is = word("IS", "is");
-		val h03_dutch = word("MOD_I", "Dutch");
+		val h00_john   = word("NP", "John");
+		val h02_is     = word("IS", "is");
+		val h03_dutch  = word("MOD_I", "Dutch");
 
 		// create the tree structure for the text;
 		val tt = _(
@@ -393,6 +393,35 @@ public final class TestJanPhrases extends AbsPipelineTest {
 						_(t01_tall, _(t03_dutch, t02_man))),
 						_(t04_who, _(t05_is, t06_john))),
 				t08_smiled);
+
+		// create the tree structure for the hypothesis;
+		val th = _(h00_john, _(h02_is,h03_dutch));
+
+		assertProof(tt, th);
+		testTestCaseCreator(tt, th, Proof);
+	}
+
+	@Test
+	public final void jan15() throws Exception {
+
+		// create the vocabulary for the text;
+		val t00_the    = word("THE", "the");
+		val t03_dutch  = word("MOD_I", "Dutch");
+		val t02_man    = word("N_1", "man");
+		val t04_who    = word("WHO_A", "who");
+		val t05_is     = word("IS", "is");
+		val t06_john   = word("NP", "John");
+		val t08_smiled = word("V_1", "smiled");
+
+		// create the vocabulary for the hypothesis;
+		val h00_john   = word("NP", "John");
+		val h02_is     = word("IS", "is");
+		val h03_dutch  = word("MOD_I", "Dutch");
+
+		// create the tree structure for the text;
+		val tt = _(
+				_(_(t00_the, _(t03_dutch, t02_man)),
+						_(t04_who, _(t05_is, t06_john))), t08_smiled);
 
 		// create the tree structure for the hypothesis;
 		val th = _(h00_john, _(h02_is,h03_dutch));
