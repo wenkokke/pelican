@@ -33,6 +33,7 @@ public final class ISmasher implements Smasher {
 		this.lcalc = lcalc;
 		lower = new IExpr2FirstOrderExpr(lcalc);
 		ext = new IOldIotaExtractor(lcalc);
+		//ext = new INewIotaExtractor(lcalc);
 		l2p = new IFirstOrderExpr2Pred(pcalc, lcalc);
 	}
 	

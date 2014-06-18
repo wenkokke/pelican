@@ -49,6 +49,8 @@ public final class INewIotaExtractor implements IotaExtractor {
 	
 	public final ExprForm<Expr> extract(@NonFinal Expr expr) {
 		
+		System.out.println("Running new IOTA extractor on: ["+stl.format(expr)+"]");
+		
 		// Replace all IOTA applications by fresh constants.
 		val bld = stl.getExprBuilder();
 		val extr = new ReplaceIotaByFreshConstant();
@@ -64,12 +66,12 @@ public final class INewIotaExtractor implements IotaExtractor {
 			//   e => EXISTS c. P(c) /\ e
 			expr =
 				bld.application(
-					bld.variable("EXISTS", Types.ET_T),
+					bld.variable("EXISTS", Types.ET_T),stl.betaReduce(
 					bld.abstraction(conName, Types.E,
 						bld.application(
 							bld.variable("AND", Types.TTT),
 							bld.application(pred,con),
-							expr)));
+							expr))));
 		}
 
 		// Return what basically amounts to a pair of the pragmatics section and
