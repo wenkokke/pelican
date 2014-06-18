@@ -141,8 +141,6 @@ public final class INewIotaExtractor implements IotaExtractor {
 					// entity that uniquely satisfies the predicate P.
 					val freshConstant = "$" + counter++;
 					constantNamesAndPredicates.put(argStr, pair(freshConstant,arg1));
-					System.err.println("IotaExtraction: [IOTA:(et)e " + stl.format(arg1) + "]\n"
-					                 + "            =>: " + freshConstant + " & " + stl.format(arg1));
 					return bld.variable(freshConstant, Types.E);
 				}
 			}
