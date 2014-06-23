@@ -1,7 +1,9 @@
 package semante.predcalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
+import static semante.pipeline.impl.IPair.pair;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,14 +18,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
-
 import semante.pipeline.Pair;
 import semante.predcalc.ExprForm;
 import semante.predcalc.IotaExtractor;
-import static semante.pipeline.impl.IPair.*;
 
-import com.google.common.collect.Maps;
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Ordering;
 
 /**
  * The IOTA extraction algorithm makes the following changes to a term: at every
@@ -63,12 +66,15 @@ public final class INewIotaExtractor implements IotaExtractor {
 			val pred    = conAndPred.getSecond();
 			
 			// Update the expression for every unbound constant c in e:
-			//   e => P(c) /\ e[...c...]
+			//   e => exists c. P(c) /\ e[...c...]
 			expr =
 				bld.application(
-					bld.variable("AND", Types.TTT),
-					bld.application(pred,con),
-					expr);
+					bld.variable("EXISTS", Types.ET_T),
+					bld.abstraction(conName, Types.E,
+						bld.application(
+							bld.variable("AND", Types.TTT),
+								bld.application(pred,con),
+								expr)));
 		}
 		
 		System.err.println("            =>: ["+stl.format(expr)+"]");
@@ -77,6 +83,16 @@ public final class INewIotaExtractor implements IotaExtractor {
 		// the newly generated constant.
 		return new IExprForm<Expr>(stl.betaReduce(expr), extr.getPragmatics());
 	}
+
+	@FieldDefaults(makeFinal=true, level = PRIVATE)
+	private final class OrderByFirst implements Comparator<Pair<Integer,Expr>> {
+
+		@Override
+		public final int compare(Pair<Integer, Expr> x, Pair<Integer, Expr> y) {
+			return x.getFirst().compareTo(y.getFirst());
+		}
+		
+	}
 	
 	@RequiredArgsConstructor
 	@FieldDefaults(makeFinal=true, level = PRIVATE)
@@ -84,14 +100,25 @@ public final class INewIotaExtractor implements IotaExtractor {
 
 		Expr.Visitor<Boolean> isIOTA = new IsIOTA();
 		ExprRichBuilder bld = stl.getExprBuilder();
+		Ordering<Pair<Integer,Expr>> ord = Ordering.from(new OrderByFirst()).reverse();
 		
 		@NonFinal int counter = 0;
 		@Getter List<Expr> pragmatics = Lists.newArrayList();
-		Map<String, Pair<String,Expr>> constantNamesAndPredicates = Maps.newHashMap();
+		Map<String, Pair<Integer,Expr>> constantNamesAndPredicates = Maps.newHashMap();
 		
 		// obtain the generated contant names and collected predicates.
 		public final Iterable<Pair<String,Expr>> getConstantNamesAndPredicates() {
-			return this.constantNamesAndPredicates.values();
+			return
+				Iterables.transform(
+					ord.immutableSortedCopy(this.constantNamesAndPredicates.values()),
+					new Function<Pair<Integer,Expr>,Pair<String,Expr>>() {
+
+						@Override
+						public final Pair<String, Expr> apply(Pair<Integer, Expr> x) {
+							return pair(indexToName(x.getFirst()), x.getSecond());
+						}
+						
+					});
 		}
 		
 		@Override
@@ -112,7 +139,7 @@ public final class INewIotaExtractor implements IotaExtractor {
 					
 				// If we already have a constant for this argument, we use it.
 				if (constantNamesAndPredicates.containsKey(argStr)) {	
-					return bld.variable(constantNamesAndPredicates.get(argStr).getFirst(),Types.E);
+					return bld.variable(indexToName(constantNamesAndPredicates.get(argStr).getFirst()), Types.E);
 				}
 				else {
 					// Otherwise, we create the uniqueness constraint that
@@ -139,9 +166,9 @@ public final class INewIotaExtractor implements IotaExtractor {
 
 					// In addition, we create a new constant to represent the
 					// entity that uniquely satisfies the predicate P.
-					val freshConstant = "$" + counter++;
-					constantNamesAndPredicates.put(argStr, pair(freshConstant,arg1));
-					return bld.variable(freshConstant, Types.E);
+					int freshIndex = counter++;
+					constantNamesAndPredicates.put(argStr, pair(freshIndex,arg1));
+					return bld.variable(indexToName(freshIndex), Types.E);
 				}
 			}
 			// If we're not dealing with an IOTA, we just recursively apply the
@@ -159,6 +186,10 @@ public final class INewIotaExtractor implements IotaExtractor {
 		@Override
 		public final Expr variable(Symbol s) {
 			return bld.variable(s);
+		}
+		
+		private final String indexToName(int i) {
+			return "$" + i;
 		}
 		
 	};
