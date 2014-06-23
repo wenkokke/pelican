@@ -13,8 +13,6 @@ import lombok.Delegate;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
-import semante.predcalc.ExprForm;
-import semante.predcalc.FOLExpr.Formula;
 import semante.checker.ICollectivityAndIotaChecker;
 import semante.checker.IllegalAnnotationException;
 import semante.disamb.UnambiguousAnnotation;
@@ -30,11 +28,12 @@ import semante.pipeline.Pair;
 import semante.pipeline.Pipeline;
 import semante.pipeline.Result;
 import semante.pipeline.TestCaseCreator;
-import semante.prover.Prover;
-import semante.prover.ProverResult;
+import semante.predcalc.ExprForm;
+import semante.predcalc.FOLExpr.Formula;
 import semante.predcalc.Smasher;
 import semante.predcalc.impl.IPredCalc;
 import semante.predcalc.impl.ISmasher;
+import semante.prover.ProverResult;
 import semante.prover.impl.IProver;
 import semante.settings.Settings;
 
@@ -63,19 +62,22 @@ public final class IPipeline implements Pipeline {
 			}
 		};
 	
+	public enum ETHType {ETextTree, EHypoTree};	
 		
 	public class PreparedFormulae<ID> {
 		
 		List<PreparedFormula> formulae;
 		Result<ID> result;
+		ETHType thType;
 		
 		public PreparedFormulae(List<PreparedFormula> formulae) {
 			result = null;
 			this.formulae = new ArrayList<PreparedFormula>(formulae);
 		}
 		
-		public PreparedFormulae(Result<ID> result) {
+		public PreparedFormulae(Result<ID> result, ETHType thType) {
 			this.result = result;
+			this.thType = thType;
 			this.formulae = null;
 		}
 		
@@ -87,6 +89,10 @@ public final class IPipeline implements Pipeline {
 			return result;
 		}
 
+		public ETHType getTHType() {
+			return thType;
+		}
+		
 		public List<PreparedFormula> getFormulae() {
 			return formulae;
 		}
@@ -138,9 +144,9 @@ public final class IPipeline implements Pipeline {
 		val treebuilder   = new IBinaryTreeBuilder<ID,UnambiguousAnnotation>();
 		val disambiguator = new IDisambiguator<ID>(stl,lexicon,flattener,printer,treebuilder);
 		val disambTextM = disambiguator.disambiguate(text);
-		if (disambTextM.isLeft()) return new PreparedFormulae<ID>(disambTextM.getLeft().<ID>toResult());
+		if (disambTextM.isLeft()) return new PreparedFormulae<ID>(disambTextM.getLeft().<ID>toResult(),ETHType.ETextTree);
 		val disambHypoM = disambiguator.disambiguate(hypo);
-		if (disambHypoM.isLeft()) return new PreparedFormulae<ID>(disambHypoM.getLeft().<ID>toResult());
+		if (disambHypoM.isLeft()) return new PreparedFormulae<ID>(disambHypoM.getLeft().<ID>toResult(),ETHType.EHypoTree);
 		val disambTexts = disambTextM.getRight();
 		val disambHypos = disambHypoM.getRight();
 		
@@ -161,7 +167,7 @@ public final class IPipeline implements Pipeline {
 		if (validTexts.isEmpty()) {
 			val invalidTexts = invalidTextsBuilder.build();
 			for(val invalidText : invalidTexts) {
-				return new PreparedFormulae<ID>(invalidText.<ID>toResult());
+				return new PreparedFormulae<ID>(invalidText.<ID>toResult(),ETHType.ETextTree);
 			}
 		}
 		
@@ -170,14 +176,27 @@ public final class IPipeline implements Pipeline {
 		val flatTexts = flattener.flattenAll(validTexts);
 		val flatHypos = flattener.flattenAll(disambHypos);
 		
+		System.err.println("Unambiguous derivations of flat text: " + flatTexts.size()); 
+		int flatId = 0;
 		for (val flatText: flatTexts) {
-			System.err.println(stl.format(stl.fromDeBruijn(flatText)));
+			System.err.println("Flat text " + flatId + ": "+ stl.format(stl.fromDeBruijn(flatText)));
+			flatId++;
 		}
 		
 		
 		// REDUCE: convert lambda terms to normal form
 		val redTexts = Lists.transform(flatTexts, reducer);
 		val redHypos = Lists.transform(flatHypos, reducer);
+
+		/*
+		System.err.println("Unambiguous derivations of reduced flat text: " + flatTexts.size()); 
+		flatId = 0;
+		for (val redText: redTexts) {
+			System.err.println("Reduced Flat text " + flatId + ": "+ stl.format(stl.fromDeBruijn(redText)));
+			flatId++;
+		}
+		*/
+		
 		val nubTexts = ImmutableSet.copyOf(redTexts);
 		val nubHypos = ImmutableSet.copyOf(redHypos);
 
@@ -200,14 +219,14 @@ public final class IPipeline implements Pipeline {
 			
 			val subsMaybeFlatText = disambiguator.disambiguateAndFlatten(subsRawText);
 			if (subsMaybeFlatText.isLeft())
-				return new PreparedFormulae<ID>(subsMaybeFlatText.getLeft());
+				return new PreparedFormulae<ID>(subsMaybeFlatText.getLeft(),ETHType.ETextTree);
 			val subsFlatTexts = subsMaybeFlatText.getRight();
 			val subsRedTexts  = Lists.transform(subsFlatTexts, reducer);
 			val subsNubTexts  = ImmutableSet.copyOf(subsRedTexts); 
 			
 			val subsMaybeFlatHypo = disambiguator.disambiguateAndFlatten(subsRawHypo);
 			if (subsMaybeFlatHypo.isLeft())
-				return new PreparedFormulae<ID>(subsMaybeFlatHypo.getLeft());
+				return new PreparedFormulae<ID>(subsMaybeFlatHypo.getLeft(),ETHType.EHypoTree);
 			val subsFlatHypos = subsMaybeFlatHypo.getRight();
 			val subsRedHypos  = Lists.transform(subsFlatHypos, reducer);
 			val subsNubHypos  = ImmutableSet.copyOf(subsRedHypos); 
@@ -266,12 +285,13 @@ public final class IPipeline implements Pipeline {
 
 	public interface ResultHandler<ID> {
 		Result<ID> getFinalResult();
-		boolean handle(ProverResult result);
+		boolean isFinalResultSet();
+		void handle(ProverResult result);
 	}
 	
 	private class SimpleResultHandler<ID> implements ResultHandler<ID> {
 		boolean finalResultSet = false;
-		Result<ID> finalResult;
+		Result<ID> finalResult = null;
 
 		public void setFinalResult(Result<ID> result) {
 			if (!finalResultSet) {
@@ -281,7 +301,7 @@ public final class IPipeline implements Pipeline {
 		}
 		
 		@Override
-		public boolean handle(ProverResult result) {
+		public void handle(ProverResult result) {
 			switch (result.getProverOutputPF().getResultType()) {
 			case ProofFound:
 				setFinalResult(new IResult$Proof<ID>());
@@ -296,7 +316,6 @@ public final class IPipeline implements Pipeline {
 				// TODO convert this to returning IResult$Error()
 				System.err.println("Unexpected error in prover execution: " + result.getProverOutputPF().getOutput());
 			}
-			return !finalResultSet;
 		}
 
 		@Override
@@ -304,18 +323,13 @@ public final class IPipeline implements Pipeline {
 			return finalResultSet ? finalResult : new IResult$Unknown<ID>();  
 		}
 		
-	}
-	
-	public final <ID> Result<ID> prove(List<PreparedFormula> formulas, Prover prover, ResultHandler<ID> resultHandler) throws FileNotFoundException {
-		// PROVE: attempt to prove the combinations of text and hypothesis
-
-		boolean loop = true;
-		for (int index=0 ; index<formulas.size() && loop ; index++) {
-			PreparedFormula formula = formulas.get(index);
-			loop = resultHandler.handle(prover.prove(formula.getTFormula(), formula.getHFormula()));
+		@Override
+		public boolean isFinalResultSet() {
+			return finalResultSet;  
 		}
-		return resultHandler.getFinalResult();
-	}	
+		
+		
+	}
 		
 	@Override
 	public final <ID> Result<ID> prove(
@@ -324,7 +338,7 @@ public final class IPipeline implements Pipeline {
 		final Iterable<Pair<BinaryTree<ID, Annotation>, BinaryTree<ID, Annotation>>> subsumptions) throws FileNotFoundException {
 
 		// prepare interfaces
-		val pcalc  = new IPredCalc();
+		val pcalc  = new IPredCalc(settings);
 		val prover = new IProver(settings, pcalc);
 		val stl2p  = new ISmasher(pcalc, stl);
 		
@@ -333,9 +347,18 @@ public final class IPipeline implements Pipeline {
 		
 		// if a result is already set then it's an error and we report it to the caller directly
 		// otherwise, we start the proving stage (prover loop).
-		return preparedFormulae.isResultSet() 
-				? preparedFormulae.getResult() 
-				: prove(preparedFormulae.getFormulae(),prover,new SimpleResultHandler<ID>());
+		if (preparedFormulae.isResultSet()) {
+			return preparedFormulae.getResult() ;
+		} else {
+			// PROVE: attempt to prove the combinations of text and hypothesis
+			List<PreparedFormula> formulas = preparedFormulae.getFormulae();
+			ResultHandler<ID> resultHandler = new SimpleResultHandler<ID>();
+			for (int index=0 ; index<formulas.size() && !resultHandler.isFinalResultSet() ; index++) {
+				PreparedFormula formula = formulas.get(index);
+				resultHandler.handle(prover.prove(formula.getTFormula(), formula.getHFormula()));
+			}
+			return resultHandler.getFinalResult();
+		}
 	}
 	
 	@Override
