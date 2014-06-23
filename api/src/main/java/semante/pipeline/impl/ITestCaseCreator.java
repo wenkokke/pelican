@@ -157,7 +157,7 @@ public final class ITestCaseCreator implements TestCaseCreator {
 			
 			@Override
 			public final Void leaf(String name) {
-				line(depth, name.replaceAll("[^a-zA-Z]", "_"));
+				line(depth, name);
 				return null;
 			}
 
