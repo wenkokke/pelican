@@ -157,7 +157,7 @@ public class AbsPipelineTest {
 				throws IOException {
 		
 		// create a temporary file for the test case.
-		val temp = File.createTempFile("TestCaseTest", ".java");
+		val temp = File.createTempFile("TestTest", ".java");
 		
 		@Cleanup
 		val writer = new BufferedWriter(new FileWriter(temp));
@@ -171,6 +171,7 @@ public class AbsPipelineTest {
 		// write the test case to the temporary file.
 		val testCaseTest = testCaseCreator.createTestCase(
 			null, "Test", "", label(text), label(hypo), builder.build(), resultType);
+		System.out.println(testCaseTest);
 		writer.append(testCaseTest);
 		
 		// attempt to compile the file

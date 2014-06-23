@@ -72,6 +72,8 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		}
 		line("import lombok.val;");
 		line("import org.junit.Test;");
+		line("import semante.pipeline.Pair;");
+		line("import semante.pipeline.SimpleBinaryTree;");
 		line("import semante.pipeline.AbsPipelineTest;");
 		line("import static semante.pipeline.ResultType.*;");
 		line("import static com.google.common.collect.ImmutableList.of;");
@@ -115,7 +117,7 @@ public final class ITestCaseCreator implements TestCaseCreator {
 			break;
 		}
 		line(2,"// test the testcasecreator;");
-		line(2,"testTestCaseCreator(tt, th, subs, %s);", resultType.toString());
+		line(2,"testTestCaseCreator(tt, th, %s, subs);", resultType.toString());
 		
 		line(1,"}");
 		line();
@@ -139,7 +141,7 @@ public final class ITestCaseCreator implements TestCaseCreator {
 			line("val sh%d = ", i); tree(vh);
 			line("val ss%d = subs(st%d, sh%d);", i, i, i);
 		}
-		line("val subs = of(");
+		line("Iterable<Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String,String>>>> subs = of(");
 		for (int i = 0; i < arr.length; i++) {
 			line(2, "ss%d" + ((i != arr.length - 1 ? "," : "")), i);
 		}
