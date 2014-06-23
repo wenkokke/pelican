@@ -171,7 +171,6 @@ public class AbsPipelineTest {
 		// write the test case to the temporary file.
 		val testCaseTest = testCaseCreator.createTestCase(
 			null, "Test", "", label(text), label(hypo), builder.build(), resultType);
-		System.out.println(testCaseTest);
 		writer.append(testCaseTest);
 		
 		// attempt to compile the file
