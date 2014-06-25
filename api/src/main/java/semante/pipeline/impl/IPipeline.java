@@ -29,12 +29,10 @@ import semante.pipeline.Pipeline;
 import semante.pipeline.PreparedFormula;
 import semante.pipeline.PreparedFormulae;
 import semante.pipeline.Result;
-import semante.pipeline.ResultHandler;
 import semante.pipeline.TestCaseCreator;
 import semante.predcalc.Smasher;
 import semante.predcalc.impl.IPredCalc;
 import semante.predcalc.impl.ISmasher;
-import semante.prover.ProverResult;
 import semante.prover.impl.IProver;
 import semante.settings.Settings;
 
