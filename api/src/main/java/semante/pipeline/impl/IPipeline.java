@@ -26,10 +26,10 @@ import semante.pipeline.Category;
 import semante.pipeline.HigherOrderImplication.HOIException;
 import semante.pipeline.Pair;
 import semante.pipeline.Pipeline;
+import semante.pipeline.PreparedFormula;
+import semante.pipeline.PreparedFormulae;
 import semante.pipeline.Result;
 import semante.pipeline.TestCaseCreator;
-import semante.predcalc.ExprForm;
-import semante.predcalc.FOLExpr.Formula;
 import semante.predcalc.Smasher;
 import semante.predcalc.impl.IPredCalc;
 import semante.predcalc.impl.ISmasher;
@@ -60,77 +60,7 @@ public final class IPipeline implements Pipeline {
 			public final DeBruijn apply(final DeBruijn expr) {
 				return stl.betaReduce(expr);
 			}
-		};
-	
-	public enum ETHType {ETextTree, EHypoTree};	
-		
-	public class PreparedFormulae<ID> {
-		
-		List<PreparedFormula> formulae;
-		Result<ID> result;
-		ETHType thType;
-		
-		public PreparedFormulae(List<PreparedFormula> formulae) {
-			result = null;
-			this.formulae = new ArrayList<PreparedFormula>(formulae);
-		}
-		
-		public PreparedFormulae(Result<ID> result, ETHType thType) {
-			this.result = result;
-			this.thType = thType;
-			this.formulae = null;
-		}
-		
-		public boolean isResultSet() {
-			return result!=null;
-		}
-		
-		public Result<ID> getResult() {
-			return result;
-		}
-
-		public ETHType getTHType() {
-			return thType;
-		}
-		
-		public List<PreparedFormula> getFormulae() {
-			return formulae;
-		}
-	
-	}
-		
-		
-	public class PreparedFormula {
-		final String tText, hText;
-		final ExprForm<Formula> tFormula, hFormula;
-		
-		public PreparedFormula(String tText, ExprForm<Formula> tFormula,
-				String hText, ExprForm<Formula> hFormula) {
-			super();
-			this.tText = tText;
-			this.hText = hText;
-			this.tFormula = tFormula;
-			this.hFormula = hFormula;
-		}
-
-		public String getTText() {
-			return tText;
-		}
-		
-		public String getHText() {
-			return hText;
-		}
-		
-		public ExprForm<Formula> getTFormula() {
-			return tFormula;
-		}
-		
-		public ExprForm<Formula> getHFormula() {
-			return hFormula;
-		}
-		
-	}
-	
+		};	
 	
 	public final <ID> PreparedFormulae<ID> prepare(
 		final BinaryTree<ID, Annotation> text,
@@ -144,9 +74,9 @@ public final class IPipeline implements Pipeline {
 		val treebuilder   = new IBinaryTreeBuilder<ID,UnambiguousAnnotation>();
 		val disambiguator = new IDisambiguator<ID>(stl,lexicon,flattener,printer,treebuilder);
 		val disambTextM = disambiguator.disambiguate(text);
-		if (disambTextM.isLeft()) return new PreparedFormulae<ID>(disambTextM.getLeft().<ID>toResult(),ETHType.ETextTree);
+		if (disambTextM.isLeft()) return new IPreparedFormulae<ID>(disambTextM.getLeft().<ID>toResult(),ETHType.ETextTree);
 		val disambHypoM = disambiguator.disambiguate(hypo);
-		if (disambHypoM.isLeft()) return new PreparedFormulae<ID>(disambHypoM.getLeft().<ID>toResult(),ETHType.EHypoTree);
+		if (disambHypoM.isLeft()) return new IPreparedFormulae<ID>(disambHypoM.getLeft().<ID>toResult(),ETHType.EHypoTree);
 		val disambTexts = disambTextM.getRight();
 		val disambHypos = disambHypoM.getRight();
 		
@@ -167,7 +97,7 @@ public final class IPipeline implements Pipeline {
 		if (validTexts.isEmpty()) {
 			val invalidTexts = invalidTextsBuilder.build();
 			for(val invalidText : invalidTexts) {
-				return new PreparedFormulae<ID>(invalidText.<ID>toResult(),ETHType.ETextTree);
+				return new IPreparedFormulae<ID>(invalidText.<ID>toResult(),ETHType.ETextTree);
 			}
 		}
 		
@@ -187,16 +117,6 @@ public final class IPipeline implements Pipeline {
 		// REDUCE: convert lambda terms to normal form
 		val redTexts = Lists.transform(flatTexts, reducer);
 		val redHypos = Lists.transform(flatHypos, reducer);
-
-		/*
-		System.err.println("Unambiguous derivations of reduced flat text: " + flatTexts.size()); 
-		flatId = 0;
-		for (val redText: redTexts) {
-			System.err.println("Reduced Flat text " + flatId + ": "+ stl.format(stl.fromDeBruijn(redText)));
-			flatId++;
-		}
-		*/
-		
 		val nubTexts = ImmutableSet.copyOf(redTexts);
 		val nubHypos = ImmutableSet.copyOf(redHypos);
 
@@ -219,14 +139,14 @@ public final class IPipeline implements Pipeline {
 			
 			val subsMaybeFlatText = disambiguator.disambiguateAndFlatten(subsRawText);
 			if (subsMaybeFlatText.isLeft())
-				return new PreparedFormulae<ID>(subsMaybeFlatText.getLeft(),ETHType.ETextTree);
+				return new IPreparedFormulae<ID>(subsMaybeFlatText.getLeft(),ETHType.ETextTree);
 			val subsFlatTexts = subsMaybeFlatText.getRight();
 			val subsRedTexts  = Lists.transform(subsFlatTexts, reducer);
 			val subsNubTexts  = ImmutableSet.copyOf(subsRedTexts); 
 			
 			val subsMaybeFlatHypo = disambiguator.disambiguateAndFlatten(subsRawHypo);
 			if (subsMaybeFlatHypo.isLeft())
-				return new PreparedFormulae<ID>(subsMaybeFlatHypo.getLeft(),ETHType.EHypoTree);
+				return new IPreparedFormulae<ID>(subsMaybeFlatHypo.getLeft(),ETHType.EHypoTree);
 			val subsFlatHypos = subsMaybeFlatHypo.getRight();
 			val subsRedHypos  = Lists.transform(subsFlatHypos, reducer);
 			val subsNubHypos  = ImmutableSet.copyOf(subsRedHypos); 
@@ -277,10 +197,10 @@ public final class IPipeline implements Pipeline {
 			for (val nubHypo: nubHypos) {
 				val hText = stl.format(stl.fromDeBruijn(nubHypo));				
 				val hFormula = stl2p.smash(stl.fromDeBruijn(nubHypo));
-				runnableFormulas.add(new PreparedFormula(tText,tFormula,hText,hFormula));
+				runnableFormulas.add(new IPreparedFormula(tText,hText,tFormula,hFormula));
 			}
 		}
-		return new PreparedFormulae<ID>(runnableFormulas);
+		return new IPreparedFormulae<ID>(runnableFormulas);
 	}
 
 	public interface ResultHandler<ID> {
@@ -343,7 +263,7 @@ public final class IPipeline implements Pipeline {
 		val stl2p  = new ISmasher(pcalc, stl);
 		
 		// prepare the formuals to try to prove (including disambiguation, flattening, etc.)
-		PreparedFormulae<ID> preparedFormulae = prepare(text, hypo, subsumptions, stl2p);
+		val preparedFormulae = prepare(text, hypo, subsumptions, stl2p);
 		
 		// if a result is already set then it's an error and we report it to the caller directly
 		// otherwise, we start the proving stage (prover loop).
