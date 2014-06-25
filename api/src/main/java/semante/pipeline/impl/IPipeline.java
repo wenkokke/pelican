@@ -29,6 +29,7 @@ import semante.pipeline.Pipeline;
 import semante.pipeline.PreparedFormula;
 import semante.pipeline.PreparedFormulae;
 import semante.pipeline.Result;
+import semante.pipeline.ResultHandler;
 import semante.pipeline.TestCaseCreator;
 import semante.predcalc.Smasher;
 import semante.predcalc.impl.IPredCalc;
@@ -61,6 +62,41 @@ public final class IPipeline implements Pipeline {
 				return stl.betaReduce(expr);
 			}
 		};	
+		
+
+	@Override
+	public final <ID> Result<ID> prove(
+		final BinaryTree<ID, Annotation> text,
+		final BinaryTree<ID, Annotation> hypo,
+		final Iterable<Pair<BinaryTree<ID, Annotation>, BinaryTree<ID, Annotation>>> subsumptions) throws FileNotFoundException {
+
+		// prepare interfaces
+		val pcalc  = new IPredCalc(settings);
+		val prover = new IProver(settings, pcalc);
+		val stl2p  = new ISmasher(pcalc, stl);
+			
+		// prepare the formuals to try to prove (including disambiguation, flattening, etc.)
+		val preparedFormulae = prepare(text, hypo, subsumptions, stl2p);
+			
+		// if a result is already set then it's an error and we report it to the caller directly
+		// otherwise, we start the proving stage (prover loop).
+		if (preparedFormulae.isResultSet()) {
+				
+			return preparedFormulae.getResult() ;
+				
+		} else {
+				
+			// PROVE: attempt to prove the combinations of text and hypothesis
+			val formulas      = preparedFormulae.getFormulae();
+			val resultHandler = new ISimpleResultHandler<ID>();
+				
+			for (int index = 0; index<formulas.size() && !resultHandler.isFinalResultSet(); index++) {
+				val formula = formulas.get(index);
+				resultHandler.handle(prover.prove(formula.getTFormula(), formula.getHFormula()));
+			}
+			return resultHandler.getFinalResult();
+		}
+	}
 	
 	public final <ID> PreparedFormulae<ID> prepare(
 		final BinaryTree<ID, Annotation> text,
@@ -201,84 +237,6 @@ public final class IPipeline implements Pipeline {
 			}
 		}
 		return new IPreparedFormulae<ID>(runnableFormulas);
-	}
-
-	public interface ResultHandler<ID> {
-		Result<ID> getFinalResult();
-		boolean isFinalResultSet();
-		void handle(ProverResult result);
-	}
-	
-	private class SimpleResultHandler<ID> implements ResultHandler<ID> {
-		boolean finalResultSet = false;
-		Result<ID> finalResult = null;
-
-		public void setFinalResult(Result<ID> result) {
-			if (!finalResultSet) {
-				finalResult = result;
-				finalResultSet = true;
-			}
-		}
-		
-		@Override
-		public void handle(ProverResult result) {
-			switch (result.getProverOutputPF().getResultType()) {
-			case ProofFound:
-				setFinalResult(new IResult$Proof<ID>());
-				break;
-			case NoProofCanBeFound:
-				break;
-			case Error:
-			case Interuppted:
-			case NotRun:
-			case Unset:
-			default:
-				// TODO convert this to returning IResult$Error()
-				System.err.println("Unexpected error in prover execution: " + result.getProverOutputPF().getOutput());
-			}
-		}
-
-		@Override
-		public Result<ID> getFinalResult() {
-			return finalResultSet ? finalResult : new IResult$Unknown<ID>();  
-		}
-		
-		@Override
-		public boolean isFinalResultSet() {
-			return finalResultSet;  
-		}
-		
-		
-	}
-		
-	@Override
-	public final <ID> Result<ID> prove(
-		final BinaryTree<ID, Annotation> text,
-		final BinaryTree<ID, Annotation> hypo,
-		final Iterable<Pair<BinaryTree<ID, Annotation>, BinaryTree<ID, Annotation>>> subsumptions) throws FileNotFoundException {
-
-		// prepare interfaces
-		val pcalc  = new IPredCalc(settings);
-		val prover = new IProver(settings, pcalc);
-		val stl2p  = new ISmasher(pcalc, stl);
-		
-		// prepare the formuals to try to prove (including disambiguation, flattening, etc.)
-		val preparedFormulae = prepare(text, hypo, subsumptions, stl2p);
-		
-		// if a result is already set then it's an error and we report it to the caller directly
-		// otherwise, we start the proving stage (prover loop).
-		if (preparedFormulae.isResultSet()) {
-			return preparedFormulae.getResult() ;
-		} else {
-			// PROVE: attempt to prove the combinations of text and hypothesis
-			List<PreparedFormula> formulas = preparedFormulae.getFormulae();
-			ResultHandler<ID> resultHandler = new SimpleResultHandler<ID>();
-			for (int index=0 ; index<formulas.size() && !resultHandler.isFinalResultSet() ; index++) {
-				PreparedFormula formula = formulas.get(index);
-				resultHandler.handle(prover.prove(formula.getTFormula(), formula.getHFormula()));
-			}
-			return resultHandler.getFinalResult();
-		}
 	}
 	
 	@Override

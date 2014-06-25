@@ -31,6 +31,7 @@ public final class IPreparedFormulae<ID> implements PreparedFormulae<ID> {
 		this(null, result, thType);
 	}
 
+	// basically, if the "result" is set, we have an error.
 	public boolean isResultSet() {
 		return result != null;
 	}
