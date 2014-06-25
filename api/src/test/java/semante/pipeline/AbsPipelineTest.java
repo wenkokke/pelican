@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.tools.ToolProvider;
 
@@ -38,9 +39,13 @@ public class AbsPipelineTest {
 	BinaryTreeFunctor<Integer, Pair<String, String>, Integer, Annotation> annotator;
 
 	public AbsPipelineTest() {
+		this(ISettings.defaultSettingsFile());
+	}
+	
+	public AbsPipelineTest(File settingsFile) {
 		try {
             val lambdacalc  = new STL();
-            val settings    = new ISettings();
+            val settings    = new ISettings(settingsFile);
             val lexicon     = new IRichLexicon(settings,lambdacalc);
 		    pipeline        = new IPipeline(settings,lambdacalc,lexicon);
 		    labeller        = ILabeller.labeller();

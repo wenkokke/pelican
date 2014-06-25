@@ -4,11 +4,11 @@ import lombok.val;
 import org.junit.Test;
 import semante.pipeline.Pair;
 import semante.pipeline.SimpleBinaryTree;
-import semante.pipeline.AbsPipelineTest;
+import semante.pipeline.AbsPipelineTestWithLegacy24;
 import static semante.pipeline.ResultType.*;
 import static com.google.common.collect.ImmutableList.of;
 
-public final class TestPel1Shared0002 extends AbsPipelineTest {
+public final class TestPel1Shared0002 extends AbsPipelineTestWithLegacy24 {
 
 		@Test
 		public final void testPel1Shared0002() throws Exception {
