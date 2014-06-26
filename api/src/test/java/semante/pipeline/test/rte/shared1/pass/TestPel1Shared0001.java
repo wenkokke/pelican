@@ -1,15 +1,17 @@
 package semante.pipeline.test.rte.shared1.pass;
 
+import static com.google.common.collect.ImmutableList.of;
+import static semante.pipeline.ResultType.Proof;
 import lombok.val;
+
 import org.junit.Test;
+
+import semante.pipeline.AbsPipelineTestWithLegacy24;
 import semante.pipeline.Pair;
 import semante.pipeline.SimpleBinaryTree;
-import semante.pipeline.AbsPipelineTest;
-import static semante.pipeline.ResultType.*;
-import static com.google.common.collect.ImmutableList.of;
 
-public final class TestPel1Shared0001 extends AbsPipelineTest {
-
+public final class TestPel1Shared0001 extends AbsPipelineTestWithLegacy24 {	
+	
 		@Test
 		public final void testPel1Shared0001() throws Exception {
 

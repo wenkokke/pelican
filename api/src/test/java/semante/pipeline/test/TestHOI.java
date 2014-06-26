@@ -14,7 +14,7 @@ import semante.pipeline.impl.IHigherOrderImplication;
 
 import com.google.common.collect.ImmutableList;
 
-public class TestHOI {
+public final class TestHOI {
 	
 	STL stl;
 	HigherOrderImplication hoi;

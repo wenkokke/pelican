@@ -54,6 +54,10 @@ public final class ISettings implements Settings {
 	    settings = (Map<String,Object>) yaml.load(is);
 	}
 	
+	public ISettings(String settingsFilename) throws FileNotFoundException {
+		this(getSettingsFile(settingsFilename));
+	}
+	
 	public ISettings() throws FileNotFoundException {
 		this(defaultSettingsFile());
 	}

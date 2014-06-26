@@ -21,22 +21,28 @@ cd ..
 
 # Install Lexicon
 cp -f ./lexicon/src/main/resources/default.lexicon "${SEMANTE_HOME}/default.lexicon"
-cp -f ./lexicon/src/main/resources/legacy.lexicon "${SEMANTE_HOME}/legacy.lexicon"
+cp -f ./lexicon/src/main/resources/legacy-1.0.lexicon "${SEMANTE_HOME}/legacy-1.0.lexicon"
+cp -f ./lexicon/src/main/resources/legacy-2.4.lexicon "${SEMANTE_HOME}/legacy-2.4.lexicon"
 
 # Configure SemAnTE
 cat <<EOF > "${SEMANTE_HOME}/default.yml"
 SemAnTE:
   Lexicon:
     Default:  '${SEMANTE_HOME}/default.lexicon'
-    Legacy:   '${SEMANTE_HOME}/legacy.lexicon'
   Prover:
     Location: '${SEMANTE_HOME}/ladr'
 EOF
-cat <<EOF > "${SEMANTE_HOME}/legacy.yml"
+cat <<EOF > "${SEMANTE_HOME}/legacy-1.0.yml"
 SemAnTE:
   Lexicon:
-    Default:  '${SEMANTE_HOME}/legacy.lexicon'
-    Legacy:   '${SEMANTE_HOME}/legacy.lexicon'
+    Default:  '${SEMANTE_HOME}/legacy-1.0.lexicon'
+  Prover:
+    Location: '${SEMANTE_HOME}/ladr'
+EOF
+cat <<EOF > "${SEMANTE_HOME}/legacy-2.4.yml"
+SemAnTE:
+  Lexicon:
+    Default:  '${SEMANTE_HOME}/legacy-2.4.lexicon'
   Prover:
     Location: '${SEMANTE_HOME}/ladr'
 EOF
