@@ -9,9 +9,9 @@ import lombok.experimental.NonFinal;
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
 import semante.pipeline.Pair;
+import semante.pipeline.ResultType;
 import semante.pipeline.SimpleBinaryTree;
 import semante.pipeline.TestCaseCreator;
-import semante.pipeline.ResultType;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
@@ -130,12 +130,13 @@ public final class ITestCaseCreator implements TestCaseCreator {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private final <ID> void subs(
 		final Iterable<Pair<BinaryTree<ID,Annotation>,BinaryTree<ID,Annotation>>> subs) {
+		
 		val arr = Iterables.toArray(subs, Pair.class);
 		for (int i = 0; i < arr.length; i++) {
 			val pt = String.format("st%d", i);
 			val ph = String.format("sh%d", i);
 			val vt = vocabulary(pt, (BinaryTree<ID, Annotation>) arr[i].getFirst());
-			val vh = vocabulary(ph, (BinaryTree<ID, Annotation>) arr[i].getFirst());
+			val vh = vocabulary(ph, (BinaryTree<ID, Annotation>) arr[i].getSecond());
 			 
 			line("val st%d = ", i); tree(vt);
 			line("val sh%d = ", i); tree(vh);
@@ -237,5 +238,5 @@ public final class ITestCaseCreator implements TestCaseCreator {
 			return str;
 		}
 	}
-
+	
 }
