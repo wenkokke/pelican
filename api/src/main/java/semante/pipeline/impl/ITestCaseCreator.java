@@ -135,7 +135,7 @@ public final class ITestCaseCreator implements TestCaseCreator {
 			val pt = String.format("st%d", i);
 			val ph = String.format("sh%d", i);
 			val vt = vocabulary(pt, (BinaryTree<ID, Annotation>) arr[i].getFirst());
-			val vh = vocabulary(ph, (BinaryTree<ID, Annotation>) arr[i].getFirst());
+			val vh = vocabulary(ph, (BinaryTree<ID, Annotation>) arr[i].getSecond());
 			 
 			line("val st%d = ", i); tree(vt);
 			line("val sh%d = ", i); tree(vh);
