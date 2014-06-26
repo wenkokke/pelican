@@ -135,28 +135,21 @@ public final class IPipeline implements Pipeline {
 			}
 		}
 		
-		
 		// FLATTEN: convert unambiguous trees to lambda terms
 		val flatTexts = flattener.flattenAll(validTexts);
 		val flatHypos = flattener.flattenAll(disambHypos);
 		
-		System.err.println("Unambiguous derivations of flat text: " + flatTexts.size()); 
-		int flatId = 0;
-		for (val flatText: flatTexts) {
-			System.err.println("Flat text " + flatId + ": "+ stl.format(stl.fromDeBruijn(flatText)));
-			flatId++;
-		}
-		
-		
 		// REDUCE: convert lambda terms to normal form
 		val redTexts = Lists.transform(flatTexts, reducer);
 		val redHypos = Lists.transform(flatHypos, reducer);
-
 		
 		// CLEAN DUPLICATES
 		val tempNubTexts = ImmutableSet.copyOf(redTexts);
 		val tempNubHypos = ImmutableSet.copyOf(redHypos);
 
+		
+		System.err.println("Unambiguous formulas: T: " + tempNubTexts.size() + ", H: " + tempNubTexts.size());
+		
 		/* commented out because already printed in the IOTA collector
 		for (val nubText: tempNubTexts) {
 			System.err.println("T: "+stl.format(stl.fromDeBruijn(nubText)));
