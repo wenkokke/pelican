@@ -29,7 +29,7 @@ public final class ISmasher implements Smasher {
 	
 	public ISmasher(PredCalc pcalc, STL lcalc) {
 		this.lcalc = lcalc;
-		extractor  = new INewIotaExtractor(lcalc);
+		extractor  = new INewIotaExtractor2(lcalc);
 		expr2foe   = new IExpr2FirstOrderExpr(lcalc);
 		foe2pred   = new IFirstOrderExpr2Pred(pcalc, lcalc);
 	}
@@ -42,6 +42,7 @@ public final class ISmasher implements Smasher {
 		// Convert all expressions in the sentence-form to predicate logic
 		List<Formula> prags = new ArrayList<Formula>();
 		for (Expr p : form.getPragmatics()) {
+			System.err.println("Smashing pragmatics: ["+ lcalc.format(p) + "]");
 			prags.add((Formula) foe2pred.convert(expr2foe.rewrite(p)));
 		}
 		// apparently, this is not safe:

@@ -60,7 +60,7 @@ public final class IPipeline implements Pipeline {
 				return stl.betaReduce(expr);
 			}
 		};	
-		
+
 
 	@Override
 	public final <ID> Result<ID> prove(
@@ -135,32 +135,43 @@ public final class IPipeline implements Pipeline {
 			}
 		}
 		
-		
 		// FLATTEN: convert unambiguous trees to lambda terms
 		val flatTexts = flattener.flattenAll(validTexts);
 		val flatHypos = flattener.flattenAll(disambHypos);
 		
-		System.err.println("Unambiguous derivations of flat text: " + flatTexts.size()); 
-		int flatId = 0;
-		for (val flatText: flatTexts) {
-			System.err.println("Flat text " + flatId + ": "+ stl.format(stl.fromDeBruijn(flatText)));
-			flatId++;
-		}
-		
-		
 		// REDUCE: convert lambda terms to normal form
 		val redTexts = Lists.transform(flatTexts, reducer);
 		val redHypos = Lists.transform(flatHypos, reducer);
-		val nubTexts = ImmutableSet.copyOf(redTexts);
-		val nubHypos = ImmutableSet.copyOf(redHypos);
+		
+		// CLEAN DUPLICATES
+		val tempNubTexts = ImmutableSet.copyOf(redTexts);
+		val tempNubHypos = ImmutableSet.copyOf(redHypos);
 
-		for (val nubText: nubTexts) {
+		
+		System.err.println("Unambiguous formulas: T: " + tempNubTexts.size() + ", H: " + tempNubTexts.size());
+		
+		/* commented out because already printed in the IOTA collector
+		for (val nubText: tempNubTexts) {
 			System.err.println("T: "+stl.format(stl.fromDeBruijn(nubText)));
 		}
-		for (val nubHypo: nubHypos) {
+		for (val nubHypo: tempNubHypos) {
 			System.err.println("H: "+stl.format(stl.fromDeBruijn(nubHypo)));
+		}*/
+
+		// COLLECT and FRONT IOTAs
+		List<DeBruijn> nubTexts = new ArrayList<DeBruijn>();
+		for (val nubText: tempNubTexts) {
+			DeBruijn t = stl.toDeBruijn(
+					IIotaCollector.collect(stl, stl.fromDeBruijn(nubText)));		
+			nubTexts.add(t);
 		}
-		
+
+		List<DeBruijn> nubHypos = new ArrayList<DeBruijn>();
+		for (val nubHypo: tempNubHypos) {
+			DeBruijn h = stl.toDeBruijn(
+					IIotaCollector.collect(stl, stl.fromDeBruijn(nubHypo)));
+			nubHypos.add(h);
+		}		
 		
 		// SUBSUMPTIONS: convert the subsumption relations to lambda terms
 		//               and add them to the term representing the text
@@ -218,6 +229,7 @@ public final class IPipeline implements Pipeline {
 			withSubsTexts = listbuilder.build();
 		}
 		
+		System.err.println("After adding subsumption relations:");
 		for (val nubText: withSubsTexts) {
 			System.err.println("T: "+stl.format(stl.fromDeBruijn(nubText)));
 		}
