@@ -183,30 +183,44 @@ public final class IPipeline implements Pipeline {
 			flatId++;
 		}
 		
-		
 		// REDUCE: convert lambda terms to normal form
 		val redTexts = Lists.transform(flatTexts, reducer);
 		val redHypos = Lists.transform(flatHypos, reducer);
 
-		/*
-		System.err.println("Unambiguous derivations of reduced flat text: " + flatTexts.size()); 
+		
+		// CLEAN DUPLICATES
+		val tempNubTexts = ImmutableSet.copyOf(redTexts);
+		val tempNubHypos = ImmutableSet.copyOf(redHypos);
+		
+		
+		System.err.println("Unambiguous derivations of reduced flat text: " + tempNubTexts.size()); 
 		flatId = 0;
-		for (val redText: redTexts) {
-			System.err.println("Reduced Flat text " + flatId + ": "+ stl.format(stl.fromDeBruijn(redText)));
+		for (val nubText: tempNubTexts) {
+			System.err.println("Reduced Flat text " + flatId + ": "+ stl.format(stl.fromDeBruijn(nubText)));
 			flatId++;
 		}
-		*/
 		
-		val nubTexts = ImmutableSet.copyOf(redTexts);
-		val nubHypos = ImmutableSet.copyOf(redHypos);
+		System.err.println("Unambiguous derivations of reduced flat hypothesis: " + tempNubHypos.size()); 
+		flatId = 0;
+		for (val nubHypo: tempNubHypos) {
+			System.err.println("Reduced Flat hypothesis " + flatId + ": "+ stl.format(stl.fromDeBruijn(nubHypo)));
+			flatId++;
+		}
 
-		for (val nubText: nubTexts) {
-			System.err.println("T: "+stl.format(stl.fromDeBruijn(nubText)));
+		// start handling the IOTAs and print results
+		List<DeBruijn> nubTexts = new ArrayList<DeBruijn>();
+		for (val nubText: tempNubTexts) {
+			DeBruijn t = stl.toDeBruijn(
+					IIotaCollector.collect(stl, stl.fromDeBruijn(nubText)));		
+			nubTexts.add(t);
 		}
-		for (val nubHypo: nubHypos) {
-			System.err.println("H: "+stl.format(stl.fromDeBruijn(nubHypo)));
-		}
-		
+
+		List<DeBruijn> nubHypos = new ArrayList<DeBruijn>();
+		for (val nubHypo: tempNubHypos) {
+			DeBruijn h = stl.toDeBruijn(
+					IIotaCollector.collect(stl, stl.fromDeBruijn(nubHypo)));
+			nubHypos.add(h);
+		}		
 		
 		// SUBSUMPTIONS: convert the subsumption relations to lambda terms
 		//               and add them to the term representing the text
@@ -224,12 +238,20 @@ public final class IPipeline implements Pipeline {
 			val subsRedTexts  = Lists.transform(subsFlatTexts, reducer);
 			val subsNubTexts  = ImmutableSet.copyOf(subsRedTexts); 
 			
+			for (val nubText : subsNubTexts) {
+				System.out.println("Nub Text: " + stl.format(nubText));
+			}
+			
 			val subsMaybeFlatHypo = disambiguator.disambiguateAndFlatten(subsRawHypo);
 			if (subsMaybeFlatHypo.isLeft())
 				return new PreparedFormulae<ID>(subsMaybeFlatHypo.getLeft(),ETHType.EHypoTree);
 			val subsFlatHypos = subsMaybeFlatHypo.getRight();
 			val subsRedHypos  = Lists.transform(subsFlatHypos, reducer);
 			val subsNubHypos  = ImmutableSet.copyOf(subsRedHypos); 
+
+			for (val nubHypo : subsNubHypos) {
+				System.out.println("Nub Hypo: " + stl.format(nubHypo));
+			}
 			
 			for (val subsText: subsNubTexts) {
 				for (val subsHypo: subsNubHypos) {
@@ -264,6 +286,7 @@ public final class IPipeline implements Pipeline {
 			withSubsTexts = listbuilder.build();
 		}
 		
+		System.err.println("After adding subsumption relations:");
 		for (val nubText: withSubsTexts) {
 			System.err.println("T: "+stl.format(stl.fromDeBruijn(nubText)));
 		}
