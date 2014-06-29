@@ -8,38 +8,68 @@ import semante.pipeline.AbsPipelineTest;
 import static semante.pipeline.ResultType.*;
 import static com.google.common.collect.ImmutableList.of;
 
-public final class TestCase03 extends AbsPipelineTest {
+public final class TestCase15 extends AbsPipelineTest {
 
 		@Test
-		public final void TestCase03t() throws Exception {
+		public final void TestCase15t() throws Exception {
 
 			// create the vocabulary for the text;
-			val t00_bill = word("NP_D","Bill");
-			val t01_kissed = word("V_2","kissed");
-			val t02_john = word("NP_D","John");
+			val t00_john = word("NP_D","John");
+			val t01_s = word("POSS","s");
+			val t02_boyfriend = word("N","boyfriend");
 			val t03_and = word("AND","and");
 			val t04_mary = word("NP_D","Mary");
+			val t05_s = word("POSS","s");
+			val t06_girlfriend = word("N","girlfriend");
+			val t07_are = word("IS","are");
+			val t08_bill = word("NP_D","Bill");
+			val t09_and = word("AND","and");
+			val t10_sue = word("NP_D","Sue");
 
 			// create the vocabulary for the hypothesis;
 			val h00_bill = word("NP_D","Bill");
-			val h01_kissed = word("V_2","kissed");
-			val h02_john = word("NP_D","John");
+			val h01_is = word("IS","is");
+			val h02_sue = word("NP_D","Sue");
 
 			// create the tree structure for the text;
 			val tt =
 			_(
-				t00_bill
-				,
 				_(
-					t01_kissed
+					_(
+						_(
+							t00_john
+							,
+							t01_s
+						)
+						,
+						t02_boyfriend
+					)
 					,
 					_(
-						t02_john
+						t03_and
 						,
 						_(
-							t03_and
+							_(
+								t04_mary
+								,
+								t05_s
+							)
 							,
-							t04_mary
+							t06_girlfriend
+						)
+					)
+				)
+				,
+				_(
+					t07_are
+					,
+					_(
+						t08_bill
+						,
+						_(
+							t09_and
+							,
+							t10_sue
 						)
 					)
 				)
@@ -52,9 +82,9 @@ public final class TestCase03 extends AbsPipelineTest {
 				h00_bill
 				,
 				_(
-					h01_kissed
+					h01_is
 					,
-					h02_john
+					h02_sue
 				)
 			)
 			;
@@ -64,9 +94,9 @@ Iterable<Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String
 );
 
 			// test for a proof;
-			assertProof(tt, th, subs);
+			assertException(tt, th, subs);
 			// test the testcasecreator;
-			testTestCaseCreator(tt, th, Proof, subs);
+			testTestCaseCreator(tt, th, Exception, subs);
 		}
 
 }

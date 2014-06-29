@@ -8,64 +8,80 @@ import semante.pipeline.AbsPipelineTest;
 import static semante.pipeline.ResultType.*;
 import static com.google.common.collect.ImmutableList.of;
 
-public final class TestCase10 extends AbsPipelineTest {
+public final class TestCase16 extends AbsPipelineTest {
 
 		@Test
-		public final void TestCase10t() throws Exception {
+		public final void TestCase16t() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_john = word("NP_D","John");
-			val t01_and = word("AND","and");
-			val t02_mary = word("NP_D","Mary");
-			val t03_s = word("GEN","s");
-			val t04_friends = word("N","friends");
-			val t05_are = word("IS","are");
-			val t06_bill = word("NP_D","Bill");
-			val t07_and = word("AND","and");
-			val t08_sue = word("NP_D","Sue");
+			val t01_s = word("POSS","s");
+			val t02_boyfriend = word("N","boyfriend");
+			val t03_and = word("AND","and");
+			val t04_mary = word("NP_D","Mary");
+			val t05_s = word("POSS","s");
+			val t06_girlfriend = word("N","girlfriend");
+			val t07_app = word("WHO_A","APP");
+			val t08_bill = word("NP_D","Bill");
+			val t09_and = word("AND","and");
+			val t10_sue = word("NP_D","Sue");
+			val t11_are = word("IS","are");
+			val t12_nice = word("MR","nice");
 
 			// create the vocabulary for the hypothesis;
-			val h00_sue = word("NP_D","Sue");
+			val h00_bill = word("NP_D","Bill");
 			val h01_is = word("IS","is");
-			val h02_bill = word("NP_D","Bill");
-			val h03_and = word("AND","and");
-			val h04_sue = word("NP_D","Sue");
-			val h05_is = word("IS","is");
-			val h06_john = word("NP_D","John");
-			
+			val h02_sue = word("NP_D","Sue");
+
 			// create the tree structure for the text;
 			val tt =
 			_(
 				_(
-					t00_john
+					_(
+						_(
+							_(
+								t00_john
+								,
+								t01_s
+							)
+							,
+							t02_boyfriend
+						)
+						,
+						_(
+							t03_and
+							,
+							_(
+								_(
+									t04_mary
+									,
+									t05_s
+								)
+								,
+								t06_girlfriend
+							)
+						)
+					)
 					,
 					_(
-						t01_and
+						t07_app
 						,
 						_(
 							_(
-								t02_mary
+								t08_bill
 								,
-								t03_s
+								t09_and
 							)
 							,
-							t04_friends
+							t10_sue
 						)
 					)
 				)
 				,
 				_(
-					t05_are
+					t11_are
 					,
-					_(
-						t06_bill
-						,
-						_(
-							t07_and
-							,
-							t08_sue
-						)
-					)
+					t12_nice
 				)
 			)
 			;
@@ -73,32 +89,16 @@ public final class TestCase10 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h00_sue
-					,
-					_(
-						h01_is
-						,
-						h02_bill
-					)
-				)
+				h00_bill
 				,
 				_(
-					h03_and
+					h01_is
 					,
-					_(
-						h04_sue
-						,
-						_(
-							h05_is
-							,
-							h06_john
-						)
-					)
+					h02_sue
 				)
 			)
 			;
-			
+
 			// create the subsumption relations;
 Iterable<Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String,String>>>> subs = of(
 );

@@ -11,7 +11,7 @@ import static com.google.common.collect.ImmutableList.of;
 public final class TestCase04 extends AbsPipelineTest {
 
 		@Test
-		public final void TestCase04() throws Exception {
+		public final void TestCase04t() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_bill = word("NP_D","Bill");

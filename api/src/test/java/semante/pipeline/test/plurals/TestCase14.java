@@ -11,7 +11,7 @@ import static com.google.common.collect.ImmutableList.of;
 public final class TestCase14 extends AbsPipelineTest {
 
 		@Test
-		public final void TestCase14() throws Exception {
+		public final void TestCase14t() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_john = word("NP_D","John");
@@ -114,9 +114,9 @@ Iterable<Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String
 );
 
 			// test for a proof;
-			assertProof(tt, th, subs);
+			assertException(tt, th, subs);
 			// test the testcasecreator;
-			testTestCaseCreator(tt, th, Proof, subs);
+			testTestCaseCreator(tt, th, Exception, subs);
 		}
 
 }
