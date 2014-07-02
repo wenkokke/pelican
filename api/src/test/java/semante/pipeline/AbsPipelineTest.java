@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.tools.ToolProvider;
 
@@ -29,14 +31,15 @@ import semante.settings.impl.ISettings;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 @FieldDefaults(level=PRIVATE)
 public class AbsPipelineTest {
 
-	Pipeline pipeline;
+	protected Pipeline pipeline;
 	Labeller labeller;
 	TestCaseCreator testCaseCreator;
-	BinaryTreeFunctor<Integer, Pair<String, String>, Integer, Annotation> annotator;
+	//BinaryTreeFunctor<Integer, Pair<String, String>, Integer, Annotation> annotator;
 
 	public AbsPipelineTest() {
 		this(ISettings.defaultSettingsFile());
@@ -50,6 +53,7 @@ public class AbsPipelineTest {
 		    pipeline        = new IPipeline(settings,lambdacalc,lexicon);
 		    labeller        = ILabeller.labeller();
 		    testCaseCreator = new ITestCaseCreator();
+		    /*
 		    annotator       = IBinaryTree.functor(
 				Functions.<Integer> identity(),
 					new Function<Pair<String,String>,Annotation>() {
@@ -57,7 +61,7 @@ public class AbsPipelineTest {
 						public final Annotation apply(final Pair<String,String> pair) {
 							return new IAnnotation(pair.getFirst(),pair.getSecond());
 						}
-				});
+				});*/
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
@@ -70,95 +74,85 @@ public class AbsPipelineTest {
 		return IPair.pair(fst, snd);
 	}
 	
-	protected final BinaryTree<Integer,Annotation> label(SimpleBinaryTree<Pair<String,String>> input) {
+	/*
+	protected final BinaryTree<ID,Annotation<ID>> label(SimpleBinaryTree<Pair<String,String>> input) {
 		return labeller.label(input).accept(annotator);
-	}
+	}*/
 	
-	protected final SimpleBinaryTree<Pair<String,String>> _(SimpleBinaryTree<Pair<String,String>> l, SimpleBinaryTree<Pair<String,String>> r) {
-		return ISimpleBinaryTree.node(l, r);
+	protected final <ID> BinaryTree<ID,Annotation<ID>> _(BinaryTree<ID,Annotation<ID>> l, BinaryTree<ID,Annotation<ID>> r, ID id) {
+		return IBinaryTree.node(id, l, r);
 	}
 
-	protected final SimpleBinaryTree<Pair<String,String>> word(String category, String text) {
-		return ISimpleBinaryTree.leaf(pair(text, category));
+	protected final <ID> BinaryTree<ID,Annotation<ID>> word(String category, String text, ID id) {
+		return IBinaryTree.leaf((Annotation<ID>)new IAnnotation<ID>(id,text,category));
 	}
 	
-	protected final Result<Integer> prove
-		(SimpleBinaryTree<Pair<String,String>> text
-		,SimpleBinaryTree<Pair<String,String>> hypo
-		,Iterable<Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String,String>>>> subs)
+	protected final <ID> Result<ID> prove
+		(BinaryTree<ID,Annotation<ID>> text
+		,BinaryTree<ID,Annotation<ID>> hypo
+		,List<Pair<ID,ID>> subs)
 			throws Exception {
-		
-		val builder = ImmutableList.<Pair<BinaryTree<Integer,Annotation>,BinaryTree<Integer,Annotation>>> builder();
-		for (val sub: subs) {
-			builder.add(pair(label(sub.getFirst()),label(sub.getSecond())));
-		}
-		return pipeline.prove(label(text), label(hypo), builder.build());
+		return pipeline.prove(text, hypo, subs);
 	}
 	
-	protected final void assertProof
-		(SimpleBinaryTree<Pair<String,String>> text
-		,SimpleBinaryTree<Pair<String,String>> hypo
-		,Iterable<Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String,String>>>> subs)
+	protected final <ID> void assertProof
+		(BinaryTree<ID,Annotation<ID>> text
+		,BinaryTree<ID,Annotation<ID>> hypo
+		,List<Pair<ID,ID>> subs)
 			throws Exception {
-		prove(text,hypo,subs).accept(new AssertProof<Integer>());
+		prove(text,hypo,subs).accept(new AssertProof<ID>());
 	}
-	
-	protected final void assertProof
-		(SimpleBinaryTree<Pair<String,String>> text
-		,SimpleBinaryTree<Pair<String,String>> hypo
-		,Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String,String>>>... subs)
-				throws Exception {
-		assertProof(text,hypo,ImmutableList.copyOf(subs));
-	}
-	
-	protected final void assertNoProof
-		(SimpleBinaryTree<Pair<String,String>> text
-		,SimpleBinaryTree<Pair<String,String>> hypo
-		,Iterable<Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String,String>>>> subs)
-			throws Exception {
-		prove(text,hypo,subs).accept(new AssertNoProof<Integer>());
-	}
-	
-	protected final void assertNoProof
-		(SimpleBinaryTree<Pair<String,String>> text
-		,SimpleBinaryTree<Pair<String,String>> hypo
-		,Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String,String>>>... subs)
-				throws Exception {
-		assertNoProof(text,hypo,ImmutableList.copyOf(subs));
-	}
-	
-	protected final void assertException
-		(SimpleBinaryTree<Pair<String,String>> text
-		,SimpleBinaryTree<Pair<String,String>> hypo
-		,Iterable<Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String,String>>>> subs)
-			throws Exception {
-		prove(text,hypo,subs).accept(new AssertException<Integer>());
-	}
-	
-	protected final void assertException
-		(SimpleBinaryTree<Pair<String,String>> text
-		,SimpleBinaryTree<Pair<String,String>> hypo
-		,Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String,String>>>... subs)
-				throws Exception {
-		assertException(text,hypo,ImmutableList.copyOf(subs));
-	}
-	
 
+	protected final <ID> void assertProof
+	(BinaryTree<ID,Annotation<ID>> text
+	,BinaryTree<ID,Annotation<ID>> hypo)
+		throws Exception {
+	prove(text,hypo,new ArrayList<Pair<ID,ID>>()).accept(new AssertProof<ID>());
+	}
 	
-	protected final void testTestCaseCreator
-		(SimpleBinaryTree<Pair<String,String>> text
-		,SimpleBinaryTree<Pair<String,String>> hypo
-		,ResultType resultType
-		,Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String,String>>>... subs)
+	protected final <ID> void assertNoProof
+		(BinaryTree<ID,Annotation<ID>> text
+		,BinaryTree<ID,Annotation<ID>> hypo
+		,List<Pair<ID,ID>> subs)
+			throws Exception {
+		prove(text,hypo,subs).accept(new AssertNoProof<ID>());
+	}
+	
+	protected final <ID> void assertNoProof
+		(BinaryTree<ID,Annotation<ID>> text
+		,BinaryTree<ID,Annotation<ID>> hypo)
+				throws Exception {
+		assertNoProof(text,hypo,new ArrayList<Pair<ID,ID>>());
+	}
+	
+	protected final <ID> void assertException
+		(BinaryTree<ID,Annotation<ID>> text
+		,BinaryTree<ID,Annotation<ID>> hypo
+		,List<Pair<ID,ID>> subs)
+			throws Exception {
+		prove(text,hypo,subs).accept(new AssertException<ID>());
+	}
+	
+	protected final <ID> void assertException
+		(BinaryTree<ID,Annotation<ID>> text
+		,BinaryTree<ID,Annotation<ID>> hypo)
+				throws Exception {
+		assertException(text,hypo,new ArrayList<Pair<ID,ID>>());
+	}
+	
+	protected final <ID> void testTestCaseCreator
+		(BinaryTree<ID,Annotation<ID>> text
+		,BinaryTree<ID,Annotation<ID>> hypo
+		,ResultType resultType)
 				throws IOException{
-		testTestCaseCreator(text,hypo,resultType,ImmutableList.copyOf(subs));
+		testTestCaseCreator(text,hypo,resultType,new ArrayList<Pair<ID,ID>>());
 	}
 	
-	protected final void testTestCaseCreator
-		(SimpleBinaryTree<Pair<String,String>> text
-		,SimpleBinaryTree<Pair<String,String>> hypo
+	protected final <ID> void testTestCaseCreator
+		(BinaryTree<ID,Annotation<ID>> text
+		,BinaryTree<ID,Annotation<ID>> hypo
 		,ResultType resultType
-		,Iterable<Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String,String>>>> subs)		
+		,List<Pair<ID,ID>> subs)		
 				throws IOException {
 		
 		// create a temporary file for the test case.
@@ -168,14 +162,11 @@ public class AbsPipelineTest {
 		val writer = new BufferedWriter(new FileWriter(temp));
 		
 		// convert the subsumptions to the correct format.
-		val builder = ImmutableList.<Pair<BinaryTree<Integer,Annotation>,BinaryTree<Integer,Annotation>>> builder();
-		for (val sub: subs) {
-			builder.add(pair(label(sub.getFirst()),label(sub.getSecond())));
-		}
+		val builder = ImmutableList.<Pair<BinaryTree<ID,Annotation<ID>>,BinaryTree<ID,Annotation<ID>>>> builder();
 		
 		// write the test case to the temporary file.
 		val testCaseTest = testCaseCreator.createTestCase(
-			null, "Test", "", label(text), label(hypo), builder.build(), resultType);
+			null, "Test", "", text, hypo, subs, resultType);
 		writer.append(testCaseTest);
 		
 		// attempt to compile the file

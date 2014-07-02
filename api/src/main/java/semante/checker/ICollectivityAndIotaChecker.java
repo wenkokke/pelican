@@ -44,10 +44,10 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 	
 	STL stl;
 	FlattenTree<ID> flattener;
-	BinaryTreeBuilder<ID,UnambiguousAnnotation> builder;
+	BinaryTreeBuilder<ID,UnambiguousAnnotation<ID>> builder;
 	
 	@Override
-	public void check(BinaryTree<ID,UnambiguousAnnotation> tree)
+	public void check(BinaryTree<ID,UnambiguousAnnotation<ID>> tree)
 			throws IllegalAnnotationException {
 		
 		// replace all occurrences of [[AND ...] ...] with [[AND z1] z2]
@@ -232,22 +232,22 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 	@RequiredArgsConstructor
 	@FieldDefaults(makeFinal=true,level=PRIVATE)
 	private final class ReplaceNPsInConjunctionByConstant implements
-		BinaryTree.Visitor<ID, UnambiguousAnnotation, BinaryTree<ID, UnambiguousAnnotation>> {
+		BinaryTree.Visitor<ID, UnambiguousAnnotation<ID>, BinaryTree<ID, UnambiguousAnnotation<ID>>> {
 		
 		@NonFinal
 		int counter = 0;
 		
-		SimpleBinaryTree.Visitor<UnambiguousAnnotation, Maybe<UnambiguousAnnotation>> hasNestedAND =
-			new IfHoldsForDirectSubtree(Left, new IfAnnotatedWith("AND"));
+		SimpleBinaryTree.Visitor<UnambiguousAnnotation<ID>, Maybe<UnambiguousAnnotation<ID>>> hasNestedAND =
+			new IfHoldsForDirectSubtree<ID>(Left, new IfAnnotatedWith<ID>("AND"));
 		
 
 		@Override
-		public final BinaryTree<ID, UnambiguousAnnotation> leaf(UnambiguousAnnotation x) {
+		public final BinaryTree<ID, UnambiguousAnnotation<ID>> leaf(UnambiguousAnnotation<ID> x) {
 			return builder.leaf(x);
 		}
 
 		@Override
-		public final BinaryTree<ID, UnambiguousAnnotation> node(ID id1, BinaryTree<ID, UnambiguousAnnotation> l1, BinaryTree<ID, UnambiguousAnnotation> r1) {
+		public final BinaryTree<ID, UnambiguousAnnotation<ID>> node(ID id1, BinaryTree<ID, UnambiguousAnnotation<ID>> l1, BinaryTree<ID, UnambiguousAnnotation<ID>> r1) {
 			
 			// recursively apply transformation:
 			val l2    = l1.accept(this);
@@ -261,7 +261,7 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 					val z1  = builder.leaf(constant(counter += 1));
 					val z2  = builder.leaf(constant(counter += 1));
 					val and = builder.leaf(query.fromJust());
-					val id2 = l1.accept(new IfHasId<ID,UnambiguousAnnotation>()).fromJust();
+					val id2 = l1.accept(new IfHasId<ID,UnambiguousAnnotation<ID>>()).fromJust();
 					return builder.node(id1, builder.node(id2, and, z1), z2);
 				}
 			}
@@ -269,7 +269,7 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 		}
 		
 		// checks the type of a subtree
-		private final Type typeOfSubtree(BinaryTree<ID, UnambiguousAnnotation> t) {
+		private final Type typeOfSubtree(BinaryTree<ID, UnambiguousAnnotation<ID>> t) {
 			return stl.typeOf(flattener.flatten(t));
 		}
 		
@@ -292,7 +292,7 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 			}
 		}
 		
-		private final UnambiguousAnnotation constant(int n) {
+		private final UnambiguousAnnotation<ID> constant(int n) {
 			val builder  = stl.getDeBruijnBuilder();
 			val text     = nameFor(n);
 			val category = "NP";
@@ -302,7 +302,7 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 						builder.variable(0, Types.ET),
 						builder.constant(text, Types.E)));
 			val type     = Types.ET_T;
-			return new IUnambiguousAnnotation(text,category,meaning,type);
+			return new IUnambiguousAnnotation<ID>(null, text,category,meaning,type);
 		}
 	}
 

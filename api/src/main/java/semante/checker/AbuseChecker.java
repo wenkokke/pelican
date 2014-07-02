@@ -5,7 +5,7 @@ import semante.pipeline.BinaryTree;
 
 public interface AbuseChecker<ID> {
 
-	public void check(BinaryTree<ID,UnambiguousAnnotation> tree)
+	public void check(BinaryTree<ID,UnambiguousAnnotation<ID>> tree)
 			throws IllegalAnnotationException;
 
 }

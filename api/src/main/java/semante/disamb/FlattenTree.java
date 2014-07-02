@@ -7,8 +7,8 @@ import semante.pipeline.BinaryTree;
 
 public interface FlattenTree<ID> {
 
-	DeBruijn flatten(BinaryTree<ID,UnambiguousAnnotation> tree);
+	DeBruijn flatten(BinaryTree<ID,UnambiguousAnnotation<ID>> tree);
 	
-	List<DeBruijn> flattenAll(List<BinaryTree<ID,UnambiguousAnnotation>> trees);
+	List<DeBruijn> flattenAll(List<BinaryTree<ID,UnambiguousAnnotation<ID>>> trees);
 	
 }

@@ -11,12 +11,12 @@ import semante.pipeline.SimpleBinaryTree;
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = PRIVATE)
-public final class IfAnnotatedWith implements SimpleBinaryTree.Visitor<UnambiguousAnnotation, Maybe<UnambiguousAnnotation>> {
+public final class IfAnnotatedWith<ID> implements SimpleBinaryTree.Visitor<UnambiguousAnnotation<ID>, Maybe<UnambiguousAnnotation<ID>>> {
 	
 	String category;
 
 	@Override
-	public final Maybe<UnambiguousAnnotation> leaf(UnambiguousAnnotation arg0) {
+	public final Maybe<UnambiguousAnnotation<ID>> leaf(UnambiguousAnnotation<ID> arg0) {
 		if (arg0.getCategory().equals(category))
 			return just(arg0);
 		else
@@ -24,7 +24,7 @@ public final class IfAnnotatedWith implements SimpleBinaryTree.Visitor<Unambiguo
 	}
 
 	@Override
-	public final Maybe<UnambiguousAnnotation> node(SimpleBinaryTree<UnambiguousAnnotation> arg1, SimpleBinaryTree<UnambiguousAnnotation> arg2) {
+	public final Maybe<UnambiguousAnnotation<ID>> node(SimpleBinaryTree<UnambiguousAnnotation<ID>> arg1, SimpleBinaryTree<UnambiguousAnnotation<ID>> arg2) {
 		return nothing();
 	}
 	

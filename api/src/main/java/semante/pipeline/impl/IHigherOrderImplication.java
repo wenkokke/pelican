@@ -33,6 +33,9 @@ public class IHigherOrderImplication implements HigherOrderImplication {
 		val textType = stl.typeOf(text);
 		val hypoType = stl.typeOf(hypo);
 		
+		System.out.println("Text element type: " + stl.format(textType));
+		System.out.println("Hypo element type: " + stl.format(hypoType));
+		
 		// check if types match.
 		if (!textType.equals(hypoType))
 			throw new HOIException(
@@ -49,6 +52,16 @@ public class IHigherOrderImplication implements HigherOrderImplication {
 		val argTypes = textType.accept(new GetArgumentTypes()).build();
 		int numQuant = 0;
 		val context  = ImmutableList.<DeBruijn> builder().add(text).add(hypo).addAll(ctxt).build();
+		
+		System.out.println("argTypes: ");
+		for (Type t : Lists.reverse(argTypes)) {
+			System.out.println(stl.format(t));
+		}
+		
+		System.out.println("context: ");
+		for (DeBruijn c : context) {
+			System.out.println(stl.format(stl.fromDeBruijn(c)));
+		}		
 		
 		Iterable<DeBruijn> mutableText = Lists.newArrayList(text);
 		Iterable<DeBruijn> mutableHypo = Lists.newArrayList(hypo);

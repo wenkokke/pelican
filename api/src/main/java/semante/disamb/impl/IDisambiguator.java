@@ -40,14 +40,14 @@ public final class IDisambiguator<ID> implements Disambiguator<ID> {
 	STL stl;
 	RichLexicon lexicon;
 	FlattenTree<ID> flattener;
-	AnnotationTreePrinter<ID> printer;
-	BinaryTreeBuilder<ID,UnambiguousAnnotation> builder;
-	Function<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>,
-	                   BinaryTree<ID,UnambiguousAnnotation>> snd = second();
+	AnnotationTreePrinter<ID,Annotation<ID>> printer;
+	BinaryTreeBuilder<ID,UnambiguousAnnotation<ID>> builder;
+	Function<Pair<Type,BinaryTree<ID,UnambiguousAnnotation<ID>>>,
+	                   BinaryTree<ID,UnambiguousAnnotation<ID>>> snd = second();
 
 	@Override
-	public Either<DisambiguatorException, List<BinaryTree<ID,UnambiguousAnnotation>>> disambiguate(
-			BinaryTree<ID, Annotation> tree) {
+	public Either<DisambiguatorException, List<BinaryTree<ID,UnambiguousAnnotation<ID>>>> disambiguate(
+			BinaryTree<ID, Annotation<ID>> tree) {
 		try {
 			return IEither.right(transform(tree.accept(new Helper()),snd));
 		}
@@ -58,9 +58,9 @@ public final class IDisambiguator<ID> implements Disambiguator<ID> {
 	
 	@Override
 	public Either<Result<ID>, List<DeBruijn>> disambiguateAndFlatten(
-			BinaryTree<ID, Annotation> tree) {
+			BinaryTree<ID, Annotation<ID>> tree) {
 		return disambiguate(tree)
-				.accept(new Either.Visitor<DisambiguatorException, List<BinaryTree<ID,UnambiguousAnnotation>>, Either<Result<ID>, List<DeBruijn>>>() {
+				.accept(new Either.Visitor<DisambiguatorException, List<BinaryTree<ID,UnambiguousAnnotation<ID>>>, Either<Result<ID>, List<DeBruijn>>>() {
 
 					@Override
 					public final Either<Result<ID>, List<DeBruijn>> left(DisambiguatorException except) {
@@ -68,18 +68,18 @@ public final class IDisambiguator<ID> implements Disambiguator<ID> {
 					}
 
 					@Override
-					public final Either<Result<ID>, List<DeBruijn>> right(List<BinaryTree<ID,UnambiguousAnnotation>> list) {
+					public final Either<Result<ID>, List<DeBruijn>> right(List<BinaryTree<ID,UnambiguousAnnotation<ID>>> list) {
 						return IEither.right(flattener.flattenAll(list));
 					}
 
 				});
 	}
 	
-	private final class Helper implements BinaryTree.Visitor<ID, Annotation, List<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>>> {
+	private final class Helper implements BinaryTree.Visitor<ID, Annotation<ID>, List<Pair<Type,BinaryTree<ID,UnambiguousAnnotation<ID>>>>> {
 
 		@Override
-		public final List<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>>
-			leaf(Annotation x) {
+		public final List<Pair<Type,BinaryTree<ID,UnambiguousAnnotation<ID>>>>
+			leaf(Annotation<ID> x) {
 			try {
 				
 				// lookup denotations in lexicon (may throw NoSuchElementException)
@@ -87,12 +87,12 @@ public final class IDisambiguator<ID> implements Disambiguator<ID> {
 					= lexicon.getEntry(x.getCategory(), x.getText()).getDenotations();
 				
 				// transform denotations to unambiguous trees, or in pseudo code:
-				// map (leaf . flip IUnambiguousAnnotation x) denotations
+				// map (leaf . flip IUnambiguousAnnotation<ID> x) denotations
 				val trees
-					= ImmutableList.<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>> builder();
+					= ImmutableList.<Pair<Type,BinaryTree<ID,UnambiguousAnnotation<ID>>>> builder();
 				for (val d : denotations) {
 					val t = stl.typeOf(d);
-					trees.add(pair(t,builder.leaf(new IUnambiguousAnnotation(x,d,t))));
+					trees.add(pair(t,builder.leaf(new IUnambiguousAnnotation<ID>(x,d,t))));
 				}
 				return trees.build();
 			}
@@ -102,17 +102,17 @@ public final class IDisambiguator<ID> implements Disambiguator<ID> {
 		}
 
 		@Override
-		public final List<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>>
-			node(ID id, BinaryTree<ID, Annotation> l, BinaryTree<ID, Annotation> r) {
+		public final List<Pair<Type,BinaryTree<ID,UnambiguousAnnotation<ID>>>>
+			node(ID id, BinaryTree<ID, Annotation<ID>> l, BinaryTree<ID, Annotation<ID>> r) {
 			
 			// recursively apply the transformation
 			val ls = l.accept(this);
 			val rs = r.accept(this);
 			
 			// set up variables for the results (new trees and errors)
-			val exps = ImmutableList.<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>> builder(); 
-			val errs = ImmutableList.<Pair<Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>
-			                              ,Pair<Type,BinaryTree<ID,UnambiguousAnnotation>>>> builder(); 
+			val exps = ImmutableList.<Pair<Type,BinaryTree<ID,UnambiguousAnnotation<ID>>>> builder(); 
+			val errs = ImmutableList.<Pair<Pair<Type,BinaryTree<ID,UnambiguousAnnotation<ID>>>
+			                              ,Pair<Type,BinaryTree<ID,UnambiguousAnnotation<ID>>>>> builder(); 
 			
 			// try all combinations of the left and right subtrees
 			for (val tul : ls) {
@@ -170,8 +170,8 @@ public final class IDisambiguator<ID> implements Disambiguator<ID> {
 			}
 		};
 	
-	private final String errorMessage(BinaryTree<ID,Annotation> treeL, List<DeBruijn> termsL,
-            BinaryTree<ID,Annotation> treeR, List<DeBruijn> termsR) {
+	private final String errorMessage(BinaryTree<ID,Annotation<ID>> treeL, List<DeBruijn> termsL,
+            BinaryTree<ID,Annotation<ID>> treeR, List<DeBruijn> termsR) {
 		return format(
 				"cannot construct well-typed lambda expression from %s and %s of types [%s] and [%s], respectively.",
 				treeL.accept(printer),

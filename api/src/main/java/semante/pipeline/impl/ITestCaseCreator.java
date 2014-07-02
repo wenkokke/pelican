@@ -1,7 +1,10 @@
 package semante.pipeline.impl;
 
 import static lombok.AccessLevel.PRIVATE;
-import static semante.pipeline.impl.IPair.pair;
+
+import java.util.Arrays;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
@@ -10,11 +13,7 @@ import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
 import semante.pipeline.Pair;
 import semante.pipeline.ResultType;
-import semante.pipeline.SimpleBinaryTree;
 import semante.pipeline.TestCaseCreator;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true,level=PRIVATE)
@@ -22,21 +21,21 @@ public final class ITestCaseCreator implements TestCaseCreator {
 	
 	@NonFinal StringBuilder test;
 	
-	
+	/*
 	@Override
 	public final String createTestCase(
 			final String packageName,
 			final String className,
 			final String comment,
-			final SimpleBinaryTree<Annotation> text,
-			final SimpleBinaryTree<Annotation> hypo,
-			final Iterable<Pair<SimpleBinaryTree<Annotation>,SimpleBinaryTree<Annotation>>> subs,
+			final SimpleBinaryTree<Annotation<Integer>> text,
+			final SimpleBinaryTree<Annotation<Integer>> hypo,
+			final List<Pair<Integer,Integer>> subs,
 			final ResultType resultType) {
 		
 		// create a labeller;
 		val lbl = ILabeller.labeller();
 		
-		val builder = ImmutableList.<Pair<BinaryTree<Integer,Annotation>,BinaryTree<Integer,Annotation>>> builder();
+		val builder = ImmutableList.<Pair<BinaryTree<Integer,Annotation<Integer>>,BinaryTree<Integer,Annotation<Integer>>>> builder();
 		for (val sub: subs) {
 			builder.add(pair(lbl.label(sub.getFirst()),lbl.label(sub.getSecond())));
 		}
@@ -50,20 +49,38 @@ public final class ITestCaseCreator implements TestCaseCreator {
 			lbl.label(hypo),
 			builder.build(),
 			resultType);
-	}
+	}*/
 
 	@Override
 	public final <ID> String createTestCase(
 			final String packageName,
 			final String className,
 			final String comment,
-			final BinaryTree<ID, Annotation> text,
-			final BinaryTree<ID, Annotation> hypo,
-			final Iterable<Pair<BinaryTree<ID, Annotation>,BinaryTree<ID, Annotation>>> subs,
+			final BinaryTree<ID, Annotation<ID>> text,
+			final BinaryTree<ID, Annotation<ID>> hypo,
+			final List<Pair<ID,ID>> subs,
 			final ResultType resultType) {
 		
 		// create a string buffer for the test;
 		test = new StringBuilder();
+		
+		boolean incSubs = subs!=null && subs.size()>0;
+		
+		List<String> subsImport;
+		String subsReference;
+		
+		if (incSubs) {
+			subsImport = Arrays.asList(
+					"import java.util.List;",
+					"import com.google.common.collect.Lists;",
+					"import semante.pipeline.Pair;",
+					"import semante.pipeline.impl.IPair;");
+			subsReference = ", subs";
+		} else {
+			subsImport = Arrays.asList();
+			subsReference = "";
+		}
+		
 		
 		// create the java source code;
 		if (packageName != null) {
@@ -72,11 +89,13 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		}
 		line("import lombok.val;");
 		line("import org.junit.Test;");
-		line("import semante.pipeline.Pair;");
-		line("import semante.pipeline.SimpleBinaryTree;");
 		line("import semante.pipeline.AbsPipelineTest;");
 		line("import static semante.pipeline.ResultType.*;");
-		line("import static com.google.common.collect.ImmutableList.of;");
+		if (incSubs) {
+			for (String imp : subsImport) { 
+				line(imp);
+			}
+		}
 		line();
 		line("public final class Test%s extends AbsPipelineTest {", className);
 		if (! comment.isEmpty()) {
@@ -102,22 +121,24 @@ public final class ITestCaseCreator implements TestCaseCreator {
 		line(2,"val th ="); tree(vh);
 		line();
 		line(2,"// create the subsumption relations;");
-		subs(subs);
+		if (incSubs) {
+			subs(subs);
+		}
 		line();
 		line(2,"// test for a proof;");
 		switch (resultType) {
 		case Proof:
-			line(2,"assertProof(tt, th, subs);");
+			line(2,"assertProof(tt, th" + subsReference + ");");
 			break;
 		case NoProof:
-			line(2,"assertNoProof(tt, th, subs);");
+			line(2,"assertNoProof(tt, th" + subsReference + ");");
 			break;
 		case Exception:
-			line(2,"assertException(tt, th, subs);");
+			line(2,"assertException(tt, th" + subsReference + ");");
 			break;
 		}
 		line(2,"// test the testcasecreator;");
-		line(2,"testTestCaseCreator(tt, th, %s, subs);", resultType.toString());
+		line(2,"testTestCaseCreator(tt, th, %s" + subsReference + ");", resultType.toString());
 		
 		line(1,"}");
 		line();
@@ -127,26 +148,15 @@ public final class ITestCaseCreator implements TestCaseCreator {
 	}
 	
 	// outputs an array of subsumption relations;
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private final <ID> void subs(
-		final Iterable<Pair<BinaryTree<ID,Annotation>,BinaryTree<ID,Annotation>>> subs) {
-		
-		val arr = Iterables.toArray(subs, Pair.class);
-		for (int i = 0; i < arr.length; i++) {
-			val pt = String.format("st%d", i);
-			val ph = String.format("sh%d", i);
-			val vt = vocabulary(pt, (BinaryTree<ID, Annotation>) arr[i].getFirst());
-			val vh = vocabulary(ph, (BinaryTree<ID, Annotation>) arr[i].getSecond());
-			 
-			line("val st%d = ", i); tree(vt);
-			line("val sh%d = ", i); tree(vh);
-			line("val ss%d = subs(st%d, sh%d);", i, i, i);
+		final List<Pair<ID,ID>> subs) {
+
+		ID id = subs.get(0).getFirst();
+		String idName = id.getClass().getSimpleName();
+		line(1, "List<Pair<"+idName+","+idName+">> subs = Lists.newArrayList();");
+		for (Pair<ID,ID> sub : subs) {
+			line(1, "subs.add(new IPair<"+idName+","+idName+">(" + sub.getFirst().toString() + "," + sub.getSecond().toString() + "));");
 		}
-		line("Iterable<Pair<SimpleBinaryTree<Pair<String,String>>,SimpleBinaryTree<Pair<String,String>>>> subs = of(");
-		for (int i = 0; i < arr.length; i++) {
-			line(2, "ss%d" + ((i != arr.length - 1 ? "," : "")), i);
-		}
-		line(");");
 	}
 	
 	// outputs a tree of variable names;
@@ -166,9 +176,11 @@ public final class ITestCaseCreator implements TestCaseCreator {
 			public final Void node(ID _, BinaryTree<ID, String> l, BinaryTree<ID, String> r) {
 				line(depth,"_("); 	// _(
 				depth++;			// 
-				l.accept(this);		//     left-subtree
-				line(depth,",");	//     ,
-				r.accept(this);		//     right-subtree
+				l.accept(this);				//	left-subtree
+				line(depth,",");			// 	,
+				r.accept(this);				//	right-subtree
+				line(depth,",");			//	,
+				line(depth,_.toString());	//  id
 				depth--;			// 
 				line(depth,")");	// );
 				return null;
@@ -180,22 +192,20 @@ public final class ITestCaseCreator implements TestCaseCreator {
 	// outputs the vocabulary for a given annotation tree and returns a tree of variable names;
 	private final <ID> BinaryTree<ID, String> vocabulary(
 			final String prefix,
-			final BinaryTree<ID, Annotation> tree) {
-		return tree.accept(new BinaryTree.Visitor<ID, Annotation, BinaryTree<ID, String>>() {
+			final BinaryTree<ID, Annotation<ID>> tree) {
+		return tree.accept(new BinaryTree.Visitor<ID, Annotation<ID>, BinaryTree<ID, String>>() {
 			
 			@NonFinal Integer id = 0;
 
 			@Override
-			public final BinaryTree<ID, String> leaf(Annotation ann) {
+			public final BinaryTree<ID, String> leaf(Annotation<ID> ann) {
 				return IBinaryTree.leaf(
-					ann.accept(new Annotation.Visitor<String>() {
+					ann.accept(new Annotation.Visitor<String,ID>() {
 						@Override
-						public final String annotation(String text, String category) {
-							
+						public final String annotation(ID id, String text, String category) {
 							val safe = text.replaceAll(" ","_").toLowerCase();
 							val name = String.format("%s%02d_%s", prefix, id, safe);
-							line(2,"val %s = word(\"%s\",\"%s\");", name, category, text);
-							id++;
+							line(2,"val %s = word(\"%s\",\"%s\",%s);", name, category, text, id.toString());
 							return name;
 							
 						}
@@ -203,9 +213,10 @@ public final class ITestCaseCreator implements TestCaseCreator {
 			}
 
 			@Override
-			public final BinaryTree<ID, String> node(ID _, BinaryTree<ID, Annotation> l, BinaryTree<ID, Annotation> r) {
+			public final BinaryTree<ID, String> node(ID _, BinaryTree<ID, Annotation<ID>> l, BinaryTree<ID, Annotation<ID>> r) {
 				return IBinaryTree.node(_, l.accept(this), r.accept(this));
 			}
+
 		});
 	}
 	

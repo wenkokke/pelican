@@ -1,0 +1,248 @@
+package semante.pipeline.test.rte.shared2;
+
+import lombok.val;
+import org.junit.Test;
+import semante.pipeline.AbsPipelineTest;
+import static semante.pipeline.ResultType.*;
+
+public final class TestPel2Shared0037 extends AbsPipelineTest {
+
+		@Test
+		public final void testPel2Shared0037() throws Exception {
+
+			// create the vocabulary for the text;
+			val t01_dan = word("$NPC_1$","Dan",1);
+			val t02_rather = word("NP_D","Rather",2);
+			val t64_app = word("WHO_A","APP",64);
+			val t04_a = word("A","a",4);
+			val t05_respected = word("MI","respected",5);
+			val t06_news = word("$NC_1$","news",6);
+			val t07_anchorman = word("N","anchorman",7);
+			val t08_in = word("P_R","in",8);
+			val t09_the = word("THE","the",9);
+			val t10_united = word("$NPC_1$","United",10);
+			val t11_states = word("NP_D","States",11);
+			val t13_has = word("V_AUX","has",13);
+			val t14_announced = word("V_2","announced",14);
+			val t15_that = word("IGNORE","that",15);
+			val t16_he = word("NP_D","he",16);
+			val t17_will = word("V_AUX","will",17);
+			val t18_retire = word("V_1","retire",18);
+			val t19_as = word("P_R","as",19);
+			val t20_the = word("THE","the",20);
+			val t21_lead = word("N","lead",21);
+			val t22_of = word("P_R","of",22);
+			val t23_the = word("THE","the",23);
+			val t24_cbs = word("$NC_1$","CBS",24);
+			val t25_main = word("$NC_1$","main",25);
+			val t26_news = word("$NC_1$","news",26);
+			val t27_program = word("N","program",27);
+			val t28_next = word("P_R","next",28);
+			val t29_year = word("NP_D","year",29);
+
+			// create the vocabulary for the hypothesis;
+			val h01_dan = word("$NPC_1$","Dan",1);
+			val h02_rather = word("NP_D","Rather",2);
+			val h03_is = word("IS","is",3);
+			val h04_respected = word("MI","respected",4);
+
+			// create the tree structure for the text;
+			val tt =
+			_(
+				_(
+					_(
+						t01_dan
+						,
+						t02_rather
+						,
+						31
+					)
+					,
+					_(
+						t64_app
+						,
+						_(
+							t04_a
+							,
+							_(
+								_(
+									t05_respected
+									,
+									_(
+										t06_news
+										,
+										t07_anchorman
+										,
+										57
+									)
+									,
+									58
+								)
+								,
+								_(
+									t08_in
+									,
+									_(
+										t09_the
+										,
+										_(
+											t10_united
+											,
+											t11_states
+											,
+											60
+										)
+										,
+										61
+									)
+									,
+									34
+								)
+								,
+								35
+							)
+							,
+							66
+						)
+						,
+						65
+					)
+					,
+					62
+				)
+				,
+				_(
+					t13_has
+					,
+					_(
+						t14_announced
+						,
+						_(
+							t15_that
+							,
+							_(
+								t16_he
+								,
+								_(
+									_(
+										_(
+											t17_will
+											,
+											t18_retire
+											,
+											55
+										)
+										,
+										_(
+											t19_as
+											,
+											_(
+												t20_the
+												,
+												_(
+													t21_lead
+													,
+													_(
+														t22_of
+														,
+														_(
+															t23_the
+															,
+															_(
+																t24_cbs
+																,
+																_(
+																	t25_main
+																	,
+																	_(
+																		t26_news
+																		,
+																		t27_program
+																		,
+																		51
+																	)
+																	,
+																	52
+																)
+																,
+																53
+															)
+															,
+															54
+														)
+														,
+														40
+													)
+													,
+													38
+												)
+												,
+												68
+											)
+											,
+											42
+										)
+										,
+										67
+									)
+									,
+									_(
+										t28_next
+										,
+										t29_year
+										,
+										43
+									)
+									,
+									56
+								)
+								,
+								46
+							)
+							,
+							47
+						)
+						,
+						48
+					)
+					,
+					49
+				)
+				,
+				63
+			)
+			;
+
+			// create the tree structure for the hypothesis;
+			val th =
+			_(
+				_(
+					h01_dan
+					,
+					h02_rather
+					,
+					6
+				)
+				,
+				_(
+					h03_is
+					,
+					h04_respected
+					,
+					8
+				)
+				,
+				10
+			)
+			;
+
+			// create the subsumption relations;
+
+			// test for a proof;
+			assertProof(tt, th);
+			// test the testcasecreator;
+			testTestCaseCreator(tt, th, Proof);
+		}
+
+}
+

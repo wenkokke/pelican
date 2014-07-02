@@ -10,10 +10,10 @@ import semante.pipeline.Result;
 
 public interface Disambiguator<ID> {
 
-	Either<DisambiguatorException, List<BinaryTree<ID,UnambiguousAnnotation>>>
-		disambiguate(BinaryTree<ID, Annotation> tree);
+	Either<DisambiguatorException, List<BinaryTree<ID,UnambiguousAnnotation<ID>>>>
+		disambiguate(BinaryTree<ID, Annotation<ID>> tree);
 	
 	Either<Result<ID>, List<DeBruijn>>
-		disambiguateAndFlatten(BinaryTree<ID, Annotation> tree);
+		disambiguateAndFlatten(BinaryTree<ID, Annotation<ID>> tree);
 
 }

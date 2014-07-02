@@ -4,14 +4,14 @@ import lambdacalc.DeBruijn;
 import lambdacalc.Type;
 import semante.pipeline.Annotation;
 
-public interface UnambiguousAnnotation extends Annotation {
+public interface UnambiguousAnnotation<ID> extends Annotation<ID> {
 
 	public Type getType();
 	public DeBruijn getMeaning();
 
-	public interface Visitor<X> {
-		X annotation(String text, String category, DeBruijn meaning);
+	public interface Visitor<X,ID> {
+		X annotation(ID id, String text, String category, DeBruijn meaning);
 	}
 
-	<X> X accept(UnambiguousAnnotation.Visitor<X> v);
+	<X> X accept(UnambiguousAnnotation.Visitor<X,ID> v);
 }

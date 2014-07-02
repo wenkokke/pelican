@@ -15,10 +15,10 @@ import semante.pipeline.impl.IAnnotation;
 @ToString
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true,level=PRIVATE)
-public class IUnambiguousAnnotation implements UnambiguousAnnotation {
+public class IUnambiguousAnnotation<ID> implements UnambiguousAnnotation<ID> {
 	
 	@Delegate
-	Annotation delegate;
+	Annotation<ID> delegate;
 	
 	@Getter
 	DeBruijn meaning;
@@ -27,12 +27,12 @@ public class IUnambiguousAnnotation implements UnambiguousAnnotation {
 	Type type;
 
 	@Override
-	public final <X> X accept(Visitor<X> v) {
-		return v.annotation(delegate.getText(), delegate.getCategory(), meaning);
+	public final <X> X accept(Visitor<X,ID> v) {
+		return v.annotation(delegate.getId(),delegate.getText(), delegate.getCategory(), meaning);
 	}
 	
-	public IUnambiguousAnnotation(String text, String category, DeBruijn meaning, Type type) {
-		this(new IAnnotation(text, category), meaning, type);
+	public IUnambiguousAnnotation(ID id, String text, String category, DeBruijn meaning, Type type) {
+		this(new IAnnotation<ID>(id, text, category), meaning, type);
 	}
 	
 }
