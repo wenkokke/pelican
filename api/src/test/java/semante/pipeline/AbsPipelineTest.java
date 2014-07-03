@@ -2,13 +2,11 @@ package semante.pipeline;
 
 import static lombok.AccessLevel.PRIVATE;
 import static org.junit.Assert.fail;
-import static semante.pipeline.impl.IPair.pair;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,25 +19,16 @@ import lombok.experimental.FieldDefaults;
 import semante.lexicon.impl.IRichLexicon;
 import semante.pipeline.impl.IAnnotation;
 import semante.pipeline.impl.IBinaryTree;
-import semante.pipeline.impl.ILabeller;
 import semante.pipeline.impl.IPair;
 import semante.pipeline.impl.IPipeline;
-import semante.pipeline.impl.ISimpleBinaryTree;
 import semante.pipeline.impl.ITestCaseCreator;
 import semante.settings.impl.ISettings;
-
-import com.google.common.base.Function;
-import com.google.common.base.Functions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 @FieldDefaults(level=PRIVATE)
 public class AbsPipelineTest {
 
 	protected Pipeline pipeline;
-	Labeller labeller;
 	TestCaseCreator testCaseCreator;
-	//BinaryTreeFunctor<Integer, Pair<String, String>, Integer, Annotation> annotator;
 
 	public AbsPipelineTest() {
 		this(ISettings.defaultSettingsFile());
@@ -51,17 +40,7 @@ public class AbsPipelineTest {
             val settings    = new ISettings(settingsFile);
             val lexicon     = new IRichLexicon(settings,lambdacalc);
 		    pipeline        = new IPipeline(settings,lambdacalc,lexicon);
-		    labeller        = ILabeller.labeller();
 		    testCaseCreator = new ITestCaseCreator();
-		    /*
-		    annotator       = IBinaryTree.functor(
-				Functions.<Integer> identity(),
-					new Function<Pair<String,String>,Annotation>() {
-						@Override
-						public final Annotation apply(final Pair<String,String> pair) {
-							return new IAnnotation(pair.getFirst(),pair.getSecond());
-						}
-				});*/
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
@@ -160,10 +139,7 @@ public class AbsPipelineTest {
 		
 		@Cleanup
 		val writer = new BufferedWriter(new FileWriter(temp));
-		
-		// convert the subsumptions to the correct format.
-		val builder = ImmutableList.<Pair<BinaryTree<ID,Annotation<ID>>,BinaryTree<ID,Annotation<ID>>>> builder();
-		
+			
 		// write the test case to the temporary file.
 		val testCaseTest = testCaseCreator.createTestCase(
 			null, "Test", "", text, hypo, subs, resultType);
