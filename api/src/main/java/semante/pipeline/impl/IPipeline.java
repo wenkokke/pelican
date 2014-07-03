@@ -39,6 +39,7 @@ import semante.pipeline.PreparedFormulae;
 import semante.pipeline.PreparedRunnableFormula;
 import semante.pipeline.PreparedRunnableFormulae;
 import semante.pipeline.PreparedTree;
+import semante.pipeline.PreparedTypeSet;
 import semante.pipeline.Result;
 import semante.pipeline.TestCaseCreator;
 import semante.predcalc.Smasher;
@@ -106,13 +107,16 @@ public final class IPipeline implements Pipeline {
 		}
 	}
 	
-	public final <ID> Set<Type> getTypeOfSub(
+	public final <ID> PreparedTypeSet<ID> getTypeOfSub(
 			final BinaryTree<ID, Annotation<ID>> text,
 			final BinaryTree<ID, Annotation<ID>> hypo,
 			final Pair<ID,ID> subsumption,
 			Smasher stl2p) throws FileNotFoundException {
 
 		PreparedFormulae<ID> preparedFormulae = prepareFormulae(text, hypo, ImmutableList.of(subsumption), stl2p);
+		if (preparedFormulae.isResultSet()) {
+			return new IPreparedTypeSet<ID>(preparedFormulae.getResult(),preparedFormulae.getETHType());
+		}
 		
 		val nubTexts = preparedFormulae.getTextDesc();
 		val nubHypos = preparedFormulae.getHypoDesc();
@@ -131,7 +135,7 @@ public final class IPipeline implements Pipeline {
 			}
 		}
 
-		return matchedTypes;
+		return new IPreparedTypeSet<ID>(matchedTypes);
 	}
 	
 	

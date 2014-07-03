@@ -2,6 +2,8 @@ package semante.pipeline.impl;
 
 import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
+import semante.pipeline.impl.IBinaryTree;
+
 
 public class ITreeTools {
 	
@@ -24,21 +26,29 @@ public class ITreeTools {
 
 	
 	static public <ID, A extends Annotation<ID>> BinaryTree<ID, A> extractElement(BinaryTree<ID, A> tree, final ID elementId) {
+		
+		
+		
 		return tree.accept(new BinaryTree.Visitor<ID,A,BinaryTree<ID, A>>() {
 
 			@Override
 			public BinaryTree<ID, A> leaf(A arg0) {
-				return null;
+				return arg0.getId().equals(elementId) ? IBinaryTree.<ID,A>leaf(arg0) : null;
 			}
 
 			@Override
 			public BinaryTree<ID, A> node(ID arg0,
 					BinaryTree<ID, A> l,
 					BinaryTree<ID, A> r) {
-				BinaryTree<ID, A> ret;
-				ret = getId(l)==elementId ? l : l.accept(this);
+				BinaryTree<ID, A> ret = null;
+				if (arg0.equals(elementId)) {
+					ret = IBinaryTree.node(arg0,l,r);
+				} 
 				if (ret==null) {
-					ret = getId(r)==elementId ? r : r.accept(this);
+					ret = l.accept(this);
+				}
+				if (ret==null) {
+					ret = r.accept(this);
 				}
 				return ret;
 			}
