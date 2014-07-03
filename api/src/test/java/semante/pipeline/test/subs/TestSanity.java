@@ -14,10 +14,10 @@ import semante.pipeline.impl.IPair;
 
 import com.google.common.collect.Lists;
 
-public final class TestCase01 extends AbsPipelineTest {
+public final class TestSanity extends AbsPipelineTest {
 
 		@Test
-		public final void testPel1Shared0041() throws Exception {
+		public final void TestCase01() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_john = word("NP_D","John",1);
@@ -29,7 +29,7 @@ public final class TestCase01 extends AbsPipelineTest {
 			val h00_john = word("NP_D","John",1);
 			val h01_is = word("IS","is",2);
 			val h02_a = word("A","a",3);
-			val h03_human = word("N","human",4);
+			val h03_human = word("MR","human",4);
 
 			// create the tree structure for the text;
 			val tt =
@@ -83,20 +83,17 @@ public final class TestCase01 extends AbsPipelineTest {
 		}
 
 		@Test
-		public final void TestCase05() throws Exception {
+		public final void TestCase02() throws Exception {
 
 			// create the vocabulary for the text;
 			val t00_john = word("NP_D","John",1);
-			val t01_kissed = word("V_2","kissed",2);
-			val t02_a = word("A","a",3);
-			val t03_tall = word("MR","tall",4);
-			val t04_boy = word("N","boy",5);
+			val t01_is = word("IS","is",2);
+			val t02_tall = word("MR","tall",3);
 
 			// create the vocabulary for the hypothesis;
 			val h00_john = word("NP_D","John",1);
-			val h01_kissed = word("V_2","kissed",2);
-			val h02_the = word("THE","the",3);
-			val h03_boy = word("N","boy",4);
+			val h01_is = word("IS","is",2);
+			val h02_vtall = word("MR","vtall",3);
 
 			// create the tree structure for the text;
 			val tt =
@@ -104,19 +101,15 @@ public final class TestCase01 extends AbsPipelineTest {
 				t00_john
 				,
 				_(
-					t01_kissed
+					t01_is
 					,
-					_(
-						t02_a
-						,
-						_(
-							t03_tall
-							,
-							t04_boy
-						,6)
-					,7)
-				,8)
-			,9)
+					t02_tall
+					,
+					4
+				)
+				,
+				5
+			)
 			;
 
 			// create the tree structure for the hypothesis;
@@ -125,23 +118,96 @@ public final class TestCase01 extends AbsPipelineTest {
 				h00_john
 				,
 				_(
-					h01_kissed
+					h01_is
+					,
+					h02_vtall
+					,
+					4
+				)
+				,
+				5
+			)
+			;
+
+			// create the subsumption relations;
+			List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+			subs.add(new IPair<Integer,Integer>(3,3));
+
+			// test for a proof;
+			assertProof(tt, th, subs);
+			// test the testcasecreator;
+			testTestCaseCreator(tt, th, Proof, subs);
+		}
+		
+		@Test
+		public final void TestCase03() throws Exception {
+
+			// create the vocabulary for the text;
+			val t00_john = word("NP_D","John",1);
+			val t01_pushed = word("V_2","pushed",2);
+			val t02_the = word("THE","the",3);
+			val t03_table = word("N","table",4);
+
+			// create the vocabulary for the hypothesis;
+			val h00_john = word("NP_D","John",1);
+			val h01_moved = word("V_2","moved",2);
+			val h02_the = word("THE","the",3);
+			val h03_table = word("N","table",4);
+
+			// create the tree structure for the text;
+			val tt =
+			_(
+				t00_john
+				,
+				_(
+					t01_pushed
+					,
+					_(
+						t02_the
+						,
+						t03_table
+						,
+						5
+					)
+					,
+					6
+				)
+				,
+				7
+			)
+			;
+
+			// create the tree structure for the hypothesis;
+			val th =
+			_(
+				h00_john
+				,
+				_(
+					h01_moved
 					,
 					_(
 						h02_the
 						,
-						h03_boy
-					,5)
-				,6)
-			,7)
+						h03_table
+						,
+						5
+					)
+					,
+					6
+				)
+				,
+				7
+			)
 			;
 
-			// test for a proof;
-			assertProof(tt, th);
-			// test the testcasecreator;
-			testTestCaseCreator(tt, th, Proof);
-		}
+			// create the subsumption relations;
+			List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+			subs.add(new IPair<Integer,Integer>(2,2));
 
-		
+			// test for a proof;
+			assertProof(tt, th, subs);
+			// test the testcasecreator;
+			testTestCaseCreator(tt, th, Proof, subs);
+		}
 		
 }
