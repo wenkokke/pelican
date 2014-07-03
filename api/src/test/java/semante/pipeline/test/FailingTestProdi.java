@@ -1,9 +1,16 @@
 package semante.pipeline.test;
 
+import java.util.List;
+
 import lombok.val;
+
 import org.junit.Test;
+
 import semante.pipeline.AbsPipelineTest;
-import static com.google.common.collect.ImmutableList.of;
+import semante.pipeline.Pair;
+import semante.pipeline.impl.IPair;
+
+import com.google.common.collect.Lists;
 
 public final class FailingTestProdi extends AbsPipelineTest {
 
@@ -11,35 +18,35 @@ public final class FailingTestProdi extends AbsPipelineTest {
 		public final void testShared112() throws Exception {
 
 			// create the vocabulary for the text;
-			val t00_the = word("THE","The");
-			val t01_head = word("N","head");
-			val t02_of = word("P_R","of");
-			val t03_the = word("THE","the");
-			val t04_italian = word("MR","Italian");
-			val t05_opposition = word("N","opposition");
-			val t06_app = word("WHO_A","APP");
-			val t07_romano = word("$NPC_1$","Romano");
-			val t08_prodi = word("NP_D","Prodi");
-			val t09_was = word("IS","was");
-			val t10_the = word("THE","the");
-			val t11_last = word("MR","last");
-			val t12_president = word("N","president");
-			val t13_of = word("P_R","of");
-			val t14_the = word("THE","the");
-			val t15_european = word("MR","European");
-			val t16_commission = word("N","Commission");
+			val t00_the = word("THE","The",1);
+			val t01_head = word("N","head",2);
+			val t02_of = word("P_R","of",3);
+			val t03_the = word("THE","the",4);
+			val t04_italian = word("MR","Italian",5);
+			val t05_opposition = word("N","opposition",6);
+			val t06_app = word("WHO_A","APP",7);
+			val t07_romano = word("$NPC_1$","Romano",8);
+			val t08_prodi = word("NP_D","Prodi",9);
+			val t09_was = word("IS","was",10);
+			val t10_the = word("THE","the",11);
+			val t11_last = word("MR","last",12);
+			val t12_president = word("N","president",13);
+			val t13_of = word("P_R","of",14);
+			val t14_the = word("THE","the",15);
+			val t15_european = word("MR","European",16);
+			val t16_commission = word("N","Commission",17);
 
 			// create the vocabulary for the hypothesis;
-			val h00_romano = word("$NPC_1$","Romano");
-			val h01_prodi = word("NP_D","Prodi");
-			val h02_is = word("IS","is");
-			val h03_a = word("A","a");
-			val h04_former = word("MR","former");
-			val h05_president = word("N","president");
-			val h06_of = word("P_R","of");
-			val h07_the = word("THE","the");
-			val h08_european = word("MR","European");
-			val h09_commission = word("N","Commission");
+			val h00_romano = word("$NPC_1$","Romano",1);
+			val h01_prodi = word("NP_D","Prodi",2);
+			val h02_is = word("IS","is",3);
+			val h03_a = word("A","a",4);
+			val h04_former = word("MR","former",5);
+			val h05_president = word("N","president",6);
+			val h06_of = word("P_R","of",7);
+			val h07_the = word("THE","the",8);
+			val h08_european = word("MR","European",9);
+			val h09_commission = word("N","Commission",10);
 
 			// create the tree structure for the text;
 			val tt =
@@ -61,11 +68,11 @@ public final class FailingTestProdi extends AbsPipelineTest {
 										t04_italian
 										,
 										t05_opposition
-									)
-								)
-							)
-						)
-					)
+									,18)
+								,19)
+							,20)
+						,21)
+					,22)
 					,
 					_(
 						t06_app
@@ -74,9 +81,9 @@ public final class FailingTestProdi extends AbsPipelineTest {
 							t07_romano
 							,
 							t08_prodi
-						)
-					)
-				)
+						,23)
+					,24)
+				,25)
 				,
 				_(
 					t09_was
@@ -100,14 +107,14 @@ public final class FailingTestProdi extends AbsPipelineTest {
 											t15_european
 											,
 											t16_commission
-										)
-									)
-								)
-							)
-						)
-					)
-				)
-			)
+										,26)
+									,27)
+								,28)
+							,29)
+						,30)
+					,31)
+				,32)
+			,33)
 			;
 
 			// create the tree structure for the hypothesis;
@@ -117,7 +124,7 @@ public final class FailingTestProdi extends AbsPipelineTest {
 					h00_romano
 					,
 					h01_prodi
-				)
+				,11)
 				,
 				_(
 					h02_is
@@ -141,26 +148,23 @@ public final class FailingTestProdi extends AbsPipelineTest {
 											h08_european
 											,
 											h09_commission
-										)
-									)
-								)
-							)
-						)
-					)
-				)
-			)
+										,12)
+									,13)
+								,14)
+							,15)
+						,16)
+					,17)
+				,18)
+			,19)
 			;
 
+			
 			// create the subsumption relations;
-			val st000_last = word("MR","last");
-			val sh000_last = word("MR","last");
-			val st0 = st000_last;
-			val sh0 = sh000_last;
-			val ss0 = subs(st0, sh0);
-			val subs = of(ss0);
+			List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+			subs.add(new IPair<Integer,Integer>(12,5));
 
-			// return the new entailment;
+			// test for a proof;
 			assertProof(tt, th, subs);
 		}
-
+			
 }

@@ -11,17 +11,25 @@ public final class TestCollectivityChecker extends AbsPipelineTest {
 	@Test
 	public final void johnAndMaryAreTheDoctors() throws Exception {
 		
-		val john    = word("NP","john");
-		val and     = word("AND","and");
-		val mary    = word("NP","mary");
-		val are     = word("IS","are");
-		val the     = word("THE","the");
-		val doctors = word("N","doctors");
+		// create the vocabulary for the text:
+		val john    = word("NP","john",1);
+		val and     = word("AND","and",2);
+		val mary    = word("NP","mary",3);
+		val are     = word("IS","are",4);
+		val the     = word("THE","the",5);
+		val doctors = word("N","doctors",6);
 		
-		val is      = word("IS","is");
+		// create the vocabulary for the hypothesis:
+		val hjohn    = word("NP","john",1);
+		val his      = word("IS","is",2);
+		val hthe     = word("THE","the",3);
+		val hdoctors = word("N","doctors",4);
+
+		// create the tree structure for the text;
+		val tt = _(_(john,_(and,mary,8),9),_(are,_(the,doctors,10),11),12);
 		
-		val tt = _(_(john,_(and,mary)),_(are,_(the,doctors)));
-		val th = _(john,_(is,_(the,doctors)));
+		// create the tree structure for the hypothesis;
+		val th = _(hjohn,_(his,_(hthe,hdoctors,5),6),7);
 		
 		assertException(tt,th);
 	}
@@ -29,21 +37,28 @@ public final class TestCollectivityChecker extends AbsPipelineTest {
 	@Test
 	public final void johnAndMaryWhoAreTheDoctorsRan() throws Exception {
 		
-		val john    = word("NP","john");
-		val and     = word("AND","and");
-		val mary    = word("NP","mary");
-		val who     = word("WHO_A","who");
-		val are     = word("IS","are");
-		val the     = word("THE","the");
-		val doctors = word("N","doctors");
-		val ran     = word("V_1","ran");
+		// create the vocabulary for the text:
+		val john    = word("NP","john",1);
+		val and     = word("AND","and",2);
+		val mary    = word("NP","mary",3);
+		val who     = word("WHO_A","who",4);
+		val are     = word("IS","are",5);
+		val the     = word("THE","the",6);
+		val doctors = word("N","doctors",7);
+		val ran     = word("V_1","ran",8);
+
+		// create the vocabulary for the hypothesis:		
+		val hjohn    = word("NP","john",1);
+		val his      = word("IS","is",2);
+		val hthe     = word("THE","the",3);
+		val hdoctors = word("N","doctors",4);
+
+		// create the tree structure for the text;
+		val tt = _(_(_(john,_(and,mary,10),11),_(who,_(are,_(the,doctors,12),13),14),15),ran,16);
 		
-		val is      = word("IS","is");
-		
-		val tt = _(_(_(john,_(and,mary)),_(who,_(are,_(the,doctors)))),ran);
-		val th = _(john,_(is,_(the,doctors)));
+		// create the tree structure for the hypothesis;
+		val th = _(hjohn,_(his,_(hthe,hdoctors,5),6),7);
 		
 		assertException(tt,th);
 	}
-	
 }
