@@ -25,10 +25,6 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 
 	protected STL lcalc; 
 	
-	public List<String> getComments() {
-		return new ArrayList<String>();
-	}
-	
 	private ExprBuilder rewriter = new ExprBuilder() {
 
 		final LowerableFunction lowerableFunction = new LowerableFunction(Types.ET);
@@ -56,36 +52,39 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 
 							@Override
 							public Expr application(Expr fun3, Expr arg3) {
-								// in this case the modifier is an application by itself, e.g. "in Brasil" modifies "walks".
+								// in this case the modifier is an application by itself, e.g. "in Brazil" modifies "walks".
+								
 								Expr e = null;
 								if (fun3.accept(isConstant)) {
 
-									// There's a subtle point here - we apply an application ("in Brasil") to a predicate, 
+									// There's a subtle point here - we apply an application ("in Brazil") to a predicate, 
 									// (e.g. "walks") and we want to have a new predicate that takes the argument of the 
-									// application (i.e. "Brasil" as an argument. So our new predicate will look like 
-									// in_walks(Brasil)(John) in the end.
-									// To do this, we ignore the argument of the application (i.e. "Brasil"), and smash the
+									// application (i.e. "Brazil" as an argument. So our new predicate will look like 
+									// in_walks(Brazil)(John) in the end.
+									// To do this, we ignore the argument of the application (i.e. "Brazil"), and smash the
 									// application as if it was just "in" applied to "walks". This will generate a new
 									// predicate - "in_walks". Since this new predicate needs to be applied to the argument
-									// that we ommitted - "brasil", the type of the predicate will be a function from E to
-									// the type that the original application (i.e. "in Brasil") returns after applied to 
+									// that we omitted - "Brazil", the type of the predicate will be a function from E to
+									// the type that the original application (i.e. "in Brazil") returns after applied to 
 									// the predicate it modifies.
-								
+
+									
 									// here we decide on the type of the new predicate
 									Type newType = new IFunction(Types.E,lcalc.typeOf(fun2).accept(getFunctionReturnType));
 									
 									// lower the modification as if the modifier is a constant (like 'tall') 
 									Expr simple = lowerModification(fun3.accept(getConstantName), lcalc.typeOf(fun2), newType , arg2);
 									
-									// apply the argument (e.g. 'Brasil')
+									// apply the argument (e.g. 'Brazil')
 									e = lcalc.getExprBuilder().application(simple,
 											lcalc.getExprBuilder().variable(buildSymbol(arg3.accept(getConstantName), Types.E)));
 									
 									System.out.println("Lowered expression (modification by application):" + lcalc.format(e));
-								
+
 								} else {
 									throw new HigherOrderError("Modifier is not a constant" + lcalc.format(fun3));
 								}
+
 								return e;
 							}
 
@@ -118,15 +117,19 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 									return newExpr;
 									
 								} catch (HigherOrderError e) {
-									return hash(lcalc.getExprBuilder().application(
+									Expr newE =  hash(lcalc.getExprBuilder().application(
 											lcalc.getExprBuilder().variable(
-													buildSymbol(modifierName,modifierType)), arg));
+													buildSymbol(modifierName,modifierType)), arg),targetType);
+									System.out.println("Modification hashed:" + lcalc.format(newE) + "; reason: [" + e.getMessage() + "]");
+									return newE;
 								}
 							}
 							
 						});
 				} catch (HigherOrderError e) {
-					return hash(app2);
+					Expr expr = hash(app2);
+					System.out.println("Lowered expression (hashed):" + lcalc.format(expr) + "; reason: [" + e.getMessage() + "]");
+					return expr;
 				}
 				
 			} else if (lcalc.typeOf(fun2).accept(getFunctionArgType).equals(TypeETT) && lcalc.typeOf(arg2).equals(TypeETT)) {
@@ -158,6 +161,10 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 				System.out.println("Lowering (ET)E to ET application: " + lcalc.format(e));
 				return e;
 			} else {
+				if (lcalc.typeOf(fun2).equals(Types.ET_ET)) {
+					System.out.println("Unlowerable (et)et application: " + lcalc.format(fun2) + " to: " + lcalc.format(arg2));
+				}
+				
 				return app2;
 			}
 		}
@@ -254,7 +261,7 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 					}
 					arg.accept(this);
 				} else {
-					throw new HigherOrderError("Argument type is neither E nor T" + lcalc.format(arg));
+					throw new HigherOrderError("Argument type is neither E nor T: " + lcalc.format(arg));
 				}
 				
 				return null;
