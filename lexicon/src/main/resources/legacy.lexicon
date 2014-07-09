@@ -130,7 +130,7 @@ reduces down to usage of the first-order primitive $(\land)$.
 
 > AND   AND:ttt
 > AND   \A:et.\B:et.\x:e.AND:ttt (A:et x:e) (B:et x:e)
-< AND   \P:(et)t.\Q:(et)t.\A:et.AND:ttt (P:(et)t A:et) (Q:(et)t A:et)
+> AND   \P:(et)t.\Q:(et)t.\A:et.AND:ttt (P:(et)t A:et) (Q:(et)t A:et)
 
 
 \subsection{The $\text{IS}$ Annotation}
@@ -300,3 +300,18 @@ we don't support polymorphism in the Java implementation.
 @ MOD_I  MI
 @ GEN    POSS
 @ NOFACT V_2
+
+\subsection{Compoundable Annotations)
++ N
++ N_1
++ N_2
++ NP_D
++ NP
++ V_1
++ V_2
++ MR
++ MOD_R
++ MI
++ MOD_I
++ GER_1
++ GER_2

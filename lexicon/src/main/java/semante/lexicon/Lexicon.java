@@ -1,6 +1,7 @@
 package semante.lexicon;
 
 import java.util.List;
+import java.util.Set;
 
 public interface Lexicon {
 	
@@ -11,4 +12,6 @@ public interface Lexicon {
 	
 	List<Word> getWords();
 	List<Category> getCategories();
+	
+	Set<String> getCompoundable();
 }

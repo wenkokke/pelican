@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import lambdacalc.DeBruijn;
 import lambdacalc.STL;
@@ -24,6 +25,7 @@ import semante.lexicon.Word;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.google.common.io.CharStreams;
 
 @FieldDefaults(makeFinal=true,level=PRIVATE)
@@ -34,7 +36,8 @@ public final class ILexicon implements Lexicon {
 	STL						stl;
 	Map<String, IWord>		words;
 	Map<String, ICategory>	categories;
-
+	Set<String>				compoundable;
+	
 	@Override
 	public final List<Word> getWords() {
 		return ImmutableList.<Word> copyOf(words.values());
@@ -66,6 +69,8 @@ public final class ILexicon implements Lexicon {
 	
 	private static final int ALIAS_REFERENCE 	= 1; 
 	private static final int ALIAS_NAME  		= 2;
+	
+	private static final int ENTRY_NAME  		= 1;
 	
 	private final boolean isCategory(final String line) {
 		return line.contains("WORD:");
@@ -125,6 +130,10 @@ public final class ILexicon implements Lexicon {
 				}
 
 			} 
+		} else if (isCompoundable(line)) {
+			val tokens    = line.split("\\s+");
+			val entry     = tokens[ENTRY_NAME];
+			compoundable.add(entry);
 		}
 	}
 
@@ -136,6 +145,10 @@ public final class ILexicon implements Lexicon {
 		return line.startsWith("> ");
 	}
 
+	private final boolean isCompoundable(final String line) {
+		return line.startsWith("+ ");
+	}
+	
 	/**
 	 * Constructor that uses the lexicon file contained within the JAR.
 	 */
@@ -174,6 +187,7 @@ public final class ILexicon implements Lexicon {
 		this.stl        = stl;
 		this.words      = Maps.newHashMap();
 		this.categories = Maps.newHashMap();
+		this.compoundable = Sets.newTreeSet();
 		
 		for (final String line : lines) {
 			try {
@@ -216,6 +230,17 @@ public final class ILexicon implements Lexicon {
 			acc.append(category.getDenotations().size());
 			acc.append("]\n");
 		}
+		acc.append(" compoundable:\n");
+		for (val entry : compoundable) {
+			acc.append("[");
+			acc.append(entry);
+			acc.append("]\n");
+		}		
 		return acc.toString();
+	}
+
+	@Override
+	public Set<String> getCompoundable() {
+		return compoundable;
 	}
 }
