@@ -26,8 +26,7 @@ public final class TestPel2Shared0006 extends AbsPipelineTest {
 			val t12_norfema = word("NP_D","NorFEMA",12);
 			val t68_app = word("WHO_A","APP",68);
 			val t14_the = word("THE","the",14);
-			val t15_fema = word("$NC_1$","FEMA",15);
-			val t16_team = word("N","team",16);
+			val t71_fema_team = word("N","FEMA_team",71);
 			val t17_which = word("WHO_R","which",17);
 			val t18_protects = word("V_2","protects",18);
 			val t19_the = word("THE","the",19);
@@ -43,8 +42,7 @@ public final class TestPel2Shared0006 extends AbsPipelineTest {
 			// create the vocabulary for the hypothesis;
 			val h01_a = word("A","A",1);
 			val h02_californiabased = word("MI","CaliforniaBased",2);
-			val h03_fema = word("$NC_1$","FEMA",3);
-			val h04_team = word("N","team",4);
+			val h16_fema_team = word("N","FEMA_team",16);
 			val h05_protects = word("V_2","protects",5);
 			val h06_the = word("THE","the",6);
 			val h07_marine = word("MI","marine",7);
@@ -119,13 +117,7 @@ public final class TestPel2Shared0006 extends AbsPipelineTest {
 											t14_the
 											,
 											_(
-												_(
-													t15_fema
-													,
-													t16_team
-													,
-													71
-												)
+												t71_fema_team
 												,
 												_(
 													t17_which
@@ -226,13 +218,7 @@ public final class TestPel2Shared0006 extends AbsPipelineTest {
 					_(
 						h02_californiabased
 						,
-						_(
-							h03_fema
-							,
-							h04_team
-							,
-							16
-						)
+						h16_fema_team
 						,
 						17
 					)
@@ -273,4 +259,3 @@ public final class TestPel2Shared0006 extends AbsPipelineTest {
 		}
 
 }
-

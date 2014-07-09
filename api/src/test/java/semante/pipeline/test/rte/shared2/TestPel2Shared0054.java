@@ -14,9 +14,7 @@ public final class TestPel2Shared0054 extends AbsPipelineTest {
 			val t01_the = word("THE","The",1);
 			val t02_canadian = word("MI","Canadian",2);
 			val t03_wireless = word("MR","wireless",3);
-			val t04_technology = word("$NC_1$","technology",4);
-			val t05_licensing = word("$NC_1$","licensing",5);
-			val t06_company = word("N","company",6);
+			val t41_technology_licensing_company = word("N","technology_licensing_company",41);
 			val t50_app = word("WHO_A","APP",50);
 			val t08_wilan = word("NP_D","WiLAN",8);
 			val t10_has = word("V_AUX","has",10);
@@ -53,19 +51,7 @@ public final class TestPel2Shared0054 extends AbsPipelineTest {
 							_(
 								t03_wireless
 								,
-								_(
-									t04_technology
-									,
-									_(
-										t05_licensing
-										,
-										t06_company
-										,
-										40
-									)
-									,
-									41
-								)
+								t41_technology_licensing_company
 								,
 								42
 							)
@@ -203,4 +189,3 @@ public final class TestPel2Shared0054 extends AbsPipelineTest {
 		}
 
 }
-

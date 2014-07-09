@@ -12,15 +12,7 @@ public final class TestPel2Shared0084 extends AbsPipelineTest {
 
 			// create the vocabulary for the text;
 			val t01_the = word("THE","The",1);
-			val t02_state = word("$NC_1$","State",2);
-			val t03_of = word("$NC_1$","of",3);
-			val t04_california = word("$NC_1$","California",4);
-			val t05_department = word("$NC_1$","Department",5);
-			val t06_of = word("$NC_1$","of",6);
-			val t07_occupational = word("$NC_1$","Occupational",7);
-			val t08_safety = word("$NC_1$","Safety",8);
-			val t09_and = word("$NC_1$","and",9);
-			val t10_health = word("N","Health",10);
+			val t76_state_of_california_department_of_occupational_safety_and_health = word("N","State_of_California_Department_of_Occupational_Safety_and_Health",76);
 			val t77_app = word("WHO_A","APP",77);
 			val t11_ = word("IGNORE","",11);
 			val t12_osha = word("NP_D","OSHA",12);
@@ -34,10 +26,7 @@ public final class TestPel2Shared0084 extends AbsPipelineTest {
 			val t20_accident = word("N","accident",20);
 			val t21_on = word("P_R","on",21);
 			val t22_the = word("THE","the",22);
-			val t23_big = word("$NPC_1$","Big",23);
-			val t24_thunder = word("$NPC_1$","Thunder",24);
-			val t25_mountain = word("$NPC_1$","Mountain",25);
-			val t26_railroad = word("NP_D","Railroad",26);
+			val t61_big_thunder_mountain_railroad = word("NP_D","Big_Thunder_Mountain_Railroad",61);
 			val t84_app = word("WHO_A","APP",84);
 			val t28_an = word("A","an",28);
 			val t29_attraction = word("N","attraction",29);
@@ -65,55 +54,7 @@ public final class TestPel2Shared0084 extends AbsPipelineTest {
 					_(
 						t01_the
 						,
-						_(
-							t02_state
-							,
-							_(
-								t03_of
-								,
-								_(
-									t04_california
-									,
-									_(
-										t05_department
-										,
-										_(
-											t06_of
-											,
-											_(
-												t07_occupational
-												,
-												_(
-													t08_safety
-													,
-													_(
-														t09_and
-														,
-														t10_health
-														,
-														67
-													)
-													,
-													65
-												)
-												,
-												76
-											)
-											,
-											36
-										)
-										,
-										34
-									)
-									,
-									73
-								)
-								,
-								38
-							)
-							,
-							74
-						)
+						t76_state_of_california_department_of_occupational_safety_and_health
 						,
 						71
 					)
@@ -169,25 +110,7 @@ public final class TestPel2Shared0084 extends AbsPipelineTest {
 													_(
 														t22_the
 														,
-														_(
-															t23_big
-															,
-															_(
-																t24_thunder
-																,
-																_(
-																	t25_mountain
-																	,
-																	t26_railroad
-																	,
-																	59
-																)
-																,
-																60
-															)
-															,
-															61
-														)
+														t61_big_thunder_mountain_railroad
 														,
 														62
 													)
@@ -329,4 +252,3 @@ public final class TestPel2Shared0084 extends AbsPipelineTest {
 		}
 
 }
-

@@ -25,8 +25,7 @@ public final class TestPel2Shared0089 extends AbsPipelineTest {
 			val t55_det = word("THE","DET",55);
 			val t11_captain = word("N","captain",11);
 			val t57_app = word("WHO_A","APP",57);
-			val t12_paolo = word("$NPC_1$","Paolo",12);
-			val t13_maldini = word("NP_D","Maldini",13);
+			val t43_paolo_maldini = word("NP_D","Paolo_Maldini",43);
 			val t14_earned = word("V_2","earned",14);
 			val t15_a = word("A","a",15);
 			val t16_victory = word("N","victory",16);
@@ -42,8 +41,7 @@ public final class TestPel2Shared0089 extends AbsPipelineTest {
 			val h02_firsthalf = word("MR","firstHalf",2);
 			val h03_goals = word("N","goals",3);
 			val h04_from = word("P_R","from",4);
-			val h05_paolo = word("$NPC_1$","Paolo",5);
-			val h06_maldini = word("NP_D","Maldini",6);
+			val h16_paolo_maldini = word("NP_D","Paolo_Maldini",16);
 			val h07_earned = word("V_2","earned",7);
 			val h08_a = word("A","a",8);
 			val h09_victory = word("N","victory",9);
@@ -106,13 +104,7 @@ public final class TestPel2Shared0089 extends AbsPipelineTest {
 														_(
 															t57_app
 															,
-															_(
-																t12_paolo
-																,
-																t13_maldini
-																,
-																43
-															)
+															t43_paolo_maldini
 															,
 															58
 														)
@@ -216,13 +208,7 @@ public final class TestPel2Shared0089 extends AbsPipelineTest {
 							_(
 								h04_from
 								,
-								_(
-									h05_paolo
-									,
-									h06_maldini
-									,
-									16
-								)
+								h16_paolo_maldini
 								,
 								17
 							)
@@ -287,4 +273,3 @@ public final class TestPel2Shared0089 extends AbsPipelineTest {
 		}
 
 }
-

@@ -15,8 +15,7 @@ public final class TestPel2Shared0073 extends AbsPipelineTest {
 			val t01_american = word("MI","American",1);
 			val t02_illusionist = word("N","illusionist",2);
 			val t47_app = word("WHO_A","APP",47);
-			val t04_james = word("$NPC_1$","James",4);
-			val t05_randi = word("NP_D","Randi",5);
+			val t22_james_randi = word("NP_D","James_Randi",22);
 			val t07_offered = word("V_2","offered",7);
 			val t08_a = word("A","a",8);
 			val t09_million = word("MR","million",9);
@@ -36,8 +35,7 @@ public final class TestPel2Shared0073 extends AbsPipelineTest {
 
 			// create the vocabulary for the hypothesis;
 			val h01_american = word("MI","American",1);
-			val h02_james = word("$NPC_1$","James",2);
-			val h03_randi = word("NP_D","Randi",3);
+			val h50_james_randi = word("NP_D","James_Randi",50);
 			val h05_who = word("WHO_A","who",5);
 			val h06_is = word("IS","is",6);
 			val h07_an = word("A","an",7);
@@ -80,13 +78,7 @@ public final class TestPel2Shared0073 extends AbsPipelineTest {
 					_(
 						t47_app
 						,
-						_(
-							t04_james
-							,
-							t05_randi
-							,
-							22
-						)
+						t22_james_randi
 						,
 						48
 					)
@@ -197,13 +189,7 @@ public final class TestPel2Shared0073 extends AbsPipelineTest {
 					_(
 						h01_american
 						,
-						_(
-							h02_james
-							,
-							h03_randi
-							,
-							50
-						)
+						h50_james_randi
 						,
 						51
 					)
@@ -336,4 +322,3 @@ public final class TestPel2Shared0073 extends AbsPipelineTest {
 		}
 
 }
-

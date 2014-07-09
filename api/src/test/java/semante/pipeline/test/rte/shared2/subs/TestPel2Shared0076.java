@@ -16,11 +16,9 @@ public final class TestPel2Shared0076 extends AbsPipelineTest {
 
 			// create the vocabulary for the text;
 			val t44_det = word("THE","DET",44);
-			val t01_hollywood = word("$NC_1$","Hollywood",1);
-			val t02_actress = word("N","actress",2);
+			val t42_hollywood_actress = word("N","Hollywood_actress",42);
 			val t46_app = word("WHO_A","APP",46);
-			val t03_minnie = word("$NPC_1$","Minnie",3);
-			val t04_driver = word("NP_D","Driver",4);
+			val t47_minnie_driver = word("NP_D","Minnie_Driver",47);
 			val t05_is = word("IS","is",5);
 			val t06_taking = word("V_2","taking",6);
 			val t07_a = word("A","a",7);
@@ -38,8 +36,7 @@ public final class TestPel2Shared0076 extends AbsPipelineTest {
 			val t18_cambodia = word("NP_D","Cambodia",18);
 
 			// create the vocabulary for the hypothesis;
-			val h01_minnie = word("$NPC_1$","Minnie",1);
-			val h02_driver = word("NP_D","Driver",2);
+			val h07_minnie_driver = word("NP_D","Minnie_Driver",7);
 			val h03_is = word("IS","is",3);
 			val h04_an = word("A","an",4);
 			val h05_actress = word("N","actress",5);
@@ -51,13 +48,7 @@ public final class TestPel2Shared0076 extends AbsPipelineTest {
 					_(
 						t44_det
 						,
-						_(
-							t01_hollywood
-							,
-							t02_actress
-							,
-							42
-						)
+						t42_hollywood_actress
 						,
 						45
 					)
@@ -65,13 +56,7 @@ public final class TestPel2Shared0076 extends AbsPipelineTest {
 					_(
 						t46_app
 						,
-						_(
-							t03_minnie
-							,
-							t04_driver
-							,
-							47
-						)
+						t47_minnie_driver
 						,
 						49
 					)
@@ -172,13 +157,7 @@ public final class TestPel2Shared0076 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_minnie
-					,
-					h02_driver
-					,
-					7
-				)
+				h07_minnie_driver
 				,
 				_(
 					h03_is
@@ -209,4 +188,3 @@ public final class TestPel2Shared0076 extends AbsPipelineTest {
 		}
 
 }
-

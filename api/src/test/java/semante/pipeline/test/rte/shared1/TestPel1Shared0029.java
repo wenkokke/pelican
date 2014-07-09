@@ -22,12 +22,10 @@ public final class TestPel1Shared0029 extends AbsPipelineTest {
 			val t08_complained = word("V_1","complained",8);
 			val t09_about = word("P_R","about",9);
 			val t47_det = word("A","DET",47);
-			val t10_prisoner = word("$NC_1$","prisoner",10);
-			val t11_treatment = word("N","treatment",11);
+			val t26_prisoner_treatment = word("N","prisoner_treatment",26);
 			val t12_at = word("P_R","at",12);
 			val t13_the = word("THE","the",13);
-			val t14_us = word("$NC_1$","US",14);
-			val t15_base = word("N","base",15);
+			val t36_us_base = word("N","US_base",36);
 			val t16_in = word("P_R","in",16);
 			val t17_guantanamo = word("NP_D","Guantanamo",17);
 			val t49_app = word("WHO_A","APP",49);
@@ -97,13 +95,7 @@ public final class TestPel1Shared0029 extends AbsPipelineTest {
 							t47_det
 							,
 							_(
-								_(
-									t10_prisoner
-									,
-									t11_treatment
-									,
-									26
-								)
+								t26_prisoner_treatment
 								,
 								_(
 									t12_at
@@ -112,13 +104,7 @@ public final class TestPel1Shared0029 extends AbsPipelineTest {
 										t13_the
 										,
 										_(
-											_(
-												t14_us
-												,
-												t15_base
-												,
-												36
-											)
+											t36_us_base
 											,
 											_(
 												t16_in
@@ -203,4 +189,3 @@ public final class TestPel1Shared0029 extends AbsPipelineTest {
 		}
 
 }
-

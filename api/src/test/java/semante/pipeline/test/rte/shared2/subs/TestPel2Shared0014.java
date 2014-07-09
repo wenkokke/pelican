@@ -19,24 +19,21 @@ public final class TestPel2Shared0014 extends AbsPipelineTest {
 			val t35_app = word("WHO_A","APP",35);
 			val t03_the = word("THE","the",3);
 			val t04_israeli = word("MI","Israeli",4);
-			val t05_intelligence = word("$NC_1$","intelligence",5);
-			val t06_agency = word("N","agency",6);
+			val t30_intelligence_agency = word("N","intelligence_agency",30);
 			val t08_is = word("IS","is",8);
 			val t09_the = word("THE","the",9);
 			val t10_world = word("N","world",10);
 			val t11_s = word("GEN","s",11);
 			val t12_most = word("MR","most",12);
 			val t13_famous = word("MI","famous",13);
-			val t14_secret = word("$NC_1$","secret",14);
-			val t15_service = word("N","service",15);
+			val t25_secret_service = word("N","secret_service",25);
 
 			// create the vocabulary for the hypothesis;
 			val h01_mossad = word("NP_D","Mossad",1);
 			val h02_is = word("IS","is",2);
 			val h03_a = word("A","a",3);
 			val h04_wellknown = word("MI","wellKnown",4);
-			val h05_intelligence = word("$NC_1$","intelligence",5);
-			val h06_agency = word("N","agency",6);
+			val h12_intelligence_agency = word("N","intelligence_agency",12);
 
 			// create the tree structure for the text;
 			val tt =
@@ -53,13 +50,7 @@ public final class TestPel2Shared0014 extends AbsPipelineTest {
 							_(
 								t04_israeli
 								,
-								_(
-									t05_intelligence
-									,
-									t06_agency
-									,
-									30
-								)
+								t30_intelligence_agency
 								,
 								31
 							)
@@ -97,13 +88,7 @@ public final class TestPel2Shared0014 extends AbsPipelineTest {
 							_(
 								t13_famous
 								,
-								_(
-									t14_secret
-									,
-									t15_service
-									,
-									25
-								)
+								t25_secret_service
 								,
 								21
 							)
@@ -135,13 +120,7 @@ public final class TestPel2Shared0014 extends AbsPipelineTest {
 						_(
 							h04_wellknown
 							,
-							_(
-								h05_intelligence
-								,
-								h06_agency
-								,
-								12
-							)
+							h12_intelligence_agency
 							,
 							13
 						)
@@ -167,4 +146,3 @@ public final class TestPel2Shared0014 extends AbsPipelineTest {
 		}
 
 }
-

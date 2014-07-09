@@ -32,8 +32,7 @@ public final class TestPel1Shared0024 extends AbsPipelineTest {
 			val t19_in = word("P_R","in",19);
 			val t20_a = word("A","a",20);
 			val t21_civil = word("MR","civil",21);
-			val t22_slander = word("$NC_1$","slander",22);
-			val t23_case = word("N","case",23);
+			val t43_slander_case = word("N","slander_case",43);
 
 			// create the vocabulary for the hypothesis;
 			val h01_num2channel = word("NP_D","num2channel",1);
@@ -137,13 +136,7 @@ public final class TestPel1Shared0024 extends AbsPipelineTest {
 													_(
 														t21_civil
 														,
-														_(
-															t22_slander
-															,
-															t23_case
-															,
-															43
-														)
+														t43_slander_case
 														,
 														44
 													)
@@ -217,4 +210,3 @@ public final class TestPel1Shared0024 extends AbsPipelineTest {
 		}
 
 }
-

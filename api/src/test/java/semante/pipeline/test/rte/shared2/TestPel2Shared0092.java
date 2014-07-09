@@ -11,25 +11,21 @@ public final class TestPel2Shared0092 extends AbsPipelineTest {
 		public final void testPel2Shared0092() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_star = word("$NPC_1$","Star",1);
-			val t02_scandinavia = word("NP_D","Scandinavia",2);
+			val t19_star_scandinavia = word("NP_D","Star_Scandinavia",19);
 			val t37_app = word("WHO_A","APP",37);
 			val t04_the = word("THE","the",4);
 			val t05_scandinavian = word("MI","Scandinavian",5);
-			val t06_broadcasting = word("$NC_1$","broadcasting",6);
-			val t07_channel = word("N","channel",7);
+			val t32_broadcasting_channel = word("N","broadcasting_channel",32);
 			val t09_reported = word("V_2","reported",9);
 			val t10_that = word("IGNORE","that",10);
 			val t11_the = word("THE","the",11);
-			val t12_football = word("$NC_1$","football",12);
-			val t13_match = word("N","match",13);
+			val t30_football_match = word("N","football_match",30);
 			val t25_resulted_in = word("V_2","resulted_in",25);
 			val t16_a = word("A","a",16);
 			val t17_draw = word("N","draw",17);
 
 			// create the vocabulary for the hypothesis;
-			val h01_star = word("$NPC_1$","Star",1);
-			val h02_scandinavia = word("NP_D","Scandinavia",2);
+			val h06_star_scandinavia = word("NP_D","Star_Scandinavia",6);
 			val h03_is = word("IS","is",3);
 			val h04_scandinavian = word("MI","Scandinavian",4);
 
@@ -37,13 +33,7 @@ public final class TestPel2Shared0092 extends AbsPipelineTest {
 			val tt =
 			_(
 				_(
-					_(
-						t01_star
-						,
-						t02_scandinavia
-						,
-						19
-					)
+					t19_star_scandinavia
 					,
 					_(
 						t37_app
@@ -54,13 +44,7 @@ public final class TestPel2Shared0092 extends AbsPipelineTest {
 							_(
 								t05_scandinavian
 								,
-								_(
-									t06_broadcasting
-									,
-									t07_channel
-									,
-									32
-								)
+								t32_broadcasting_channel
 								,
 								33
 							)
@@ -84,13 +68,7 @@ public final class TestPel2Shared0092 extends AbsPipelineTest {
 							_(
 								t11_the
 								,
-								_(
-									t12_football
-									,
-									t13_match
-									,
-									30
-								)
+								t30_football_match
 								,
 								31
 							)
@@ -125,13 +103,7 @@ public final class TestPel2Shared0092 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_star
-					,
-					h02_scandinavia
-					,
-					6
-				)
+				h06_star_scandinavia
 				,
 				_(
 					h03_is
@@ -154,4 +126,3 @@ public final class TestPel2Shared0092 extends AbsPipelineTest {
 		}
 
 }
-

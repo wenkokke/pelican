@@ -11,14 +11,12 @@ public final class TestPel1Shared0001 extends AbsPipelineTest {
 		public final void testPel1Shared0001() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_jessica = word("$NPC_1$","Jessica",1);
-			val t02_litman = word("NP_D","Litman",2);
+			val t25_jessica_litman = word("NP_D","Jessica_Litman",25);
 			val t49_app = word("WHO_A","APP",49);
 			val t04_the = word("THE","the",4);
 			val t05_widely = word("MR","widely",5);
 			val t06_known = word("MI","known",6);
-			val t07_law = word("$NC_1$","law",7);
-			val t08_professor = word("N","professor",8);
+			val t41_law_professor = word("N","law_professor",41);
 			val t09_at = word("P_R","at",9);
 			val t10_michigan = word("NP_D","Michigan",10);
 			val t11_s = word("POSS","s",11);
@@ -29,32 +27,23 @@ public final class TestPel1Shared0001 extends AbsPipelineTest {
 			val t17_specialized = word("V_1","specialized",17);
 			val t18_in = word("P_R","in",18);
 			val t52_det = word("A","DET",52);
-			val t19_copyright = word("$NC_1$","copyright",19);
-			val t20_law = word("N","law",20);
+			val t33_copyright_law = word("N","copyright_law",33);
 			val t21_for = word("P_R","for",21);
 			val t55_det = word("A","DET",55);
 			val t22_num20 = word("MR","num20",22);
 			val t23_years = word("N","years",23);
 
 			// create the vocabulary for the hypothesis;
-			val h01_jessica = word("$NPC_1$","Jessica",1);
-			val h02_litman = word("NP_D","Litman",2);
+			val h08_jessica_litman = word("NP_D","Jessica_Litman",8);
 			val h03_is = word("IS","is",3);
 			val h04_a = word("A","a",4);
-			val h05_law = word("$NC_1$","law",5);
-			val h06_professor = word("N","professor",6);
+			val h12_law_professor = word("N","law_professor",12);
 
 			// create the tree structure for the text;
 			val tt =
 			_(
 				_(
-					_(
-						t01_jessica
-						,
-						t02_litman
-						,
-						25
-					)
+					t25_jessica_litman
 					,
 					_(
 						t49_app
@@ -69,13 +58,7 @@ public final class TestPel1Shared0001 extends AbsPipelineTest {
 									t06_known
 									,
 									_(
-										_(
-											t07_law
-											,
-											t08_professor
-											,
-											41
-										)
+										t41_law_professor
 										,
 										_(
 											t09_at
@@ -140,13 +123,7 @@ public final class TestPel1Shared0001 extends AbsPipelineTest {
 								_(
 									t52_det
 									,
-									_(
-										t19_copyright
-										,
-										t20_law
-										,
-										33
-									)
+									t33_copyright_law
 									,
 									53
 								)
@@ -190,13 +167,7 @@ public final class TestPel1Shared0001 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_jessica
-					,
-					h02_litman
-					,
-					8
-				)
+				h08_jessica_litman
 				,
 				_(
 					h03_is
@@ -204,13 +175,7 @@ public final class TestPel1Shared0001 extends AbsPipelineTest {
 					_(
 						h04_a
 						,
-						_(
-							h05_law
-							,
-							h06_professor
-							,
-							12
-						)
+						h12_law_professor
 						,
 						13
 					)
@@ -231,4 +196,3 @@ public final class TestPel1Shared0001 extends AbsPipelineTest {
 		}
 
 }
-

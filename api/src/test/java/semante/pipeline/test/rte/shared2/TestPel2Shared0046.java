@@ -12,8 +12,7 @@ public final class TestPel2Shared0046 extends AbsPipelineTest {
 
 			// create the vocabulary for the text;
 			val t01_the = word("THE","The",1);
-			val t02_security = word("$NC_1$","security",2);
-			val t03_authorities = word("N","authorities",3);
+			val t62_security_authorities = word("N","security_authorities",62);
 			val t04_have = word("V_AUX","have",4);
 			val t05_declared = word("V_2","declared",5);
 			val t06_a = word("A","a",6);
@@ -56,13 +55,7 @@ public final class TestPel2Shared0046 extends AbsPipelineTest {
 				_(
 					t01_the
 					,
-					_(
-						t02_security
-						,
-						t03_authorities
-						,
-						62
-					)
+					t62_security_authorities
 					,
 					63
 				)
@@ -273,4 +266,3 @@ public final class TestPel2Shared0046 extends AbsPipelineTest {
 		}
 
 }
-

@@ -15,8 +15,7 @@ public final class TestPel1Shared0031 extends AbsPipelineTest {
 		public final void testPel1Shared0031() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_peter = word("$NPC_1$","Peter",1);
-			val t02_voser = word("NP_D","Voser",2);
+			val t21_peter_voser = word("NP_D","Peter_Voser",21);
 			val t46_app = word("WHO_A","APP",46);
 			val t04_a = word("A","a",4);
 			val t05_num46yearold = word("N","num46YearOld",5);
@@ -31,12 +30,10 @@ public final class TestPel1Shared0031 extends AbsPipelineTest {
 			val t15_anglodutch = word("MR","AngloDutch",15);
 			val t16_company = word("N","company",16);
 			val t17_on = word("P_R","on",17);
-			val t18_october = word("$NPC_1$","October",18);
-			val t19_num4 = word("NP_D","num4",19);
+			val t33_october_num4 = word("NP_D","October_num4",33);
 
 			// create the vocabulary for the hypothesis;
-			val h01_peter = word("$NPC_1$","Peter",1);
-			val h02_voser = word("NP_D","Voser",2);
+			val h11_peter_voser = word("NP_D","Peter_Voser",11);
 			val h03_has = word("V_AUX","has",3);
 			val h04_worked = word("V_1","worked",4);
 			val h05_for = word("P_R","for",5);
@@ -49,13 +46,7 @@ public final class TestPel1Shared0031 extends AbsPipelineTest {
 			val tt =
 			_(
 				_(
-					_(
-						t01_peter
-						,
-						t02_voser
-						,
-						21
-					)
+					t21_peter_voser
 					,
 					_(
 						t46_app
@@ -131,13 +122,7 @@ public final class TestPel1Shared0031 extends AbsPipelineTest {
 						_(
 							t17_on
 							,
-							_(
-								t18_october
-								,
-								t19_num4
-								,
-								33
-							)
+							t33_october_num4
 							,
 							34
 						)
@@ -155,13 +140,7 @@ public final class TestPel1Shared0031 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_peter
-					,
-					h02_voser
-					,
-					11
-				)
+				h11_peter_voser
 				,
 				_(
 					_(
@@ -216,4 +195,3 @@ public final class TestPel1Shared0031 extends AbsPipelineTest {
 		}
 
 }
-

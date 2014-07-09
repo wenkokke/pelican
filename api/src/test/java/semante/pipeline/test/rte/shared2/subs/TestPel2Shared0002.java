@@ -26,8 +26,7 @@ public final class TestPel2Shared0002 extends AbsPipelineTest {
 			val t09_the = word("THE","the",9);
 			val t10_summit = word("N","summit",10);
 			val t11_of = word("P_R","of",11);
-			val t12_mount = word("$NPC_1$","Mount",12);
-			val t13_olympus = word("NP_D","Olympus",13);
+			val t33_mount_olympus = word("NP_D","Mount_Olympus",33);
 			val t61_app = word("WHO_A","APP",61);
 			val t15_the = word("THE","the",15);
 			val t16_mountain = word("N","mountain",16);
@@ -100,13 +99,7 @@ public final class TestPel2Shared0002 extends AbsPipelineTest {
 									t11_of
 									,
 									_(
-										_(
-											t12_mount
-											,
-											t13_olympus
-											,
-											33
-										)
+										t33_mount_olympus
 										,
 										_(
 											t61_app
@@ -245,4 +238,3 @@ public final class TestPel2Shared0002 extends AbsPipelineTest {
 		}
 
 }
-

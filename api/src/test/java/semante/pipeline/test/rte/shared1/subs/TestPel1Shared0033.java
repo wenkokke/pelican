@@ -27,16 +27,14 @@ public final class TestPel1Shared0033 extends AbsPipelineTest {
 			val t10_senior = word("MR","senior",10);
 			val t11_leader = word("N","leader",11);
 			val t43_app = word("WHO_A","APP",43);
-			val t13_deng = word("$NPC_1$","Deng",13);
-			val t14_xiaoping = word("NP_D","Xiaoping",14);
+			val t24_deng_xiaoping = word("NP_D","Deng_Xiaoping",24);
 			val t16_who = word("WHO_A","who",16);
 			val t17_is = word("IS","is",17);
 			val t18_near = word("P_R","near",18);
 			val t19_death = word("NP_D","death",19);
 
 			// create the vocabulary for the hypothesis;
-			val h01_deng = word("$NPC_1$","Deng",1);
-			val h02_xiaoping = word("NP_D","Xiaoping",2);
+			val h07_deng_xiaoping = word("NP_D","Deng_Xiaoping",7);
 			val h03_is = word("IS","is",3);
 			val h04_num90 = word("IGNORE","num90",4);
 			val h05_years = word("IGNORE","years",5);
@@ -96,13 +94,7 @@ public final class TestPel1Shared0033 extends AbsPipelineTest {
 										t43_app
 										,
 										_(
-											_(
-												t13_deng
-												,
-												t14_xiaoping
-												,
-												24
-											)
+											t24_deng_xiaoping
 											,
 											_(
 												t16_who
@@ -152,13 +144,7 @@ public final class TestPel1Shared0033 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_deng
-					,
-					h02_xiaoping
-					,
-					7
-				)
+				h07_deng_xiaoping
 				,
 				_(
 					h03_is
@@ -195,4 +181,3 @@ public final class TestPel1Shared0033 extends AbsPipelineTest {
 		}
 
 }
-

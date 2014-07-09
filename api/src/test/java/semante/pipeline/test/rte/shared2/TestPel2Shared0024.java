@@ -17,8 +17,7 @@ public final class TestPel2Shared0024 extends AbsPipelineTest {
 			val t04_they = word("NP_D","they",4);
 			val t05_would = word("V_AUX","would",5);
 			val t06_behead = word("V_2","behead",6);
-			val t07_kim = word("$NPC_1$","Kim",7);
-			val t08_sunil = word("NP_D","SunIl",8);
+			val t20_kim_sunil = word("NP_D","Kim_SunIl",20);
 			val t42_app = word("WHO_A","APP",42);
 			val t10_a = word("A","a",10);
 			val t11_korean = word("MI","Korean",11);
@@ -29,8 +28,7 @@ public final class TestPel2Shared0024 extends AbsPipelineTest {
 			val t16_iraq = word("NP_D","Iraq",16);
 
 			// create the vocabulary for the hypothesis;
-			val h01_kim = word("$NPC_1$","Kim",1);
-			val h02_sunil = word("NP_D","SunIl",2);
+			val h12_kim_sunil = word("NP_D","Kim_SunIl",12);
 			val h04_who = word("WHO_A","who",4);
 			val h05_is = word("IS","is",5);
 			val h06_korean = word("MI","Korean",6);
@@ -65,13 +63,7 @@ public final class TestPel2Shared0024 extends AbsPipelineTest {
 							)
 							,
 							_(
-								_(
-									t07_kim
-									,
-									t08_sunil
-									,
-									20
-								)
+								t20_kim_sunil
 								,
 								_(
 									t42_app
@@ -137,13 +129,7 @@ public final class TestPel2Shared0024 extends AbsPipelineTest {
 			val th =
 			_(
 				_(
-					_(
-						h01_kim
-						,
-						h02_sunil
-						,
-						12
-					)
+					h12_kim_sunil
 					,
 					_(
 						h04_who
@@ -189,4 +175,3 @@ public final class TestPel2Shared0024 extends AbsPipelineTest {
 		}
 
 }
-

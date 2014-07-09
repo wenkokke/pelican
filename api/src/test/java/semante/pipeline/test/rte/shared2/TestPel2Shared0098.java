@@ -13,8 +13,7 @@ public final class TestPel2Shared0098 extends AbsPipelineTest {
 			// create the vocabulary for the text;
 			val t01_the = word("THE","The",1);
 			val t02_ukrainian = word("MR","Ukrainian",2);
-			val t03_election = word("$NC_1$","election",3);
-			val t04_commission = word("N","commission",4);
+			val t43_election_commission = word("N","election_commission",43);
 			val t05_declared = word("FACT","declared",5);
 			val t06_that = word("IGNORE","that",6);
 			val t07_the = word("THE","the",7);
@@ -22,8 +21,7 @@ public final class TestPel2Shared0098 extends AbsPipelineTest {
 			val t47_app = word("WHO_A","APP",47);
 			val t10_the = word("THE","the",10);
 			val t11_jubilant = word("MI","jubilant",11);
-			val t12_viktor = word("$NPC_1$","Viktor",12);
-			val t13_yanukovych = word("NP_D","Yanukovych",13);
+			val t36_viktor_yanukovych = word("NP_D","Viktor_Yanukovych",36);
 			val t15_had = word("V_AUX","had",15);
 			val t16_won = word("V_2","won",16);
 			val t17_the = word("THE","the",17);
@@ -49,13 +47,7 @@ public final class TestPel2Shared0098 extends AbsPipelineTest {
 					_(
 						t02_ukrainian
 						,
-						_(
-							t03_election
-							,
-							t04_commission
-							,
-							43
-						)
+						t43_election_commission
 						,
 						44
 					)
@@ -88,13 +80,7 @@ public final class TestPel2Shared0098 extends AbsPipelineTest {
 										_(
 											t11_jubilant
 											,
-											_(
-												t12_viktor
-												,
-												t13_yanukovych
-												,
-												36
-											)
+											t36_viktor_yanukovych
 											,
 											37
 										)
@@ -203,4 +189,3 @@ public final class TestPel2Shared0098 extends AbsPipelineTest {
 		}
 
 }
-

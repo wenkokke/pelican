@@ -18,8 +18,7 @@ public final class TestPel2Shared0066 extends AbsPipelineTest {
 			val t04_the = word("THE","the",4);
 			val t05_scandal = word("N","scandal",5);
 			val t06_undermines = word("V_2","undermines",6);
-			val t07_president = word("$NPC_1$","President",7);
-			val t08_cardoso = word("NP_D","Cardoso",8);
+			val t29_president_cardoso = word("NP_D","President_Cardoso",29);
 			val t09_and = word("AND","and",9);
 			val t10_could = word("V_AUX","could",10);
 			val t47_force_out = word("V_2","force_out",47);
@@ -34,12 +33,10 @@ public final class TestPel2Shared0066 extends AbsPipelineTest {
 			val t21_the = word("THE","the",21);
 			val t22_senate = word("N","Senate",22);
 			val t62_app = word("WHO_A","APP",62);
-			val t24_jador = word("$NPC_1$","Jador",24);
-			val t25_barbalho = word("NP_D","Barbalho",25);
+			val t37_jador_barbalho = word("NP_D","Jador_Barbalho",37);
 
 			// create the vocabulary for the hypothesis;
-			val h01_jador = word("$NPC_1$","Jador",1);
-			val h02_barbalho = word("NP_D","Barbalho",2);
+			val h08_jador_barbalho = word("NP_D","Jador_Barbalho",8);
 			val h03_is = word("IS","is",3);
 			val h04_a = word("A","a",4);
 			val h05_brazilian = word("MI","Brazilian",5);
@@ -75,13 +72,7 @@ public final class TestPel2Shared0066 extends AbsPipelineTest {
 								_(
 									t06_undermines
 									,
-									_(
-										t07_president
-										,
-										t08_cardoso
-										,
-										29
-									)
+									t29_president_cardoso
 									,
 									30
 								)
@@ -155,13 +146,7 @@ public final class TestPel2Shared0066 extends AbsPipelineTest {
 												_(
 													t62_app
 													,
-													_(
-														t24_jador
-														,
-														t25_barbalho
-														,
-														37
-													)
+													t37_jador_barbalho
 													,
 													63
 												)
@@ -197,13 +182,7 @@ public final class TestPel2Shared0066 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_jador
-					,
-					h02_barbalho
-					,
-					8
-				)
+				h08_jador_barbalho
 				,
 				_(
 					h03_is
@@ -238,4 +217,3 @@ public final class TestPel2Shared0066 extends AbsPipelineTest {
 		}
 
 }
-

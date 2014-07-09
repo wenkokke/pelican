@@ -20,8 +20,7 @@ public final class TestPel2Shared0118 extends AbsPipelineTest {
 			val t07_palestinian = word("MI","Palestinian",7);
 			val t08_leader = word("N","leader",8);
 			val t64_app = word("WHO_A","APP",64);
-			val t10_yasser = word("$NPC_1$","Yasser",10);
-			val t11_arafat = word("NP_D","Arafat",11);
+			val t33_yasser_arafat = word("NP_D","Yasser_Arafat",33);
 			val t13_has = word("V_AUX","has",13);
 			val t14_lapsed = word("V_1","lapsed",14);
 			val t15_into = word("P_R","into",15);
@@ -42,8 +41,7 @@ public final class TestPel2Shared0118 extends AbsPipelineTest {
 			// create the vocabulary for the hypothesis;
 			val h01_the = word("THE","The",1);
 			val h02_palestinian = word("MI","Palestinian",2);
-			val h03_yasser = word("$NPC_1$","Yasser",3);
-			val h04_arafat = word("NP_D","Arafat",4);
+			val h17_yasser_arafat = word("NP_D","Yasser_Arafat",17);
 			val h05_has = word("V_AUX","has",5);
 			val h06_lapsed = word("V_1","lapsed",6);
 			val h07_into = word("P_R","into",7);
@@ -95,13 +93,7 @@ public final class TestPel2Shared0118 extends AbsPipelineTest {
 							_(
 								t64_app
 								,
-								_(
-									t10_yasser
-									,
-									t11_arafat
-									,
-									33
-								)
+								t33_yasser_arafat
 								,
 								65
 							)
@@ -220,13 +212,7 @@ public final class TestPel2Shared0118 extends AbsPipelineTest {
 					_(
 						h02_palestinian
 						,
-						_(
-							h03_yasser
-							,
-							h04_arafat
-							,
-							17
-						)
+						h17_yasser_arafat
 						,
 						18
 					)
@@ -273,4 +259,3 @@ public final class TestPel2Shared0118 extends AbsPipelineTest {
 		}
 
 }
-

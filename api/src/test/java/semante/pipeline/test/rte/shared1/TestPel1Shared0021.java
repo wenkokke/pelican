@@ -11,8 +11,7 @@ public final class TestPel1Shared0021 extends AbsPipelineTest {
 		public final void testPel1Shared0021() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_cote = word("$NPC_1$","Cote",1);
-			val t02_divoire = word("NP_D","dIvoire",2);
+			val t41_cote_divoire = word("NP_D","Cote_dIvoire",41);
 			val t04_which = word("WHO_A","which",4);
 			val t05_once = word("MR","once",5);
 			val t06_was = word("IS","was",6);
@@ -36,8 +35,7 @@ public final class TestPel1Shared0021 extends AbsPipelineTest {
 			val t24_against = word("P_R","against",24);
 			val t25_gbagbo = word("NP_D","Gbagbo",25);
 			val t26_in = word("P_R","in",26);
-			val t27_september = word("$NPC_1$","September",27);
-			val t28_num2002 = word("NP_D","num2002",28);
+			val t62_september_num2002 = word("NP_D","September_num2002",62);
 			val t30_pitting = word("GER_2","pitting",30);
 			val t97_det = word("EMPTYDET","DET",97);
 			val t31_rebels = word("N","rebels",31);
@@ -51,8 +49,7 @@ public final class TestPel1Shared0021 extends AbsPipelineTest {
 			val t39_south = word("N","south",39);
 
 			// create the vocabulary for the hypothesis;
-			val h01_cote = word("$NPC_1$","Cote",1);
-			val h02_divoire = word("NP_D","dIvoire",2);
+			val h07_cote_divoire = word("NP_D","Cote_dIvoire",7);
 			val h03_is = word("IS","is",3);
 			val h04_in = word("P_I","in",4);
 			val h05_africa = word("NP_D","Africa",5);
@@ -61,13 +58,7 @@ public final class TestPel1Shared0021 extends AbsPipelineTest {
 			val tt =
 			_(
 				_(
-					_(
-						t01_cote
-						,
-						t02_divoire
-						,
-						41
-					)
+					t41_cote_divoire
 					,
 					_(
 						t04_which
@@ -195,13 +186,7 @@ public final class TestPel1Shared0021 extends AbsPipelineTest {
 								_(
 									t26_in
 									,
-									_(
-										t27_september
-										,
-										t28_num2002
-										,
-										62
-									)
+									t62_september_num2002
 									,
 									63
 								)
@@ -287,13 +272,7 @@ public final class TestPel1Shared0021 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_cote
-					,
-					h02_divoire
-					,
-					7
-				)
+				h07_cote_divoire
 				,
 				_(
 					h03_is
@@ -322,4 +301,3 @@ public final class TestPel1Shared0021 extends AbsPipelineTest {
 		}
 
 }
-

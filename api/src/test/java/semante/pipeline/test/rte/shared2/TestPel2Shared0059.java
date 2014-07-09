@@ -11,8 +11,7 @@ public final class TestPel2Shared0059 extends AbsPipelineTest {
 		public final void testPel2Shared0059() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_andy = word("$NPC_1$","Andy",1);
-			val t02_grove = word("NP_D","Grove",2);
+			val t21_andy_grove = word("NP_D","Andy_Grove",21);
 			val t42_app = word("WHO_A","APP",42);
 			val t04_intel = word("NP_D","Intel",4);
 			val t05_s = word("POSS","s",5);
@@ -21,8 +20,7 @@ public final class TestPel2Shared0059 extends AbsPipelineTest {
 			val t09_about = word("P_R","about",9);
 			val t10_the = word("THE","the",10);
 			val t11_toughest = word("MR","toughest",11);
-			val t12_business = word("$NC_1$","business",12);
-			val t13_challenge = word("N","challenge",13);
+			val t35_business_challenge = word("N","business_challenge",35);
 			val t44_app = word("WHO_R","APP",44);
 			val t14_facing = word("V_2","facing",14);
 			val t15_intel = word("NP_D","Intel",15);
@@ -39,20 +37,13 @@ public final class TestPel2Shared0059 extends AbsPipelineTest {
 			val h05_talked = word("V_1","talked",5);
 			val h06_about = word("P_R","about",6);
 			val h07_a = word("A","a",7);
-			val h08_business = word("$NC_1$","business",8);
-			val h09_challenge = word("N","challenge",9);
+			val h19_business_challenge = word("N","business_challenge",19);
 
 			// create the tree structure for the text;
 			val tt =
 			_(
 				_(
-					_(
-						t01_andy
-						,
-						t02_grove
-						,
-						21
-					)
+					t21_andy_grove
 					,
 					_(
 						t42_app
@@ -91,13 +82,7 @@ public final class TestPel2Shared0059 extends AbsPipelineTest {
 									t11_toughest
 									,
 									_(
-										_(
-											t12_business
-											,
-											t13_challenge
-											,
-											35
-										)
+										t35_business_challenge
 										,
 										_(
 											t44_app
@@ -187,13 +172,7 @@ public final class TestPel2Shared0059 extends AbsPipelineTest {
 						_(
 							h07_a
 							,
-							_(
-								h08_business
-								,
-								h09_challenge
-								,
-								19
-							)
+							h19_business_challenge
 							,
 							20
 						)
@@ -217,4 +196,3 @@ public final class TestPel2Shared0059 extends AbsPipelineTest {
 		}
 
 }
-

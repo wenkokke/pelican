@@ -2,7 +2,7 @@ package semante.predcalc.impl;
 
 import static lombok.AccessLevel.PRIVATE;
 
-import java.util.List;
+import java.util.Set;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,6 +19,7 @@ import semante.predcalc.ExprForm;
 public class IExprForm<Kind> implements ExprForm<Kind> {
 
 	Kind		semantics;
-	List<Kind>	pragmatics;
+	Set<Kind>	uniquenessConditions;
+	Set<Kind>	implications;
 
 }

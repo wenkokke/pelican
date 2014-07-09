@@ -33,23 +33,19 @@ public final class TestPel2Shared0122 extends AbsPipelineTest {
 			val t18_mnr = word("NP_D","MNR",18);
 			val t19_ = word("IGNORE","",19);
 			val t82_app = word("WHO_A","APP",82);
-			val t21_hector = word("$NPC_1$","Hector",21);
-			val t22_oqueli = word("NP_D","Oqueli",22);
+			val t45_hector_oqueli = word("NP_D","Hector_Oqueli",45);
 			val t23_was = word("IS","was",23);
 			val t24_found = word("V_1","found",24);
 			val t25_in = word("P_R","in",25);
-			val t26_cuilapa = word("$NPC_1$","Cuilapa",26);
-			val t28_guatemala = word("NP_D","Guatemala",28);
+			val t72_cuilapa_guatemala = word("NP_D","Cuilapa_Guatemala",72);
 			val t30_near = word("P_R","near",30);
 			val t31_the = word("THE","the",31);
 			val t32_border = word("N","border",32);
 			val t33_with = word("P_R","with",33);
-			val t34_el = word("$NPC_1$","El",34);
-			val t35_salvador = word("NP_D","Salvador",35);
+			val t56_el_salvador = word("NP_D","El_Salvador",56);
 
 			// create the vocabulary for the hypothesis;
-			val h01_hector = word("$NPC_1$","Hector",1);
-			val h02_oqueli = word("NP_D","Oqueli",2);
+			val h09_hector_oqueli = word("NP_D","Hector_Oqueli",9);
 			val h03_was = word("IS","was",3);
 			val h04_the = word("THE","the",4);
 			val h05_undersecretary = word("N","undersecretary",5);
@@ -167,13 +163,7 @@ public final class TestPel2Shared0122 extends AbsPipelineTest {
 											_(
 												t82_app
 												,
-												_(
-													t21_hector
-													,
-													t22_oqueli
-													,
-													45
-												)
+												t45_hector_oqueli
 												,
 												83
 											)
@@ -200,13 +190,7 @@ public final class TestPel2Shared0122 extends AbsPipelineTest {
 										_(
 											t25_in
 											,
-											_(
-												t26_cuilapa
-												,
-												t28_guatemala
-												,
-												72
-											)
+											t72_cuilapa_guatemala
 											,
 											54
 										)
@@ -226,13 +210,7 @@ public final class TestPel2Shared0122 extends AbsPipelineTest {
 												_(
 													t33_with
 													,
-													_(
-														t34_el
-														,
-														t35_salvador
-														,
-														56
-													)
+													t56_el_salvador
 													,
 													57
 												)
@@ -268,13 +246,7 @@ public final class TestPel2Shared0122 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_hector
-					,
-					h02_oqueli
-					,
-					9
-				)
+				h09_hector_oqueli
 				,
 				_(
 					h03_was
@@ -315,4 +287,3 @@ public final class TestPel2Shared0122 extends AbsPipelineTest {
 		}
 
 }
-

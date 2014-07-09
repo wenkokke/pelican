@@ -14,16 +14,11 @@ public final class TestPel1Shared0008 extends AbsPipelineTest {
 			val t01_the = word("THE","The",1);
 			val t02_international = word("MI","international",2);
 			val t03_humanitarian = word("MI","humanitarian",3);
-			val t04_aid = word("$NC_1$","aid",4);
-			val t05_organization = word("N","organization",5);
+			val t66_aid_organization = word("N","aid_organization",66);
 			val t84_app = word("WHO_A","APP",84);
-			val t07_doctors = word("$NPC_1$","Doctors",7);
-			val t08_without = word("$NPC_1$","Without",8);
-			val t09_borders = word("NP_D","Borders",9);
+			val t40_doctors_without_borders = word("NP_D","Doctors_Without_Borders",40);
 			val t81_app = word("WHO_A","APP",81);
-			val t11_medecins = word("$NPC_1$","Medecins",11);
-			val t12_sans = word("$NPC_1$","Sans",12);
-			val t13_frontieres = word("NP_D","Frontieres",13);
+			val t61_medecins_sans_frontieres = word("NP_D","Medecins_Sans_Frontieres",61);
 			val t79_app = word("WHO_A","APP",79);
 			val t14_ = word("IGNORE","",14);
 			val t15_msf = word("NP_D","MSF",15);
@@ -45,14 +40,11 @@ public final class TestPel1Shared0008 extends AbsPipelineTest {
 			val t29_darfur = word("NP_D","Darfur",29);
 
 			// create the vocabulary for the hypothesis;
-			val h01_doctors = word("$NPC_1$","Doctors",1);
-			val h02_without = word("$NPC_1$","Without",2);
-			val h03_borders = word("NP_D","Borders",3);
+			val h19_doctors_without_borders = word("NP_D","Doctors_Without_Borders",19);
 			val h04_is = word("IS","is",4);
 			val h05_an = word("A","an",5);
 			val h06_international = word("MI","international",6);
-			val h07_aid = word("$NC_1$","aid",7);
-			val h08_organization = word("N","organization",8);
+			val h16_aid_organization = word("N","aid_organization",16);
 
 			// create the tree structure for the text;
 			val tt =
@@ -67,13 +59,7 @@ public final class TestPel1Shared0008 extends AbsPipelineTest {
 							_(
 								t03_humanitarian
 								,
-								_(
-									t04_aid
-									,
-									t05_organization
-									,
-									66
-								)
+								t66_aid_organization
 								,
 								67
 							)
@@ -88,37 +74,13 @@ public final class TestPel1Shared0008 extends AbsPipelineTest {
 						t84_app
 						,
 						_(
-							_(
-								t07_doctors
-								,
-								_(
-									t08_without
-									,
-									t09_borders
-									,
-									39
-								)
-								,
-								40
-							)
+							t40_doctors_without_borders
 							,
 							_(
 								t81_app
 								,
 								_(
-									_(
-										t11_medecins
-										,
-										_(
-											t12_sans
-											,
-											t13_frontieres
-											,
-											60
-										)
-										,
-										61
-									)
+									t61_medecins_sans_frontieres
 									,
 									_(
 										t79_app
@@ -248,19 +210,7 @@ public final class TestPel1Shared0008 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_doctors
-					,
-					_(
-						h02_without
-						,
-						h03_borders
-						,
-						12
-					)
-					,
-					19
-				)
+				h19_doctors_without_borders
 				,
 				_(
 					h04_is
@@ -271,13 +221,7 @@ public final class TestPel1Shared0008 extends AbsPipelineTest {
 						_(
 							h06_international
 							,
-							_(
-								h07_aid
-								,
-								h08_organization
-								,
-								16
-							)
+							h16_aid_organization
 							,
 							17
 						)
@@ -301,4 +245,3 @@ public final class TestPel1Shared0008 extends AbsPipelineTest {
 		}
 
 }
-

@@ -19,8 +19,7 @@ public final class TestPel2Shared0056 extends AbsPipelineTest {
 			val t05_the = word("THE","the",5);
 			val t06_widow = word("N","widow",6);
 			val t61_app = word("WHO_A","APP",61);
-			val t08_yoko = word("$NPC_1$","Yoko",8);
-			val t09_ono = word("NP_D","Ono",9);
+			val t31_yoko_ono = word("NP_D","Yoko_Ono",31);
 			val t11_who = word("WHO_A","who",11);
 			val t12_is = word("IS","is",12);
 			val t13_a = word("A","a",13);
@@ -35,12 +34,10 @@ public final class TestPel2Shared0056 extends AbsPipelineTest {
 			val t23_museum = word("N","museum",23);
 			val t24_which = word("WHO_R","which",24);
 			val t25_honors = word("V_2","honors",25);
-			val t26_john = word("$NPC_1$","John",26);
-			val t27_lennon = word("NP_D","Lennon",27);
+			val t42_john_lennon = word("NP_D","John_Lennon",42);
 
 			// create the vocabulary for the hypothesis;
-			val h01_yoko = word("$NPC_1$","Yoko",1);
-			val h02_ono = word("NP_D","Ono",2);
+			val h08_yoko_ono = word("NP_D","Yoko_Ono",8);
 			val h03_is = word("IS","is",3);
 			val h04_a = word("A","a",4);
 			val h05_japanese = word("MI","Japanese",5);
@@ -83,13 +80,7 @@ public final class TestPel2Shared0056 extends AbsPipelineTest {
 									_(
 										t61_app
 										,
-										_(
-											t08_yoko
-											,
-											t09_ono
-											,
-											31
-										)
+										t31_yoko_ono
 										,
 										62
 									)
@@ -159,13 +150,7 @@ public final class TestPel2Shared0056 extends AbsPipelineTest {
 													_(
 														t25_honors
 														,
-														_(
-															t26_john
-															,
-															t27_lennon
-															,
-															42
-														)
+														t42_john_lennon
 														,
 														43
 													)
@@ -204,13 +189,7 @@ public final class TestPel2Shared0056 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_yoko
-					,
-					h02_ono
-					,
-					8
-				)
+				h08_yoko_ono
 				,
 				_(
 					h03_is
@@ -245,4 +224,3 @@ public final class TestPel2Shared0056 extends AbsPipelineTest {
 		}
 
 }
-

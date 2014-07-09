@@ -15,8 +15,7 @@ public final class TestPel2Shared0081 extends AbsPipelineTest {
 			val t02_doctor = word("N","doctor",2);
 			val t03_who = word("WHO_A","who",3);
 			val t04_treated = word("V_2","treated",4);
-			val t05_ayrton = word("$NPC_1$","Ayrton",5);
-			val t06_senna = word("NP_D","Senna",6);
+			val t31_ayrton_senna = word("NP_D","Ayrton_Senna",31);
 			val t07_in = word("P_R","in",7);
 			val t08_italy = word("NP_D","Italy",8);
 			val t10_after = word("P_R","after",10);
@@ -24,10 +23,7 @@ public final class TestPel2Shared0081 extends AbsPipelineTest {
 			val t12_crash = word("N","crash",12);
 			val t13_in = word("P_R","in",13);
 			val t14_the = word("THE","the",14);
-			val t15_san = word("$NPC_1$","San",15);
-			val t16_marino = word("$NPC_1$","Marino",16);
-			val t17_grand = word("$NPC_1$","Grand",17);
-			val t18_prix = word("NP_D","Prix",18);
+			val t56_san_marino_grand_prix = word("NP_D","San_Marino_Grand_Prix",56);
 			val t20_has = word("V_AUX","has",20);
 			val t21_denied = word("V_2","denied",21);
 			val t63_det = word("EMPTYDET","DET",63);
@@ -42,8 +38,7 @@ public final class TestPel2Shared0081 extends AbsPipelineTest {
 			val h01_a = word("A","A",1);
 			val h02_doctor = word("N","doctor",2);
 			val h03_treated = word("V_2","treated",3);
-			val h04_ayrton = word("$NPC_1$","Ayrton",4);
-			val h05_senna = word("NP_D","Senna",5);
+			val h10_ayrton_senna = word("NP_D","Ayrton_Senna",10);
 			val h06_in = word("P_R","in",6);
 			val h07_italy = word("NP_D","Italy",7);
 
@@ -67,13 +62,7 @@ public final class TestPel2Shared0081 extends AbsPipelineTest {
 								_(
 									t04_treated
 									,
-									_(
-										t05_ayrton
-										,
-										t06_senna
-										,
-										31
-									)
+									t31_ayrton_senna
 									,
 									35
 								)
@@ -104,25 +93,7 @@ public final class TestPel2Shared0081 extends AbsPipelineTest {
 											_(
 												t14_the
 												,
-												_(
-													t15_san
-													,
-													_(
-														t16_marino
-														,
-														_(
-															t17_grand
-															,
-															t18_prix
-															,
-															54
-														)
-														,
-														55
-													)
-													,
-													56
-												)
+												t56_san_marino_grand_prix
 												,
 												57
 											)
@@ -217,13 +188,7 @@ public final class TestPel2Shared0081 extends AbsPipelineTest {
 					_(
 						h03_treated
 						,
-						_(
-							h04_ayrton
-							,
-							h05_senna
-							,
-							10
-						)
+						h10_ayrton_senna
 						,
 						14
 					)
@@ -252,4 +217,3 @@ public final class TestPel2Shared0081 extends AbsPipelineTest {
 		}
 
 }
-

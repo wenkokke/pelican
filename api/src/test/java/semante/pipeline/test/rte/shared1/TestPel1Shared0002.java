@@ -13,8 +13,7 @@ public final class TestPel1Shared0002 extends AbsPipelineTest {
 			// create the vocabulary for the text;
 			val t01_the = word("THE","The",1);
 			val t02_controversyracked = word("MR","controversyRacked",2);
-			val t03_oil = word("$NC_1$","oil",3);
-			val t04_giant = word("N","giant",4);
+			val t42_oil_giant = word("N","oil_giant",42);
 			val t52_app = word("WHO_A","APP",52);
 			val t05_shell = word("NP_D","Shell",5);
 			val t06_has = word("V_AUX","has",6);
@@ -38,8 +37,7 @@ public final class TestPel1Shared0002 extends AbsPipelineTest {
 			val h01_shell = word("NP_D","Shell",1);
 			val h02_is = word("IS","is",2);
 			val h03_an = word("A","an",3);
-			val h04_oil = word("$NC_1$","oil",4);
-			val h05_giant = word("N","giant",5);
+			val h11_oil_giant = word("N","oil_giant",11);
 
 			// create the tree structure for the text;
 			val tt =
@@ -51,13 +49,7 @@ public final class TestPel1Shared0002 extends AbsPipelineTest {
 						_(
 							t02_controversyracked
 							,
-							_(
-								t03_oil
-								,
-								t04_giant
-								,
-								42
-							)
+							t42_oil_giant
 							,
 							43
 						)
@@ -183,13 +175,7 @@ public final class TestPel1Shared0002 extends AbsPipelineTest {
 					_(
 						h03_an
 						,
-						_(
-							h04_oil
-							,
-							h05_giant
-							,
-							11
-						)
+						h11_oil_giant
 						,
 						12
 					)
@@ -210,4 +196,3 @@ public final class TestPel1Shared0002 extends AbsPipelineTest {
 		}
 
 }
-

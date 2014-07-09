@@ -1,7 +1,9 @@
 package semante.predcalc.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import lambdacalc.Expr;
 import lambdacalc.Expr.Visitor;
@@ -192,13 +194,50 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 		}
 	};
 	
+	
+	private Set<String> getExternalVars(Expr expr) {
+		
+		final Set<String> definedVars = new HashSet<String>();
+		final Set<String> usedVars = new HashSet<String>();
+		
+		expr.accept(new Visitor<Void>() {
+
+			@Override
+			public Void abstraction(Symbol arg0, Expr arg1) {
+				definedVars.add(arg0.getName());
+				return arg1.accept(this);
+			}
+
+			@Override
+			public Void application(Expr arg0, Expr arg1) {
+				arg0.accept(this);
+				arg1.accept(this);
+				return null;
+			}
+
+			@Override
+			public Void variable(Symbol arg0) {
+				if (arg0.getType().equals(Types.E)) {
+					usedVars.add(arg0.getName());
+				}
+				return null;
+			}
+			
+		});
+				
+		usedVars.removeAll(definedVars);
+		return usedVars;
+		
+	}
+	
 	private List<Predicate> parsePredicates(Expr arg) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		parseNextPredicate(arg, predicates); 
+		System.out.println("parsing predicate: " + lcalc.format(arg));
+		parseNextPredicate(arg, predicates,getExternalVars(arg)); 
 		return predicates;
 	}
 	
-	private void parseNextPredicate(Expr arg, final List<Predicate> predicates) {
+	private void parseNextPredicate(Expr arg, final List<Predicate> predicates, final Set<String> externalVars) {
 
 		final List<String> arguments = new ArrayList<String>();
 		
@@ -230,18 +269,19 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 				if (argIsTypeE) {
 					if (fun.accept(isConstant)) {
 						// the application can be one of many options. For example, it can be something like "man:et x1:e" or 
-						// something like "man:et c1:e" or something like "loves:eet c2:e". What's important to check is whether
-						// the argument is a variable (e.g. x0) or not. If it is, then it's due to some abstraction and we ignore
-						// it. In that case we investigate only the function. 
-						// if, however, the argument is not a variable, it means that it is either a fixed constant like John or
-						// a constant created by an iota, like c1. In these cases we create a complex predicate - a predicate with
-						// an argument.
-
+						// something like "love:eet x3:e". What's important to check is whether the argument is an external variable 
+						// (i.e. a variable introduced by an abstraction outside the scope of the argument from which we extract these 
+						// predicates. If the variable is not external (i.e. it's internal), we investigate only the function. 
+						// if, however, the argument is external, we create a complex predicate - a predicate with an argument.
 						String argName = arg.accept(this);
-						boolean argIsVariable = argIsTypeE && argName.matches("x[0-9]+");
+						boolean argIsExternal = externalVars.contains(argName);
 
-						if (!argIsVariable) {
-							// i.e. the argument is 'John' or 'c1'
+						if (argIsExternal) {
+							System.out.println("Argument [" + argName + "] is external");
+						}
+						
+						if (argIsExternal) {
+							// i.e. the argument is 'John' or 'x4' introdued by an external iota.
 							arguments.add(argName);
 						}
 						fun.accept(this);
@@ -419,6 +459,11 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 		
 		public Expr getExpr() {
 			return expr;
+		}
+		
+		
+		public String toString() {
+			return "Predicate: name=" + name + "; arguments=" + arguments.toString() + "; expr=" + lcalc.format(expr);
 		}
 	}
 

@@ -13,27 +13,22 @@ public final class TestPel2Shared0079 extends AbsPipelineTest {
 			// create the vocabulary for the text;
 			val t30_det = word("THE","DET",30);
 			val t01_italian = word("MI","Italian",1);
-			val t02_prime = word("$NC_1$","Prime",2);
-			val t03_minister = word("N","Minister",3);
+			val t27_prime_minister = word("N","Prime_Minister",27);
 			val t33_app = word("WHO_A","APP",33);
-			val t04_silvio = word("$NPC_1$","Silvio",4);
-			val t05_berlusconi = word("NP_D","Berlusconi",5);
+			val t25_silvio_berlusconi = word("NP_D","Silvio_Berlusconi",25);
 			val t06_promised = word("V_2","promised",6);
 			val t07_a = word("A","a",7);
 			val t08_reformation = word("N","reformation",8);
 			val t09_of = word("P_R","of",9);
 			val t10_italy = word("NP_D","Italy",10);
 			val t11_s = word("POSS","s",11);
-			val t12_business = word("$NC_1$","business",12);
-			val t13_regulations = word("N","regulations",13);
+			val t23_business_regulations = word("N","business_regulations",23);
 
 			// create the vocabulary for the hypothesis;
-			val h01_silvio = word("$NPC_1$","Silvio",1);
-			val h02_berlusconi = word("NP_D","Berlusconi",2);
+			val h08_silvio_berlusconi = word("NP_D","Silvio_Berlusconi",8);
 			val h03_is = word("IS","is",3);
 			val h04_a = word("A","a",4);
-			val h05_prime = word("$NC_1$","Prime",5);
-			val h06_minister = word("N","Minister",6);
+			val h12_prime_minister = word("N","Prime_Minister",12);
 
 			// create the tree structure for the text;
 			val tt =
@@ -45,13 +40,7 @@ public final class TestPel2Shared0079 extends AbsPipelineTest {
 						_(
 							t01_italian
 							,
-							_(
-								t02_prime
-								,
-								t03_minister
-								,
-								27
-							)
+							t27_prime_minister
 							,
 							28
 						)
@@ -62,13 +51,7 @@ public final class TestPel2Shared0079 extends AbsPipelineTest {
 					_(
 						t33_app
 						,
-						_(
-							t04_silvio
-							,
-							t05_berlusconi
-							,
-							25
-						)
+						t25_silvio_berlusconi
 						,
 						34
 					)
@@ -97,13 +80,7 @@ public final class TestPel2Shared0079 extends AbsPipelineTest {
 										17
 									)
 									,
-									_(
-										t12_business
-										,
-										t13_regulations
-										,
-										23
-									)
+									t23_business_regulations
 									,
 									24
 								)
@@ -127,13 +104,7 @@ public final class TestPel2Shared0079 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_silvio
-					,
-					h02_berlusconi
-					,
-					8
-				)
+				h08_silvio_berlusconi
 				,
 				_(
 					h03_is
@@ -141,13 +112,7 @@ public final class TestPel2Shared0079 extends AbsPipelineTest {
 					_(
 						h04_a
 						,
-						_(
-							h05_prime
-							,
-							h06_minister
-							,
-							12
-						)
+						h12_prime_minister
 						,
 						13
 					)
@@ -168,4 +133,3 @@ public final class TestPel2Shared0079 extends AbsPipelineTest {
 		}
 
 }
-

@@ -17,8 +17,7 @@ public final class TestPel2Shared0099 extends AbsPipelineTest {
 			val t07_seismic = word("MR","seismic",7);
 			val t08_activity = word("NP_D","activity",8);
 			val t01_in = word("P_R","In",1);
-			val t02_august = word("$NPC_1$","August",2);
-			val t03_num1999 = word("NP_D","num1999",3);
+			val t25_august_num1999 = word("NP_D","August_num1999",25);
 			val t09_marked = word("V_2","marked",9);
 			val t10_the = word("THE","the",10);
 			val t11_beginning = word("N","beginning",11);
@@ -32,8 +31,7 @@ public final class TestPel2Shared0099 extends AbsPipelineTest {
 			val t19_which = word("WHO_A","which",19);
 			val t20_lasted = word("V_1","lasted",20);
 			val t21_until = word("P_R","until",21);
-			val t22_november = word("$NPC_1$","November",22);
-			val t23_num1999 = word("NP_D","num1999",23);
+			val t35_november_num1999 = word("NP_D","November_num1999",35);
 
 			// create the vocabulary for the hypothesis;
 			val h01_the = word("THE","The",1);
@@ -43,8 +41,7 @@ public final class TestPel2Shared0099 extends AbsPipelineTest {
 			val h05_earthquakes = word("NP_D","earthquakes",5);
 			val h06_lasted = word("V_1","lasted",6);
 			val h07_until = word("P_R","until",7);
-			val h08_november = word("$NPC_1$","November",8);
-			val h09_num1999 = word("NP_D","num1999",9);
+			val h15_november_num1999 = word("NP_D","November_num1999",15);
 
 			// create the tree structure for the text;
 			val tt =
@@ -79,13 +76,7 @@ public final class TestPel2Shared0099 extends AbsPipelineTest {
 					_(
 						t01_in
 						,
-						_(
-							t02_august
-							,
-							t03_num1999
-							,
-							25
-						)
+						t25_august_num1999
 						,
 						26
 					)
@@ -144,13 +135,7 @@ public final class TestPel2Shared0099 extends AbsPipelineTest {
 												_(
 													t21_until
 													,
-													_(
-														t22_november
-														,
-														t23_num1999
-														,
-														35
-													)
+													t35_november_num1999
 													,
 													36
 												)
@@ -218,13 +203,7 @@ public final class TestPel2Shared0099 extends AbsPipelineTest {
 					_(
 						h07_until
 						,
-						_(
-							h08_november
-							,
-							h09_num1999
-							,
-							15
-						)
+						h15_november_num1999
 						,
 						16
 					)
@@ -245,4 +224,3 @@ public final class TestPel2Shared0099 extends AbsPipelineTest {
 		}
 
 }
-

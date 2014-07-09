@@ -18,14 +18,12 @@ public final class TestIdioms extends AbsPipelineTest {
 			// create the vocabulary for the text;
 			val t01_john = word("NP_D","John",1);
 			val t09_ran_into = word("V_2","ran_into",9);
-			val t04_virginia = word("$NPC_1$","Virginia",4);
-			val t05_wolf = word("NP_D","Wolf",5);
+			val t07_virginia_wolf = word("NP_D","Virginia_Wolf",7);
 
 			// create the vocabulary for the hypothesis;
 			val h01_john = word("NP_D","John",1);
 			val h02_met = word("V_2","met",2);
-			val h03_virginia = word("$NPC_1$","Virginia",3);
-			val h04_wolf = word("NP_D","Wolf",4);
+			val h06_virginia_wolf = word("NP_D","Virginia_Wolf",6);
 
 			// create the tree structure for the text;
 			val tt =
@@ -35,13 +33,7 @@ public final class TestIdioms extends AbsPipelineTest {
 				_(
 					t09_ran_into
 					,
-					_(
-						t04_virginia
-						,
-						t05_wolf
-						,
-						7
-					)
+					t07_virginia_wolf
 					,
 					11
 				)
@@ -58,13 +50,7 @@ public final class TestIdioms extends AbsPipelineTest {
 				_(
 					h02_met
 					,
-					_(
-						h03_virginia
-						,
-						h04_wolf
-						,
-						6
-					)
+					h06_virginia_wolf
 					,
 					7
 				)
@@ -351,8 +337,7 @@ public final class TestIdioms extends AbsPipelineTest {
 			// test for a proof;
 			assertProof(tt, th, subs);
 			// test the testcasecreator;
-			testTestCaseCreator(tt, th, Proof, subs);
-
+			testTestCaseCreator(tt, th, Proof,subs);
 		}
 
 		@Test
@@ -481,4 +466,132 @@ public final class TestIdioms extends AbsPipelineTest {
 			// test the testcasecreator;
 			testTestCaseCreator(tt, th, Proof, subs);
 		}
+
+		@Test
+		public final void TestCase07() throws Exception {
+
+			// create the vocabulary for the text;
+			val t01_john = word("NP_D","John",1);
+			val t02_got = word("V_2","got",2);
+			val t03_the = word("THE","the",3);
+			val t04_job = word("N","job",4);
+			val t05_by = word("P_R","by",5);
+			val t06_pulling = word("GER_1","pulling",6);
+			val t20_det = word("GER_1","some",20);
+			val t07_strings = word("GER_1","strings",7);
+
+			// create the vocabulary for the hypothesis;
+			val h01_john = word("NP_D","John",1);
+			val h02_got = word("V_2","got",2);
+			val h03_the = word("THE","the",3);
+			val h04_job = word("N","job",4);
+			val h05_by = word("P_R","by",5);
+			val h06_using = word("GER_1","using",6);
+			val h20_det = word("GER_1","some",20);
+			val h07_connections = word("GER_1","connections",7);
+
+			// create the tree structure for the text;
+			val tt =
+			_(
+				t01_john
+				,
+				_(
+					_(
+						t02_got
+						,
+						_(
+							t03_the
+							,
+							t04_job
+							,
+							10
+						)
+						,
+						17
+					)
+					,
+					_(
+						t05_by
+						,
+						_(
+							t06_pulling
+							,
+							_(
+								t20_det
+								,
+								t07_strings
+								,
+								21
+							)
+							,
+							12
+						)
+						,
+						14
+					)
+					,
+					18
+				)
+				,
+				19
+			)
+			;
+
+			// create the tree structure for the hypothesis;
+			val th =
+			_(
+				h01_john
+				,
+				_(
+					_(
+						h02_got
+						,
+						_(
+							h03_the
+							,
+							h04_job
+							,
+							10
+						)
+						,
+						17
+					)
+					,
+					_(
+						h05_by
+						,
+						_(
+							h06_using
+							,
+							_(
+								h20_det
+								,
+								h07_connections
+								,
+								21
+							)
+							,
+							12
+						)
+						,
+						14
+					)
+					,
+					18
+				)
+				,
+				19
+			)
+			;
+
+			// create the subsumption relations;
+			List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+			subs.add(new IPair<Integer,Integer>(12,12));
+
+			// test for a proof;
+			assertProof(tt, th, subs);
+			// test the testcasecreator;
+			testTestCaseCreator(tt, th, Proof, subs);
+		}
+		
 }

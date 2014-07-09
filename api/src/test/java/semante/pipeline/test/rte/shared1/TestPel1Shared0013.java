@@ -17,8 +17,7 @@ public final class TestPel1Shared0013 extends AbsPipelineTest {
 			val t05_the = word("THE","the",5);
 			val t06_religion = word("N","religion",6);
 			val t07_of = word("P_R","of",7);
-			val t08_jurgen = word("$NPC_1$","Jurgen",8);
-			val t09_schneider = word("NP_D","Schneider",9);
+			val t37_jurgen_schneider = word("NP_D","Jurgen_Schneider",37);
 			val t79_app = word("WHO_A","APP",79);
 			val t11_the = word("THE","the",11);
 			val t12_developer = word("N","developer",12);
@@ -34,8 +33,7 @@ public final class TestPel1Shared0013 extends AbsPipelineTest {
 			val t21_of = word("P_R","of",21);
 			val t22_dms = word("NP_D","DMs",22);
 			val t23_to = word("P_R","to",23);
-			val t24_deutsche = word("$NPC_1$","Deutsche",24);
-			val t25_bank = word("NP_D","Bank",25);
+			val t48_deutsche_bank = word("NP_D","Deutsche_Bank",48);
 			val t27_as = word("P_R","as",27);
 			val t28_the = word("THE","the",28);
 			val t29_cause = word("N","cause",29);
@@ -45,8 +43,7 @@ public final class TestPel1Shared0013 extends AbsPipelineTest {
 			val t33_downfall = word("N","downfall",33);
 
 			// create the vocabulary for the hypothesis;
-			val h01_jurgen = word("$NPC_1$","Jurgen",1);
-			val h02_schneider = word("NP_D","Schneider",2);
+			val h06_jurgen_schneider = word("NP_D","Jurgen_Schneider",6);
 			val h03_went = word("V_1","went",3);
 			val h04_bankrupt = word("MR","bankrupt",4);
 
@@ -75,13 +72,7 @@ public final class TestPel1Shared0013 extends AbsPipelineTest {
 									t07_of
 									,
 									_(
-										_(
-											t08_jurgen
-											,
-											t09_schneider
-											,
-											37
-										)
+										t37_jurgen_schneider
 										,
 										_(
 											t79_app
@@ -140,13 +131,7 @@ public final class TestPel1Shared0013 extends AbsPipelineTest {
 																				_(
 																					t23_to
 																					,
-																					_(
-																						t24_deutsche
-																						,
-																						t25_bank
-																						,
-																						48
-																					)
+																					t48_deutsche_bank
 																					,
 																					49
 																				)
@@ -244,13 +229,7 @@ public final class TestPel1Shared0013 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_jurgen
-					,
-					h02_schneider
-					,
-					6
-				)
+				h06_jurgen_schneider
 				,
 				_(
 					h03_went
@@ -273,4 +252,3 @@ public final class TestPel1Shared0013 extends AbsPipelineTest {
 		}
 
 }
-

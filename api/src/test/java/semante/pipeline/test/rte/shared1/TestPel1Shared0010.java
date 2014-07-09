@@ -11,12 +11,9 @@ public final class TestPel1Shared0010 extends AbsPipelineTest {
 		public final void testPel1Shared0010() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_foreign = word("$NPC_1$","Foreign",1);
-			val t02_affairs = word("$NPC_1$","Affairs",2);
-			val t03_minister = word("NP_D","Minister",3);
+			val t37_foreign_affairs_minister = word("NP_D","Foreign_Affairs_Minister",37);
 			val t40_app = word("WHO_A","APP",40);
-			val t04_alexander = word("$NPC_1$","Alexander",4);
-			val t05_downer = word("NP_D","Downer",5);
+			val t34_alexander_downer = word("NP_D","Alexander_Downer",34);
 			val t06_will = word("V_AUX","will",6);
 			val t07_host = word("V_2","host",7);
 			val t08_the = word("THE","the",8);
@@ -26,13 +23,10 @@ public final class TestPel1Shared0010 extends AbsPipelineTest {
 			val t12_conference = word("N","conference",12);
 			val t13_at = word("P_R","at",13);
 			val t14_the = word("THE","the",14);
-			val t15_adelaide = word("$NPC_1$","Adelaide",15);
-			val t16_town = word("$NPC_1$","Town",16);
-			val t17_hall = word("NP_D","Hall",17);
+			val t32_adelaide_town_hall = word("NP_D","Adelaide_Town_Hall",32);
 
 			// create the vocabulary for the hypothesis;
-			val h01_alexander = word("$NPC_1$","Alexander",1);
-			val h02_downer = word("NP_D","Downer",2);
+			val h08_alexander_downer = word("NP_D","Alexander_Downer",8);
 			val h03_will = word("V_AUX","will",3);
 			val h04_host = word("V_2","host",4);
 			val h05_a = word("A","a",5);
@@ -42,30 +36,12 @@ public final class TestPel1Shared0010 extends AbsPipelineTest {
 			val tt =
 			_(
 				_(
-					_(
-						t01_foreign
-						,
-						_(
-							t02_affairs
-							,
-							t03_minister
-							,
-							36
-						)
-						,
-						37
-					)
+					t37_foreign_affairs_minister
 					,
 					_(
 						t40_app
 						,
-						_(
-							t04_alexander
-							,
-							t05_downer
-							,
-							34
-						)
+						t34_alexander_downer
 						,
 						41
 					)
@@ -115,19 +91,7 @@ public final class TestPel1Shared0010 extends AbsPipelineTest {
 							_(
 								t14_the
 								,
-								_(
-									t15_adelaide
-									,
-									_(
-										t16_town
-										,
-										t17_hall
-										,
-										31
-									)
-									,
-									32
-								)
+								t32_adelaide_town_hall
 								,
 								33
 							)
@@ -148,13 +112,7 @@ public final class TestPel1Shared0010 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_alexander
-					,
-					h02_downer
-					,
-					8
-				)
+				h08_alexander_downer
 				,
 				_(
 					h03_will
@@ -189,4 +147,3 @@ public final class TestPel1Shared0010 extends AbsPipelineTest {
 		}
 
 }
-

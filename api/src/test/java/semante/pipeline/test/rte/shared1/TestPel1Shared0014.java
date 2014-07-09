@@ -17,23 +17,18 @@ public final class TestPel1Shared0014 extends AbsPipelineTest {
 			val t04_editor = word("N","editor",4);
 			val t05_of = word("P_R","of",5);
 			val t06_the = word("THE","the",6);
-			val t07_daily = word("$NPC_1$","Daily",7);
-			val t08_planet = word("NP_D","Planet",8);
+			val t69_daily_planet = word("NP_D","Daily_Planet",69);
 			val t84_app = word("WHO_A","APP",84);
 			val t10_the = word("THE","the",10);
 			val t11_newspaper = word("N","newspaper",11);
 			val t12_that = word("WHO_R","that",12);
 			val t13_employs = word("V_2","employs",13);
 			val t14_the = word("THE","the",14);
-			val t15_man = word("$NPC_1$","Man",15);
-			val t16_of = word("$NPC_1$","of",16);
-			val t17_steel = word("NP_D","Steel",17);
+			val t82_man_of_steel = word("NP_D","Man_of_Steel",82);
 			val t18_s = word("POSS","s",18);
-			val t19_alter = word("$NC_1$","alter",19);
-			val t20_ego = word("N","ego",20);
+			val t46_alter_ego = word("N","alter_ego",46);
 			val t90_app = word("WHO_A","APP",90);
-			val t22_clark = word("$NPC_1$","Clark",22);
-			val t23_kent = word("NP_D","Kent",23);
+			val t47_clark_kent = word("NP_D","Clark_Kent",47);
 			val t25_with = word("P_R","with",25);
 			val t26_a = word("A","a",26);
 			val t27_job = word("N","job",27);
@@ -48,14 +43,12 @@ public final class TestPel1Shared0014 extends AbsPipelineTest {
 
 			// create the vocabulary for the hypothesis;
 			val h01_the = word("THE","The",1);
-			val h02_daily = word("$NPC_1$","Daily",2);
-			val h03_planet = word("NP_D","Planet",3);
+			val h13_daily_planet = word("NP_D","Daily_Planet",13);
 			val h17_app = word("WHO_A","APP",17);
 			val h15_det = word("A","DET",15);
 			val h04_newspaper = word("N","newspaper",4);
 			val h05_employs = word("V_2","employs",5);
-			val h06_clark = word("$NPC_1$","Clark",6);
-			val h07_kent = word("NP_D","Kent",7);
+			val h09_clark_kent = word("NP_D","Clark_Kent",9);
 
 			// create the tree structure for the text;
 			val tt =
@@ -79,13 +72,7 @@ public final class TestPel1Shared0014 extends AbsPipelineTest {
 										_(
 											t06_the
 											,
-											_(
-												t07_daily
-												,
-												t08_planet
-												,
-												69
-											)
+											t69_daily_planet
 											,
 											70
 										)
@@ -112,19 +99,7 @@ public final class TestPel1Shared0014 extends AbsPipelineTest {
 																			_(
 																				t14_the
 																				,
-																				_(
-																					t15_man
-																					,
-																					_(
-																						t16_of
-																						,
-																						t17_steel
-																						,
-																						44
-																					)
-																					,
-																					82
-																				)
+																				t82_man_of_steel
 																				,
 																				45
 																			)
@@ -134,13 +109,7 @@ public final class TestPel1Shared0014 extends AbsPipelineTest {
 																			58
 																		)
 																		,
-																		_(
-																			t19_alter
-																			,
-																			t20_ego
-																			,
-																			46
-																		)
+																		t46_alter_ego
 																		,
 																		83
 																	)
@@ -148,13 +117,7 @@ public final class TestPel1Shared0014 extends AbsPipelineTest {
 																	_(
 																		t90_app
 																		,
-																		_(
-																			t22_clark
-																			,
-																			t23_kent
-																			,
-																			47
-																		)
+																		t47_clark_kent
 																		,
 																		91
 																	)
@@ -267,13 +230,7 @@ public final class TestPel1Shared0014 extends AbsPipelineTest {
 					_(
 						h01_the
 						,
-						_(
-							h02_daily
-							,
-							h03_planet
-							,
-							13
-						)
+						h13_daily_planet
 						,
 						14
 					)
@@ -298,13 +255,7 @@ public final class TestPel1Shared0014 extends AbsPipelineTest {
 				_(
 					h05_employs
 					,
-					_(
-						h06_clark
-						,
-						h07_kent
-						,
-						9
-					)
+					h09_clark_kent
 					,
 					10
 				)
@@ -322,4 +273,3 @@ public final class TestPel1Shared0014 extends AbsPipelineTest {
 		}
 
 }
-

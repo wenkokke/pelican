@@ -28,9 +28,7 @@ public final class TestPel2Shared0019 extends AbsPipelineTest {
 			val t17_former = word("MR","former",17);
 			val t18_quarterback = word("N","quarterback",18);
 			val t77_app = word("WHO_A","APP",77);
-			val t20_j = word("$NPC_1$","J",20);
-			val t21_p = word("$NPC_1$","P",21);
-			val t22_losman = word("NP_D","Losman",22);
+			val t60_j_p_losman = word("NP_D","J_P_Losman",60);
 			val t24_who = word("WHO_A","who",24);
 			val t25_missed = word("V_2","missed",25);
 			val t26_the = word("THE","the",26);
@@ -54,9 +52,7 @@ public final class TestPel2Shared0019 extends AbsPipelineTest {
 			val h11_former = word("MR","former",11);
 			val h12_quarterback = word("N","quarterback",12);
 			val h36_app = word("WHO_A","APP",36);
-			val h13_j = word("$NPC_1$","J",13);
-			val h14_p = word("$NPC_1$","P",14);
-			val h15_losman = word("NP_D","Losman",15);
+			val h27_j_p_losman = word("NP_D","J_P_Losman",27);
 
 			// create the tree structure for the text;
 			val tt =
@@ -145,19 +141,7 @@ public final class TestPel2Shared0019 extends AbsPipelineTest {
 									_(
 										t77_app
 										,
-										_(
-											t20_j
-											,
-											_(
-												t21_p
-												,
-												t22_losman
-												,
-												59
-											)
-											,
-											60
-										)
+										t60_j_p_losman
 										,
 										78
 									)
@@ -287,19 +271,7 @@ public final class TestPel2Shared0019 extends AbsPipelineTest {
 								_(
 									h36_app
 									,
-									_(
-										h13_j
-										,
-										_(
-											h14_p
-											,
-											h15_losman
-											,
-											26
-										)
-										,
-										27
-									)
+									h27_j_p_losman
 									,
 									37
 								)
@@ -329,4 +301,3 @@ public final class TestPel2Shared0019 extends AbsPipelineTest {
 		}
 
 }
-

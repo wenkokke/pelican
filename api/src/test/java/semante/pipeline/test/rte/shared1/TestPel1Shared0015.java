@@ -18,8 +18,7 @@ public final class TestPel1Shared0015 extends AbsPipelineTest {
 			val t05_the = word("THE","the",5);
 			val t06_coup = word("N","coup",6);
 			val t62_app = word("WHO_A","APP",62);
-			val t08_pibul = word("$NPC_1$","Pibul",8);
-			val t09_songgram = word("NP_D","Songgram",9);
+			val t31_pibul_songgram = word("NP_D","Pibul_Songgram",31);
 			val t64_app = word("WHO_A","APP",64);
 			val t11_educated = word("V_1","educated",11);
 			val t12_in = word("P_R","in",12);
@@ -41,8 +40,7 @@ public final class TestPel1Shared0015 extends AbsPipelineTest {
 			val t27_years = word("N","years",27);
 
 			// create the vocabulary for the hypothesis;
-			val h01_pibul = word("$NPC_1$","Pibul",1);
-			val h02_songgram = word("NP_D","Songgram",2);
+			val h08_pibul_songgram = word("NP_D","Pibul_Songgram",8);
 			val h03_was = word("IS","was",3);
 			val h04_a = word("A","a",4);
 			val h05_young = word("MI","young",5);
@@ -88,13 +86,7 @@ public final class TestPel1Shared0015 extends AbsPipelineTest {
 						_(
 							t62_app
 							,
-							_(
-								t08_pibul
-								,
-								t09_songgram
-								,
-								31
-							)
+							t31_pibul_songgram
 							,
 							63
 						)
@@ -218,13 +210,7 @@ public final class TestPel1Shared0015 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_pibul
-					,
-					h02_songgram
-					,
-					8
-				)
+				h08_pibul_songgram
 				,
 				_(
 					h03_was
@@ -259,4 +245,3 @@ public final class TestPel1Shared0015 extends AbsPipelineTest {
 		}
 
 }
-

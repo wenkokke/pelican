@@ -21,8 +21,7 @@ public final class TestPel2Shared0031 extends AbsPipelineTest {
 			val t04_the = word("THE","the",4);
 			val t05_biggest = word("MR","biggest",5);
 			val t06_unauthorized = word("MI","unauthorized",6);
-			val t07_sharing = word("$NC_1$","sharing",7);
-			val t08_site = word("N","site",8);
+			val t51_sharing_site = word("N","sharing_site",51);
 			val t10_has = word("V_AUX","has",10);
 			val t11_now = word("MR","now",11);
 			val t12_become = word("V_2","become",12);
@@ -31,8 +30,7 @@ public final class TestPel2Shared0031 extends AbsPipelineTest {
 			val t15_service = word("N","service",15);
 			val t17_offering = word("GER_2","offering",17);
 			val t66_det = word("EMPTYDET","DET",66);
-			val t18_music = word("$NC_1$","music",18);
-			val t19_downloads = word("N","downloads",19);
+			val t35_music_downloads = word("N","music_downloads",35);
 			val t20_for = word("P_R","for",20);
 			val t21_a = word("A","a",21);
 			val t22_monthly = word("MR","monthly",22);
@@ -64,13 +62,7 @@ public final class TestPel2Shared0031 extends AbsPipelineTest {
 									_(
 										t06_unauthorized
 										,
-										_(
-											t07_sharing
-											,
-											t08_site
-											,
-											51
-										)
+										t51_sharing_site
 										,
 										61
 									)
@@ -130,13 +122,7 @@ public final class TestPel2Shared0031 extends AbsPipelineTest {
 							t66_det
 							,
 							_(
-								_(
-									t18_music
-									,
-									t19_downloads
-									,
-									35
-								)
+								t35_music_downloads
 								,
 								_(
 									t20_for
@@ -202,4 +188,3 @@ public final class TestPel2Shared0031 extends AbsPipelineTest {
 		}
 
 }
-

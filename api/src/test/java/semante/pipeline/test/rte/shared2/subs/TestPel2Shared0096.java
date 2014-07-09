@@ -15,18 +15,14 @@ public final class TestPel2Shared0096 extends AbsPipelineTest {
 		public final void testPel2Shared0096() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_peter = word("$NPC_1$","Peter",1);
-			val t02_clarke = word("NP_D","Clarke",2);
+			val t22_peter_clarke = word("NP_D","Peter_Clarke",22);
 			val t49_app = word("WHO_A","APP",49);
 			val t04_the = word("THE","the",4);
 			val t05_overworked = word("MR","overworked",5);
 			val t06_head = word("N","head",6);
 			val t07_of = word("P_R","of",7);
 			val t08_the = word("THE","the",8);
-			val t09_metropolitan = word("$NPC_1$","Metropolitan",9);
-			val t10_police = word("$NPC_1$","Police",10);
-			val t11_antiterrorist = word("$NPC_1$","antiTerrorist",11);
-			val t12_branch = word("NP_D","branch",12);
+			val t45_metropolitan_police_antiterrorist_branch = word("NP_D","Metropolitan_Police_antiTerrorist_branch",45);
 			val t14_wanted = word("V_2","wanted",14);
 			val t55_det = word("EMPTYDET","DET",55);
 			val t15_information = word("N","information",15);
@@ -39,8 +35,7 @@ public final class TestPel2Shared0096 extends AbsPipelineTest {
 
 			// create the vocabulary for the hypothesis;
 			val h01_a = word("A","A",1);
-			val h02_police = word("$NC_1$","police",2);
-			val h03_chief = word("N","chief",3);
+			val h26_police_chief = word("N","police_chief",26);
 			val h04_wanted = word("V_2","wanted",4);
 			val h29_det = word("EMPTYDET","DET",29);
 			val h05_information = word("N","information",5);
@@ -55,13 +50,7 @@ public final class TestPel2Shared0096 extends AbsPipelineTest {
 			val tt =
 			_(
 				_(
-					_(
-						t01_peter
-						,
-						t02_clarke
-						,
-						22
-					)
+					t22_peter_clarke
 					,
 					_(
 						t49_app
@@ -81,25 +70,7 @@ public final class TestPel2Shared0096 extends AbsPipelineTest {
 										_(
 											t08_the
 											,
-											_(
-												t09_metropolitan
-												,
-												_(
-													t10_police
-													,
-													_(
-														t11_antiterrorist
-														,
-														t12_branch
-														,
-														43
-													)
-													,
-													44
-												)
-												,
-												45
-											)
+											t45_metropolitan_police_antiterrorist_branch
 											,
 											46
 										)
@@ -182,13 +153,7 @@ public final class TestPel2Shared0096 extends AbsPipelineTest {
 				_(
 					h01_a
 					,
-					_(
-						h02_police
-						,
-						h03_chief
-						,
-						26
-					)
+					h26_police_chief
 					,
 					27
 				)
@@ -258,4 +223,3 @@ public final class TestPel2Shared0096 extends AbsPipelineTest {
 		}
 
 }
-

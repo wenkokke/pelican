@@ -12,8 +12,7 @@ public final class TestPel2Shared0057 extends AbsPipelineTest {
 
 			// create the vocabulary for the text;
 			val t01_the = word("THE","The",1);
-			val t02_world = word("$NPC_1$","World",2);
-			val t03_bank = word("NP_D","Bank",3);
+			val t42_world_bank = word("NP_D","World_Bank",42);
 			val t50_app = word("WHO_A","APP",50);
 			val t05_the = word("THE","the",5);
 			val t06_largest = word("MR","largest",6);
@@ -50,13 +49,7 @@ public final class TestPel2Shared0057 extends AbsPipelineTest {
 					_(
 						t01_the
 						,
-						_(
-							t02_world
-							,
-							t03_bank
-							,
-							42
-						)
+						t42_world_bank
 						,
 						43
 					)
@@ -224,4 +217,3 @@ public final class TestPel2Shared0057 extends AbsPipelineTest {
 		}
 
 }
-

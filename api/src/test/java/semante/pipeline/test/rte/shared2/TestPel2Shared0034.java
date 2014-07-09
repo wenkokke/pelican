@@ -17,9 +17,7 @@ public final class TestPel2Shared0034 extends AbsPipelineTest {
 			val t04_tremors = word("NP_D","tremors",4);
 			val t05_which = word("WHO_A","which",5);
 			val t06_rocked = word("V_2","rocked",6);
-			val t07_mount = word("$NPC_1$","Mount",7);
-			val t08_st = word("$NPC_1$","St",8);
-			val t09_helens = word("NP_D","Helens",9);
+			val t73_mount_st_helens = word("NP_D","Mount_St_Helens",73);
 			val t10_for = word("P_R","for",10);
 			val t11_num90 = word("NUMBER","num90",11);
 			val t12_minutes = word("N","minutes",12);
@@ -32,9 +30,7 @@ public final class TestPel2Shared0034 extends AbsPipelineTest {
 			val t19_the = word("THE","the",19);
 			val t20_next = word("MR","next",20);
 			val t21_few = word("MR","few",21);
-			val t22_minutes = word("$NC_1$","minutes",22);
-			val t23_or = word("$NC_1$","or",23);
-			val t24_months = word("N","months",24);
+			val t79_minutes_or_months = word("N","minutes_or_months",79);
 			val t26_frightening = word("GER_2","frightening",26);
 			val t27_the = word("THE","the",27);
 			val t28_local = word("MR","local",28);
@@ -46,9 +42,7 @@ public final class TestPel2Shared0034 extends AbsPipelineTest {
 			val h03_of = word("P_R","of",3);
 			val h04_tremors = word("NP_D","tremors",4);
 			val h05_rocked = word("V_2","rocked",5);
-			val h06_mount = word("$NPC_1$","Mount",6);
-			val h07_st = word("$NPC_1$","St",7);
-			val h08_helens = word("NP_D","Helens",8);
+			val h20_mount_st_helens = word("NP_D","Mount_St_Helens",20);
 			val h09_overnight = word("MI","overnight",9);
 
 			// create the tree structure for the text;
@@ -83,19 +77,7 @@ public final class TestPel2Shared0034 extends AbsPipelineTest {
 								_(
 									t06_rocked
 									,
-									_(
-										t07_mount
-										,
-										_(
-											t08_st
-											,
-											t09_helens
-											,
-											48
-										)
-										,
-										73
-									)
+									t73_mount_st_helens
 									,
 									72
 								)
@@ -153,19 +135,7 @@ public final class TestPel2Shared0034 extends AbsPipelineTest {
 												_(
 													t21_few
 													,
-													_(
-														t22_minutes
-														,
-														_(
-															t23_or
-															,
-															t24_months
-															,
-															58
-														)
-														,
-														79
-													)
+													t79_minutes_or_months
 													,
 													78
 												)
@@ -245,19 +215,7 @@ public final class TestPel2Shared0034 extends AbsPipelineTest {
 					_(
 						h05_rocked
 						,
-						_(
-							h06_mount
-							,
-							_(
-								h07_st
-								,
-								h08_helens
-								,
-								19
-							)
-							,
-							20
-						)
+						h20_mount_st_helens
 						,
 						17
 					)
@@ -280,4 +238,3 @@ public final class TestPel2Shared0034 extends AbsPipelineTest {
 		}
 
 }
-

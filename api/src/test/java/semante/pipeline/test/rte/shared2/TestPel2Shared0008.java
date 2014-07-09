@@ -19,8 +19,7 @@ public final class TestPel2Shared0008 extends AbsPipelineTest {
 			val t05_antarctic = word("MI","Antarctic",5);
 			val t06_search = word("N","Search",6);
 			val t07_for = word("P_R","for",7);
-			val t08_meteorites = word("$NPC_1$","Meteorites",8);
-			val t09_program = word("NP_D","Program",9);
+			val t27_meteorites_program = word("NP_D","Meteorites_Program",27);
 			val t10_announced = word("FACT","announced",10);
 			val t11_that = word("IGNORE","that",11);
 			val t12_a = word("A","a",12);
@@ -31,8 +30,7 @@ public final class TestPel2Shared0008 extends AbsPipelineTest {
 			val t17_recovered = word("V_1","recovered",17);
 			val t18_in = word("P_R","in",18);
 			val t19_the = word("THE","the",19);
-			val t20_south = word("$NPC_1$","South",20);
-			val t21_pole = word("NP_D","Pole",21);
+			val t43_south_pole = word("NP_D","South_Pole",43);
 
 			// create the vocabulary for the hypothesis;
 			val h01_a = word("A","A",1);
@@ -41,8 +39,7 @@ public final class TestPel2Shared0008 extends AbsPipelineTest {
 			val h03_recovered = word("V_1","recovered",3);
 			val h04_in = word("P_R","in",4);
 			val h05_the = word("THE","the",5);
-			val h06_south = word("$NPC_1$","South",6);
-			val h07_pole = word("NP_D","Pole",7);
+			val h21_south_pole = word("NP_D","South_Pole",21);
 			val h08_was = word("IS","was",8);
 			val h09_from = word("P_I","from",9);
 			val h10_mars = word("NP_D","Mars",10);
@@ -74,13 +71,7 @@ public final class TestPel2Shared0008 extends AbsPipelineTest {
 											_(
 												t07_for
 												,
-												_(
-													t08_meteorites
-													,
-													t09_program
-													,
-													27
-												)
+												t27_meteorites_program
 												,
 												45
 											)
@@ -145,13 +136,7 @@ public final class TestPel2Shared0008 extends AbsPipelineTest {
 										_(
 											t19_the
 											,
-											_(
-												t20_south
-												,
-												t21_pole
-												,
-												43
-											)
+											t43_south_pole
 											,
 											44
 										)
@@ -202,13 +187,7 @@ public final class TestPel2Shared0008 extends AbsPipelineTest {
 								_(
 									h05_the
 									,
-									_(
-										h06_south
-										,
-										h07_pole
-										,
-										21
-									)
+									h21_south_pole
 									,
 									22
 								)
@@ -252,4 +231,3 @@ public final class TestPel2Shared0008 extends AbsPipelineTest {
 		}
 
 }
-

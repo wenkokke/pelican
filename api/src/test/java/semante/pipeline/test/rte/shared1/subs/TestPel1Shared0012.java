@@ -22,8 +22,7 @@ public final class TestPel1Shared0012 extends AbsPipelineTest {
 			val t05_italian = word("MR","Italian",5);
 			val t06_opposition = word("N","opposition",6);
 			val t43_app = word("WHO_A","APP",43);
-			val t08_romano = word("$NPC_1$","Romano",8);
-			val t09_prodi = word("NP_D","Prodi",9);
+			val t22_romano_prodi = word("NP_D","Romano_Prodi",22);
 			val t11_was = word("IS","was",11);
 			val t12_the = word("THE","the",12);
 			val t13_last = word("MR","last",13);
@@ -34,8 +33,7 @@ public final class TestPel1Shared0012 extends AbsPipelineTest {
 			val t18_commission = word("N","Commission",18);
 
 			// create the vocabulary for the hypothesis;
-			val h01_romano = word("$NPC_1$","Romano",1);
-			val h02_prodi = word("NP_D","Prodi",2);
+			val h12_romano_prodi = word("NP_D","Romano_Prodi",12);
 			val h03_is = word("IS","is",3);
 			val h04_a = word("A","a",4);
 			val h05_former = word("MR","former",5);
@@ -84,13 +82,7 @@ public final class TestPel1Shared0012 extends AbsPipelineTest {
 					_(
 						t43_app
 						,
-						_(
-							t08_romano
-							,
-							t09_prodi
-							,
-							22
-						)
+						t22_romano_prodi
 						,
 						44
 					)
@@ -149,13 +141,7 @@ public final class TestPel1Shared0012 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_romano
-					,
-					h02_prodi
-					,
-					12
-				)
+				h12_romano_prodi
 				,
 				_(
 					h03_is
@@ -216,4 +202,3 @@ public final class TestPel1Shared0012 extends AbsPipelineTest {
 		}
 
 }
-

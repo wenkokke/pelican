@@ -23,13 +23,11 @@ public final class TestPel2Shared0055 extends AbsPipelineTest {
 			val t70_app = word("WHO_A","APP",70);
 			val t07_the = word("THE","the",7);
 			val t08_islamic = word("MI","Islamic",8);
-			val t09_resistance = word("$NC_1$","Resistance",9);
-			val t10_movement = word("N","Movement",10);
+			val t58_resistance_movement = word("N","Resistance_Movement",58);
 			val t12_will = word("V_AUX","will",12);
 			val t13_torpedo = word("V_2","torpedo",13);
 			val t14_the = word("THE","the",14);
-			val t15_peace = word("$NC_1$","peace",15);
-			val t16_process = word("N","process",16);
+			val t48_peace_process = word("N","peace_process",48);
 			val t18_destroying = word("GER_2","destroying",18);
 			val t62_det = word("THE","DET",62);
 			val t19_hopes = word("N","hopes",19);
@@ -50,8 +48,7 @@ public final class TestPel2Shared0055 extends AbsPipelineTest {
 			val h06_will = word("V_AUX","will",6);
 			val h07_halt = word("V_2","halt",7);
 			val h08_a = word("A","a",8);
-			val h09_peace = word("$NC_1$","peace",9);
-			val h10_process = word("N","process",10);
+			val h20_peace_process = word("N","peace_process",20);
 
 			// create the tree structure for the text;
 			val tt =
@@ -80,13 +77,7 @@ public final class TestPel2Shared0055 extends AbsPipelineTest {
 											_(
 												t08_islamic
 												,
-												_(
-													t09_resistance
-													,
-													t10_movement
-													,
-													58
-												)
+												t58_resistance_movement
 												,
 												65
 											)
@@ -122,13 +113,7 @@ public final class TestPel2Shared0055 extends AbsPipelineTest {
 							_(
 								t14_the
 								,
-								_(
-									t15_peace
-									,
-									t16_process
-									,
-									48
-								)
+								t48_peace_process
 								,
 								49
 							)
@@ -240,13 +225,7 @@ public final class TestPel2Shared0055 extends AbsPipelineTest {
 						_(
 							h08_a
 							,
-							_(
-								h09_peace
-								,
-								h10_process
-								,
-								20
-							)
+							h20_peace_process
 							,
 							21
 						)
@@ -272,4 +251,3 @@ public final class TestPel2Shared0055 extends AbsPipelineTest {
 		}
 
 }
-

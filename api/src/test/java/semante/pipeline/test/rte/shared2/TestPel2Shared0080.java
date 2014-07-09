@@ -24,8 +24,7 @@ public final class TestPel2Shared0080 extends AbsPipelineTest {
 			val t51_det = word("THE","DET",51);
 			val t13_painter = word("N","painter",13);
 			val t53_app = word("WHO_A","APP",53);
-			val t14_edvard = word("$NPC_1$","Edvard",14);
-			val t15_munch = word("NP_D","Munch",15);
+			val t44_edvard_munch = word("NP_D","Edvard_Munch",44);
 			val t17_was = word("IS","was",17);
 			val t18_stolen = word("V_1","stolen",18);
 			val t19_from = word("P_R","from",19);
@@ -39,8 +38,7 @@ public final class TestPel2Shared0080 extends AbsPipelineTest {
 			val h06_which = word("WHO_A","which",6);
 			val h07_is = word("IS","is",7);
 			val h08_by = word("P_R","by",8);
-			val h09_edvard = word("$NPC_1$","Edvard",9);
-			val h10_munch = word("NP_D","Munch",10);
+			val h17_edvard_munch = word("NP_D","Edvard_Munch",17);
 			val h12_is = word("IS","is",12);
 			val h13_famous = word("MI","famous",13);
 
@@ -101,13 +99,7 @@ public final class TestPel2Shared0080 extends AbsPipelineTest {
 											_(
 												t53_app
 												,
-												_(
-													t14_edvard
-													,
-													t15_munch
-													,
-													44
-												)
+												t44_edvard_munch
 												,
 												54
 											)
@@ -190,13 +182,7 @@ public final class TestPel2Shared0080 extends AbsPipelineTest {
 							_(
 								h08_by
 								,
-								_(
-									h09_edvard
-									,
-									h10_munch
-									,
-									17
-								)
+								h17_edvard_munch
 								,
 								18
 							)
@@ -231,4 +217,3 @@ public final class TestPel2Shared0080 extends AbsPipelineTest {
 		}
 
 }
-

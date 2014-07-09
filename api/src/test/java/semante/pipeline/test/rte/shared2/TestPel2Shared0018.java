@@ -29,8 +29,7 @@ public final class TestPel2Shared0018 extends AbsPipelineTest {
 			val t16_skiing = word("MR","skiing",16);
 			val t17_resort = word("N","resort",17);
 			val t63_app = word("WHO_A","APP",63);
-			val t19_wanderer = word("$NPC_1$","Wanderer",19);
-			val t20_resort = word("NP_D","Resort",20);
+			val t36_wanderer_resort = word("NP_D","Wanderer_Resort",36);
 			val t22_in = word("P_R","in",22);
 			val t23_austria = word("NP_D","Austria",23);
 			val t25_killing = word("GER_2","killing",25);
@@ -148,13 +147,7 @@ public final class TestPel2Shared0018 extends AbsPipelineTest {
 									_(
 										t63_app
 										,
-										_(
-											t19_wanderer
-											,
-											t20_resort
-											,
-											36
-										)
+										t36_wanderer_resort
 										,
 										64
 									)
@@ -280,4 +273,3 @@ public final class TestPel2Shared0018 extends AbsPipelineTest {
 		}
 
 }
-

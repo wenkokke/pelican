@@ -21,8 +21,7 @@ public final class TestPel2Shared0060 extends AbsPipelineTest {
 			val t09_with = word("P_R","with",9);
 			val t10_the = word("THE","the",10);
 			val t11_international = word("MI","International",11);
-			val t12_space = word("$NC_1$","Space",12);
-			val t13_station = word("N","Station",13);
+			val t38_space_station = word("N","Space_Station",38);
 			val t15_after = word("P_R","after",15);
 			val t16_a = word("A","a",16);
 			val t17_twoday = word("MR","twoDay",17);
@@ -30,8 +29,7 @@ public final class TestPel2Shared0060 extends AbsPipelineTest {
 			val t19_from = word("P_R","from",19);
 			val t20_kazakhstan = word("NP_D","Kazakhstan",20);
 			val t21_s = word("POSS","s",21);
-			val t22_baikonur = word("$NC_1$","Baikonur",22);
-			val t23_cosmodrome = word("N","Cosmodrome",23);
+			val t44_baikonur_cosmodrome = word("N","Baikonur_Cosmodrome",44);
 
 			// create the vocabulary for the hypothesis;
 			val h01_the = word("THE","The",1);
@@ -40,8 +38,7 @@ public final class TestPel2Shared0060 extends AbsPipelineTest {
 			val h04_docked = word("V_1","docked",4);
 			val h05_with = word("P_R","with",5);
 			val h06_a = word("A","a",6);
-			val h07_space = word("$NC_1$","space",7);
-			val h08_station = word("N","station",8);
+			val h15_space_station = word("N","space_station",15);
 
 			// create the tree structure for the text;
 			val tt =
@@ -91,13 +88,7 @@ public final class TestPel2Shared0060 extends AbsPipelineTest {
 								_(
 									t11_international
 									,
-									_(
-										t12_space
-										,
-										t13_station
-										,
-										38
-									)
+									t38_space_station
 									,
 									39
 								)
@@ -135,13 +126,7 @@ public final class TestPel2Shared0060 extends AbsPipelineTest {
 												31
 											)
 											,
-											_(
-												t22_baikonur
-												,
-												t23_cosmodrome
-												,
-												44
-											)
+											t44_baikonur_cosmodrome
 											,
 											45
 										)
@@ -194,13 +179,7 @@ public final class TestPel2Shared0060 extends AbsPipelineTest {
 						_(
 							h06_a
 							,
-							_(
-								h07_space
-								,
-								h08_station
-								,
-								15
-							)
+							h15_space_station
 							,
 							16
 						)
@@ -224,4 +203,3 @@ public final class TestPel2Shared0060 extends AbsPipelineTest {
 		}
 
 }
-

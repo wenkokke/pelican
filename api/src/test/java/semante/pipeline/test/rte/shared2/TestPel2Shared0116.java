@@ -15,8 +15,7 @@ public final class TestPel2Shared0116 extends AbsPipelineTest {
 			val t02_angered = word("MI","angered",2);
 			val t03_dissident = word("N","dissident",3);
 			val t60_app = word("WHO_A","APP",60);
-			val t05_john = word("$NPC_1$","John",5);
-			val t06_bok = word("NP_D","Bok",6);
+			val t30_john_bok = word("NP_D","John_Bok",30);
 			val t08_who = word("WHO_A","who",8);
 			val t09_has = word("V_AUX","has",9);
 			val t10_been = word("IS","been",10);
@@ -34,19 +33,16 @@ public final class TestPel2Shared0116 extends AbsPipelineTest {
 			val t23_prime = word("MR","prime",23);
 			val t24_minister = word("N","minister",24);
 			val t63_app = word("WHO_A","APP",63);
-			val t25_stanislav = word("$NPC_1$","Stanislav",25);
-			val t26_gross = word("NP_D","Gross",26);
+			val t47_stanislav_gross = word("NP_D","Stanislav_Gross",47);
 
 			// create the vocabulary for the hypothesis;
 			val h01_angered = word("MI","Angered",1);
-			val h02_john = word("$NPC_1$","John",2);
-			val h03_bok = word("NP_D","Bok",3);
+			val h25_john_bok = word("NP_D","John_Bok",25);
 			val h04_has = word("V_AUX","has",4);
 			val h05_been = word("IS","been",5);
 			val h06_on = word("P_R","on",6);
 			val h07_a = word("A","a",7);
-			val h08_hunger = word("$NC_1$","hunger",8);
-			val h09_strike = word("N","strike",9);
+			val h21_hunger_strike = word("N","hunger_strike",21);
 			val h10_since = word("P_I","since",10);
 			val h11_monday = word("NP_D","Monday",11);
 
@@ -72,13 +68,7 @@ public final class TestPel2Shared0116 extends AbsPipelineTest {
 						_(
 							t60_app
 							,
-							_(
-								t05_john
-								,
-								t06_bok
-								,
-								30
-							)
+							t30_john_bok
 							,
 							61
 						)
@@ -169,13 +159,7 @@ public final class TestPel2Shared0116 extends AbsPipelineTest {
 									_(
 										t63_app
 										,
-										_(
-											t25_stanislav
-											,
-											t26_gross
-											,
-											47
-										)
+										t47_stanislav_gross
 										,
 										64
 									)
@@ -205,13 +189,7 @@ public final class TestPel2Shared0116 extends AbsPipelineTest {
 				_(
 					h01_angered
 					,
-					_(
-						h02_john
-						,
-						h03_bok
-						,
-						25
-					)
+					h25_john_bok
 					,
 					26
 				)
@@ -229,13 +207,7 @@ public final class TestPel2Shared0116 extends AbsPipelineTest {
 								_(
 									h07_a
 									,
-									_(
-										h08_hunger
-										,
-										h09_strike
-										,
-										21
-									)
+									h21_hunger_strike
 									,
 									22
 								)
@@ -273,4 +245,3 @@ public final class TestPel2Shared0116 extends AbsPipelineTest {
 		}
 
 }
-

@@ -18,14 +18,10 @@ public final class TestPel2Shared0036 extends AbsPipelineTest {
 			val t05_esteemed = word("MR","esteemed",5);
 			val t06_baron = word("N","Baron",6);
 			val t51_app = word("WHO_A","APP",51);
-			val t07_pierre = word("$NPC_1$","Pierre",7);
-			val t08_de = word("$NPC_1$","de",8);
-			val t09_coubertin = word("NP_D","Coubertin",9);
+			val t45_pierre_de_coubertin = word("NP_D","Pierre_de_Coubertin",45);
 			val t11_founded = word("V_2","founded",11);
 			val t12_the = word("THE","the",12);
-			val t13_international = word("$NPC_1$","International",13);
-			val t14_olympic = word("$NPC_1$","Olympic",14);
-			val t15_committee = word("NP_D","Committee",15);
+			val t38_international_olympic_committee = word("NP_D","International_Olympic_Committee",38);
 			val t17_earning = word("GER_2","earning",17);
 			val t18_a = word("A","a",18);
 			val t19_place = word("N","place",19);
@@ -36,9 +32,7 @@ public final class TestPel2Shared0036 extends AbsPipelineTest {
 			val h01_the = word("THE","The",1);
 			val h02_aristocrat = word("N","aristocrat",2);
 			val h19_app = word("WHO_A","APP",19);
-			val h03_pierre = word("$NPC_1$","Pierre",3);
-			val h04_de = word("$NPC_1$","de",4);
-			val h05_coubertin = word("NP_D","Coubertin",5);
+			val h15_pierre_de_coubertin = word("NP_D","Pierre_de_Coubertin",15);
 			val h06_was = word("IS","was",6);
 			val h07_a = word("A","a",7);
 			val h08_baron = word("N","baron",8);
@@ -76,19 +70,7 @@ public final class TestPel2Shared0036 extends AbsPipelineTest {
 							_(
 								t51_app
 								,
-								_(
-									t07_pierre
-									,
-									_(
-										t08_de
-										,
-										t09_coubertin
-										,
-										44
-									)
-									,
-									45
-								)
+								t45_pierre_de_coubertin
 								,
 								52
 							)
@@ -109,19 +91,7 @@ public final class TestPel2Shared0036 extends AbsPipelineTest {
 						_(
 							t12_the
 							,
-							_(
-								t13_international
-								,
-								_(
-									t14_olympic
-									,
-									t15_committee
-									,
-									37
-								)
-								,
-								38
-							)
+							t38_international_olympic_committee
 							,
 							39
 						)
@@ -177,19 +147,7 @@ public final class TestPel2Shared0036 extends AbsPipelineTest {
 					_(
 						h19_app
 						,
-						_(
-							h03_pierre
-							,
-							_(
-								h04_de
-								,
-								h05_coubertin
-								,
-								14
-							)
-							,
-							15
-						)
+						h15_pierre_de_coubertin
 						,
 						20
 					)
@@ -224,4 +182,3 @@ public final class TestPel2Shared0036 extends AbsPipelineTest {
 		}
 
 }
-

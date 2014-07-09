@@ -12,8 +12,7 @@ public final class TestPel2Shared0035 extends AbsPipelineTest {
 
 			// create the vocabulary for the text;
 			val t01_a = word("A","A",1);
-			val t02_houston = word("$NC_1$","Houston",2);
-			val t03_multimillionaire = word("N","multimillionaire",3);
+			val t67_houston_multimillionaire = word("N","Houston_multimillionaire",67);
 			val t04_said = word("V_2","said",4);
 			val t05_he = word("NP_D","he",5);
 			val t06_is = word("IS","is",6);
@@ -24,37 +23,25 @@ public final class TestPel2Shared0035 extends AbsPipelineTest {
 			val t11_the = word("THE","the",11);
 			val t12_light = word("MR","light",12);
 			val t13_blue = word("MR","blue",13);
-			val t14_num1975 = word("$NC_1$","num1975",14);
-			val t15_ford = word("$NC_1$","Ford",15);
-			val t16_escort = word("$NC_1$","Escort",16);
-			val t17_gl = word("N","GL",17);
+			val t73_num1975_ford_escort_gl = word("N","num1975_Ford_Escort_GL",73);
 			val t18_which = word("WHO_A","which",18);
 			val t19_was = word("IS","was",19);
 			val t20_once = word("MR","once",20);
 			val t21_owned = word("V_1","owned",21);
 			val t22_by = word("P_R","by",22);
-			val t23_pope = word("$NPC_1$","Pope",23);
-			val t24_john = word("$NPC_1$","John",24);
-			val t25_paul = word("$NPC_1$","Paul",25);
-			val t26_ii = word("NP_D","II",26);
+			val t64_pope_john_paul_ii = word("NP_D","Pope_John_Paul_II",64);
 			val t27_in = word("P_R","in",27);
 			val t28_his = word("THE","his",28);
 			val t29_hometown = word("N","hometown",29);
 
 			// create the vocabulary for the hypothesis;
 			val h01_a = word("A","A",1);
-			val h02_num1975 = word("$NC_1$","num1975",2);
-			val h03_ford = word("$NC_1$","Ford",3);
-			val h04_escort = word("$NC_1$","Escort",4);
-			val h05_gl = word("N","GL",5);
+			val h29_num1975_ford_escort_gl = word("N","num1975_Ford_Escort_GL",29);
 			val h06_was = word("IS","was",6);
 			val h07_once = word("MR","once",7);
 			val h08_owned = word("V_1","owned",8);
 			val h09_by = word("P_R","by",9);
-			val h10_pope = word("$NPC_1$","Pope",10);
-			val h11_john = word("$NPC_1$","John",11);
-			val h12_paul = word("$NPC_1$","Paul",12);
-			val h13_ii = word("NP_D","II",13);
+			val h24_pope_john_paul_ii = word("NP_D","Pope_John_Paul_II",24);
 
 			// create the tree structure for the text;
 			val tt =
@@ -62,13 +49,7 @@ public final class TestPel2Shared0035 extends AbsPipelineTest {
 				_(
 					t01_a
 					,
-					_(
-						t02_houston
-						,
-						t03_multimillionaire
-						,
-						67
-					)
+					t67_houston_multimillionaire
 					,
 					68
 				)
@@ -104,25 +85,7 @@ public final class TestPel2Shared0035 extends AbsPipelineTest {
 														_(
 															t13_blue
 															,
-															_(
-																t14_num1975
-																,
-																_(
-																	t15_ford
-																	,
-																	_(
-																		t16_escort
-																		,
-																		t17_gl
-																		,
-																		58
-																	)
-																	,
-																	73
-																)
-																,
-																72
-															)
+															t73_num1975_ford_escort_gl
 															,
 															34
 														)
@@ -149,25 +112,7 @@ public final class TestPel2Shared0035 extends AbsPipelineTest {
 																	_(
 																		t22_by
 																		,
-																		_(
-																			t23_pope
-																			,
-																			_(
-																				t24_john
-																				,
-																				_(
-																					t25_paul
-																					,
-																					t26_ii
-																					,
-																					62
-																				)
-																				,
-																				63
-																			)
-																			,
-																			64
-																		)
+																		t64_pope_john_paul_ii
 																		,
 																		43
 																	)
@@ -235,25 +180,7 @@ public final class TestPel2Shared0035 extends AbsPipelineTest {
 				_(
 					h01_a
 					,
-					_(
-						h02_num1975
-						,
-						_(
-							h03_ford
-							,
-							_(
-								h04_escort
-								,
-								h05_gl
-								,
-								27
-							)
-							,
-							28
-						)
-						,
-						29
-					)
+					h29_num1975_ford_escort_gl
 					,
 					30
 				)
@@ -270,25 +197,7 @@ public final class TestPel2Shared0035 extends AbsPipelineTest {
 							_(
 								h09_by
 								,
-								_(
-									h10_pope
-									,
-									_(
-										h11_john
-										,
-										_(
-											h12_paul
-											,
-											h13_ii
-											,
-											22
-										)
-										,
-										23
-									)
-									,
-									24
-								)
+								h24_pope_john_paul_ii
 								,
 								18
 							)
@@ -315,4 +224,3 @@ public final class TestPel2Shared0035 extends AbsPipelineTest {
 		}
 
 }
-

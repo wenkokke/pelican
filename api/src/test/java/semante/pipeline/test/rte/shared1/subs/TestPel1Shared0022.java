@@ -24,8 +24,7 @@ public final class TestPel1Shared0022 extends AbsPipelineTest {
 			val t06_first = word("MR","first",6);
 			val t07_proposed = word("V_1","proposed",7);
 			val t08_by = word("P_R","by",8);
-			val t09_albert = word("$NPC_1$","Albert",9);
-			val t10_einstein = word("NP_D","Einstein",10);
+			val t39_albert_einstein = word("NP_D","Albert_Einstein",39);
 			val t11_and = word("AND","and",11);
 			val t12_often = word("MR","often",12);
 			val t13_reiterated = word("V_1","reiterated",13);
@@ -34,8 +33,7 @@ public final class TestPel1Shared0022 extends AbsPipelineTest {
 			val t15_british = word("MI","British",15);
 			val t16_astrophysicist = word("N","astrophysicist",16);
 			val t85_app = word("WHO_A","APP",85);
-			val t17_stephen = word("$NPC_1$","Stephen",17);
-			val t18_hawking = word("NP_D","Hawking",18);
+			val t72_stephen_hawking = word("NP_D","Stephen_Hawking",72);
 			val t20_seeks = word("V_2","seeks",20);
 			val t21_a = word("A","a",21);
 			val t22_single = word("MR","single",22);
@@ -54,8 +52,7 @@ public final class TestPel1Shared0022 extends AbsPipelineTest {
 			val t34_universe = word("N","universe",34);
 
 			// create the vocabulary for the hypothesis;
-			val h01_stephen = word("$NPC_1$","Stephen",1);
-			val h02_hawking = word("NP_D","Hawking",2);
+			val h07_stephen_hawking = word("NP_D","Stephen_Hawking",7);
 			val h03_is = word("IS","is",3);
 			val h04_a = word("A","a",4);
 			val h05_physicist = word("N","physicist",5);
@@ -94,13 +91,7 @@ public final class TestPel1Shared0022 extends AbsPipelineTest {
 												_(
 													t08_by
 													,
-													_(
-														t09_albert
-														,
-														t10_einstein
-														,
-														39
-													)
+													t39_albert_einstein
 													,
 													40
 												)
@@ -141,13 +132,7 @@ public final class TestPel1Shared0022 extends AbsPipelineTest {
 															_(
 																t85_app
 																,
-																_(
-																	t17_stephen
-																	,
-																	t18_hawking
-																	,
-																	72
-																)
+																t72_stephen_hawking
 																,
 																86
 															)
@@ -284,13 +269,7 @@ public final class TestPel1Shared0022 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_stephen
-					,
-					h02_hawking
-					,
-					7
-				)
+				h07_stephen_hawking
 				,
 				_(
 					h03_is
@@ -321,4 +300,3 @@ public final class TestPel1Shared0022 extends AbsPipelineTest {
 		}
 
 }
-

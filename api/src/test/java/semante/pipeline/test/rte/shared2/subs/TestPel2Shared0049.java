@@ -15,16 +15,13 @@ public final class TestPel2Shared0049 extends AbsPipelineTest {
 		public final void testPel2Shared0049() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_sirhan = word("$NPC_1$","Sirhan",1);
-			val t02_sirhan = word("NP_D","Sirhan",2);
+			val t32_sirhan_sirhan = word("NP_D","Sirhan_Sirhan",32);
 			val t74_app = word("WHO_A","APP",74);
 			val t04_a = word("A","a",4);
 			val t05_jordanian = word("MI","Jordanian",5);
 			val t06_immigrant = word("N","immigrant",6);
 			val t08_murdered = word("V_2","murdered",8);
-			val t09_robert = word("$NPC_1$","Robert",9);
-			val t10_f = word("$NPC_1$","F",10);
-			val t11_kennedy = word("NP_D","Kennedy",11);
+			val t59_robert_f_kennedy = word("NP_D","Robert_F_Kennedy",59);
 			val t72_app = word("WHO_A","APP",72);
 			val t13_the = word("THE","the",13);
 			val t14_american = word("MI","American",14);
@@ -34,16 +31,12 @@ public final class TestPel2Shared0049 extends AbsPipelineTest {
 			val t18_a = word("A","a",18);
 			val t19_brother = word("N","brother",19);
 			val t20_of = word("P_R","of",20);
-			val t21_john = word("$NPC_1$","John",21);
-			val t22_f = word("$NPC_1$","F",22);
-			val t23_kennedy = word("NP_D","Kennedy",23);
+			val t63_john_f_kennedy = word("NP_D","John_F_Kennedy",63);
 			val t25_serving = word("GER_2","serving",25);
 			val t26_a = word("A","a",26);
-			val t27_life = word("$NC_1$","life",27);
-			val t28_term = word("N","term",28);
+			val t66_life_term = word("N","life_term",66);
 			val t29_at = word("P_R","at",29);
-			val t30_soledad = word("$NPC_1$","Soledad",30);
-			val t31_prison = word("NP_D","Prison",31);
+			val t52_soledad_prison = word("NP_D","Soledad_Prison",52);
 
 			// create the vocabulary for the hypothesis;
 			val h01_a = word("A","A",1);
@@ -58,13 +51,7 @@ public final class TestPel2Shared0049 extends AbsPipelineTest {
 			val tt =
 			_(
 				_(
-					_(
-						t01_sirhan
-						,
-						t02_sirhan
-						,
-						32
-					)
+					t32_sirhan_sirhan
 					,
 					_(
 						t74_app
@@ -94,19 +81,7 @@ public final class TestPel2Shared0049 extends AbsPipelineTest {
 						t08_murdered
 						,
 						_(
-							_(
-								t09_robert
-								,
-								_(
-									t10_f
-									,
-									t11_kennedy
-									,
-									58
-								)
-								,
-								59
-							)
+							t59_robert_f_kennedy
 							,
 							_(
 								t72_app
@@ -135,19 +110,7 @@ public final class TestPel2Shared0049 extends AbsPipelineTest {
 															_(
 																t20_of
 																,
-																_(
-																	t21_john
-																	,
-																	_(
-																		t22_f
-																		,
-																		t23_kennedy
-																		,
-																		62
-																	)
-																	,
-																	63
-																)
+																t63_john_f_kennedy
 																,
 																40
 															)
@@ -189,24 +152,12 @@ public final class TestPel2Shared0049 extends AbsPipelineTest {
 							t26_a
 							,
 							_(
-								_(
-									t27_life
-									,
-									t28_term
-									,
-									66
-								)
+								t66_life_term
 								,
 								_(
 									t29_at
 									,
-									_(
-										t30_soledad
-										,
-										t31_prison
-										,
-										52
-									)
+									t52_soledad_prison
 									,
 									53
 								)
@@ -279,4 +230,3 @@ public final class TestPel2Shared0049 extends AbsPipelineTest {
 		}
 
 }
-

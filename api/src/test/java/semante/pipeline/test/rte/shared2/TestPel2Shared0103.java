@@ -14,22 +14,18 @@ public final class TestPel2Shared0103 extends AbsPipelineTest {
 			val t52_det = word("THE","DET",52);
 			val t01_nurse = word("N","Nurse",1);
 			val t54_app = word("WHO_A","APP",54);
-			val t02_jinny = word("$NPC_1$","Jinny",2);
-			val t03_resor = word("NP_D","Resor",3);
+			val t49_jinny_resor = word("NP_D","Jinny_Resor",49);
 			val t04_said = word("FACT","said",4);
 			val t05_martin = word("NP_D","Martin",5);
 			val t06_was = word("IS","was",6);
 			val t07_taken = word("V_1","taken",7);
 			val t08_to = word("P_R","to",8);
-			val t09_ochsner = word("$NPC_1$","Ochsner",9);
-			val t10_foundation = word("$NPC_1$","Foundation",10);
-			val t11_hospital = word("NP_D","Hospital",11);
+			val t45_ochsner_foundation_hospital = word("NP_D","Ochsner_Foundation_Hospital",45);
 			val t56_app = word("WHO_A","APP",56);
 			val t13_a = word("A","a",13);
 			val t14_hospital = word("N","hospital",14);
 			val t15_in = word("P_I","in",15);
-			val t16_new = word("$NPC_1$","New",16);
-			val t17_orleans = word("NP_D","Orleans",17);
+			val t28_new_orleans = word("NP_D","New_Orleans",28);
 			val t18_and = word("AND","and",18);
 			val t19_was = word("IS","was",19);
 			val t20_treated = word("V_1","treated",20);
@@ -38,13 +34,10 @@ public final class TestPel2Shared0103 extends AbsPipelineTest {
 			val t22_dehydration = word("N","dehydration",22);
 
 			// create the vocabulary for the hypothesis;
-			val h01_ochsner = word("$NPC_1$","Ochsner",1);
-			val h02_foundation = word("$NPC_1$","Foundation",2);
-			val h03_hospital = word("NP_D","Hospital",3);
+			val h15_ochsner_foundation_hospital = word("NP_D","Ochsner_Foundation_Hospital",15);
 			val h04_is = word("IS","is",4);
 			val h05_in = word("P_I","in",5);
-			val h06_new = word("$NPC_1$","New",6);
-			val h07_orleans = word("NP_D","Orleans",7);
+			val h10_new_orleans = word("NP_D","New_Orleans",10);
 
 			// create the tree structure for the text;
 			val tt =
@@ -61,13 +54,7 @@ public final class TestPel2Shared0103 extends AbsPipelineTest {
 					_(
 						t54_app
 						,
-						_(
-							t02_jinny
-							,
-							t03_resor
-							,
-							49
-						)
+						t49_jinny_resor
 						,
 						55
 					)
@@ -92,19 +79,7 @@ public final class TestPel2Shared0103 extends AbsPipelineTest {
 										t08_to
 										,
 										_(
-											_(
-												t09_ochsner
-												,
-												_(
-													t10_foundation
-													,
-													t11_hospital
-													,
-													44
-												)
-												,
-												45
-											)
+											t45_ochsner_foundation_hospital
 											,
 											_(
 												t56_app
@@ -118,13 +93,7 @@ public final class TestPel2Shared0103 extends AbsPipelineTest {
 														_(
 															t15_in
 															,
-															_(
-																t16_new
-																,
-																t17_orleans
-																,
-																28
-															)
+															t28_new_orleans
 															,
 															29
 														)
@@ -198,19 +167,7 @@ public final class TestPel2Shared0103 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_ochsner
-					,
-					_(
-						h02_foundation
-						,
-						h03_hospital
-						,
-						14
-					)
-					,
-					15
-				)
+				h15_ochsner_foundation_hospital
 				,
 				_(
 					h04_is
@@ -218,13 +175,7 @@ public final class TestPel2Shared0103 extends AbsPipelineTest {
 					_(
 						h05_in
 						,
-						_(
-							h06_new
-							,
-							h07_orleans
-							,
-							10
-						)
+						h10_new_orleans
 						,
 						11
 					)
@@ -245,4 +196,3 @@ public final class TestPel2Shared0103 extends AbsPipelineTest {
 		}
 
 }
-

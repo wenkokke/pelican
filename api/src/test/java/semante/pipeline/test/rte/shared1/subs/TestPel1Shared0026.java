@@ -23,14 +23,12 @@ public final class TestPel1Shared0026 extends AbsPipelineTest {
 			val t06_kanchenjunga = word("MR","Kanchenjunga",6);
 			val t07_expedition = word("N","Expedition",7);
 			val t08_of = word("P_R","of",8);
-			val t09_south = word("$NPC_1$","South",9);
-			val t10_korea = word("NP_D","Korea",10);
+			val t27_south_korea = word("NP_D","South_Korea",27);
 			val t11_successfully = word("MR","successfully",11);
 			val t12_scaled = word("V_2","scaled",12);
 			val t13_the = word("THE","the",13);
 			val t14_famous = word("MI","famous",14);
-			val t15_mt = word("$NPC_1$","Mt",15);
-			val t16_kanchenjunga = word("NP_D","Kanchenjunga",16);
+			val t41_mt_kanchenjunga = word("NP_D","Mt_Kanchenjunga",41);
 			val t17_via = word("P_R","via",17);
 			val t18_the = word("THE","the",18);
 			val t19_south = word("MR","south",19);
@@ -71,13 +69,7 @@ public final class TestPel1Shared0026 extends AbsPipelineTest {
 											_(
 												t08_of
 												,
-												_(
-													t09_south
-													,
-													t10_korea
-													,
-													27
-												)
+												t27_south_korea
 												,
 												28
 											)
@@ -117,13 +109,7 @@ public final class TestPel1Shared0026 extends AbsPipelineTest {
 									_(
 										t14_famous
 										,
-										_(
-											t15_mt
-											,
-											t16_kanchenjunga
-											,
-											41
-										)
+										t41_mt_kanchenjunga
 										,
 										42
 									)
@@ -209,4 +195,3 @@ public final class TestPel1Shared0026 extends AbsPipelineTest {
 		}
 
 }
-

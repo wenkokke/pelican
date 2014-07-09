@@ -12,14 +12,11 @@ public final class TestPel2Shared0028 extends AbsPipelineTest {
 
 			// create the vocabulary for the text;
 			val t01_a = word("A","A",1);
-			val t02_news = word("$NC_1$","news",2);
-			val t03_reporter = word("N","reporter",3);
+			val t48_news_reporter = word("N","news_reporter",48);
 			val t04_said = word("FACT","said",4);
 			val t05_that = word("IGNORE","that",5);
 			val t06_the = word("THE","the",6);
-			val t07_royal = word("$NC_1$","Royal",7);
-			val t08_navy = word("$NC_1$","Navy",8);
-			val t09_servicemen = word("N","servicemen",9);
+			val t44_royal_navy_servicemen = word("N","Royal_Navy_servicemen",44);
 			val t10_who = word("WHO_A","who",10);
 			val t11_are = word("V_AUX","are",11);
 			val t12_held = word("V_2","held",12);
@@ -35,9 +32,7 @@ public final class TestPel2Shared0028 extends AbsPipelineTest {
 
 			// create the vocabulary for the hypothesis;
 			val h01_the = word("THE","The",1);
-			val h02_royal = word("$NC_1$","Royal",2);
-			val h03_navy = word("$NC_1$","Navy",3);
-			val h04_servicemen = word("N","servicemen",4);
+			val h21_royal_navy_servicemen = word("N","Royal_Navy_servicemen",21);
 			val h05_are = word("V_AUX","are",5);
 			val h06_held = word("V_2","held",6);
 			val h07_captive = word("NP_D","captive",7);
@@ -51,13 +46,7 @@ public final class TestPel2Shared0028 extends AbsPipelineTest {
 				_(
 					t01_a
 					,
-					_(
-						t02_news
-						,
-						t03_reporter
-						,
-						48
-					)
+					t48_news_reporter
 					,
 					49
 				)
@@ -73,19 +62,7 @@ public final class TestPel2Shared0028 extends AbsPipelineTest {
 								_(
 									t06_the
 									,
-									_(
-										t07_royal
-										,
-										_(
-											t08_navy
-											,
-											t09_servicemen
-											,
-											43
-										)
-										,
-										44
-									)
+									t44_royal_navy_servicemen
 									,
 									45
 								)
@@ -176,19 +153,7 @@ public final class TestPel2Shared0028 extends AbsPipelineTest {
 				_(
 					h01_the
 					,
-					_(
-						h02_royal
-						,
-						_(
-							h03_navy
-							,
-							h04_servicemen
-							,
-							20
-						)
-						,
-						21
-					)
+					h21_royal_navy_servicemen
 					,
 					22
 				)
@@ -238,4 +203,3 @@ public final class TestPel2Shared0028 extends AbsPipelineTest {
 		}
 
 }
-

@@ -15,10 +15,7 @@ public final class TestPel2Shared0093 extends AbsPipelineTest {
 		public final void testPel2Shared0093() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_scripps = word("$NPC_1$","Scripps",1);
-			val t02_memorial = word("$NPC_1$","Memorial",2);
-			val t03_hospital = word("$NPC_1$","Hospital",3);
-			val t04_encinitas = word("NP_D","Encinitas",4);
+			val t23_scripps_memorial_hospital_encinitas = word("NP_D","Scripps_Memorial_Hospital_Encinitas",23);
 			val t29_app = word("WHO_A","APP",29);
 			val t06_the = word("THE","the",6);
 			val t07_nonprofit = word("MR","nonprofit",7);
@@ -35,33 +32,13 @@ public final class TestPel2Shared0093 extends AbsPipelineTest {
 			val h03_hospital = word("N","hospital",3);
 			val h04_assists = word("V_2","assists",4);
 			val h18_det = word("A","DET",18);
-			val h05_surfing = word("$NC_1$","surfing",5);
-			val h06_accident = word("$NC_1$","accident",6);
-			val h07_victims = word("N","victims",7);
+			val h11_surfing_accident_victims = word("N","surfing_accident_victims",11);
 
 			// create the tree structure for the text;
 			val tt =
 			_(
 				_(
-					_(
-						t01_scripps
-						,
-						_(
-							t02_memorial
-							,
-							_(
-								t03_hospital
-								,
-								t04_encinitas
-								,
-								21
-							)
-							,
-							22
-						)
-						,
-						23
-					)
+					t23_scripps_memorial_hospital_encinitas
 					,
 					_(
 						t29_app
@@ -139,19 +116,7 @@ public final class TestPel2Shared0093 extends AbsPipelineTest {
 					_(
 						h18_det
 						,
-						_(
-							h05_surfing
-							,
-							_(
-								h06_accident
-								,
-								h07_victims
-								,
-								10
-							)
-							,
-							11
-						)
+						h11_surfing_accident_victims
 						,
 						19
 					)
@@ -175,4 +140,3 @@ public final class TestPel2Shared0093 extends AbsPipelineTest {
 		}
 
 }
-

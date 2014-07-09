@@ -13,9 +13,7 @@ public final class TestPel2Shared0016 extends AbsPipelineTest {
 			// create the vocabulary for the text;
 			val t01_the = word("THE","The",1);
 			val t02_num3 = word("MR","num3",2);
-			val t03_percent = word("$NC_1$","percent",3);
-			val t04_growth = word("$NC_1$","growth",4);
-			val t05_rate = word("N","rate",5);
+			val t38_percent_growth_rate = word("N","percent_growth_rate",38);
 			val t06_that = word("WHO_A","that",6);
 			val t07_was = word("IS","was",7);
 			val t08_predicted = word("V_1","predicted",8);
@@ -34,9 +32,7 @@ public final class TestPel2Shared0016 extends AbsPipelineTest {
 			// create the vocabulary for the hypothesis;
 			val h01_a = word("A","A",1);
 			val h02_num3 = word("MR","num3",2);
-			val h03_percent = word("$NC_1$","percent",3);
-			val h04_growth = word("$NC_1$","growth",4);
-			val h05_rate = word("N","rate",5);
+			val h14_percent_growth_rate = word("N","percent_growth_rate",14);
 			val h06_was = word("IS","was",6);
 			val h07_predicted = word("V_1","predicted",7);
 
@@ -50,19 +46,7 @@ public final class TestPel2Shared0016 extends AbsPipelineTest {
 						_(
 							t02_num3
 							,
-							_(
-								t03_percent
-								,
-								_(
-									t04_growth
-									,
-									t05_rate
-									,
-									37
-								)
-								,
-								38
-							)
+							t38_percent_growth_rate
 							,
 							39
 						)
@@ -162,19 +146,7 @@ public final class TestPel2Shared0016 extends AbsPipelineTest {
 					_(
 						h02_num3
 						,
-						_(
-							h03_percent
-							,
-							_(
-								h04_growth
-								,
-								h05_rate
-								,
-								13
-							)
-							,
-							14
-						)
+						h14_percent_growth_rate
 						,
 						15
 					)
@@ -203,4 +175,3 @@ public final class TestPel2Shared0016 extends AbsPipelineTest {
 		}
 
 }
-

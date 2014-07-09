@@ -20,8 +20,7 @@ public final class TestPel2Shared0123 extends AbsPipelineTest {
 			val t02_prime = word("MR","Prime",2);
 			val t03_minister = word("N","Minister",3);
 			val t54_app = word("WHO_A","APP",54);
-			val t05_john = word("$NPC_1$","John",5);
-			val t06_howard = word("NP_D","Howard",6);
+			val t26_john_howard = word("NP_D","John_Howard",26);
 			val t08_has = word("V_AUX","has",8);
 			val t09_made = word("V_2","made",9);
 			val t10_an = word("A","an",10);
@@ -37,8 +36,7 @@ public final class TestPel2Shared0123 extends AbsPipelineTest {
 			val t20_prime = word("MR","Prime",20);
 			val t21_minister = word("N","Minister",21);
 			val t58_app = word("WHO_A","APP",58);
-			val t22_ibrahim = word("$NPC_1$","Ibrahim",22);
-			val t23_aljaafari = word("NP_D","alJaafari",23);
+			val t45_ibrahim_aljaafari = word("NP_D","Ibrahim_alJaafari",45);
 
 			// create the vocabulary for the hypothesis;
 			val h01_howard = word("NP_D","Howard",1);
@@ -74,13 +72,7 @@ public final class TestPel2Shared0123 extends AbsPipelineTest {
 					_(
 						t54_app
 						,
-						_(
-							t05_john
-							,
-							t06_howard
-							,
-							26
-						)
+						t26_john_howard
 						,
 						55
 					)
@@ -154,13 +146,7 @@ public final class TestPel2Shared0123 extends AbsPipelineTest {
 											_(
 												t58_app
 												,
-												_(
-													t22_ibrahim
-													,
-													t23_aljaafari
-													,
-													45
-												)
+												t45_ibrahim_aljaafari
 												,
 												59
 											)
@@ -231,4 +217,3 @@ public final class TestPel2Shared0123 extends AbsPipelineTest {
 		}
 
 }
-

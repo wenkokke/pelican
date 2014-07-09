@@ -12,8 +12,7 @@ public final class TestPel2Shared0026 extends AbsPipelineTest {
 
 			// create the vocabulary for the text;
 			val t01_the = word("THE","The",1);
-			val t02_wait = word("$NC_1$","wait",2);
-			val t03_time = word("N","time",3);
+			val t37_wait_time = word("N","wait_time",37);
 			val t04_for = word("P_R","for",4);
 			val t05_a = word("A","a",5);
 			val t06_green = word("MR","green",6);
@@ -32,8 +31,7 @@ public final class TestPel2Shared0026 extends AbsPipelineTest {
 
 			// create the vocabulary for the hypothesis;
 			val h01_the = word("THE","The",1);
-			val h02_wait = word("$NC_1$","wait",2);
-			val h03_time = word("N","time",3);
+			val h20_wait_time = word("N","wait_time",20);
 			val h04_for = word("P_R","for",4);
 			val h05_an = word("A","an",5);
 			val h06_american = word("MR","American",6);
@@ -49,13 +47,7 @@ public final class TestPel2Shared0026 extends AbsPipelineTest {
 					t01_the
 					,
 					_(
-						_(
-							t02_wait
-							,
-							t03_time
-							,
-							37
-						)
+						t37_wait_time
 						,
 						_(
 							t04_for
@@ -156,13 +148,7 @@ public final class TestPel2Shared0026 extends AbsPipelineTest {
 					h01_the
 					,
 					_(
-						_(
-							h02_wait
-							,
-							h03_time
-							,
-							20
-						)
+						h20_wait_time
 						,
 						_(
 							h04_for
@@ -217,4 +203,3 @@ public final class TestPel2Shared0026 extends AbsPipelineTest {
 		}
 
 }
-

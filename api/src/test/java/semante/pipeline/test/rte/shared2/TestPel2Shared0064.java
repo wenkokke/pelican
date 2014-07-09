@@ -14,21 +14,18 @@ public final class TestPel2Shared0064 extends AbsPipelineTest {
 			val t52_det = word("THE","DET",52);
 			val t01_senator = word("N","Senator",1);
 			val t50_app = word("WHO_A","APP",50);
-			val t02_jader = word("$NPC_1$","Jader",2);
-			val t03_barbalho = word("NP_D","Barbalho",3);
+			val t36_jader_barbalho = word("NP_D","Jader_Barbalho",36);
 			val t55_app = word("WHO_A","APP",55);
 			val t05_the = word("THE","the",5);
 			val t06_recently = word("MR","recently",6);
 			val t07_elected = word("MR","elected",7);
-			val t08_senate = word("$NC_1$","senate",8);
-			val t09_president = word("N","president",9);
+			val t38_senate_president = word("N","senate_president",38);
 			val t10_who = word("WHO_R","who",10);
 			val t11_is = word("IS","is",11);
 			val t12_heaped = word("V_1","heaped",12);
 			val t13_with = word("P_R","with",13);
 			val t43_det = word("EMPTYDET","DET",43);
-			val t14_corruption = word("$NC_1$","corruption",14);
-			val t15_charges = word("N","charges",15);
+			val t25_corruption_charges = word("N","corruption_charges",25);
 			val t17_led = word("V_2","led",17);
 			val t18_the = word("THE","the",18);
 			val t19_pmdb = word("NP_D","PMDB",19);
@@ -38,8 +35,7 @@ public final class TestPel2Shared0064 extends AbsPipelineTest {
 			val h02_senator = word("N","senator",2);
 			val h03_is = word("IS","is",3);
 			val h12_det = word("A","DET",12);
-			val h04_senate = word("$NC_1$","senate",4);
-			val h05_president = word("N","president",5);
+			val h08_senate_president = word("N","senate_president",8);
 
 			// create the tree structure for the text;
 			val tt =
@@ -57,13 +53,7 @@ public final class TestPel2Shared0064 extends AbsPipelineTest {
 						_(
 							t50_app
 							,
-							_(
-								t02_jader
-								,
-								t03_barbalho
-								,
-								36
-							)
+							t36_jader_barbalho
 							,
 							51
 						)
@@ -84,13 +74,7 @@ public final class TestPel2Shared0064 extends AbsPipelineTest {
 									t07_elected
 									,
 									_(
-										_(
-											t08_senate
-											,
-											t09_president
-											,
-											38
-										)
+										t38_senate_president
 										,
 										_(
 											t10_who
@@ -107,13 +91,7 @@ public final class TestPel2Shared0064 extends AbsPipelineTest {
 														_(
 															t43_det
 															,
-															_(
-																t14_corruption
-																,
-																t15_charges
-																,
-																25
-															)
+															t25_corruption_charges
 															,
 															44
 														)
@@ -183,13 +161,7 @@ public final class TestPel2Shared0064 extends AbsPipelineTest {
 					_(
 						h12_det
 						,
-						_(
-							h04_senate
-							,
-							h05_president
-							,
-							8
-						)
+						h08_senate_president
 						,
 						13
 					)
@@ -210,4 +182,3 @@ public final class TestPel2Shared0064 extends AbsPipelineTest {
 		}
 
 }
-

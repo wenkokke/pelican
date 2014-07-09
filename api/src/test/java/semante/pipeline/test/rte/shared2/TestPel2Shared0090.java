@@ -11,79 +11,33 @@ public final class TestPel2Shared0090 extends AbsPipelineTest {
 		public final void testPel2Shared0090() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_kurdistan = word("$NPC_1$","Kurdistan",1);
-			val t02_regional = word("$NPC_1$","Regional",2);
-			val t03_government = word("$NPC_1$","Government",3);
-			val t04_prime = word("$NPC_1$","Prime",4);
-			val t05_minister = word("NP_D","Minister",5);
+			val t30_kurdistan_regional_government_prime_minister = word("NP_D","Kurdistan_Regional_Government_Prime_Minister",30);
 			val t33_app = word("WHO_A","APP",33);
-			val t06_dr = word("$NPC_1$","Dr",6);
-			val t07_barham = word("$NPC_1$","Barham",7);
-			val t08_salih = word("NP_D","Salih",8);
+			val t25_dr_barham_salih = word("NP_D","Dr_Barham_Salih",25);
 			val t09_was = word("IS","was",9);
 			val t10_unharmed = word("MR","unharmed",10);
 			val t11_after = word("P_R","after",11);
 			val t12_the = word("THE","the",12);
-			val t13_assassination = word("$NC_1$","assassination",13);
-			val t14_attempt = word("N","attempt",14);
+			val t22_assassination_attempt = word("N","assassination_attempt",22);
 
 			// create the vocabulary for the hypothesis;
-			val h01_dr = word("$NPC_1$","Dr",1);
-			val h02_barham = word("$NPC_1$","Barham",2);
-			val h03_salih = word("NP_D","Salih",3);
+			val h20_dr_barham_salih = word("NP_D","Dr_Barham_Salih",20);
 			val h04_was = word("IS","was",4);
 			val h05_unharmed = word("MR","unharmed",5);
 			val h06_after = word("P_R","after",6);
 			val h07_an = word("A","an",7);
-			val h08_assassination = word("$NC_1$","assassination",8);
-			val h09_attempt = word("N","attempt",9);
+			val h17_assassination_attempt = word("N","assassination_attempt",17);
 
 			// create the tree structure for the text;
 			val tt =
 			_(
 				_(
-					_(
-						t01_kurdistan
-						,
-						_(
-							t02_regional
-							,
-							_(
-								t03_government
-								,
-								_(
-									t04_prime
-									,
-									t05_minister
-									,
-									27
-								)
-								,
-								28
-							)
-							,
-							29
-						)
-						,
-						30
-					)
+					t30_kurdistan_regional_government_prime_minister
 					,
 					_(
 						t33_app
 						,
-						_(
-							t06_dr
-							,
-							_(
-								t07_barham
-								,
-								t08_salih
-								,
-								24
-							)
-							,
-							25
-						)
+						t25_dr_barham_salih
 						,
 						34
 					)
@@ -106,13 +60,7 @@ public final class TestPel2Shared0090 extends AbsPipelineTest {
 						_(
 							t12_the
 							,
-							_(
-								t13_assassination
-								,
-								t14_attempt
-								,
-								22
-							)
+							t22_assassination_attempt
 							,
 							23
 						)
@@ -130,19 +78,7 @@ public final class TestPel2Shared0090 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_dr
-					,
-					_(
-						h02_barham
-						,
-						h03_salih
-						,
-						19
-					)
-					,
-					20
-				)
+				h20_dr_barham_salih
 				,
 				_(
 					_(
@@ -159,13 +95,7 @@ public final class TestPel2Shared0090 extends AbsPipelineTest {
 						_(
 							h07_an
 							,
-							_(
-								h08_assassination
-								,
-								h09_attempt
-								,
-								17
-							)
+							h17_assassination_attempt
 							,
 							18
 						)
@@ -189,4 +119,3 @@ public final class TestPel2Shared0090 extends AbsPipelineTest {
 		}
 
 }
-

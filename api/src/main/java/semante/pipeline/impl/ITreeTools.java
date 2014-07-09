@@ -26,9 +26,7 @@ public class ITreeTools {
 
 	
 	static public <ID, A extends Annotation<ID>> BinaryTree<ID, A> extractElement(BinaryTree<ID, A> tree, final ID elementId) {
-		
-		
-		
+
 		return tree.accept(new BinaryTree.Visitor<ID,A,BinaryTree<ID, A>>() {
 
 			@Override

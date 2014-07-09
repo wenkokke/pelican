@@ -11,25 +11,21 @@ public final class TestPel2Shared0013 extends AbsPipelineTest {
 		public final void testPel2Shared0013() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_cote = word("$NPC_1$","Cote",1);
-			val t02_divoire = word("NP_D","dIvoire",2);
+			val t30_cote_divoire = word("NP_D","Cote_dIvoire",30);
 			val t03_s = word("POSS","s",3);
 			val t04_president = word("N","President",4);
 			val t36_app = word("WHO_A","APP",36);
 			val t06_kenyan = word("MI","Kenyan",6);
-			val t07_laurent = word("$NPC_1$","Laurent",7);
-			val t08_gbagbo = word("NP_D","Gbagbo",8);
+			val t32_laurent_gbagbo = word("NP_D","Laurent_Gbagbo",32);
 			val t10_promulgated = word("V_2","promulgated",10);
 			val t38_det = word("EMPTYDET","DET",38);
 			val t11_new = word("MR","new",11);
-			val t12_election = word("$NC_1$","election",12);
-			val t13_laws = word("N","laws",13);
+			val t26_election_laws = word("N","election_laws",26);
 			val t14_in = word("P_R","in",14);
 			val t15_july = word("NP_D","July",15);
 
 			// create the vocabulary for the hypothesis;
-			val h01_cote = word("$NPC_1$","Cote",1);
-			val h02_divoire = word("NP_D","dIvoire",2);
+			val h12_cote_divoire = word("NP_D","Cote_dIvoire",12);
 			val h03_s = word("POSS","s",3);
 			val h04_president = word("N","President",4);
 			val h05_is = word("IS","is",5);
@@ -41,13 +37,7 @@ public final class TestPel2Shared0013 extends AbsPipelineTest {
 				_(
 					_(
 						_(
-							_(
-								t01_cote
-								,
-								t02_divoire
-								,
-								30
-							)
+							t30_cote_divoire
 							,
 							t03_s
 							,
@@ -65,13 +55,7 @@ public final class TestPel2Shared0013 extends AbsPipelineTest {
 						_(
 							t06_kenyan
 							,
-							_(
-								t07_laurent
-								,
-								t08_gbagbo
-								,
-								32
-							)
+							t32_laurent_gbagbo
 							,
 							33
 						)
@@ -92,13 +76,7 @@ public final class TestPel2Shared0013 extends AbsPipelineTest {
 							_(
 								t11_new
 								,
-								_(
-									t12_election
-									,
-									t13_laws
-									,
-									26
-								)
+								t26_election_laws
 								,
 								27
 							)
@@ -129,13 +107,7 @@ public final class TestPel2Shared0013 extends AbsPipelineTest {
 			_(
 				_(
 					_(
-						_(
-							h01_cote
-							,
-							h02_divoire
-							,
-							12
-						)
+						h12_cote_divoire
 						,
 						h03_s
 						,
@@ -168,4 +140,3 @@ public final class TestPel2Shared0013 extends AbsPipelineTest {
 		}
 
 }
-

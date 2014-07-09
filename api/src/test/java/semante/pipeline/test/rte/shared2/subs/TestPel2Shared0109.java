@@ -18,13 +18,10 @@ public final class TestPel2Shared0109 extends AbsPipelineTest {
 			val t01_the = word("THE","The",1);
 			val t02_astronaut = word("N","astronaut",2);
 			val t56_app = word("WHO_A","APP",56);
-			val t03_neil = word("$NPC_1$","Neil",3);
-			val t04_armstrong = word("NP_D","Armstrong",4);
+			val t28_neil_armstrong = word("NP_D","Neil_Armstrong",28);
 			val t06_was = word("IS","was",6);
 			val t07_named = word("V_2","named",7);
-			val t09_ambassador = word("$NPC_1$","Ambassador",9);
-			val t10_of = word("$NPC_1$","of",10);
-			val t11_exploration = word("NP_D","Exploration",11);
+			val t46_ambassador_of_exploration = word("NP_D","Ambassador_of_Exploration",46);
 			val t13_in = word("P_I","in",13);
 			val t14_the = word("THE","the",14);
 			val t15_ceremony = word("N","ceremony",15);
@@ -32,12 +29,7 @@ public final class TestPel2Shared0109 extends AbsPipelineTest {
 			val t17_nasa = word("NP_D","NASA",17);
 			val t18_at = word("P_R","at",18);
 			val t19_the = word("THE","the",19);
-			val t20_smithsonian = word("$NPC_1$","Smithsonian",20);
-			val t21_national = word("$NPC_1$","National",21);
-			val t22_air = word("$NPC_1$","Air",22);
-			val t23_and = word("$NPC_1$","and",23);
-			val t24_space = word("$NPC_1$","Space",24);
-			val t25_museum = word("NP_D","Museum",25);
+			val t61_smithsonian_national_air_and_space_museum = word("NP_D","Smithsonian_National_Air_and_Space_Museum",61);
 
 			// create the vocabulary for the hypothesis;
 			val h01_armstrong = word("NP_D","Armstrong",1);
@@ -69,13 +61,7 @@ public final class TestPel2Shared0109 extends AbsPipelineTest {
 					_(
 						t56_app
 						,
-						_(
-							t03_neil
-							,
-							t04_armstrong
-							,
-							28
-						)
+						t28_neil_armstrong
 						,
 						57
 					)
@@ -91,19 +77,7 @@ public final class TestPel2Shared0109 extends AbsPipelineTest {
 							_(
 								t07_named
 								,
-								_(
-									t09_ambassador
-									,
-									_(
-										t10_of
-										,
-										t11_exploration
-										,
-										32
-									)
-									,
-									46
-								)
+								t46_ambassador_of_exploration
 								,
 								47
 							)
@@ -143,37 +117,7 @@ public final class TestPel2Shared0109 extends AbsPipelineTest {
 							_(
 								t19_the
 								,
-								_(
-									t20_smithsonian
-									,
-									_(
-										t21_national
-										,
-										_(
-											t22_air
-											,
-											_(
-												t23_and
-												,
-												_(
-													t24_space
-													,
-													t25_museum
-													,
-													40
-												)
-												,
-												52
-											)
-											,
-											49
-										)
-										,
-										61
-									)
-									,
-									50
-								)
+								t61_smithsonian_national_air_and_space_museum
 								,
 								51
 							)
@@ -281,4 +225,3 @@ public final class TestPel2Shared0109 extends AbsPipelineTest {
 		}
 
 }
-

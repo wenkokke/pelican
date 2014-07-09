@@ -20,20 +20,15 @@ public final class TestPel1Shared0005 extends AbsPipelineTest {
 			val t05_milan = word("MI","Milan",5);
 			val t06_magistrate = word("N","magistrate",6);
 			val t37_app = word("WHO_A","APP",37);
-			val t07_antonio = word("$NPC_1$","Antonio",7);
-			val t08_di = word("$NPC_1$","di",8);
-			val t09_pietro = word("NP_D","Pietro",9);
+			val t32_antonio_di_pietro = word("NP_D","Antonio_di_Pietro",32);
 			val t26_focused_on = word("V_2","focused_on",26);
 			val t12_italy = word("NP_D","Italy",12);
 			val t13_s = word("POSS","s",13);
 			val t14_private = word("MI","private",14);
-			val t15_business = word("$NC_1$","business",15);
-			val t16_sectors = word("N","sectors",16);
+			val t28_business_sectors = word("N","business_sectors",28);
 
 			// create the vocabulary for the hypothesis;
-			val h01_antonio = word("$NPC_1$","Antonio",1);
-			val h02_di = word("$NPC_1$","di",2);
-			val h03_pietro = word("NP_D","Pietro",3);
+			val h13_antonio_di_pietro = word("NP_D","Antonio_di_Pietro",13);
 			val h04_is = word("IS","is",4);
 			val h05_a = word("A","a",5);
 			val h06_magistrate = word("N","magistrate",6);
@@ -74,19 +69,7 @@ public final class TestPel1Shared0005 extends AbsPipelineTest {
 										_(
 											t37_app
 											,
-											_(
-												t07_antonio
-												,
-												_(
-													t08_di
-													,
-													t09_pietro
-													,
-													31
-												)
-												,
-												32
-											)
+											t32_antonio_di_pietro
 											,
 											38
 										)
@@ -124,13 +107,7 @@ public final class TestPel1Shared0005 extends AbsPipelineTest {
 						_(
 							t14_private
 							,
-							_(
-								t15_business
-								,
-								t16_sectors
-								,
-								28
-							)
+							t28_business_sectors
 							,
 							29
 						)
@@ -148,19 +125,7 @@ public final class TestPel1Shared0005 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_antonio
-					,
-					_(
-						h02_di
-						,
-						h03_pietro
-						,
-						12
-					)
-					,
-					13
-				)
+				h13_antonio_di_pietro
 				,
 				_(
 					h04_is
@@ -189,4 +154,3 @@ public final class TestPel1Shared0005 extends AbsPipelineTest {
 		}
 
 }
-

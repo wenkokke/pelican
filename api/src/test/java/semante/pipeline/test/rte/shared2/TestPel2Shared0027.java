@@ -29,8 +29,7 @@ public final class TestPel2Shared0027 extends AbsPipelineTest {
 			val t50_det = word("THE","DET",50);
 			val t17_soaring = word("MR","soaring",17);
 			val t18_natural = word("MR","natural",18);
-			val t19_gas = word("$NC_1$","gas",19);
-			val t20_prices = word("N","prices",20);
+			val t39_gas_prices = word("N","gas_prices",39);
 
 			// create the vocabulary for the hypothesis;
 			val h01_barron = word("NP_D","Barron",1);
@@ -122,13 +121,7 @@ public final class TestPel2Shared0027 extends AbsPipelineTest {
 											_(
 												t18_natural
 												,
-												_(
-													t19_gas
-													,
-													t20_prices
-													,
-													39
-												)
+												t39_gas_prices
 												,
 												40
 											)
@@ -196,4 +189,3 @@ public final class TestPel2Shared0027 extends AbsPipelineTest {
 		}
 
 }
-

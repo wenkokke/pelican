@@ -11,8 +11,7 @@ public final class TestPel2Shared0085 extends AbsPipelineTest {
 		public final void testPel2Shared0085() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_paul = word("$NPC_1$","Paul",1);
-			val t02_bremer = word("NP_D","Bremer",2);
+			val t31_paul_bremer = word("NP_D","Paul_Bremer",31);
 			val t67_app = word("WHO_A","APP",67);
 			val t04_the = word("THE","the",4);
 			val t05_top = word("MR","top",5);
@@ -37,12 +36,10 @@ public final class TestPel2Shared0085 extends AbsPipelineTest {
 			val t25_iraqi = word("MI","Iraqi",25);
 			val t26_president = word("N","president",26);
 			val t70_app = word("WHO_A","APP",70);
-			val t28_ghazi = word("$NPC_1$","Ghazi",28);
-			val t29_alyawar = word("NP_D","alYawar",29);
+			val t43_ghazi_alyawar = word("NP_D","Ghazi_alYawar",43);
 
 			// create the vocabulary for the hypothesis;
-			val h01_ghazi = word("$NPC_1$","Ghazi",1);
-			val h02_alyawar = word("NP_D","alYawar",2);
+			val h06_ghazi_alyawar = word("NP_D","Ghazi_alYawar",6);
 			val h03_is = word("IS","is",3);
 			val h04_iraqi = word("MI","Iraqi",4);
 
@@ -50,13 +47,7 @@ public final class TestPel2Shared0085 extends AbsPipelineTest {
 			val tt =
 			_(
 				_(
-					_(
-						t01_paul
-						,
-						t02_bremer
-						,
-						31
-					)
+					t31_paul_bremer
 					,
 					_(
 						t67_app
@@ -180,13 +171,7 @@ public final class TestPel2Shared0085 extends AbsPipelineTest {
 										_(
 											t70_app
 											,
-											_(
-												t28_ghazi
-												,
-												t29_alyawar
-												,
-												43
-											)
+											t43_ghazi_alyawar
 											,
 											71
 										)
@@ -216,13 +201,7 @@ public final class TestPel2Shared0085 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_ghazi
-					,
-					h02_alyawar
-					,
-					6
-				)
+				h06_ghazi_alyawar
 				,
 				_(
 					h03_is
@@ -245,4 +224,3 @@ public final class TestPel2Shared0085 extends AbsPipelineTest {
 		}
 
 }
-

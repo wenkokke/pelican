@@ -19,8 +19,7 @@ public final class TestPel2Shared0053 extends AbsPipelineTest {
 			val t06_first = word("MR","first",6);
 			val t07_permanent = word("MR","permanent",7);
 			val t08_global = word("MI","global",8);
-			val t09_criminal = word("$NC_1$","criminal",9);
-			val t10_tribunal = word("N","tribunal",10);
+			val t52_criminal_tribunal = word("N","criminal_tribunal",52);
 			val t12_was = word("IS","was",12);
 			val t58_set_up = word("V_1","set_up",58);
 			val t15_in = word("P_R","in",15);
@@ -43,8 +42,7 @@ public final class TestPel2Shared0053 extends AbsPipelineTest {
 			val h02_icc = word("NP_D","ICC",2);
 			val h03_is = word("IS","is",3);
 			val h04_a = word("A","a",4);
-			val h05_criminal = word("$NC_1$","criminal",5);
-			val h06_tribunal = word("N","tribunal",6);
+			val h12_criminal_tribunal = word("N","criminal_tribunal",12);
 
 			// create the tree structure for the text;
 			val tt =
@@ -79,13 +77,7 @@ public final class TestPel2Shared0053 extends AbsPipelineTest {
 									_(
 										t08_global
 										,
-										_(
-											t09_criminal
-											,
-											t10_tribunal
-											,
-											52
-										)
+										t52_criminal_tribunal
 										,
 										53
 									)
@@ -218,13 +210,7 @@ public final class TestPel2Shared0053 extends AbsPipelineTest {
 					_(
 						h04_a
 						,
-						_(
-							h05_criminal
-							,
-							h06_tribunal
-							,
-							12
-						)
+						h12_criminal_tribunal
 						,
 						13
 					)
@@ -245,4 +231,3 @@ public final class TestPel2Shared0053 extends AbsPipelineTest {
 		}
 
 }
-

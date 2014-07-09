@@ -19,24 +19,18 @@ public final class TestPel2Shared0039 extends AbsPipelineTest {
 			val t02_reported = word("FACT","reported",2);
 			val t03_that = word("IGNORE","that",3);
 			val t04_the = word("THE","the",4);
-			val t05_october = word("$NC_1$","October",5);
-			val t06_earthquake = word("N","earthquake",6);
+			val t39_october_earthquake = word("N","October_earthquake",39);
 			val t07_occurred = word("V_1","occurred",7);
 			val t08_at = word("P_R","at",8);
 			val t09_the = word("THE","the",9);
-			val t10_pacific = word("$NC_1$","Pacific",10);
-			val t11_side = word("$NC_1$","side",11);
-			val t12_boundary = word("N","boundary",12);
+			val t42_pacific_side_boundary = word("N","Pacific_side_boundary",42);
 			val t13_of = word("P_R","of",13);
 			val t14_the = word("THE","the",14);
-			val t15_kuril = word("$NC_1$","Kuril",15);
-			val t16_arc = word("N","arc",16);
+			val t44_kuril_arc = word("N","Kuril_arc",44);
 			val t55_app = word("WHO_A","APP",55);
 			val t17_ = word("IGNORE","",17);
 			val t18_the = word("THE","the",18);
-			val t19_south = word("$NPC_1$","South",19);
-			val t20_kuril = word("$NPC_1$","Kuril",20);
-			val t21_islands = word("NP_D","Islands",21);
+			val t47_south_kuril_islands = word("NP_D","South_Kuril_Islands",47);
 			val t22_ = word("IGNORE","",22);
 
 			// create the vocabulary for the hypothesis;
@@ -45,9 +39,7 @@ public final class TestPel2Shared0039 extends AbsPipelineTest {
 			val h03_occurred = word("V_1","occurred",3);
 			val h04_at = word("P_R","at",4);
 			val h05_the = word("THE","the",5);
-			val h06_south = word("$NPC_1$","South",6);
-			val h07_kuril = word("$NPC_1$","Kuril",7);
-			val h08_islands = word("NP_D","Islands",8);
+			val h16_south_kuril_islands = word("NP_D","South_Kuril_Islands",16);
 
 			// create the tree structure for the text;
 			val tt =
@@ -64,13 +56,7 @@ public final class TestPel2Shared0039 extends AbsPipelineTest {
 							_(
 								t04_the
 								,
-								_(
-									t05_october
-									,
-									t06_earthquake
-									,
-									39
-								)
+								t39_october_earthquake
 								,
 								40
 							)
@@ -86,19 +72,7 @@ public final class TestPel2Shared0039 extends AbsPipelineTest {
 											t09_the
 											,
 											_(
-												_(
-													t10_pacific
-													,
-													_(
-														t11_side
-														,
-														t12_boundary
-														,
-														41
-													)
-													,
-													42
-												)
+												t42_pacific_side_boundary
 												,
 												_(
 													t13_of
@@ -106,13 +80,7 @@ public final class TestPel2Shared0039 extends AbsPipelineTest {
 													_(
 														t14_the
 														,
-														_(
-															t15_kuril
-															,
-															t16_arc
-															,
-															44
-														)
+														t44_kuril_arc
 														,
 														45
 													)
@@ -136,19 +104,7 @@ public final class TestPel2Shared0039 extends AbsPipelineTest {
 													_(
 														t18_the
 														,
-														_(
-															t19_south
-															,
-															_(
-																t20_kuril
-																,
-																t21_islands
-																,
-																46
-															)
-															,
-															47
-														)
+														t47_south_kuril_islands
 														,
 														48
 													)
@@ -206,19 +162,7 @@ public final class TestPel2Shared0039 extends AbsPipelineTest {
 						_(
 							h05_the
 							,
-							_(
-								h06_south
-								,
-								_(
-									h07_kuril
-									,
-									h08_islands
-									,
-									15
-								)
-								,
-								16
-							)
+							h16_south_kuril_islands
 							,
 							17
 						)
@@ -244,4 +188,3 @@ public final class TestPel2Shared0039 extends AbsPipelineTest {
 		}
 
 }
-

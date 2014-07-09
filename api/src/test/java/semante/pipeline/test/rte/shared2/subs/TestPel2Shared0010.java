@@ -19,8 +19,7 @@ public final class TestPel2Shared0010 extends AbsPipelineTest {
 			val t02_announcement = word("N","announcement",2);
 			val t03_said = word("FACT","said",3);
 			val t04_that = word("IGNORE","that",4);
-			val t05_ghazi = word("$NPC_1$","Ghazi",5);
-			val t06_yawar = word("NP_D","Yawar",6);
+			val t29_ghazi_yawar = word("NP_D","Ghazi_Yawar",29);
 			val t59_app = word("WHO_A","APP",59);
 			val t08_the = word("THE","the",8);
 			val t09_sunni = word("MR","Sunni",9);
@@ -31,8 +30,7 @@ public final class TestPel2Shared0010 extends AbsPipelineTest {
 			val t61_det = word("SOME","DET",61);
 			val t14_years = word("N","years",14);
 			val t15_in = word("P_R","in",15);
-			val t16_saudi = word("$NPC_1$","Saudi",16);
-			val t17_arabia = word("NP_D","Arabia",17);
+			val t34_saudi_arabia = word("NP_D","Saudi_Arabia",34);
 			val t19_has = word("V_AUX","has",19);
 			val t20_been = word("IS","been",20);
 			val t21_picked = word("V_1","picked",21);
@@ -68,13 +66,7 @@ public final class TestPel2Shared0010 extends AbsPipelineTest {
 						,
 						_(
 							_(
-								_(
-									t05_ghazi
-									,
-									t06_yawar
-									,
-									29
-								)
+								t29_ghazi_yawar
 								,
 								_(
 									t59_app
@@ -121,13 +113,7 @@ public final class TestPel2Shared0010 extends AbsPipelineTest {
 												_(
 													t15_in
 													,
-													_(
-														t16_saudi
-														,
-														t17_arabia
-														,
-														34
-													)
+													t34_saudi_arabia
 													,
 													35
 												)
@@ -244,4 +230,3 @@ public final class TestPel2Shared0010 extends AbsPipelineTest {
 		}
 
 }
-

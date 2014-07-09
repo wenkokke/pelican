@@ -31,8 +31,7 @@ public final class TestPel2Shared0115 extends AbsPipelineTest {
 			val t18_the = word("THE","the",18);
 			val t19_king = word("N","king",19);
 			val t93_app = word("WHO_A","APP",93);
-			val t21_haakon = word("$NPC_1$","Haakon",21);
-			val t22_v = word("NP_D","V",22);
+			val t51_haakon_v = word("NP_D","Haakon_V",51);
 			val t24_and = word("AND","and",24);
 			val t25_was = word("IS","was",25);
 			val t26_elected = word("V_2","elected",26);
@@ -57,8 +56,7 @@ public final class TestPel2Shared0115 extends AbsPipelineTest {
 			val h04_s = word("POSS","s",4);
 			val h05_throne = word("N","throne",5);
 			val h06_from = word("P_R","from",6);
-			val h07_haakon = word("$NPC_1$","Haakon",7);
-			val h08_v = word("NP_D","V",8);
+			val h13_haakon_v = word("NP_D","Haakon_V",13);
 
 			// create the tree structure for the text;
 			val tt =
@@ -169,13 +167,7 @@ public final class TestPel2Shared0115 extends AbsPipelineTest {
 									_(
 										t93_app
 										,
-										_(
-											t21_haakon
-											,
-											t22_v
-											,
-											51
-										)
+										t51_haakon_v
 										,
 										94
 									)
@@ -316,13 +308,7 @@ public final class TestPel2Shared0115 extends AbsPipelineTest {
 					_(
 						h06_from
 						,
-						_(
-							h07_haakon
-							,
-							h08_v
-							,
-							13
-						)
+						h13_haakon_v
 						,
 						14
 					)
@@ -343,4 +329,3 @@ public final class TestPel2Shared0115 extends AbsPipelineTest {
 		}
 
 }
-

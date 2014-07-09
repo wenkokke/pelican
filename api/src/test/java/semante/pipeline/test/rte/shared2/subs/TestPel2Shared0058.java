@@ -16,10 +16,7 @@ public final class TestPel2Shared0058 extends AbsPipelineTest {
 
 			// create the vocabulary for the text;
 			val t01_the = word("THE","The",1);
-			val t02_international = word("$NPC_1$","International",2);
-			val t03_atomic = word("$NPC_1$","Atomic",3);
-			val t04_energy = word("$NPC_1$","Energy",4);
-			val t05_agency = word("NP_D","Agency",5);
+			val t58_international_atomic_energy_agency = word("NP_D","International_Atomic_Energy_Agency",58);
 			val t70_app = word("WHO_A","APP",70);
 			val t06_ = word("IGNORE","",6);
 			val t07_iaea = word("NP_D","IAEA",7);
@@ -40,8 +37,7 @@ public final class TestPel2Shared0058 extends AbsPipelineTest {
 			val t74_app = word("WHO_A","APP",74);
 			val t22_austria = word("NP_D","Austria",22);
 			val t24_on = word("P_R","on",24);
-			val t25_september = word("$NPC_1$","September",25);
-			val t26_num19 = word("NP_D","num19",26);
+			val t47_september_num19 = word("NP_D","September_num19",47);
 			val t28_inviting = word("GER_2","inviting",28);
 			val t79_det = word("EMPTYDET","DET",79);
 			val t29_members = word("N","members",29);
@@ -73,25 +69,7 @@ public final class TestPel2Shared0058 extends AbsPipelineTest {
 					_(
 						t01_the
 						,
-						_(
-							t02_international
-							,
-							_(
-								t03_atomic
-								,
-								_(
-									t04_energy
-									,
-									t05_agency
-									,
-									56
-								)
-								,
-								57
-							)
-							,
-							58
-						)
+						t58_international_atomic_energy_agency
 						,
 						59
 					)
@@ -210,13 +188,7 @@ public final class TestPel2Shared0058 extends AbsPipelineTest {
 						_(
 							t24_on
 							,
-							_(
-								t25_september
-								,
-								t26_num19
-								,
-								47
-							)
+							t47_september_num19
 							,
 							48
 						)
@@ -363,4 +335,3 @@ public final class TestPel2Shared0058 extends AbsPipelineTest {
 		}
 
 }
-

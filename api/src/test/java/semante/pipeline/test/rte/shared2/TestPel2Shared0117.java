@@ -16,8 +16,7 @@ public final class TestPel2Shared0117 extends AbsPipelineTest {
 			val t03_now = word("MI","now",3);
 			val t04_lives = word("V_1","lives",4);
 			val t05_in = word("P_R","in",5);
-			val t06_rochester = word("$NPC_1$","Rochester",6);
-			val t07_hills = word("NP_D","Hills",7);
+			val t31_rochester_hills = word("NP_D","Rochester_Hills",31);
 			val t61_app = word("WHO_A","APP",61);
 			val t09_a = word("A","a",9);
 			val t10_small = word("MR","small",10);
@@ -34,8 +33,7 @@ public final class TestPel2Shared0117 extends AbsPipelineTest {
 			val t22_a = word("A","a",22);
 			val t23_rape = word("N","rape",23);
 			val t24_in = word("P_R","in",24);
-			val t25_clinton = word("$NPC_1$","Clinton",25);
-			val t26_township = word("NP_D","Township",26);
+			val t44_clinton_township = word("NP_D","Clinton_Township",44);
 
 			// create the vocabulary for the hypothesis;
 			val h01_wyniemko = word("NP_D","Wyniemko",1);
@@ -67,13 +65,7 @@ public final class TestPel2Shared0117 extends AbsPipelineTest {
 									t05_in
 									,
 									_(
-										_(
-											t06_rochester
-											,
-											t07_hills
-											,
-											31
-										)
+										t31_rochester_hills
 										,
 										_(
 											t61_app
@@ -167,13 +159,7 @@ public final class TestPel2Shared0117 extends AbsPipelineTest {
 									_(
 										t24_in
 										,
-										_(
-											t25_clinton
-											,
-											t26_township
-											,
-											44
-										)
+										t44_clinton_township
 										,
 										45
 									)
@@ -259,4 +245,3 @@ public final class TestPel2Shared0117 extends AbsPipelineTest {
 		}
 
 }
-

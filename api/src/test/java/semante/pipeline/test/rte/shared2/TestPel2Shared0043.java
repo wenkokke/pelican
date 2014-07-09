@@ -13,8 +13,7 @@ public final class TestPel2Shared0043 extends AbsPipelineTest {
 			// create the vocabulary for the text;
 			val t01_the = word("THE","The",1);
 			val t02_first = word("MR","first",2);
-			val t03_heart = word("$NC_1$","heart",3);
-			val t04_transplant = word("N","transplant",4);
+			val t61_heart_transplant = word("N","heart_transplant",61);
 			val t05_in = word("P_R","in",5);
 			val t06_britain = word("NP_D","Britain",6);
 			val t08_which = word("WHO_A","which",8);
@@ -45,8 +44,7 @@ public final class TestPel2Shared0043 extends AbsPipelineTest {
 
 			// create the vocabulary for the hypothesis;
 			val h01_a = word("A","A",1);
-			val h02_heart = word("$NC_1$","heart",2);
-			val h03_transplant = word("N","transplant",3);
+			val h10_heart_transplant = word("N","heart_transplant",10);
 			val h04_is = word("IS","is",4);
 			val h05_lifesaving = word("MI","lifesaving",5);
 
@@ -61,13 +59,7 @@ public final class TestPel2Shared0043 extends AbsPipelineTest {
 							t02_first
 							,
 							_(
-								_(
-									t03_heart
-									,
-									t04_transplant
-									,
-									61
-								)
+								t61_heart_transplant
 								,
 								_(
 									t05_in
@@ -241,13 +233,7 @@ public final class TestPel2Shared0043 extends AbsPipelineTest {
 				_(
 					h01_a
 					,
-					_(
-						h02_heart
-						,
-						h03_transplant
-						,
-						10
-					)
+					h10_heart_transplant
 					,
 					11
 				)
@@ -273,4 +259,3 @@ public final class TestPel2Shared0043 extends AbsPipelineTest {
 		}
 
 }
-

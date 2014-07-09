@@ -11,17 +11,14 @@ public final class TestPel2Shared0037 extends AbsPipelineTest {
 		public final void testPel2Shared0037() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_dan = word("$NPC_1$","Dan",1);
-			val t02_rather = word("NP_D","Rather",2);
+			val t31_dan_rather = word("NP_D","Dan_Rather",31);
 			val t64_app = word("WHO_A","APP",64);
 			val t04_a = word("A","a",4);
 			val t05_respected = word("MI","respected",5);
-			val t06_news = word("$NC_1$","news",6);
-			val t07_anchorman = word("N","anchorman",7);
+			val t57_news_anchorman = word("N","news_anchorman",57);
 			val t08_in = word("P_R","in",8);
 			val t09_the = word("THE","the",9);
-			val t10_united = word("$NPC_1$","United",10);
-			val t11_states = word("NP_D","States",11);
+			val t60_united_states = word("NP_D","United_States",60);
 			val t13_has = word("V_AUX","has",13);
 			val t14_announced = word("V_2","announced",14);
 			val t15_that = word("IGNORE","that",15);
@@ -33,16 +30,12 @@ public final class TestPel2Shared0037 extends AbsPipelineTest {
 			val t21_lead = word("N","lead",21);
 			val t22_of = word("P_R","of",22);
 			val t23_the = word("THE","the",23);
-			val t24_cbs = word("$NC_1$","CBS",24);
-			val t25_main = word("$NC_1$","main",25);
-			val t26_news = word("$NC_1$","news",26);
-			val t27_program = word("N","program",27);
+			val t53_cbs_main_news_program = word("N","CBS_main_news_program",53);
 			val t28_next = word("P_R","next",28);
 			val t29_year = word("NP_D","year",29);
 
 			// create the vocabulary for the hypothesis;
-			val h01_dan = word("$NPC_1$","Dan",1);
-			val h02_rather = word("NP_D","Rather",2);
+			val h06_dan_rather = word("NP_D","Dan_Rather",6);
 			val h03_is = word("IS","is",3);
 			val h04_respected = word("MI","respected",4);
 
@@ -50,13 +43,7 @@ public final class TestPel2Shared0037 extends AbsPipelineTest {
 			val tt =
 			_(
 				_(
-					_(
-						t01_dan
-						,
-						t02_rather
-						,
-						31
-					)
+					t31_dan_rather
 					,
 					_(
 						t64_app
@@ -68,13 +55,7 @@ public final class TestPel2Shared0037 extends AbsPipelineTest {
 								_(
 									t05_respected
 									,
-									_(
-										t06_news
-										,
-										t07_anchorman
-										,
-										57
-									)
+									t57_news_anchorman
 									,
 									58
 								)
@@ -85,13 +66,7 @@ public final class TestPel2Shared0037 extends AbsPipelineTest {
 									_(
 										t09_the
 										,
-										_(
-											t10_united
-											,
-											t11_states
-											,
-											60
-										)
+										t60_united_states
 										,
 										61
 									)
@@ -148,25 +123,7 @@ public final class TestPel2Shared0037 extends AbsPipelineTest {
 														_(
 															t23_the
 															,
-															_(
-																t24_cbs
-																,
-																_(
-																	t25_main
-																	,
-																	_(
-																		t26_news
-																		,
-																		t27_program
-																		,
-																		51
-																	)
-																	,
-																	52
-																)
-																,
-																53
-															)
+															t53_cbs_main_news_program
 															,
 															54
 														)
@@ -216,13 +173,7 @@ public final class TestPel2Shared0037 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_dan
-					,
-					h02_rather
-					,
-					6
-				)
+				h06_dan_rather
 				,
 				_(
 					h03_is
@@ -245,4 +196,3 @@ public final class TestPel2Shared0037 extends AbsPipelineTest {
 		}
 
 }
-

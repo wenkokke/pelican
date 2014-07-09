@@ -15,17 +15,14 @@ public final class TestPel2Shared0063 extends AbsPipelineTest {
 		public final void testPel2Shared0063() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_pibul = word("$NPC_1$","Pibul",1);
-			val t02_songgram = word("NP_D","Songgram",2);
+			val t23_pibul_songgram = word("NP_D","Pibul_Songgram",23);
 			val t46_app = word("WHO_A","APP",46);
 			val t04_thailand = word("NP_D","Thailand",4);
 			val t05_s = word("POSS","s",5);
 			val t06_military = word("MR","military",6);
 			val t07_dictator = word("N","dictator",7);
 			val t08_during = word("P_R","during",8);
-			val t09_world = word("$NPC_1$","World",9);
-			val t10_war = word("$NPC_1$","War",10);
-			val t11_num2 = word("NP_D","num2",11);
+			val t43_world_war_num2 = word("NP_D","World_War_num2",43);
 			val t13_led = word("V_2","led",13);
 			val t14_a = word("A","a",14);
 			val t15_campaign = word("N","campaign",15);
@@ -34,8 +31,7 @@ public final class TestPel2Shared0063 extends AbsPipelineTest {
 			val t17_antijapanese = word("MR","antiJapanese",17);
 			val t18_leader = word("N","leader",18);
 			val t51_app = word("WHO_A","APP",51);
-			val t20_mangpo = word("$NPC_1$","Mangpo",20);
-			val t21_satayahuraska = word("NP_D","Satayahuraska",21);
+			val t32_mangpo_satayahuraska = word("NP_D","Mangpo_Satayahuraska",32);
 
 			// create the vocabulary for the hypothesis;
 			val h01_a = word("A","A",1);
@@ -45,20 +41,13 @@ public final class TestPel2Shared0063 extends AbsPipelineTest {
 			val h05_a = word("A","a",5);
 			val h06_campaign = word("N","campaign",6);
 			val h07_against = word("P_R","against",7);
-			val h08_mangpo = word("$NPC_1$","Mangpo",8);
-			val h09_satayahuraska = word("NP_D","Satayahuraska",9);
+			val h13_mangpo_satayahuraska = word("NP_D","Mangpo_Satayahuraska",13);
 
 			// create the tree structure for the text;
 			val tt =
 			_(
 				_(
-					_(
-						t01_pibul
-						,
-						t02_songgram
-						,
-						23
-					)
+					t23_pibul_songgram
 					,
 					_(
 						t46_app
@@ -81,19 +70,7 @@ public final class TestPel2Shared0063 extends AbsPipelineTest {
 									_(
 										t08_during
 										,
-										_(
-											t09_world
-											,
-											_(
-												t10_war
-												,
-												t11_num2
-												,
-												42
-											)
-											,
-											43
-										)
+										t43_world_war_num2
 										,
 										27
 									)
@@ -149,13 +126,7 @@ public final class TestPel2Shared0063 extends AbsPipelineTest {
 							_(
 								t51_app
 								,
-								_(
-									t20_mangpo
-									,
-									t21_satayahuraska
-									,
-									32
-								)
+								t32_mangpo_satayahuraska
 								,
 								52
 							)
@@ -208,13 +179,7 @@ public final class TestPel2Shared0063 extends AbsPipelineTest {
 					_(
 						h07_against
 						,
-						_(
-							h08_mangpo
-							,
-							h09_satayahuraska
-							,
-							13
-						)
+						h13_mangpo_satayahuraska
 						,
 						14
 					)
@@ -227,8 +192,8 @@ public final class TestPel2Shared0063 extends AbsPipelineTest {
 			;
 
 			// create the subsumption relations;
-		List<Pair<Integer,Integer>> subs = Lists.newArrayList();
-		subs.add(new IPair<Integer,Integer>(41,20));
+			List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+			subs.add(new IPair<Integer,Integer>(41,20));
 
 			// test for a proof;
 			assertProof(tt, th, subs);
@@ -237,4 +202,3 @@ public final class TestPel2Shared0063 extends AbsPipelineTest {
 		}
 
 }
-

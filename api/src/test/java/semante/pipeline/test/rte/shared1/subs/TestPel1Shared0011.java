@@ -22,16 +22,14 @@ public final class TestPel1Shared0011 extends AbsPipelineTest {
 			val t06_to = word("P_R","to",6);
 			val t07_the = word("THE","the",7);
 			val t08_num2005 = word("MI","num2005",8);
-			val t09_grand = word("$NPC_1$","Grand",9);
-			val t10_slam = word("NP_D","Slam",10);
+			val t58_grand_slam = word("NP_D","Grand_Slam",58);
 			val t11_and = word("AND","and",11);
 			val t12_skippered = word("V_2","skippered",12);
 			val t13_the = word("THE","the",13);
 			val t14_welsh = word("MI","Welsh",14);
 			val t15_side = word("N","side",15);
 			val t16_against = word("P_R","against",16);
-			val t17_new = word("$NPC_1$","New",17);
-			val t18_zealand = word("NP_D","Zealand",18);
+			val t38_new_zealand = word("NP_D","New_Zealand",38);
 			val t19_in = word("P_R","in",19);
 			val t20_cardiff = word("NP_D","Cardiff",20);
 			val t21_last = word("P_R","last",21);
@@ -80,13 +78,7 @@ public final class TestPel1Shared0011 extends AbsPipelineTest {
 										_(
 											t08_num2005
 											,
-											_(
-												t09_grand
-												,
-												t10_slam
-												,
-												58
-											)
+											t58_grand_slam
 											,
 											59
 										)
@@ -129,13 +121,7 @@ public final class TestPel1Shared0011 extends AbsPipelineTest {
 											_(
 												t16_against
 												,
-												_(
-													t17_new
-													,
-													t18_zealand
-													,
-													38
-												)
+												t38_new_zealand
 												,
 												43
 											)
@@ -265,4 +251,3 @@ public final class TestPel1Shared0011 extends AbsPipelineTest {
 		}
 
 }
-

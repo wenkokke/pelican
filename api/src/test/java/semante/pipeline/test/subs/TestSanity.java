@@ -29,7 +29,7 @@ public final class TestSanity extends AbsPipelineTest {
 			val h00_john = word("NP_D","John",1);
 			val h01_is = word("IS","is",2);
 			val h02_a = word("A","a",3);
-			val h03_human = word("MR","human",4);
+			val h03_human = word("N","human",4);
 
 			// create the tree structure for the text;
 			val tt =

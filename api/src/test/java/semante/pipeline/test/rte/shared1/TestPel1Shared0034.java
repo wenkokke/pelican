@@ -13,8 +13,7 @@ public final class TestPel1Shared0034 extends AbsPipelineTest {
 			// create the vocabulary for the text;
 			val t01_the = word("THE","The",1);
 			val t02_arabiclanguage = word("MI","ArabicLanguage",2);
-			val t03_television = word("$NC_1$","television",3);
-			val t04_network = word("N","network",4);
+			val t36_television_network = word("N","television_network",36);
 			val t41_app = word("WHO_A","APP",41);
 			val t05_aljazeera = word("NP_D","AlJazeera",5);
 			val t06_reports = word("V_2","reports",6);
@@ -34,8 +33,7 @@ public final class TestPel1Shared0034 extends AbsPipelineTest {
 			val h02_is = word("IS","is",2);
 			val h03_an = word("A","an",3);
 			val h04_arabiclanguage = word("MI","ArabicLanguage",4);
-			val h05_television = word("$NC_1$","television",5);
-			val h06_network = word("N","network",6);
+			val h12_television_network = word("N","television_network",12);
 
 			// create the tree structure for the text;
 			val tt =
@@ -47,13 +45,7 @@ public final class TestPel1Shared0034 extends AbsPipelineTest {
 						_(
 							t02_arabiclanguage
 							,
-							_(
-								t03_television
-								,
-								t04_network
-								,
-								36
-							)
+							t36_television_network
 							,
 							37
 						)
@@ -152,13 +144,7 @@ public final class TestPel1Shared0034 extends AbsPipelineTest {
 						_(
 							h04_arabiclanguage
 							,
-							_(
-								h05_television
-								,
-								h06_network
-								,
-								12
-							)
+							h12_television_network
 							,
 							13
 						)
@@ -182,4 +168,3 @@ public final class TestPel1Shared0034 extends AbsPipelineTest {
 		}
 
 }
-

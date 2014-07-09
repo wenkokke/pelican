@@ -11,8 +11,7 @@ public final class TestPel2Shared0022 extends AbsPipelineTest {
 		public final void testPel2Shared0022() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_wal = word("$NPC_1$","Wal",1);
-			val t02_mart = word("NP_D","Mart",2);
+			val t21_wal_mart = word("NP_D","Wal_Mart",21);
 			val t42_app = word("WHO_A","APP",42);
 			val t04_the = word("THE","the",4);
 			val t05_american = word("MI","American",5);
@@ -20,18 +19,14 @@ public final class TestPel2Shared0022 extends AbsPipelineTest {
 			val t08_faces = word("V_2","faces",8);
 			val t09_a = word("A","a",9);
 			val t10_huge = word("MR","huge",10);
-			val t11_sex = word("$NC_1$","sex",11);
-			val t12_discrimination = word("$NC_1$","discrimination",12);
-			val t13_suit = word("N","suit",13);
+			val t31_sex_discrimination_suit = word("N","sex_discrimination_suit",31);
 			val t15_following = word("GER_2","following",15);
 			val t16_another = word("A","another",16);
 			val t17_great = word("MR","great",17);
-			val t18_supermarket = word("$NC_1$","supermarket",18);
-			val t19_chain = word("N","chain",19);
+			val t34_supermarket_chain = word("N","supermarket_chain",34);
 
 			// create the vocabulary for the hypothesis;
-			val h01_wal = word("$NPC_1$","Wal",1);
-			val h02_mart = word("NP_D","Mart",2);
+			val h05_wal_mart = word("NP_D","Wal_Mart",5);
 			val h03_is = word("IS","is",3);
 			val h04_american = word("MI","American",4);
 
@@ -39,13 +34,7 @@ public final class TestPel2Shared0022 extends AbsPipelineTest {
 			val tt =
 			_(
 				_(
-					_(
-						t01_wal
-						,
-						t02_mart
-						,
-						21
-					)
+					t21_wal_mart
 					,
 					_(
 						t42_app
@@ -80,19 +69,7 @@ public final class TestPel2Shared0022 extends AbsPipelineTest {
 							_(
 								t10_huge
 								,
-								_(
-									t11_sex
-									,
-									_(
-										t12_discrimination
-										,
-										t13_suit
-										,
-										30
-									)
-									,
-									31
-								)
+								t31_sex_discrimination_suit
 								,
 								32
 							)
@@ -112,13 +89,7 @@ public final class TestPel2Shared0022 extends AbsPipelineTest {
 							_(
 								t17_great
 								,
-								_(
-									t18_supermarket
-									,
-									t19_chain
-									,
-									34
-								)
+								t34_supermarket_chain
 								,
 								35
 							)
@@ -139,13 +110,7 @@ public final class TestPel2Shared0022 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_wal
-					,
-					h02_mart
-					,
-					5
-				)
+				h05_wal_mart
 				,
 				_(
 					h03_is
@@ -168,4 +133,3 @@ public final class TestPel2Shared0022 extends AbsPipelineTest {
 		}
 
 }
-

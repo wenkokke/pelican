@@ -11,9 +11,7 @@ public final class TestPel2Shared0087 extends AbsPipelineTest {
 		public final void testPel2Shared0087() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_amar = word("$NPC_1$","Amar",1);
-			val t02_mani = word("$NPC_1$","Mani",2);
-			val t03_tripathi = word("NP_D","Tripathi",3);
+			val t40_amar_mani_tripathi = word("NP_D","Amar_Mani_Tripathi",40);
 			val t46_app = word("WHO_A","APP",46);
 			val t04_ = word("IGNORE","",4);
 			val t05_the = word("THE","the",5);
@@ -56,19 +54,7 @@ public final class TestPel2Shared0087 extends AbsPipelineTest {
 			val tt =
 			_(
 				_(
-					_(
-						t01_amar
-						,
-						_(
-							t02_mani
-							,
-							t03_tripathi
-							,
-							39
-						)
-						,
-						40
-					)
+					t40_amar_mani_tripathi
 					,
 					_(
 						t46_app
@@ -287,4 +273,3 @@ public final class TestPel2Shared0087 extends AbsPipelineTest {
 		}
 
 }
-

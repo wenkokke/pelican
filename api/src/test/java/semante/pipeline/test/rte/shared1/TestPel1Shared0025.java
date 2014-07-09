@@ -19,8 +19,7 @@ public final class TestPel1Shared0025 extends AbsPipelineTest {
 			val t06_theater = word("IGNORE","theater",6);
 			val t07_actor = word("N","actor",7);
 			val t60_app = word("WHO_A","APP",60);
-			val t09_nikos = word("$NPC_1$","Nikos",9);
-			val t10_kourkoulos = word("NP_D","Kourkoulos",10);
+			val t30_nikos_kourkoulos = word("NP_D","Nikos_Kourkoulos",30);
 			val t11_died = word("V_1","died",11);
 			val t12_at = word("P_R","at",12);
 			val t13_the = word("THE","the",13);
@@ -37,8 +36,7 @@ public final class TestPel1Shared0025 extends AbsPipelineTest {
 			val t25_cancer = word("N","cancer",25);
 
 			// create the vocabulary for the hypothesis;
-			val h01_nikos = word("$NPC_1$","Nikos",1);
-			val h02_kourkoulos = word("NP_D","Kourkoulos",2);
+			val h08_nikos_kourkoulos = word("NP_D","Nikos_Kourkoulos",8);
 			val h03_was = word("IS","was",3);
 			val h04_a = word("A","a",4);
 			val h05_greek = word("MI","Greek",5);
@@ -89,13 +87,7 @@ public final class TestPel1Shared0025 extends AbsPipelineTest {
 					_(
 						t60_app
 						,
-						_(
-							t09_nikos
-							,
-							t10_kourkoulos
-							,
-							30
-						)
+						t30_nikos_kourkoulos
 						,
 						61
 					)
@@ -190,13 +182,7 @@ public final class TestPel1Shared0025 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_nikos
-					,
-					h02_kourkoulos
-					,
-					8
-				)
+				h08_nikos_kourkoulos
 				,
 				_(
 					h03_was
@@ -231,4 +217,3 @@ public final class TestPel1Shared0025 extends AbsPipelineTest {
 		}
 
 }
-

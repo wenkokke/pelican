@@ -12,8 +12,7 @@ public final class TestPel2Shared0021 extends AbsPipelineTest {
 
 			// create the vocabulary for the text;
 			val t01_the = word("THE","The",1);
-			val t02_white = word("$NC_1$","White",2);
-			val t03_house = word("N","House",3);
+			val t33_white_house = word("N","White_House",33);
 			val t04_ignored = word("V_2","ignored",4);
 			val t05_the = word("THE","the",5);
 			val t06_domestic = word("MR","domestic",6);
@@ -24,21 +23,18 @@ public final class TestPel2Shared0021 extends AbsPipelineTest {
 			val t11_militant = word("MI","militant",11);
 			val t12_organization = word("N","organization",12);
 			val t37_app = word("WHO_A","APP",37);
-			val t14_al = word("$NPC_1$","al",14);
-			val t15_qaeda = word("NP_D","Qaeda",15);
+			val t20_al_qaeda = word("NP_D","al_Qaeda",20);
 
 			// create the vocabulary for the hypothesis;
 			val h24_det = word("THE","DET",24);
-			val h01_white = word("$NC_1$","White",1);
-			val h02_house = word("N","House",2);
+			val h12_white_house = word("N","White_House",12);
 			val h03_ignored = word("V_2","ignored",3);
 			val h04_a = word("A","a",4);
 			val h05_threat = word("N","threat",5);
 			val h06_from = word("P_R","from",6);
 			val h07_the = word("THE","the",7);
 			val h08_islamic = word("MI","Islamic",8);
-			val h09_al = word("$NPC_1$","al",9);
-			val h10_qaeda = word("NP_D","Qaeda",10);
+			val h19_al_qaeda = word("NP_D","al_Qaeda",19);
 
 			// create the tree structure for the text;
 			val tt =
@@ -46,13 +42,7 @@ public final class TestPel2Shared0021 extends AbsPipelineTest {
 				_(
 					t01_the
 					,
-					_(
-						t02_white
-						,
-						t03_house
-						,
-						33
-					)
+					t33_white_house
 					,
 					34
 				)
@@ -96,13 +86,7 @@ public final class TestPel2Shared0021 extends AbsPipelineTest {
 										_(
 											t37_app
 											,
-											_(
-												t14_al
-												,
-												t15_qaeda
-												,
-												20
-											)
+											t20_al_qaeda
 											,
 											38
 										)
@@ -135,13 +119,7 @@ public final class TestPel2Shared0021 extends AbsPipelineTest {
 				_(
 					h24_det
 					,
-					_(
-						h01_white
-						,
-						h02_house
-						,
-						12
-					)
+					h12_white_house
 					,
 					25
 				)
@@ -164,13 +142,7 @@ public final class TestPel2Shared0021 extends AbsPipelineTest {
 									_(
 										h08_islamic
 										,
-										_(
-											h09_al
-											,
-											h10_qaeda
-											,
-											19
-										)
+										h19_al_qaeda
 										,
 										20
 									)
@@ -203,4 +175,3 @@ public final class TestPel2Shared0021 extends AbsPipelineTest {
 		}
 
 }
-

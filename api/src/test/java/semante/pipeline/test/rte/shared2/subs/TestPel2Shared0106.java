@@ -22,11 +22,9 @@ public final class TestPel2Shared0106 extends AbsPipelineTest {
 			val t04_that = word("IGNORE","that",4);
 			val t05_the = word("THE","the",5);
 			val t06_austrian = word("MI","Austrian",6);
-			val t07_movie = word("$NC_1$","movie",7);
-			val t08_actor = word("N","actor",8);
+			val t33_movie_actor = word("N","movie_actor",33);
 			val t40_app = word("WHO_A","APP",40);
-			val t10_arnold = word("$NPC_1$","Arnold",10);
-			val t11_schwarzenegger = word("NP_D","Schwarzenegger",11);
+			val t21_arnold_schwarzenegger = word("NP_D","Arnold_Schwarzenegger",21);
 			val t13_was = word("IS","was",13);
 			val t14_elected = word("V_2","elected",14);
 			val t42_det = word("THE","DET",42);
@@ -35,8 +33,7 @@ public final class TestPel2Shared0106 extends AbsPipelineTest {
 			val t17_california = word("NP_D","California",17);
 
 			// create the vocabulary for the hypothesis;
-			val h01_arnold = word("$NPC_1$","Arnold",1);
-			val h02_schwarzenegger = word("NP_D","Schwarzenegger",2);
+			val h07_arnold_schwarzenegger = word("NP_D","Arnold_Schwarzenegger",7);
 			val h03_became = word("V_2","became",3);
 			val h04_a = word("A","a",4);
 			val h05_governor = word("N","governor",5);
@@ -72,13 +69,7 @@ public final class TestPel2Shared0106 extends AbsPipelineTest {
 									_(
 										t06_austrian
 										,
-										_(
-											t07_movie
-											,
-											t08_actor
-											,
-											33
-										)
+										t33_movie_actor
 										,
 										34
 									)
@@ -89,13 +80,7 @@ public final class TestPel2Shared0106 extends AbsPipelineTest {
 								_(
 									t40_app
 									,
-									_(
-										t10_arnold
-										,
-										t11_schwarzenegger
-										,
-										21
-									)
+									t21_arnold_schwarzenegger
 									,
 									41
 								)
@@ -151,13 +136,7 @@ public final class TestPel2Shared0106 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_arnold
-					,
-					h02_schwarzenegger
-					,
-					7
-				)
+				h07_arnold_schwarzenegger
 				,
 				_(
 					h03_became
@@ -188,4 +167,3 @@ public final class TestPel2Shared0106 extends AbsPipelineTest {
 		}
 
 }
-

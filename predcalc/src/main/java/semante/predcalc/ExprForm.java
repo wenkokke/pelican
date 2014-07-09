@@ -1,6 +1,7 @@
 package semante.predcalc;
 
 import java.util.List;
+import java.util.Set;
 
 /*
  * A pair of semantics and pragmatics
@@ -10,5 +11,9 @@ import java.util.List;
 public interface ExprForm<Kind> {
 
 	public Kind getSemantics();
-	public List<Kind> getPragmatics();
+	
+	// Pragmatics
+	public Set<Kind> getUniquenessConditions();
+	public Set<Kind> getImplications();
+	
 }

@@ -18,34 +18,26 @@ public final class TestPel2Shared0070 extends AbsPipelineTest {
 			val t01_the = word("THE","The",1);
 			val t02_professor = word("N","professor",2);
 			val t35_app = word("WHO_A","APP",35);
-			val t03_john = word("$NPC_1$","John",3);
-			val t04_c = word("$NPC_1$","C",4);
-			val t05_harsanyi = word("NP_D","Harsanyi",5);
+			val t31_john_c_harsanyi = word("NP_D","John_C_Harsanyi",31);
 			val t06_won = word("V_2","won",6);
 			val t07_the = word("THE","the",7);
-			val t08_nobel = word("$NC_1$","Nobel",8);
-			val t09_prize = word("N","Prize",9);
+			val t25_nobel_prize = word("N","Nobel_Prize",25);
 			val t10_for = word("P_I","for",10);
 			val t11_a = word("A","a",11);
 			val t12_study = word("N","study",12);
 			val t13_about = word("P_R","about",13);
-			val t14_game = word("$NPC_1$","Game",14);
-			val t15_theory = word("NP_D","Theory",15);
+			val t21_game_theory = word("NP_D","Game_Theory",21);
 
 			// create the vocabulary for the hypothesis;
-			val h01_john = word("$NPC_1$","John",1);
-			val h02_c = word("$NPC_1$","C",2);
-			val h03_harsanyi = word("NP_D","Harsanyi",3);
+			val h29_john_c_harsanyi = word("NP_D","John_C_Harsanyi",29);
 			val h04_received = word("V_2","received",4);
 			val h05_a = word("A","a",5);
-			val h06_nobel = word("$NC_1$","Nobel",6);
-			val h07_prize = word("N","Prize",7);
+			val h23_nobel_prize = word("N","Nobel_Prize",23);
 			val h08_for = word("P_I","for",8);
 			val h09_a = word("A","a",9);
 			val h10_study = word("N","study",10);
 			val h11_about = word("P_R","about",11);
-			val h12_game = word("$NPC_1$","Game",12);
-			val h13_theory = word("NP_D","Theory",13);
+			val h19_game_theory = word("NP_D","Game_Theory",19);
 
 			// create the tree structure for the text;
 			val tt =
@@ -62,19 +54,7 @@ public final class TestPel2Shared0070 extends AbsPipelineTest {
 					_(
 						t35_app
 						,
-						_(
-							t03_john
-							,
-							_(
-								t04_c
-								,
-								t05_harsanyi
-								,
-								30
-							)
-							,
-							31
-						)
+						t31_john_c_harsanyi
 						,
 						36
 					)
@@ -89,13 +69,7 @@ public final class TestPel2Shared0070 extends AbsPipelineTest {
 						_(
 							t07_the
 							,
-							_(
-								t08_nobel
-								,
-								t09_prize
-								,
-								25
-							)
+							t25_nobel_prize
 							,
 							26
 						)
@@ -115,13 +89,7 @@ public final class TestPel2Shared0070 extends AbsPipelineTest {
 								_(
 									t13_about
 									,
-									_(
-										t14_game
-										,
-										t15_theory
-										,
-										21
-									)
+									t21_game_theory
 									,
 									22
 								)
@@ -145,19 +113,7 @@ public final class TestPel2Shared0070 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_john
-					,
-					_(
-						h02_c
-						,
-						h03_harsanyi
-						,
-						28
-					)
-					,
-					29
-				)
+				h29_john_c_harsanyi
 				,
 				_(
 					_(
@@ -166,13 +122,7 @@ public final class TestPel2Shared0070 extends AbsPipelineTest {
 						_(
 							h05_a
 							,
-							_(
-								h06_nobel
-								,
-								h07_prize
-								,
-								23
-							)
+							h23_nobel_prize
 							,
 							24
 						)
@@ -192,13 +142,7 @@ public final class TestPel2Shared0070 extends AbsPipelineTest {
 								_(
 									h11_about
 									,
-									_(
-										h12_game
-										,
-										h13_theory
-										,
-										19
-									)
+									h19_game_theory
 									,
 									20
 								)
@@ -230,4 +174,3 @@ public final class TestPel2Shared0070 extends AbsPipelineTest {
 		}
 
 }
-

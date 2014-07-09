@@ -11,9 +11,7 @@ public final class TestPel2Shared0094 extends AbsPipelineTest {
 		public final void testPel2Shared0094() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_walter = word("$NPC_1$","Walter",1);
-			val t02_r = word("$NPC_1$","R",2);
-			val t03_mears = word("NP_D","Mears",3);
+			val t41_walter_r_mears = word("NP_D","Walter_R_Mears",41);
 			val t46_app = word("WHO_A","APP",46);
 			val t05_the = word("THE","the",5);
 			val t06_wellknown = word("MI","wellKnown",6);
@@ -21,10 +19,7 @@ public final class TestPel2Shared0094 extends AbsPipelineTest {
 			val t09_has = word("V_AUX","has",9);
 			val t62_reported_on = word("V_2","reported_on",62);
 			val t53_det = word("EMPTYDET","DET",53);
-			val t12_washington = word("$NC_1$","Washington",12);
-			val t13_and = word("$NC_1$","and",13);
-			val t14_national = word("$NC_1$","national",14);
-			val t15_politics = word("N","politics",15);
+			val t51_washington_and_national_politics = word("N","Washington_and_national_politics",51);
 			val t16_for = word("P_R","for",16);
 			val t17_more = word("MR","more",17);
 			val t18_than = word("MR","than",18);
@@ -33,9 +28,7 @@ public final class TestPel2Shared0094 extends AbsPipelineTest {
 			val t20_years = word("N","years",20);
 
 			// create the vocabulary for the hypothesis;
-			val h01_walter = word("$NPC_1$","Walter",1);
-			val h02_r = word("$NPC_1$","R",2);
-			val h03_mears = word("NP_D","Mears",3);
+			val h16_walter_r_mears = word("NP_D","Walter_R_Mears",16);
 			val h04_is = word("IS","is",4);
 			val h05_a = word("A","a",5);
 			val h06_wellknown = word("MI","wellKnown",6);
@@ -45,19 +38,7 @@ public final class TestPel2Shared0094 extends AbsPipelineTest {
 			val tt =
 			_(
 				_(
-					_(
-						t01_walter
-						,
-						_(
-							t02_r
-							,
-							t03_mears
-							,
-							40
-						)
-						,
-						41
-					)
+					t41_walter_r_mears
 					,
 					_(
 						t46_app
@@ -92,25 +73,7 @@ public final class TestPel2Shared0094 extends AbsPipelineTest {
 							_(
 								t53_det
 								,
-								_(
-									t12_washington
-									,
-									_(
-										t13_and
-										,
-										_(
-											t14_national
-											,
-											t15_politics
-											,
-											36
-										)
-										,
-										51
-									)
-									,
-									50
-								)
+								t51_washington_and_national_politics
 								,
 								60
 							)
@@ -163,19 +126,7 @@ public final class TestPel2Shared0094 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_walter
-					,
-					_(
-						h02_r
-						,
-						h03_mears
-						,
-						15
-					)
-					,
-					16
-				)
+				h16_walter_r_mears
 				,
 				_(
 					h04_is
@@ -210,4 +161,3 @@ public final class TestPel2Shared0094 extends AbsPipelineTest {
 		}
 
 }
-

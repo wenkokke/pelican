@@ -24,8 +24,7 @@ public final class TestPel2Shared0067 extends AbsPipelineTest {
 			val t57_app = word("WHO_A","APP",57);
 			val t06_an = word("A","an",6);
 			val t07_indigestible = word("MI","indigestible",7);
-			val t08_food = word("$NC_1$","food",8);
-			val t09_group = word("N","group",9);
+			val t45_food_group = word("N","food_group",45);
 			val t10_which = word("WHO_A","which",10);
 			val t11_is = word("IS","is",11);
 			val t12_found = word("V_1","found",12);
@@ -35,8 +34,7 @@ public final class TestPel2Shared0067 extends AbsPipelineTest {
 			val t17_may = word("V_AUX","may",17);
 			val t18_keep = word("V_2","keep",18);
 			val t59_det = word("EMPTYDET","DET",59);
-			val t19_blood = word("$NC_1$","blood",19);
-			val t20_glucose = word("N","glucose",20);
+			val t36_blood_glucose = word("N","blood_glucose",36);
 			val t21_from = word("P_R","from",21);
 			val t22_rising = word("V_1","rising",22);
 
@@ -83,13 +81,7 @@ public final class TestPel2Shared0067 extends AbsPipelineTest {
 											_(
 												t07_indigestible
 												,
-												_(
-													t08_food
-													,
-													t09_group
-													,
-													45
-												)
+												t45_food_group
 												,
 												46
 											)
@@ -148,13 +140,7 @@ public final class TestPel2Shared0067 extends AbsPipelineTest {
 										_(
 											t59_det
 											,
-											_(
-												t19_blood
-												,
-												t20_glucose
-												,
-												36
-											)
+											t36_blood_glucose
 											,
 											60
 										)
@@ -213,8 +199,8 @@ public final class TestPel2Shared0067 extends AbsPipelineTest {
 			;
 
 			// create the subsumption relations;
-		List<Pair<Integer,Integer>> subs = Lists.newArrayList();
-		subs.add(new IPair<Integer,Integer>(4,1));
+			List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+			subs.add(new IPair<Integer,Integer>(4,1));
 
 			// test for a proof;
 			assertProof(tt, th, subs);
@@ -223,4 +209,3 @@ public final class TestPel2Shared0067 extends AbsPipelineTest {
 		}
 
 }
-

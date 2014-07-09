@@ -51,7 +51,7 @@ public class IFirstOrderExpr2Pred implements FirstOrderExpr2Pred {
 				// TODO
 				// 	Do we really need a case here for (non-)factives?
 				// 	We would like to compile `say:tet c:t z:e` to `say(c,z)`
-				throw new UnsupportedOperationException("Unknown type: "+ lcalc.format(s.getType()));
+				throw new UnsupportedOperationException("Unknown type: "+ lcalc.format(s.getType()) + " for variable: " + s.getName());
 			}
 		}  
 

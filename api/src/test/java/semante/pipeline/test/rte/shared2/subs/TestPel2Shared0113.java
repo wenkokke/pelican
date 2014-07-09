@@ -15,14 +15,12 @@ public final class TestPel2Shared0113 extends AbsPipelineTest {
 		public final void testPel2Shared0113() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_shrek = word("$NPC_1$","Shrek",1);
-			val t02_num2 = word("NP_D","num2",2);
+			val t16_shrek_num2 = word("NP_D","Shrek_num2",16);
 			val t31_app = word("WHO_A","APP",31);
 			val t04_the = word("THE","the",4);
 			val t05_sequel = word("N","sequel",5);
 			val t06_to = word("P_R","to",6);
-			val t07_shrek = word("$NPC_1$","Shrek",7);
-			val t08_num1 = word("NP_D","num1",8);
+			val t18_shrek_num1 = word("NP_D","Shrek_num1",18);
 			val t27_rang_up = word("V_2","rang_up",27);
 			val t34_det = word("EMPTYDET","DET",34);
 			val t12_num92 = word("MR","num92",12);
@@ -33,8 +31,7 @@ public final class TestPel2Shared0113 extends AbsPipelineTest {
 			val h01_a = word("A","A",1);
 			val h02_sequel = word("N","sequel",2);
 			val h03_to = word("P_R","to",3);
-			val h04_shrek = word("$NPC_1$","Shrek",4);
-			val h05_num1 = word("NP_D","num1",5);
+			val h12_shrek_num1 = word("NP_D","Shrek_num1",12);
 			val h06_earned = word("V_2","earned",6);
 			val h21_det = word("EMPTYDET","DET",21);
 			val h07_num92 = word("MR","num92",7);
@@ -45,13 +42,7 @@ public final class TestPel2Shared0113 extends AbsPipelineTest {
 			val tt =
 			_(
 				_(
-					_(
-						t01_shrek
-						,
-						t02_num2
-						,
-						16
-					)
+					t16_shrek_num2
 					,
 					_(
 						t31_app
@@ -65,13 +56,7 @@ public final class TestPel2Shared0113 extends AbsPipelineTest {
 								_(
 									t06_to
 									,
-									_(
-										t07_shrek
-										,
-										t08_num1
-										,
-										18
-									)
+									t18_shrek_num1
 									,
 									19
 								)
@@ -130,13 +115,7 @@ public final class TestPel2Shared0113 extends AbsPipelineTest {
 						_(
 							h03_to
 							,
-							_(
-								h04_shrek
-								,
-								h05_num1
-								,
-								12
-							)
+							h12_shrek_num1
 							,
 							13
 						)
@@ -188,4 +167,3 @@ public final class TestPel2Shared0113 extends AbsPipelineTest {
 		}
 
 }
-

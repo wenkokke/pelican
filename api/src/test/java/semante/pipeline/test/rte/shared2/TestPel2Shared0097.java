@@ -11,14 +11,9 @@ public final class TestPel2Shared0097 extends AbsPipelineTest {
 		public final void testPel2Shared0097() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_de = word("$NPC_1$","De",1);
-			val t02_klerk = word("NP_D","Klerk",2);
+			val t21_de_klerk = word("NP_D","De_Klerk",21);
 			val t03_was = word("IS","was",3);
-			val t04_deputy = word("$NPC_1$","Deputy",4);
-			val t05_president = word("$NPC_1$","President",5);
-			val t06_of = word("$NPC_1$","of",6);
-			val t07_south = word("$NPC_1$","South",7);
-			val t08_africa = word("NP_D","Africa",8);
+			val t46_deputy_president_of_south_africa = word("NP_D","Deputy_President_of_South_Africa",46);
 			val t09_during = word("P_R","during",9);
 			val t10_the = word("THE","the",10);
 			val t11_term = word("N","term",11);
@@ -27,14 +22,12 @@ public final class TestPel2Shared0097 extends AbsPipelineTest {
 			val t14_former = word("MR","former",14);
 			val t15_president = word("N","president",15);
 			val t44_app = word("WHO_A","APP",44);
-			val t16_nelson = word("$NPC_1$","Nelson",16);
-			val t17_mandela = word("NP_D","Mandela",17);
+			val t36_nelson_mandela = word("NP_D","Nelson_Mandela",36);
 			val t18_until = word("P_R","until",18);
 			val t19_num1996 = word("NP_D","num1996",19);
 
 			// create the vocabulary for the hypothesis;
-			val h01_nelson = word("$NPC_1$","Nelson",1);
-			val h02_mandela = word("NP_D","Mandela",2);
+			val h08_nelson_mandela = word("NP_D","Nelson_Mandela",8);
 			val h03_is = word("IS","is",3);
 			val h04_a = word("A","a",4);
 			val h05_former = word("MR","former",5);
@@ -43,44 +36,14 @@ public final class TestPel2Shared0097 extends AbsPipelineTest {
 			// create the tree structure for the text;
 			val tt =
 			_(
-				_(
-					t01_de
-					,
-					t02_klerk
-					,
-					21
-				)
+				t21_de_klerk
 				,
 				_(
 					_(
 						_(
 							t03_was
 							,
-							_(
-								t04_deputy
-								,
-								_(
-									t05_president
-									,
-									_(
-										t06_of
-										,
-										_(
-											t07_south
-											,
-											t08_africa
-											,
-											23
-										)
-										,
-										24
-									)
-									,
-									22
-								)
-								,
-								46
-							)
+							t46_deputy_president_of_south_africa
 							,
 							35
 						)
@@ -115,13 +78,7 @@ public final class TestPel2Shared0097 extends AbsPipelineTest {
 											_(
 												t44_app
 												,
-												_(
-													t16_nelson
-													,
-													t17_mandela
-													,
-													36
-												)
+												t36_nelson_mandela
 												,
 												45
 											)
@@ -162,13 +119,7 @@ public final class TestPel2Shared0097 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_nelson
-					,
-					h02_mandela
-					,
-					8
-				)
+				h08_nelson_mandela
 				,
 				_(
 					h03_is
@@ -203,4 +154,3 @@ public final class TestPel2Shared0097 extends AbsPipelineTest {
 		}
 
 }
-

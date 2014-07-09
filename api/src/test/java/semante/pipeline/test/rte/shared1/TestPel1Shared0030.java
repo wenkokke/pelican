@@ -13,8 +13,7 @@ public final class TestPel1Shared0030 extends AbsPipelineTest {
 			// create the vocabulary for the text;
 			val t01_a = word("A","A",1);
 			val t02_senior = word("MR","senior",2);
-			val t03_coalition = word("$NC_1$","coalition",3);
-			val t04_official = word("N","official",4);
+			val t61_coalition_official = word("N","coalition_official",61);
 			val t05_in = word("P_R","in",5);
 			val t06_iraq = word("NP_D","Iraq",6);
 			val t07_said = word("FACT","said",7);
@@ -24,9 +23,7 @@ public final class TestPel1Shared0030 extends AbsPipelineTest {
 			val t12_was = word("V_AUX","was",12);
 			val t13_found = word("V_1","found",13);
 			val t14_by = word("P_R","by",14);
-			val t15_us = word("$NPC_1$","US",15);
-			val t16_military = word("$NPC_1$","military",16);
-			val t17_police = word("NP_D","police",17);
+			val t57_us_military_police = word("NP_D","US_military_police",57);
 			val t18_in = word("P_R","in",18);
 			val t19_the = word("THE","the",19);
 			val t20_west = word("N","west",20);
@@ -45,9 +42,7 @@ public final class TestPel1Shared0030 extends AbsPipelineTest {
 			val h04_been = word("V_AUX","been",4);
 			val h05_found = word("V_1","found",5);
 			val h06_by = word("P_R","by",6);
-			val h07_us = word("$NPC_1$","US",7);
-			val h08_military = word("$NPC_1$","military",8);
-			val h09_police = word("NP_D","police",9);
+			val h19_us_military_police = word("NP_D","US_military_police",19);
 
 			// create the tree structure for the text;
 			val tt =
@@ -59,13 +54,7 @@ public final class TestPel1Shared0030 extends AbsPipelineTest {
 						_(
 							t02_senior
 							,
-							_(
-								t03_coalition
-								,
-								t04_official
-								,
-								61
-							)
+							t61_coalition_official
 							,
 							62
 						)
@@ -113,19 +102,7 @@ public final class TestPel1Shared0030 extends AbsPipelineTest {
 										_(
 											t14_by
 											,
-											_(
-												t15_us
-												,
-												_(
-													t16_military
-													,
-													t17_police
-													,
-													56
-												)
-												,
-												57
-											)
+											t57_us_military_police
 											,
 											37
 										)
@@ -233,19 +210,7 @@ public final class TestPel1Shared0030 extends AbsPipelineTest {
 					_(
 						h06_by
 						,
-						_(
-							h07_us
-							,
-							_(
-								h08_military
-								,
-								h09_police
-								,
-								18
-							)
-							,
-							19
-						)
+						h19_us_military_police
 						,
 						13
 					)
@@ -266,4 +231,3 @@ public final class TestPel1Shared0030 extends AbsPipelineTest {
 		}
 
 }
-

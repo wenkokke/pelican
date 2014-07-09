@@ -22,9 +22,7 @@ public final class TestPel2Shared0068 extends AbsPipelineTest {
 			val t03_walmart = word("NP_D","WalMart",3);
 			val t37_app = word("WHO_A","APP",37);
 			val t05_the = word("THE","the",5);
-			val t06_discount = word("$NC_1$","discount",6);
-			val t07_department = word("$NC_1$","department",7);
-			val t08_store = word("N","store",8);
+			val t29_discount_department_store = word("N","discount_department_store",29);
 			val t10_faces = word("V_2","faces",10);
 			val t11_an = word("A","an",11);
 			val t12_allegation = word("N","allegation",12);
@@ -81,19 +79,7 @@ public final class TestPel2Shared0068 extends AbsPipelineTest {
 						_(
 							t05_the
 							,
-							_(
-								t06_discount
-								,
-								_(
-									t07_department
-									,
-									t08_store
-									,
-									28
-								)
-								,
-								29
-							)
+							t29_discount_department_store
 							,
 							30
 						)
@@ -216,4 +202,3 @@ public final class TestPel2Shared0068 extends AbsPipelineTest {
 		}
 
 }
-

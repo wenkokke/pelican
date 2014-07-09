@@ -12,8 +12,7 @@ public final class TestPel2Shared0041 extends AbsPipelineTest {
 
 			// create the vocabulary for the text;
 			val t01_the = word("THE","The",1);
-			val t02_terror = word("$NC_1$","terror",2);
-			val t03_group = word("N","group",3);
+			val t59_terror_group = word("N","terror_group",59);
 			val t04_had = word("V_AUX","had",4);
 			val t05_killed = word("V_2","killed",5);
 			val t06_an = word("A","an",6);
@@ -39,8 +38,7 @@ public final class TestPel2Shared0041 extends AbsPipelineTest {
 
 			// create the vocabulary for the hypothesis;
 			val h01_a = word("A","A",1);
-			val h02_terror = word("$NC_1$","terror",2);
-			val h03_group = word("N","group",3);
+			val h19_terror_group = word("N","terror_group",19);
 			val h04_had = word("V_AUX","had",4);
 			val h05_killed = word("V_2","killed",5);
 			val h06_an = word("A","an",6);
@@ -54,13 +52,7 @@ public final class TestPel2Shared0041 extends AbsPipelineTest {
 				_(
 					t01_the
 					,
-					_(
-						t02_terror
-						,
-						t03_group
-						,
-						59
-					)
+					t59_terror_group
 					,
 					60
 				)
@@ -203,13 +195,7 @@ public final class TestPel2Shared0041 extends AbsPipelineTest {
 				_(
 					h01_a
 					,
-					_(
-						h02_terror
-						,
-						h03_group
-						,
-						19
-					)
+					h19_terror_group
 					,
 					20
 				)
@@ -259,4 +245,3 @@ public final class TestPel2Shared0041 extends AbsPipelineTest {
 		}
 
 }
-

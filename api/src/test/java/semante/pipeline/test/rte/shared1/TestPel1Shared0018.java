@@ -23,12 +23,10 @@ public final class TestPel1Shared0018 extends AbsPipelineTest {
 			val t09_bulgarian = word("MI","Bulgarian",9);
 			val t10_writer = word("N","writer",10);
 			val t30_app = word("WHO_A","APP",30);
-			val t12_nikolai = word("$NPC_1$","Nikolai",12);
-			val t13_haitov = word("NP_D","Haitov",13);
+			val t18_nikolai_haitov = word("NP_D","Nikolai_Haitov",18);
 
 			// create the vocabulary for the hypothesis;
-			val h01_nikolai = word("$NPC_1$","Nikolai",1);
-			val h02_haitov = word("NP_D","Haitov",2);
+			val h07_nikolai_haitov = word("NP_D","Nikolai_Haitov",7);
 			val h03_is = word("IS","is",3);
 			val h04_a = word("A","a",4);
 			val h05_writer = word("N","writer",5);
@@ -86,13 +84,7 @@ public final class TestPel1Shared0018 extends AbsPipelineTest {
 									_(
 										t30_app
 										,
-										_(
-											t12_nikolai
-											,
-											t13_haitov
-											,
-											18
-										)
+										t18_nikolai_haitov
 										,
 										31
 									)
@@ -119,13 +111,7 @@ public final class TestPel1Shared0018 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_nikolai
-					,
-					h02_haitov
-					,
-					7
-				)
+				h07_nikolai_haitov
 				,
 				_(
 					h03_is
@@ -154,4 +140,3 @@ public final class TestPel1Shared0018 extends AbsPipelineTest {
 		}
 
 }
-

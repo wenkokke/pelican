@@ -28,22 +28,15 @@ public final class TestPel1Shared0038 extends AbsPipelineTest {
 			val t16_the = word("THE","the",16);
 			val t17_headquarters = word("N","headquarters",17);
 			val t18_of = word("P_R","of",18);
-			val t19_first = word("$NPC_1$","First",19);
-			val t20_automotive = word("$NPC_1$","Automotive",20);
-			val t21_works = word("$NPC_1$","Works",21);
-			val t22_group = word("NP_D","Group",22);
+			val t59_first_automotive_works_group = word("NP_D","First_Automotive_Works_Group",59);
 			val t69_app = word("WHO_A","APP",69);
 			val t24_a = word("A","a",24);
 			val t25_top = word("MR","top",25);
 			val t26_chinese = word("MI","Chinese",26);
-			val t27_vehicle = word("$NC_1$","vehicle",27);
-			val t28_maker = word("N","maker",28);
+			val t60_vehicle_maker = word("N","vehicle_maker",60);
 
 			// create the vocabulary for the hypothesis;
-			val h01_first = word("$NPC_1$","First",1);
-			val h02_automotive = word("$NPC_1$","Automotive",2);
-			val h03_works = word("$NPC_1$","Works",3);
-			val h04_group = word("NP_D","Group",4);
+			val h14_first_automotive_works_group = word("NP_D","First_Automotive_Works_Group",14);
 			val h05_is = word("IS","is",5);
 			val h06_chinese = word("MI","Chinese",6);
 
@@ -134,25 +127,7 @@ public final class TestPel1Shared0038 extends AbsPipelineTest {
 									t18_of
 									,
 									_(
-										_(
-											t19_first
-											,
-											_(
-												t20_automotive
-												,
-												_(
-													t21_works
-													,
-													t22_group
-													,
-													57
-												)
-												,
-												58
-											)
-											,
-											59
-										)
+										t59_first_automotive_works_group
 										,
 										_(
 											t69_app
@@ -166,13 +141,7 @@ public final class TestPel1Shared0038 extends AbsPipelineTest {
 													_(
 														t26_chinese
 														,
-														_(
-															t27_vehicle
-															,
-															t28_maker
-															,
-															60
-														)
+														t60_vehicle_maker
 														,
 														61
 													)
@@ -211,25 +180,7 @@ public final class TestPel1Shared0038 extends AbsPipelineTest {
 			// create the tree structure for the hypothesis;
 			val th =
 			_(
-				_(
-					h01_first
-					,
-					_(
-						h02_automotive
-						,
-						_(
-							h03_works
-							,
-							h04_group
-							,
-							12
-						)
-						,
-						13
-					)
-					,
-					14
-				)
+				h14_first_automotive_works_group
 				,
 				_(
 					h05_is
@@ -252,4 +203,3 @@ public final class TestPel1Shared0038 extends AbsPipelineTest {
 		}
 
 }
-

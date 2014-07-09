@@ -112,4 +112,3 @@ public final class TestPel2Shared0105 extends AbsPipelineTest {
 		}
 
 }
-

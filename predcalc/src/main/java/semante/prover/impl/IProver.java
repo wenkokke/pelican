@@ -185,12 +185,21 @@ public class IProver implements Prover {
 		StringBuilder out = new StringBuilder();
 		out.append("formulas(assumptions).\n");
 		out.append("% Pragmatics:\n");
-		for (Formula prg : txt.getPragmatics()) {
-			out.append(fol.format(prg) + ".\n");
+		
+		if (txt.getUniquenessConditions().size()>0) {
+			out.append("\n% Uniqueness conditions:\n");
+			for (Formula prg : txt.getUniquenessConditions()) {
+				out.append(fol.format(prg) + ".\n");
+			}
 		}
-		for (Formula prg : hyp.getPragmatics()) {
-			out.append(fol.format(prg) + ".\n");
+		
+		if (txt.getImplications().size()>0) {
+			out.append("\n% Implications:\n");
+			for (Formula prg : txt.getImplications()) {
+				out.append(fol.format(prg) + ".\n");
+			}
 		}
+
 		out.append("\n% Semantics:\n");
 		out.append(fol.format(txt.getSemantics()) + ".\n");
 		if (subs != null) {

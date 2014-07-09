@@ -18,8 +18,7 @@ public final class TestPNs extends AbsPipelineTest {
 			// create the vocabulary for the text;
 			val t01_john = word("NP_D","John",1);
 			val t02_kissed = word("V_2","kissed",2);
-			val t03_virginia = word("$NPC_1$","Virginia",3);
-			val t04_wolf = word("NP_D","Wolf",4);
+			val t06_virginia_wolf = word("NP_D","Virginia_Wolf",6);
 
 			// create the vocabulary for the hypothesis;
 			val h01_john = word("NP_D","John",1);
@@ -34,13 +33,7 @@ public final class TestPNs extends AbsPipelineTest {
 				_(
 					t02_kissed
 					,
-					_(
-						t03_virginia
-						,
-						t04_wolf
-						,
-						6
-					)
+					t06_virginia_wolf
 					,
 					7
 				)
@@ -67,8 +60,8 @@ public final class TestPNs extends AbsPipelineTest {
 			;
 
 			// create the subsumption relations;
-		List<Pair<Integer,Integer>> subs = Lists.newArrayList();
-		subs.add(new IPair<Integer,Integer>(6,3));
+			List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+			subs.add(new IPair<Integer,Integer>(6,3));
 
 			// test for a proof;
 			assertProof(tt, th, subs);
@@ -77,11 +70,10 @@ public final class TestPNs extends AbsPipelineTest {
 		}
 
 		@Test
-		public final void TestCas02() throws Exception {
+		public final void TestCase02() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_norma = word("$NPC_1$","Norma",1);
-			val t02_jean = word("NP_D","Jean",2);
+			val t05_norma_jean = word("NP_D","Norma_Jean",5);
 			val t03_kissed = word("V_2","kissed",3);
 			val t04_john = word("NP_D","John",4);
 
@@ -93,13 +85,7 @@ public final class TestPNs extends AbsPipelineTest {
 			// create the tree structure for the text;
 			val tt =
 			_(
-				_(
-					t01_norma
-					,
-					t02_jean
-					,
-					5
-				)
+				t05_norma_jean
 				,
 				_(
 					t03_kissed
@@ -131,8 +117,8 @@ public final class TestPNs extends AbsPipelineTest {
 			;
 
 			// create the subsumption relations;
-		List<Pair<Integer,Integer>> subs = Lists.newArrayList();
-		subs.add(new IPair<Integer,Integer>(5,1));
+			List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+			subs.add(new IPair<Integer,Integer>(5,1));
 
 			// test for a proof;
 			assertProof(tt, th, subs);
@@ -141,11 +127,10 @@ public final class TestPNs extends AbsPipelineTest {
 		}
 
 		@Test
-		public final void TestCas03() throws Exception {
+		public final void TestCase03() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_john = word("$NPC_1$","John",1);
-			val t02_lennon = word("NP_D","Lennon",2);
+			val t10_john_lennon = word("NP_D","John_Lennon",10);
 			val t20_app = word("WHO_A","APP",20);
 			val t04_the = word("THE","the",4);
 			val t05_singer = word("N","singer",5);
@@ -166,13 +151,7 @@ public final class TestPNs extends AbsPipelineTest {
 			val tt =
 			_(
 				_(
-					_(
-						t01_john
-						,
-						t02_lennon
-						,
-						10
-					)
+					t10_john_lennon
 					,
 					_(
 						t20_app
@@ -251,9 +230,9 @@ public final class TestPNs extends AbsPipelineTest {
 			;
 
 			// create the subsumption relations;
-		List<Pair<Integer,Integer>> subs = Lists.newArrayList();
-		subs.add(new IPair<Integer,Integer>(10,1));
-
+			List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+			subs.add(new IPair<Integer,Integer>(10,1));
+		
 			// test for a proof;
 			assertProof(tt, th, subs);
 			// test the testcasecreator;
@@ -262,11 +241,10 @@ public final class TestPNs extends AbsPipelineTest {
 		
 		
 		@Test
-		public final void TestCas04() throws Exception {
+		public final void TestCase04() throws Exception {
 
 			// create the vocabulary for the text;
-			val t01_john = word("$NPC_1$","John",1);
-			val t02_lennon = word("NP_D","Lennon",2);
+			val t09_john_lennon = word("NP_D","John_Lennon",9);
 			val t04_who = word("WHO_A","who",4);
 			val t05_sang = word("V_2","sang",5);
 			val t06_imagine = word("NP_D","Imagine",6);
@@ -283,13 +261,7 @@ public final class TestPNs extends AbsPipelineTest {
 			val tt =
 			_(
 				_(
-					_(
-						t01_john
-						,
-						t02_lennon
-						,
-						9
-					)
+					t09_john_lennon
 					,
 					_(
 						t04_who
@@ -344,8 +316,8 @@ public final class TestPNs extends AbsPipelineTest {
 			;
 
 			// create the subsumption relations;
-		List<Pair<Integer,Integer>> subs = Lists.newArrayList();
-		subs.add(new IPair<Integer,Integer>(9,1));
+			List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+			subs.add(new IPair<Integer,Integer>(9,1));
 
 			// test for a proof;
 			assertProof(tt, th, subs);
@@ -354,7 +326,7 @@ public final class TestPNs extends AbsPipelineTest {
 		}
 	
 		@Test
-		public final void TestCas05() throws Exception {
+		public final void TestCase05() throws Exception {
 
 			// create the vocabulary for the text;
 			val t01_the = word("THE","The",1);
@@ -362,8 +334,7 @@ public final class TestPNs extends AbsPipelineTest {
 			val t03_of = word("P_R","of",3);
 			val t04_imagine = word("NP_D","Imagine",4);
 			val t20_app = word("WHO_A","APP",20);
-			val t06_john = word("$NPC_1$","John",6);
-			val t07_lennon = word("NP_D","Lennon",7);
+			val t14_john_lennon = word("NP_D","John_Lennon",14);
 			val t09_smiled = word("V_1","smiled",9);
 
 			// create the vocabulary for the hypothesis;
@@ -402,13 +373,7 @@ public final class TestPNs extends AbsPipelineTest {
 					_(
 						t20_app
 						,
-						_(
-							t06_john
-							,
-							t07_lennon
-							,
-							14
-						)
+						t14_john_lennon
 						,
 						21
 					)
@@ -464,8 +429,8 @@ public final class TestPNs extends AbsPipelineTest {
 			;
 
 			// create the subsumption relations;
-		List<Pair<Integer,Integer>> subs = Lists.newArrayList();
-		subs.add(new IPair<Integer,Integer>(14,6));
+			List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+			subs.add(new IPair<Integer,Integer>(14,6));
 
 			// test for a proof;
 			assertProof(tt, th, subs);
@@ -475,15 +440,14 @@ public final class TestPNs extends AbsPipelineTest {
 
 
 		@Test
-		public final void TestCas06() throws Exception {
+		public final void TestCase06() throws Exception {
 
 			// create the vocabulary for the text;
 			val t01_john = word("NP_D","John",1);
 			val t02_met = word("V_2","met",2);
 			val t03_mary = word("NP_D","Mary",3);
 			val t04_in = word("P_R","in",4);
-			val t05_los = word("$NPC_1$","Los",5);
-			val t06_angeles = word("NP_D","Angeles",6);
+			val t09_los_angeles = word("NP_D","Los_Angeles",9);
 
 			// create the vocabulary for the hypothesis;
 			val h01_john = word("NP_D","John",1);
@@ -509,13 +473,7 @@ public final class TestPNs extends AbsPipelineTest {
 					_(
 						t04_in
 						,
-						_(
-							t05_los
-							,
-							t06_angeles
-							,
-							9
-						)
+						t09_los_angeles
 						,
 						10
 					)
@@ -557,8 +515,8 @@ public final class TestPNs extends AbsPipelineTest {
 			;
 
 			// create the subsumption relations;
-		List<Pair<Integer,Integer>> subs = Lists.newArrayList();
-		subs.add(new IPair<Integer,Integer>(9,5));
+			List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+			subs.add(new IPair<Integer,Integer>(9,5));
 
 			// test for a proof;
 			assertProof(tt, th, subs);
@@ -567,21 +525,18 @@ public final class TestPNs extends AbsPipelineTest {
 		}
 		
 		@Test
-		public final void TestCas07() throws Exception {
+		public final void TestCase07() throws Exception {
 
 			// create the vocabulary for the text;
 			val t01_the = word("THE","The",1);
-			val t02_los = word("$NPC_1$","Los",2);
-			val t03_angeles = word("$NPC_1$","Angeles",3);
-			val t04_lakers = word("NP_D","Lakers",4);
+			val t13_los_angeles_lakers = word("NP_D","Los_Angeles_Lakers",13);
 			val t05_won = word("V_2","won",5);
 			val t06_the = word("THE","the",6);
 			val t07_game = word("N","game",7);
 
 			// create the vocabulary for the hypothesis;
 			val h01_the = word("THE","The",1);
-			val h02_la = word("$NPC_1$","LA",2);
-			val h03_lakers = word("NP_D","Lakers",3);
+			val h11_la_lakers = word("NP_D","LA_Lakers",11);
 			val h04_won = word("V_2","won",4);
 			val h05_the = word("THE","the",5);
 			val h06_game = word("N","game",6);
@@ -592,19 +547,7 @@ public final class TestPNs extends AbsPipelineTest {
 				_(
 					t01_the
 					,
-					_(
-						t02_los
-						,
-						_(
-							t03_angeles
-							,
-							t04_lakers
-							,
-							12
-						)
-						,
-						13
-					)
+					t13_los_angeles_lakers
 					,
 					14
 				)
@@ -633,13 +576,7 @@ public final class TestPNs extends AbsPipelineTest {
 				_(
 					h01_the
 					,
-					_(
-						h02_la
-						,
-						h03_lakers
-						,
-						11
-					)
+					h11_la_lakers
 					,
 					12
 				)
@@ -663,8 +600,8 @@ public final class TestPNs extends AbsPipelineTest {
 			;
 
 			// create the subsumption relations;
-		List<Pair<Integer,Integer>> subs = Lists.newArrayList();
-		subs.add(new IPair<Integer,Integer>(13,11));
+			List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+			subs.add(new IPair<Integer,Integer>(13,11));
 
 			// test for a proof;
 			assertProof(tt, th, subs);

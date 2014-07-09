@@ -32,8 +32,7 @@ public final class TestPel1Shared0036 extends AbsPipelineTest {
 			val t18_korea = word("NP_D","Korea",18);
 			val t128_app = word("WHO_A","APP",128);
 			val t19_ = word("IGNORE","",19);
-			val t20_south = word("$NPC_1$","South",20);
-			val t21_korea = word("NP_D","Korea",21);
+			val t66_south_korea = word("NP_D","South_Korea",66);
 			val t22_ = word("IGNORE","",22);
 			val t97_is_located = word("V_1","is_located",97);
 			val t26_in = word("P_R","in",26);
@@ -48,8 +47,7 @@ public final class TestPel1Shared0036 extends AbsPipelineTest {
 			val t35_hangang = word("N","HanGang",35);
 			val t133_app = word("WHO_A","APP",133);
 			val t36_ = word("IGNORE","",36);
-			val t37_han = word("$NPC_1$","Han",37);
-			val t38_river = word("NP_D","River",38);
+			val t77_han_river = word("NP_D","Han_River",77);
 			val t39_ = word("IGNORE","",39);
 			val t41_which = word("WHO_A","which",41);
 			val t42_lies = word("V_2","lies",42);
@@ -62,15 +60,13 @@ public final class TestPel1Shared0036 extends AbsPipelineTest {
 			val t48_ = word("IGNORE","",48);
 			val t49_from = word("P_R","from",49);
 			val t50_the = word("THE","the",50);
-			val t51_yellow = word("$NC_1$","Yellow",51);
-			val t52_sea = word("N","Sea",52);
+			val t107_yellow_sea = word("N","Yellow_Sea",107);
 
 			// create the vocabulary for the hypothesis;
 			val h01_the = word("THE","The",1);
 			val h02_capital = word("N","capital",2);
 			val h03_of = word("P_R","of",3);
-			val h04_south = word("$NPC_1$","South",4);
-			val h05_korea = word("NP_D","Korea",5);
+			val h10_south_korea = word("NP_D","South_Korea",10);
 			val h06_is = word("IS","is",6);
 			val h07_seoul = word("NP_D","Seoul",7);
 
@@ -183,13 +179,7 @@ public final class TestPel1Shared0036 extends AbsPipelineTest {
 											_(
 												t19_
 												,
-												_(
-													t20_south
-													,
-													t21_korea
-													,
-													66
-												)
+												t66_south_korea
 												,
 												114
 											)
@@ -261,13 +251,7 @@ public final class TestPel1Shared0036 extends AbsPipelineTest {
 																	_(
 																		t36_
 																		,
-																		_(
-																			t37_han
-																			,
-																			t38_river
-																			,
-																			77
-																		)
+																		t77_han_river
 																		,
 																		101
 																	)
@@ -331,13 +315,7 @@ public final class TestPel1Shared0036 extends AbsPipelineTest {
 																			_(
 																				t50_the
 																				,
-																				_(
-																					t51_yellow
-																					,
-																					t52_sea
-																					,
-																					107
-																				)
+																				t107_yellow_sea
 																				,
 																				108
 																			)
@@ -403,13 +381,7 @@ public final class TestPel1Shared0036 extends AbsPipelineTest {
 						_(
 							h03_of
 							,
-							_(
-								h04_south
-								,
-								h05_korea
-								,
-								10
-							)
+							h10_south_korea
 							,
 							11
 						)
@@ -441,4 +413,3 @@ public final class TestPel1Shared0036 extends AbsPipelineTest {
 		}
 
 }
-
