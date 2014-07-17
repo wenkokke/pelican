@@ -36,8 +36,14 @@ public class IFirstOrderExpr2Pred implements FirstOrderExpr2Pred {
 	private Visitor<FOLExpr> smash = new Visitor<FOLExpr>() {
 		@Override public FOLExpr variable(Symbol s) {
 			if (typeIs(s.getType(), Types.E)) {
-				// Variable
-				return new IFOLExpr.Variable(s.getName());
+				// Variable or Constant
+				// if it's a variable (i.e. its prefix is in [u-z] followed by a number) then we keep it as is.
+				// otherwise we assume that it's a constant and we capitalize the first character.
+				String name = s.getName();
+				if (!name.matches("^[u-z]\\d+$")) {
+					name = name.substring(0, 1).toUpperCase() + name.substring(1);
+				}
+				return new IFOLExpr.Variable(name);
 			} else if (typeVector(s.getType(), Types.T,  Types.T)) {
 				// Connective
 				return new IFOLExpr.Connective(lookup(s.getName()), new ArrayList<Formula>());
