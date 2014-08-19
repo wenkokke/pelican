@@ -13,6 +13,7 @@ import lombok.val;
 import semante.pipeline.ImplicationGenerator;
 import semante.pipeline.IotaExtractor;
 import semante.pipeline.IotaExtractor.IotaExtractorResult;
+import semante.settings.Settings;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
@@ -21,8 +22,10 @@ public class IImplicationGenerator implements ImplicationGenerator {
 
 	private STL stl;
 	private IotaExtractor iotaExtractor;
+	private boolean debugMode;
 	
-	public IImplicationGenerator(STL stl, IotaExtractor iotaExtractor) {
+	public IImplicationGenerator(Settings settings, STL stl, IotaExtractor iotaExtractor) {
+		this.debugMode = Boolean.parseBoolean(settings.get("SemAnTE","Tracer","Pipeline"));
 		this.stl = stl;
 		this.iotaExtractor = iotaExtractor;
 	}
@@ -50,7 +53,9 @@ public class IImplicationGenerator implements ImplicationGenerator {
 		val sourceType = stl.typeOf(sourceExp);
 		val targetType = stl.typeOf(targetExp);
 		
-		System.err.println("Defining implication between: ["+stl.format(sourceExp)+"] and ["+stl.format(targetExp)+"] of types: [" + stl.format(sourceType) + "] and [" + stl.format(targetType) +"].");
+		if (debugMode) {
+			System.err.println("Defining implication between: ["+stl.format(sourceExp)+"] and ["+stl.format(targetExp)+"] of types: [" + stl.format(sourceType) + "] and [" + stl.format(targetType) +"].");
+		}
 		
 		if (!sourceType.equals(targetType)) {
 			throw new UnmatchedTypesException(stl.format(sourceType),stl.format(targetType)); 
@@ -185,7 +190,9 @@ public class IImplicationGenerator implements ImplicationGenerator {
 		
 		if (implications.size()>0) {
 			for (val implication : implications) {
-				System.err.println("Generated implication: " + stl.format(implication));
+				if (debugMode) {
+					System.err.println("Generated implication: " + stl.format(implication));
+				}
 			}
 		}
 		

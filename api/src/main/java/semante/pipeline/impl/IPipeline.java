@@ -67,7 +67,7 @@ public final class IPipeline implements Pipeline {
 	Settings		settings;
 	STL				stl;
 	RichLexicon		lexicon;
-	
+
 	// REDUCER: simple function wrapper around the STL beta reducer
 	Function<DeBruijn,DeBruijn> reducer
 		= new Function<DeBruijn,DeBruijn>() {
@@ -82,11 +82,11 @@ public final class IPipeline implements Pipeline {
 		final BinaryTree<ID, Annotation<ID>> text,
 		final BinaryTree<ID, Annotation<ID>> hypo,
 		final List<Pair<ID, ID>> subsumptions) throws FileNotFoundException {
-
+		
 		// prepare interfaces
 		val pcalc  = new IPredCalc(settings);
 		val prover = new IProver(settings, pcalc);
-		val stl2p  = new ISmasher(pcalc, stl);
+		val stl2p  = new ISmasher(settings,pcalc, stl);
 			
 		// prepare the formuals to try to prove (including disambiguation, flattening, etc.)
 		val preparedFormulae = prepare(text, hypo, subsumptions, stl2p);
@@ -123,6 +123,9 @@ public final class IPipeline implements Pipeline {
 			final List<ID> subIds,
 			final ETHType thType,
 			final String treeName) {
+
+		
+		val debugMode = Boolean.parseBoolean(settings.get("SemAnTE","Tracer","Pipeline"));
 		
 		val lowerCaseTree = new ILowerCase().apply(tree);
 		
@@ -177,7 +180,10 @@ public final class IPipeline implements Pipeline {
 
 		Map<DeBruijn,List<DeBruijn>> treesMap = new HashMap<DeBruijn, List<DeBruijn>>();
 
-		System.err.println(treeName + ": reduced unambiguous trees: " + redTextsMap.size() + "; subsumed elements: " + subIds.toString());
+		if (debugMode) {
+			System.err.println(treeName + ": reduced unambiguous trees: " + redTextsMap.size() + "; subsumed elements: " + subIds.toString());
+		}
+		
 		// map between reduced texts and the sub-trees that the subsumptions refer to
 		for (int i : redTextsMap.keySet()) {
 			val redText = redTextsMap.get(i);
@@ -204,6 +210,35 @@ public final class IPipeline implements Pipeline {
 		
 		return new IPreparedTree<ID>(ImmutableMap.copyOf(treesMap),thType);
 	}
+	
+	public final <ID> Result<ID> typeCheck(
+			final BinaryTree<ID, Annotation<ID>> tree,
+			final List<Pair<ID,ID>> subsumptions, ETHType thType) {
+
+		val printer       = new IAnnotationTreePrinter<ID,Annotation<ID>>();
+		val flattener     = new IFlattenTree<ID>(stl.getDeBruijnBuilder());
+		val treebuilder   = new IBinaryTreeBuilder<ID,UnambiguousAnnotation<ID>>();
+		val disambiguator = new IDisambiguator<ID>(stl,lexicon,flattener,printer,treebuilder);
+
+		// getFirst: simple function wrapper around a pair
+		Function<Pair<ID,ID>,ID> getFirst = new Function<Pair<ID,ID>,ID>() {
+			@Override public final ID apply(final Pair<ID,ID> pair) {return pair.getFirst();}
+		};	
+
+		// getSecond: simple function wrapper around a pair
+		Function<Pair<ID,ID>,ID> getSecond = new Function<Pair<ID,ID>,ID>() {
+			@Override public final ID apply(final Pair<ID,ID> pair) {return pair.getSecond();}
+		};	
+		
+		val nameGetter = ImmutableMap.of(ETHType.ETextTree,"T",ETHType.EHypoTree,"H");
+		val subGetter = ImmutableMap.of(ETHType.ETextTree,getFirst,ETHType.EHypoTree,getSecond);
+		val subIds = subsumptions!=null ? Lists.transform(subsumptions, subGetter.get(thType)) : new ArrayList<ID>();
+		val preparedTree = prepareTree(printer,flattener,treebuilder,disambiguator,
+									   tree,subIds,thType,nameGetter.get(thType));
+		
+		return preparedTree.isResultSet() ? preparedTree.getResult() : new IResult$Proof<ID>();
+	}
+
 	
 	public final <ID> PreparedFormulae<ID> prepareFormulae(
 			final BinaryTree<ID, Annotation<ID>> text,
@@ -289,9 +324,9 @@ public final class IPipeline implements Pipeline {
 		//               and add them to the term representing the text
 		List<PreparedRunnableFormula> runnableFormulas = new ArrayList<PreparedRunnableFormula>();
 
-		IotaExtractor iotaExtractor = new IIotaExtractor();
+		IotaExtractor iotaExtractor = new IIotaExtractor(settings);
 		
-		ImplicationGenerator impGenerator = new IImplicationGenerator(stl,iotaExtractor);
+		ImplicationGenerator impGenerator = new IImplicationGenerator(settings,stl,iotaExtractor);
 		
 		val unsupportedImplicationsB = ImmutableSet.<String>builder();
 		val unmatchedImplicationsB = ImmutableSet.<String>builder();

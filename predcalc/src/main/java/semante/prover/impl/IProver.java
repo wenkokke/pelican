@@ -41,10 +41,14 @@ public class IProver implements Prover {
 
 	private PredCalc fol;
 	private String proverPath;
-
+	private boolean debugMode;
+	private boolean printPredCalc;
+	
 	public IProver(Settings settings, PredCalc pcalc) {
 		this.fol  = pcalc;
 		this.proverPath = settings.get("SemAnTE","Prover","Location");
+		this.debugMode = Boolean.parseBoolean(settings.get("SemAnTE","Tracer","Prover"));
+		this.printPredCalc = Boolean.parseBoolean(settings.get("SemAnTE","Tracer","PredCalc"));
 	}
 
 	@Override
@@ -88,10 +92,14 @@ public class IProver implements Prover {
 			val interrupter = new InterruptTimerTask(Thread.currentThread());
 			timer.schedule(interrupter, timeout * 1000);
 
-			System.out.println("Running Prover process ["+prover9+"]");
+			if (debugMode) {
+				System.out.println("Running Prover process ["+prover9+"]");
+			}
 			process = Runtime.getRuntime().exec(command);
 
-			System.out.println("Prover is running");
+			if (debugMode) {
+				System.out.println("Prover is running");
+			}
 
 			// readers for the error and output stream (executed in separated threads)
 			errorGobbler = new StreamGobbler(process.getErrorStream(), "ERROR", prover9OutputBuffer);            
@@ -100,15 +108,19 @@ public class IProver implements Prover {
 			// kick them off
 			errorGobbler.start();
 			outputGobbler.start();
-			
-			System.out.println("Waiting for prover to end");
+
+			if (debugMode) {
+				System.out.println("Waiting for prover to end");
+			}
 			int exitVal = process.waitFor();
 
 			String resultDesc = prover9exitCodeToString(exitVal);
 			resultType = prover9exitCodeToResultEnum(exitVal);
 			
 			// the process has ended gracefully (otherwise - the InterruptedException would have been thrown)
-			System.out.println("Prover ended with exit value: [" + exitVal + "], meaning: [" + resultDesc + "], type: [" + resultType + "]");
+			if (debugMode) {
+				System.out.println("Prover ended with exit value: [" + exitVal + "], meaning: [" + resultDesc + "], type: [" + resultType + "]");
+			}
 
 		} catch(IOException e) {
 			proverOutputPF = new IProverOutput("Failed to create input file or to execute the process - " + e.getMessage(),ResultType.Error);
@@ -125,10 +137,14 @@ public class IProver implements Prover {
 				for (StreamGobbler streamGobbler : streamGobblers) {
 					if (streamGobbler.isAlive()) {
 						try {
-							System.out.println("Waiting for globber " + streamGobbler.type + " to end: ");
+							if (debugMode) {
+								System.out.println("Waiting for globber " + streamGobbler.type + " to end: ");
+							}
 							streamGobbler.join();
 						} catch(InterruptedException e) {
-							System.out.println("Interuppted while waiting for stream gobbler to end");
+							if (debugMode) {
+								System.out.println("Interuppted while waiting for stream gobbler to end");
+							}
 						}
 					}
 				}
@@ -144,7 +160,9 @@ public class IProver implements Prover {
 					String proverOutput = prover9OutputBuffer.toString();
 					if (resultType==ResultType.NoProofCanBeFound && proverOutput.matches("(?s).*Exiting with [1-9]+ proofs?.*")) {
 						resultType = ResultType.ProofFound;
-						System.out.println("Prover stdout indicates that a proof WAS found; dismissing exit code indication, type is set to: [" + resultType + "]");
+						if (debugMode) {
+							System.out.println("Prover stdout indicates that a proof WAS found; dismissing exit code indication, type is set to: [" + resultType + "]");
+						}
 					}
 					proverOutputPF = new IProverOutput(proverOutput,resultType);
 				} else {
@@ -167,10 +185,11 @@ public class IProver implements Prover {
 				boolean del = true;
 
 				if (del) { 
-					//System.out.println("Deleting temp input file: " + tempFile.toString()); 
 					tempFile.delete();
 				} else {
-					System.out.println("NOT deleting temp input file: " + tempFile.toString()); 
+					if (debugMode) {
+						System.out.println("NOT deleting temp input file: " + tempFile.toString());
+					}
 				}
 			}
 
@@ -210,7 +229,10 @@ public class IProver implements Prover {
 		out.append("formulas(goals).\n");
 		out.append(fol.format(hyp.getSemantics()) + ".\n");
 		out.append("end_of_list.");
-		System.err.println(out);
+		
+		if (printPredCalc) {
+			System.err.println(out);
+		}
 		return out.toString();
 	}
 
@@ -224,7 +246,7 @@ public class IProver implements Prover {
 		}
 
 		public void run() {
-			System.out.println("Timeout expired!");
+			System.err.println("Prover9 timeout expired!");
 			thread.interrupt();
 		}
 	}
