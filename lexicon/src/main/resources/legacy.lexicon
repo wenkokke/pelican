@@ -59,14 +59,16 @@ semantically still behave as a verb. These cases are easily taken care of.
 
 \subsection{Modifiers}
 
-Modifiers are annotated as $\text{MOD}_I$ or $\text{MOD}_R$ depending on whether they
-are \textit{intersective} or \textit{restrictive}.
+Modifiers are annotated as $\text{MOD}_I$, $\text{MOD}_R$ or $\text{MOD}_NR$ depending on whether they
+are \textit{intersective}, \textit{restrictive} or \textit{non-restrictive}.
 
 > MOD_I \A:et.\x:e.AND:ttt (A:et x:e) (WORD:et x:e)
 
 > MOD_R \A:et.\z:e.AND:ttt (A:et z:e) ((WORD:(et)et A:et) z:e)
 > MOD_R \A:eet.\x:e.\z:e.AND:ttt (A:eet z:e x:e) ((WORD:(et)et (\z:e.A:eet z:e x:e)) z:e)
 > MOD_R \A:eeet.\x:e.\y:e.\z:e.AND:ttt (A:eeet z:e x:e y:e) ((WORD:(et)et (\z:e.A:eeet z:e x:e y:e)) z:e)
+
+> MOD_NR \A:et.\z:e.((WORD:(et)et A:et) z:e)
 
 Two specialized versions of $\text{MOD}_I$ and $\text{MOD}_R$\footnote{
   \textbf{TODO}: provide examples in which these versions are needed.
@@ -298,6 +300,7 @@ we don't support polymorphism in the Java implementation.
 @ NP     NP_D
 @ MOD_R  MR
 @ MOD_I  MI
+@ MOD_NR NR
 @ GEN    POSS
 @ NOFACT V_2
 
@@ -312,6 +315,8 @@ we don't support polymorphism in the Java implementation.
 + MR
 + MOD_R
 + MI
++ NR
++ MOD_NR
 + MOD_I
 + GER_1
 + GER_2
