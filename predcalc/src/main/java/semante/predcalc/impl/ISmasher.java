@@ -16,6 +16,7 @@ import semante.predcalc.FOLExpr.Formula;
 import semante.predcalc.FirstOrderExpr2Pred;
 import semante.predcalc.PredCalc;
 import semante.predcalc.Smasher;
+import semante.settings.Settings;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -27,10 +28,13 @@ public final class ISmasher implements Smasher {
 	Expr2FirstOrderExpr expr2foe;
 	FirstOrderExpr2Pred foe2pred;
 	
-	public ISmasher(PredCalc pcalc, STL lcalc) {
+	boolean debugMode;
+	
+	public ISmasher(Settings settings, PredCalc pcalc, STL lcalc) {
 		this.lcalc = lcalc;
-		expr2foe   = new IExpr2FirstOrderExpr(lcalc);
+		expr2foe   = new IExpr2FirstOrderExpr(settings, lcalc);
 		foe2pred   = new IFirstOrderExpr2Pred(pcalc, lcalc);
+		this.debugMode = Boolean.parseBoolean(settings.get("SemAnTE","Tracer","Smasher"));
 	}
 	
 	@Override
@@ -42,7 +46,9 @@ public final class ISmasher implements Smasher {
 		val uniquenessB = ImmutableSet.<Formula>builder();
 		if (uniquenessConditions!=null) {
 			for (Expr p : uniquenessConditions) {
-				System.err.println("Smashing uniqueness: ["+ lcalc.format(p) + "]");
+				if (debugMode) {
+					System.err.println("Smashing uniqueness: ["+ lcalc.format(p) + "]");
+				}
 				uniquenessB.add((Formula) foe2pred.convert(expr2foe.rewrite(p)));
 			}
 		}
@@ -52,7 +58,9 @@ public final class ISmasher implements Smasher {
 		val implicationsB = ImmutableSet.<Formula>builder();
 		if (implications!=null) {
 			for (Expr p : implications) {
-				System.err.println("Smashing implication: ["+ lcalc.format(p) + "]");
+				if (debugMode) {
+					System.err.println("Smashing implication: ["+ lcalc.format(p) + "]");
+				}
 				implicationsB.add((Formula) foe2pred.convert(expr2foe.rewrite(p)));
 			}
 		}
@@ -61,7 +69,9 @@ public final class ISmasher implements Smasher {
 		// apparently, this is not safe:
 		// ClassCastException: IFOLExpr$Variable cannot be case to FOLExpr$Formula
 		Expr rewritten = expr2foe.rewrite(expr);
-		System.err.println("Lowered Form: [" + lcalc.format(rewritten) + "]");
+		if (debugMode) {		
+			System.err.println("Lowered Form: [" + lcalc.format(rewritten) + "]");
+		}
 		FOLExpr converted = foe2pred.convert(rewritten);
 		Formula smashedSemantics = (Formula) converted;
 		

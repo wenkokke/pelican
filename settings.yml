@@ -8,3 +8,9 @@ SemAnTE:
   Server:
     Hostname: '91.233.105.232'
     Username: 'root'
+  Tracer:
+    Pipeline: 'false'
+    Smasher: 'false'
+    PredCalc: 'false'
+    Prover: 'false'
+	

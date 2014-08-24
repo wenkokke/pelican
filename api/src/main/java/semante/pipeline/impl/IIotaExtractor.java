@@ -22,10 +22,10 @@ import lambdacalc.STL;
 import lambdacalc.Symbol;
 import lambdacalc.Type;
 import lambdacalc.Types;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 import semante.pipeline.IotaExtractor;
+import semante.settings.Settings;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
@@ -48,13 +48,19 @@ import com.google.common.collect.ImmutableSet.Builder;
  * @author Pepijn Kokke
  */
 
-@RequiredArgsConstructor
+
 @FieldDefaults(makeFinal=true, level = PRIVATE)
 public final class IIotaExtractor implements IotaExtractor {
 	
 	private static final String FRONTED_IOTA_NAME 	= "FIOTA"; 
 	private static final String FRONTED_EQ_NAME 	= "FEQ"; 
 
+	private boolean debugMode;
+	
+	public IIotaExtractor(Settings settings) {
+		debugMode = Boolean.parseBoolean(settings.get("SemAnTE","Tracer","Pipeline"));		
+	}
+	
 	@Override
 	public IotaExtractorResult extract(final Expr expr, final STL stl) {
 
@@ -65,12 +71,16 @@ public final class IIotaExtractor implements IotaExtractor {
 
 		final Builder<Expr> uniquenessConditionsB = ImmutableSet.<Expr>builder();
 
-		System.err.println("Extracting IOTAs from =>: ["+stl.format(expr)+"]");
+		if (debugMode) {
+			System.err.println("Extracting IOTAs from =>: ["+stl.format(expr)+"]");
+		}
 		
 		// COLLECT and FRONT IOTAs as existentials
 		final Expr frontedExpr = front(stl, expr);
 
-		System.err.println("(After fronting)        : ["+stl.format(expr)+"]");
+		if (debugMode) {
+			System.err.println("(After fronting)        : ["+stl.format(expr)+"]");
+		}
 		
 		// Extract the uniqueness condition of IOTAs
 		final Expr newExpr = frontedExpr.accept(new ExprBuilder() {
@@ -200,7 +210,9 @@ public final class IIotaExtractor implements IotaExtractor {
 		
 		val newExprReduced = stl.betaReduce(newExpr);
 		
-		System.err.println("(Final output)          : ["+stl.format(newExprReduced)+"]");
+		if (debugMode) {
+			System.err.println("(Final output)          : ["+stl.format(newExprReduced)+"]");
+		}
 	
 		return new IotaExtractorResult() {
 

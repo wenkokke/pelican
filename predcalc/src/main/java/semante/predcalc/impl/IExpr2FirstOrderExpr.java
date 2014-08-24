@@ -14,17 +14,22 @@ import lambdacalc.Type;
 import lambdacalc.Types;
 import lambdacalc.impl.IType.IConstant;
 import lambdacalc.impl.IType.IFunction;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 import semante.predcalc.Expr2FirstOrderExpr;
 import semante.predcalc.HigherOrderError;
+import semante.settings.Settings;
 
 
-@RequiredArgsConstructor
 @FieldDefaults(makeFinal=true)
 public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 
+	public IExpr2FirstOrderExpr(Settings settings, STL lcalc) {
+		this.lcalc = lcalc;
+		this.debugMode = Boolean.parseBoolean(settings.get("SemAnTE","Tracer","Smasher"));
+	}
+	
+	protected boolean debugMode;
 	protected STL lcalc; 
 	
 	private ExprBuilder rewriter = new ExprBuilder() {
@@ -42,7 +47,9 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 			val app2 = lcalc.getExprBuilder().application(fun2, arg2);
 
 			if (lcalc.typeOf(fun2).accept(lowerableFunction) && lcalc.typeOf(arg2).equals(lowerableFunction.getType())) {
-				System.out.println("Lowerable application: the function  ["+ lcalc.format(fun2) + "] is applied to an argument of type " + lcalc.format(lcalc.typeOf(arg2)) + ": [" + lcalc.format(arg2) + "]");
+				if (debugMode) {
+					System.out.println("Lowerable application: the function  ["+ lcalc.format(fun2) + "] is applied to an argument of type " + lcalc.format(lcalc.typeOf(arg2)) + ": [" + lcalc.format(arg2) + "]");
+				}
 				
 				try {
 					return fun2.accept(new ExprBuilder() {
@@ -81,7 +88,9 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 									e = lcalc.getExprBuilder().application(simple,
 											lcalc.getExprBuilder().variable(buildSymbol(arg3.accept(getConstantName), Types.E)));
 									
-									System.out.println("Lowered expression (modification by application):" + lcalc.format(e));
+									if (debugMode) {
+										System.out.println("Lowered expression (modification by application):" + lcalc.format(e));
+									}
 
 								} else {
 									throw new HigherOrderError("Modifier is not a constant" + lcalc.format(fun3));
@@ -97,7 +106,9 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 								// compounds we may have a noun of type (et)(et)(et)et applied to a noun of type et, so the 
 								// return type is (et)(et)et. Note that NP compounds are handled differently, see below.
 								Expr e = lowerModification(s.getName(), lcalc.typeOf(fun2), s.getType().accept(getFunctionReturnType), arg2); 
-								System.out.println("Lowered expression (direct modification):" + lcalc.format(e));
+								if (debugMode) {								
+									System.out.println("Lowered expression (direct modification):" + lcalc.format(e));
+								}
 								return e;
 							}
 							
@@ -122,7 +133,9 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 									Expr newE =  hash(lcalc.getExprBuilder().application(
 											lcalc.getExprBuilder().variable(
 													buildSymbol(modifierName,modifierType)), arg),targetType);
-									System.out.println("Modification hashed:" + lcalc.format(newE) + "; reason: [" + e.getMessage() + "]");
+									if (debugMode) {
+										System.out.println("Modification hashed:" + lcalc.format(newE) + "; reason: [" + e.getMessage() + "]");
+									}
 									return newE;
 								}
 							}
@@ -130,7 +143,9 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 						});
 				} catch (HigherOrderError e) {
 					Expr expr = hash(app2);
-					System.out.println("Lowered expression (hashed):" + lcalc.format(expr) + "; reason: [" + e.getMessage() + "]");
+					if (debugMode) {
+						System.out.println("Lowered expression (hashed):" + lcalc.format(expr) + "; reason: [" + e.getMessage() + "]");
+					}
 					return expr;
 				}
 				
@@ -143,7 +158,9 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 					Expr e = lcalc.getExprBuilder().variable(buildSymbol(
 							fun2.accept(getConstantName) + "_" + arg2.accept(getNPConstantName),
 							lcalc.typeOf(fun2).accept(getFunctionReturnType)));
-					System.out.println("NP compound: " + lcalc.format(e));
+					if (debugMode) {
+						System.out.println("NP compound: " + lcalc.format(e));
+					}
 					return e;
 				} else {
 					throw new HigherOrderError("NP compound with a non-constant argument: " + lcalc.format(app2));
@@ -154,17 +171,21 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 				Expr e = lcalc.getExprBuilder().application(
 							lcalc.getExprBuilder().variable(buildSymbol(fun2.accept(getConstantName),Types.EET)),
 							hash(arg2,Types.E));
-				System.out.println("Lowering TET to T application: " + lcalc.format(e));
+				if (debugMode) {				
+					System.out.println("Lowering TET to T application: " + lcalc.format(e));
+				}
 				return e;
 			} else if ( fun2.accept(isConstant) &&
 					lcalc.typeOf(fun2).equals(Types.ET_E) && 
 					lcalc.typeOf(arg2).equals(Types.ET)) {
 				Expr e = hash(app2);
-				System.out.println("Lowering (ET)E to ET application: " + lcalc.format(e));
+				if (debugMode) {				
+					System.out.println("Lowering (ET)E to ET application: " + lcalc.format(e));
+				}
 				return e;
 			} else {
 				if (lcalc.typeOf(fun2).equals(Types.ET_ET)) {
-					System.out.println("Unlowerable (et)et application: " + lcalc.format(fun2) + " to: " + lcalc.format(arg2));
+					System.err.println("Unlowerable (et)et application: " + lcalc.format(fun2) + " to: " + lcalc.format(arg2));
 				}
 				
 				return app2;
@@ -232,7 +253,9 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 	
 	private List<Predicate> parsePredicates(Expr arg) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		System.out.println("parsing predicate: " + lcalc.format(arg));
+		if (debugMode) {
+			System.out.println("parsing predicate: " + lcalc.format(arg));
+		}
 		parseNextPredicate(arg, predicates,getExternalVars(arg)); 
 		return predicates;
 	}
@@ -277,7 +300,9 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 						boolean argIsExternal = externalVars.contains(argName);
 
 						if (argIsExternal) {
-							System.out.println("Argument [" + argName + "] is external");
+							if (debugMode) {							
+								System.out.println("Argument [" + argName + "] is external");
+							}
 						}
 						
 						if (argIsExternal) {
