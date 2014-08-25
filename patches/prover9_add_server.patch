@@ -1,6 +1,6 @@
-diff -bur ladr/parse.c ladr/parse.c
---- ladr/parse.c	2009-03-17 18:04:29.000000000 +0100
-+++ ladr/parse.c	2014-08-21 03:46:12.000000000 +0200
+diff -bur ./ladr/parse.c ./ladr/parse.c
+--- ./ladr/parse.c	2009-03-17 18:04:29.000000000 +0100
++++ ./ladr/parse.c	2014-08-21 03:46:12.000000000 +0200
 @@ -554,7 +554,7 @@
  
      c = getc(fp);
@@ -10,10 +10,18 @@ diff -bur ladr/parse.c ladr/parse.c
        eof = TRUE;
      else if (comment_char(c)) {
        c = finish_comment(fp);
-diff -bur ladr/top_input.c ladr/top_input.c
---- ladr/top_input.c	2009-02-23 22:39:22.000000000 +0100
-+++ ladr/top_input.c	2014-08-22 03:09:34.000000000 +0200
-@@ -880,6 +880,8 @@
+diff -bur ./ladr/top_input.c ./ladr/top_input.c
+--- ./ladr/top_input.c	2009-02-23 22:39:22.000000000 +0100
++++ ./ladr/top_input.c	2014-08-25 02:33:22.000000000 +0200
+@@ -23,6 +23,7 @@
+ #include "clausify.h"
+ #include "definitions.h"
+ #include <ctype.h>  /* for toupper, tolower */
++#include <unistd.h>
+ 
+ /* Private definitions and types */
+ 
+@@ -880,6 +881,8 @@
  void read_all_input(int argc, char **argv, FILE *fout,
  		    BOOL echo, int unknown_action)
  {
@@ -22,7 +30,7 @@ diff -bur ladr/top_input.c ladr/top_input.c
    int n = which_string_member("-f", argv, argc);
    if (n == -1) {
      read_from_file(stdin, fout, echo, unknown_action);
-@@ -899,6 +901,18 @@
+@@ -899,6 +902,18 @@
        fclose(fin);
      }
    }
@@ -41,9 +49,9 @@ diff -bur ladr/top_input.c ladr/top_input.c
    process_standard_options();
    symbol_check_and_declare();
  }  /* read_all_input */
-diff -bur provers.src/Makefile provers.src/Makefile
---- provers.src/Makefile	2014-08-11 15:45:38.000000000 +0200
-+++ provers.src/Makefile	2014-08-20 19:18:16.000000000 +0200
+diff -bur ./provers.src/Makefile ./provers.src/Makefile
+--- ./provers.src/Makefile	2009-10-28 15:22:15.000000000 +0100
++++ ./provers.src/Makefile	2014-08-20 19:18:16.000000000 +0200
 @@ -11,6 +11,8 @@
  # CFLAGS = $(XFLAGS) -pg -O -Wall
  # CFLAGS = $(XFLAGS) -Wall -pedantic
@@ -57,31 +65,31 @@ diff -bur provers.src/Makefile provers.src/Makefile
  	$(MAKE) prover9
  
  prover9: prover9.o $(OBJECTS)
--	$(CC) $(CFLAGS) -o prover9 prover9.o $(OBJECTS) ../ladr/libladr.a -lm
+-	$(CC) $(CFLAGS) -lm -o prover9 prover9.o $(OBJECTS) ../ladr/libladr.a
 +	$(CC) $(CFLAGS) -lm -o prover9 prover9.o $(OBJECTS) ../ladr/libladr.a $(LDFLAGS)
  
  fof-prover9: fof-prover9.o $(OBJECTS)
--	$(CC) $(CFLAGS) -o fof-prover9 fof-prover9.o $(OBJECTS) ../ladr/libladr.a -lm
+-	$(CC) $(CFLAGS) -lm -o fof-prover9 fof-prover9.o $(OBJECTS) ../ladr/libladr.a
 +	$(CC) $(CFLAGS) -lm -o fof-prover9 fof-prover9.o $(OBJECTS) ../ladr/libladr.a  $(LDFLAGS)
  
  ladr_to_tptp: ladr_to_tptp.o $(OBJECTS)
--	$(CC) $(CFLAGS) -o ladr_to_tptp ladr_to_tptp.o $(OBJECTS) ../ladr/libladr.a -lm
+-	$(CC) $(CFLAGS) -lm -o ladr_to_tptp ladr_to_tptp.o $(OBJECTS) ../ladr/libladr.a
 +	$(CC) $(CFLAGS) -lm -o ladr_to_tptp ladr_to_tptp.o $(OBJECTS) ../ladr/libladr.a $(LDFLAGS)
  
  tptp_to_ladr: tptp_to_ladr.o $(OBJECTS)
--	$(CC) $(CFLAGS) -o tptp_to_ladr tptp_to_ladr.o $(OBJECTS) ../ladr/libladr.a -lm
+-	$(CC) $(CFLAGS) -lm -o tptp_to_ladr tptp_to_ladr.o $(OBJECTS) ../ladr/libladr.a
 +	$(CC) $(CFLAGS) -lm -o tptp_to_ladr tptp_to_ladr.o $(OBJECTS) ../ladr/libladr.a  $(LDFLAGS)
  
  autosketches4: autosketches4.o $(OBJECTS)
--	$(CC) $(CFLAGS) -o autosketches4 autosketches4.o $(OBJECTS) ../ladr/libladr.a -lm
+-	$(CC) $(CFLAGS) -lm -o autosketches4 autosketches4.o $(OBJECTS) ../ladr/libladr.a
 +	$(CC) $(CFLAGS) -lm -o autosketches4 autosketches4.o $(OBJECTS) ../ladr/libladr.a $(LDFLAGS)
  
  newauto: newauto.o $(OBJECTS)
--	$(CC) $(CFLAGS) -o newauto newauto.o $(OBJECTS) ../ladr/libladr.a -lm
+-	$(CC) $(CFLAGS) -lm -o newauto newauto.o $(OBJECTS) ../ladr/libladr.a
 +	$(CC) $(CFLAGS) -lm -o newauto newauto.o $(OBJECTS) ../ladr/libladr.a $(LDFLAGS)
  
  newsax: newsax.o $(OBJECTS)
--	$(CC) $(CFLAGS) -o newsax newsax.o $(OBJECTS) ../ladr/libladr.a -lm
+-	$(CC) $(CFLAGS) -lm -o newsax newsax.o $(OBJECTS) ../ladr/libladr.a
 +	$(CC) $(CFLAGS) -lm -o newsax newsax.o $(OBJECTS) ../ladr/libladr.a $(LDFLAGS)
  
  cgrep: cgrep.o $(OBJECTS)
@@ -98,10 +106,10 @@ diff -bur provers.src/Makefile provers.src/Makefile
  
  prover9.o mprover.o iterate4.o autosketches4.o fof-prover9.o: search.h utilities.h  forward_subsume.h giv_select.h white_black.h demodulate.h actions.h index_lits.h pred_elim.h unfold.h provers.h
  
-diff -bur provers.src/prover9.c provers.src/prover9.c
---- provers.src/prover9.c	2007-09-24 17:28:53.000000000 +0200
-+++ provers.src/prover9.c	2014-08-22 02:21:24.000000000 +0200
-@@ -21,14 +21,178 @@
+diff -bur ./provers.src/prover9.c ./provers.src/prover9.c
+--- ./provers.src/prover9.c	2007-09-24 17:28:53.000000000 +0200
++++ ./provers.src/prover9.c	2014-08-25 03:24:14.000000000 +0200
+@@ -21,14 +21,177 @@
  
  #include "provers.h"
  
@@ -112,14 +120,16 @@ diff -bur provers.src/prover9.c provers.src/prover9.c
 +
 +#include <fcntl.h>
 +#include <signal.h>
++#include <unistd.h>
 +
 +#include <sys/types.h>
 +#include <sys/socket.h>
 +#include <sys/wait.h>
 +#include <sys/stat.h>
 +
-+int server_main(argc,params);
-+int original_main(argc,params);
++int server_main(int argc, char **argv);
++int original_main(int argc, char **argv);
++
 +
 +void handle_sigchld(int sig) {
 +  while (waitpid((pid_t)(-1), 0, WNOHANG) > 0) {}
@@ -149,26 +159,23 @@ diff -bur provers.src/prover9.c provers.src/prover9.c
 +		}
 +	}
 +
++	int code = 0;
 +	if (server_port!=-1)
 +	{
-+		return server_main(argc,argv);
++		code = server_main(argc,argv);
 +	} else
 +	{
-+		return original_main(argc,argv);
++		code = original_main(argc,argv);
 +	}
-+}
++	exit(code);
++} /* main */
 +
 +
 +
 +int server_main(int argc, char **argv)
 +{
 +    int sockfd, newsockfd, portno, clilen;
-+    char buffer[256];
 +    struct sockaddr_in serv_addr, cli_addr;
-+    int  n;
-+    FILE *temp_out;
-+    int in_size;
-+    char *in_buff;
 +
 +
 +    // in order not to aggregate zombie child processes, following:
@@ -262,7 +269,7 @@ diff -bur provers.src/prover9.c provers.src/prover9.c
 +
 +            // shutdown and close the file descriptors
 +            shutdown(newsockfd, SHUT_RDWR);
-+            close(stderr);
++            fclose(stderr);
 +            close(newsockfd);
 +
 +            //return code is not really important since it's not read
@@ -273,25 +280,27 @@ diff -bur provers.src/prover9.c provers.src/prover9.c
 +            close(newsockfd);
 +        }
 +  } /* end of while */
-+}
++} /* server_main */
 +
 +int original_main(int argc, char **argv)
 +{
    Prover_input input;
    Prover_results results;
  
-@@ -60,6 +224,6 @@
+@@ -60,6 +223,7 @@
        fprintf(stderr, "\nSEARCH FAILED\n");
    }
  
 -  exit_with_message(stdout, results->return_code);
 -  exit(1);  // to satisfy the compiler (won't be called)
-+  return exit_with_message(stdout, results->return_code);
-+  //exit(1);  // to satisfy the compiler (won't be called)
- }  // main
-diff -bur provers.src/provers.c provers.src/provers.c
---- provers.src/provers.c	2009-01-22 23:06:32.000000000 +0100
-+++ provers.src/provers.c	2014-08-21 03:43:32.000000000 +0200
+-}  // main
++  report_message(stdout, results->return_code);
++  
++  return results->return_code;
++}  // original_main
+diff -bur ./provers.src/provers.c ./provers.src/provers.c
+--- ./provers.src/provers.c	2009-01-22 23:06:32.000000000 +0100
++++ ./provers.src/provers.c	2014-08-21 03:43:32.000000000 +0200
 @@ -66,7 +66,7 @@
       Two colon after options: argument optional. (GNU extension! Don't use it!)
    */
@@ -310,36 +319,67 @@ diff -bur provers.src/provers.c provers.src/provers.c
      case 'h':
      default:
        printf("%s", Help_string);
-diff -bur provers.src/search.c provers.src/search.c
---- provers.src/search.c	2009-11-04 00:52:29.000000000 +0100
-+++ provers.src/search.c	2014-08-20 23:57:32.000000000 +0200
-@@ -687,7 +687,7 @@
- */
- 
- /* PUBLIC */
--void exit_with_message(FILE *fp, int code)
-+int exit_with_message(FILE *fp, int code)
- {
-   int proofs = Glob.initialized ? Stats.proofs : -1;
-   
-@@ -714,7 +714,7 @@
- 	  my_process_id(), exit_string(code), get_date());
-   
-   fflush(fp);
--  exit(code);
-+  return code;
+diff -bur ./provers.src/search.c ./provers.src/search.c
+--- ./provers.src/search.c	2009-11-04 00:52:29.000000000 +0100
++++ ./provers.src/search.c	2014-08-25 03:09:36.000000000 +0200
+@@ -717,6 +717,48 @@
+   exit(code);
  }  /* exit_with_message */
  
++
++/*************
++ *
++ *   report_message()
++ *
++ *************/
++
++/* DOCUMENTATION
++*/
++
++/* PUBLIC */
++void report_message(FILE *fp, int code)
++{
++  int proofs = Glob.initialized ? Stats.proofs : -1;
++  
++  if (proofs == -1)
++    fprintf(fp, "\nExiting.\n");
++  else if (proofs == 0)
++    fprintf(fp, "\nExiting with failure.\n");
++  else
++    fprintf(fp, "\nExiting with %d proof%s.\n",
++	    proofs, proofs == 1 ? "" : "s");
++  
++  if (!Opt || !flag(Opt->quiet)) {
++    fflush(stdout);
++    fprintf(stderr, "\n------ process %d exit (%s) ------\n",
++	    my_process_id(), exit_string(code));
++    if (!Opt || flag(Opt->bell))
++      bell(stderr);
++  }
++
++  if (Opt && parm(Opt->report_stderr) > 0)
++    report(stderr, "some");
++
++  fprintf(fp, "\nProcess %d exit (%s) %s",
++	  my_process_id(), exit_string(code), get_date());
++  
++  fflush(fp);
++}  /* report_message */
++
++
++
  /*************
-diff -bur provers.src/search.h provers.src/search.h
---- provers.src/search.h	2009-02-25 17:00:01.000000000 +0100
-+++ provers.src/search.h	2014-08-21 00:04:04.000000000 +0200
-@@ -54,7 +54,7 @@
+  *
+  *   report()
+diff -bur ./provers.src/search.h ./provers.src/search.h
+--- ./provers.src/search.h	2009-02-25 17:00:01.000000000 +0100
++++ ./provers.src/search.h	2014-08-25 03:19:44.000000000 +0200
+@@ -56,6 +56,8 @@
  
- void fprint_all_stats(FILE *fp, char *stats_level);
+ void exit_with_message(FILE *fp, int code);
  
--void exit_with_message(FILE *fp, int code);
-+int exit_with_message(FILE *fp, int code);
- 
++void report_message(FILE *fp, int code);
++
  void report(FILE *fp, char *level);
  
+ void free_search_memory(void);

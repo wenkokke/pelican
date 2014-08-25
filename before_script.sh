@@ -7,7 +7,7 @@ wget http://www.cs.unm.edu/~mccune/mace4/download/LADR-2009-11A.tar.gz
 tar xvfz LADR-2009-11A.tar.gz >/dev/null
 cd LADR-2009-11A
 patch -p0 < ../patches/prover9_makefile.patch
-#patch -p0 < ../patches/prover9_add_server.patch
+patch -p0 < ../patches/prover9_add_server.patch
 make all >/dev/null
 if [ $? -eq 0 ]; then
     echo "Prover9 was built successfully"
