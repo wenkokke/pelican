@@ -32,6 +32,9 @@ SemAnTE:
     Default:  '${SEMANTE_HOME}/default.lexicon'
   Prover:
     Location: '${SEMANTE_HOME}/ladr'
+  Tracer:
+    Prover:   'false'
+    PredCalc: 'false'
 EOF
 cat <<EOF > "${SEMANTE_HOME}/legacy-1.0.yml"
 SemAnTE:
@@ -39,6 +42,9 @@ SemAnTE:
     Default:  '${SEMANTE_HOME}/legacy-1.0.lexicon'
   Prover:
     Location: '${SEMANTE_HOME}/ladr'
+  Tracer:
+    Prover:   'false'
+    PredCalc: 'false'
 EOF
 cat <<EOF > "${SEMANTE_HOME}/legacy-2.4.yml"
 SemAnTE:
@@ -46,4 +52,7 @@ SemAnTE:
     Default:  '${SEMANTE_HOME}/legacy-2.4.lexicon'
   Prover:
     Location: '${SEMANTE_HOME}/ladr'
+  Tracer:
+    Prover:   'false'
+    PredCalc: 'false'
 EOF
