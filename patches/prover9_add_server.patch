@@ -1,0 +1,385 @@
+diff -bur ./ladr/parse.c ./ladr/parse.c
+--- ./ladr/parse.c	2009-03-17 18:04:29.000000000 +0100
++++ ./ladr/parse.c	2014-08-21 03:46:12.000000000 +0200
+@@ -554,7 +554,7 @@
+ 
+     c = getc(fp);
+ 
+-    if (c == EOF)
++    if (c == EOF || c == (unsigned char)EOF)
+       eof = TRUE;
+     else if (comment_char(c)) {
+       c = finish_comment(fp);
+diff -bur ./ladr/top_input.c ./ladr/top_input.c
+--- ./ladr/top_input.c	2009-02-23 22:39:22.000000000 +0100
++++ ./ladr/top_input.c	2014-08-25 02:33:22.000000000 +0200
+@@ -23,6 +23,7 @@
+ #include "clausify.h"
+ #include "definitions.h"
+ #include <ctype.h>  /* for toupper, tolower */
++#include <unistd.h>
+ 
+ /* Private definitions and types */
+ 
+@@ -880,6 +881,8 @@
+ void read_all_input(int argc, char **argv, FILE *fout,
+ 		    BOOL echo, int unknown_action)
+ {
++  int s = which_string_member("-s", argv, argc);
++  if (s == -1) {
+   int n = which_string_member("-f", argv, argc);
+   if (n == -1) {
+     read_from_file(stdin, fout, echo, unknown_action);
+@@ -899,6 +902,18 @@
+       fclose(fin);
+     }
+   }
++  }
++  else {
++    int sfd = atoi (argv[s+1]);
++    FILE* fin = fdopen(dup(sfd), "r+");
++    if (fin == NULL) {
++      char s[100];
++      sprintf(s, "Failed to read from socket");
++      fatal_error(s);
++    }
++    read_from_file(fin, fout, echo, unknown_action);
++    fclose(fin);
++  }
+   process_standard_options();
+   symbol_check_and_declare();
+ }  /* read_all_input */
+diff -bur ./provers.src/Makefile ./provers.src/Makefile
+--- ./provers.src/Makefile	2009-10-28 15:22:15.000000000 +0100
++++ ./provers.src/Makefile	2014-08-20 19:18:16.000000000 +0200
+@@ -11,6 +11,8 @@
+ # CFLAGS = $(XFLAGS) -pg -O -Wall
+ # CFLAGS = $(XFLAGS) -Wall -pedantic
+ 
++LDFLAGS = -lm
++
+ PRVR_OBJ = index_lits.o forward_subsume.o demodulate.o\
+            pred_elim.o unfold.o semantics.o\
+ 	   giv_select.o white_black.o actions.o\
+@@ -63,34 +65,34 @@
+ 	$(MAKE) prover9
+ 
+ prover9: prover9.o $(OBJECTS)
+-	$(CC) $(CFLAGS) -lm -o prover9 prover9.o $(OBJECTS) ../ladr/libladr.a
++	$(CC) $(CFLAGS) -lm -o prover9 prover9.o $(OBJECTS) ../ladr/libladr.a $(LDFLAGS)
+ 
+ fof-prover9: fof-prover9.o $(OBJECTS)
+-	$(CC) $(CFLAGS) -lm -o fof-prover9 fof-prover9.o $(OBJECTS) ../ladr/libladr.a
++	$(CC) $(CFLAGS) -lm -o fof-prover9 fof-prover9.o $(OBJECTS) ../ladr/libladr.a  $(LDFLAGS)
+ 
+ ladr_to_tptp: ladr_to_tptp.o $(OBJECTS)
+-	$(CC) $(CFLAGS) -lm -o ladr_to_tptp ladr_to_tptp.o $(OBJECTS) ../ladr/libladr.a
++	$(CC) $(CFLAGS) -lm -o ladr_to_tptp ladr_to_tptp.o $(OBJECTS) ../ladr/libladr.a $(LDFLAGS)
+ 
+ tptp_to_ladr: tptp_to_ladr.o $(OBJECTS)
+-	$(CC) $(CFLAGS) -lm -o tptp_to_ladr tptp_to_ladr.o $(OBJECTS) ../ladr/libladr.a
++	$(CC) $(CFLAGS) -lm -o tptp_to_ladr tptp_to_ladr.o $(OBJECTS) ../ladr/libladr.a  $(LDFLAGS)
+ 
+ autosketches4: autosketches4.o $(OBJECTS)
+-	$(CC) $(CFLAGS) -lm -o autosketches4 autosketches4.o $(OBJECTS) ../ladr/libladr.a
++	$(CC) $(CFLAGS) -lm -o autosketches4 autosketches4.o $(OBJECTS) ../ladr/libladr.a $(LDFLAGS)
+ 
+ newauto: newauto.o $(OBJECTS)
+-	$(CC) $(CFLAGS) -lm -o newauto newauto.o $(OBJECTS) ../ladr/libladr.a
++	$(CC) $(CFLAGS) -lm -o newauto newauto.o $(OBJECTS) ../ladr/libladr.a $(LDFLAGS)
+ 
+ newsax: newsax.o $(OBJECTS)
+-	$(CC) $(CFLAGS) -lm -o newsax newsax.o $(OBJECTS) ../ladr/libladr.a
++	$(CC) $(CFLAGS) -lm -o newsax newsax.o $(OBJECTS) ../ladr/libladr.a $(LDFLAGS)
+ 
+ cgrep: cgrep.o $(OBJECTS)
+-	$(CC) $(CFLAGS) -o cgrep cgrep.o $(OBJECTS) ../ladr/libladr.a
++	$(CC) $(CFLAGS) -o cgrep cgrep.o $(OBJECTS) ../ladr/libladr.a $(LDFLAGS)
+ 
+ mprover: mprover.o $(OBJECTS)
+-	$(CC) $(CFLAGS) -o mprover mprover.o $(OBJECTS) ../ladr/libladr.a ../mace4.src/libmace4.a
++	$(CC) $(CFLAGS) -o mprover mprover.o $(OBJECTS) ../ladr/libladr.a ../mace4.src/libmace4.a $(LDFLAGS)
+ 
+ iterate4: iterate4.o $(OBJECTS)
+-	$(CC) $(CFLAGS) -o iterate4 iterate4.o $(OBJECTS) ../ladr/libladr.a
++	$(CC) $(CFLAGS) -o iterate4 iterate4.o $(OBJECTS) ../ladr/libladr.a $(LDFLAGS)
+ 
+ prover9.o mprover.o iterate4.o autosketches4.o fof-prover9.o: search.h utilities.h  forward_subsume.h giv_select.h white_black.h demodulate.h actions.h index_lits.h pred_elim.h unfold.h provers.h
+ 
+diff -bur ./provers.src/prover9.c ./provers.src/prover9.c
+--- ./provers.src/prover9.c	2007-09-24 17:28:53.000000000 +0200
++++ ./provers.src/prover9.c	2014-08-25 03:24:14.000000000 +0200
+@@ -21,14 +21,177 @@
+ 
+ #include "provers.h"
+ 
++#include <stdlib.h>
++#include <stdio.h>
++#include <string.h>
++#include <netinet/in.h>
++
++#include <fcntl.h>
++#include <signal.h>
++#include <unistd.h>
++
++#include <sys/types.h>
++#include <sys/socket.h>
++#include <sys/wait.h>
++#include <sys/stat.h>
++
++int server_main(int argc, char **argv);
++int original_main(int argc, char **argv);
++
++
++void handle_sigchld(int sig) {
++  while (waitpid((pid_t)(-1), 0, WNOHANG) > 0) {}
++}
++
++
+ /*************
+  *
+  *    main -- basic prover
+  *
+  *************/
+ 
++int server_port = -1;
++
+ int main(int argc, char **argv)
+ {
++	int i;
++	for (i=0 ; i<argc ; i++) {
++		if (strcmp(argv[i],"-s")==0)
++		{
++			if (i+1<argc) {
++				server_port = atoi(argv[i+1]);
++			} else {
++				perror("Prover9 server mode syntax: -s <port>");
++				exit(1);
++			}
++		}
++	}
++
++	int code = 0;
++	if (server_port!=-1)
++	{
++		code = server_main(argc,argv);
++	} else
++	{
++		code = original_main(argc,argv);
++	}
++	exit(code);
++} /* main */
++
++
++
++int server_main(int argc, char **argv)
++{
++    int sockfd, newsockfd, portno, clilen;
++    struct sockaddr_in serv_addr, cli_addr;
++
++
++    // in order not to aggregate zombie child processes, following:
++    // http://www.microhowto.info/howto/reap_zombie_processes_using_a_sigchld_handler.html
++  	struct sigaction sa;
++  	sa.sa_handler = &handle_sigchld;
++  	sigemptyset(&sa.sa_mask);
++  	sa.sa_flags = SA_RESTART | SA_NOCLDSTOP;
++  	if (sigaction(SIGCHLD, &sa, 0) == -1) {
++  	  perror(0);
++  	  exit(1);
++  	}
++
++    // obtain a socket
++    sockfd = socket(AF_INET, SOCK_STREAM, 0);
++    if (sockfd < 0)
++    {
++        perror("ERROR opening socket");
++        exit(1);
++    }
++    /* Initialize socket structure */
++    bzero((char *) &serv_addr, sizeof(serv_addr));
++    portno = server_port;
++    serv_addr.sin_family = AF_INET;
++    serv_addr.sin_addr.s_addr = INADDR_ANY;
++    serv_addr.sin_port = htons(portno);
++
++    /* Now bind the host address using bind() call.*/
++    if (bind(sockfd, (struct sockaddr *) &serv_addr,
++                          sizeof(serv_addr)) < 0)
++    {
++         perror("ERROR on binding");
++         exit(1);
++    }
++    /* Now start listening for the clients, here
++     * process will go in sleep mode and will wait
++     * for the incoming connection
++     */
++    listen(sockfd,5);
++    clilen = sizeof(cli_addr);
++
++    // we need this in order to redirect the child process stdout to /dev/null
++    int devNull = open("/dev/null", O_WRONLY);
++    if(devNull == -1){
++        perror("Error in open('/dev/null',0)");
++        exit(EXIT_FAILURE);
++    }
++
++    printf("Prover9 server is entering mainloop.\n");
++    while (1)
++    {
++        newsockfd = accept(sockfd,
++                (struct sockaddr *) &cli_addr, &clilen);
++        if (newsockfd < 0)
++        {
++            perror("ERROR on accept");
++            exit(1);
++        }
++        /* Create child process */
++        int pid = fork();
++        if (pid < 0)
++        {
++            perror("ERROR on fork");
++            exit(1);
++        }
++        if (pid == 0)
++        {
++            // This is the client process
++
++      		// no need for the socket of the main loop
++            close(sockfd);
++
++            // redirect stdout to /dev/null, and stderr to the socket descriptor
++            dup2(devNull, 1);
++            dup2(newsockfd, 2);
++
++            // prepare an alternative argv
++            char *params[3];
++            char buff[16];
++            sprintf(buff,"%d",newsockfd);
++            params[0] = argv[0];
++            params[1] = "-s";
++            params[2] = buff;
++
++            // run the prover
++            int code = original_main(argc,params);
++
++            // flush the output
++            //fflush(stdout);
++            //fflush(stderr);
++
++            // shutdown and close the file descriptors
++            shutdown(newsockfd, SHUT_RDWR);
++            fclose(stderr);
++            close(newsockfd);
++
++            //return code is not really important since it's not read
++            exit(code);
++        }
++        else
++        {
++            close(newsockfd);
++        }
++  } /* end of while */
++} /* server_main */
++
++int original_main(int argc, char **argv)
++{
+   Prover_input input;
+   Prover_results results;
+ 
+@@ -60,6 +223,7 @@
+       fprintf(stderr, "\nSEARCH FAILED\n");
+   }
+ 
+-  exit_with_message(stdout, results->return_code);
+-  exit(1);  // to satisfy the compiler (won't be called)
+-}  // main
++  report_message(stdout, results->return_code);
++  
++  return results->return_code;
++}  // original_main
+diff -bur ./provers.src/provers.c ./provers.src/provers.c
+--- ./provers.src/provers.c	2009-01-22 23:06:32.000000000 +0100
++++ ./provers.src/provers.c	2014-08-21 03:43:32.000000000 +0200
+@@ -66,7 +66,7 @@
+      Two colon after options: argument optional. (GNU extension! Don't use it!)
+   */
+   
+-  while ((c = getopt(argc, argv,":hapxt:f")) != EOF) {
++  while ((c = getopt(argc, argv,":shapxt:f")) != EOF) {
+     switch (c) {
+     case 'x':
+       opts.auto2 = TRUE;
+@@ -80,6 +80,8 @@
+     case 'f':  /* input files */
+       opts.files = TRUE;
+       break;
++    case 's':
++    	break;
+     case 'h':
+     default:
+       printf("%s", Help_string);
+diff -bur ./provers.src/search.c ./provers.src/search.c
+--- ./provers.src/search.c	2009-11-04 00:52:29.000000000 +0100
++++ ./provers.src/search.c	2014-08-25 03:09:36.000000000 +0200
+@@ -717,6 +717,48 @@
+   exit(code);
+ }  /* exit_with_message */
+ 
++
++/*************
++ *
++ *   report_message()
++ *
++ *************/
++
++/* DOCUMENTATION
++*/
++
++/* PUBLIC */
++void report_message(FILE *fp, int code)
++{
++  int proofs = Glob.initialized ? Stats.proofs : -1;
++  
++  if (proofs == -1)
++    fprintf(fp, "\nExiting.\n");
++  else if (proofs == 0)
++    fprintf(fp, "\nExiting with failure.\n");
++  else
++    fprintf(fp, "\nExiting with %d proof%s.\n",
++	    proofs, proofs == 1 ? "" : "s");
++  
++  if (!Opt || !flag(Opt->quiet)) {
++    fflush(stdout);
++    fprintf(stderr, "\n------ process %d exit (%s) ------\n",
++	    my_process_id(), exit_string(code));
++    if (!Opt || flag(Opt->bell))
++      bell(stderr);
++  }
++
++  if (Opt && parm(Opt->report_stderr) > 0)
++    report(stderr, "some");
++
++  fprintf(fp, "\nProcess %d exit (%s) %s",
++	  my_process_id(), exit_string(code), get_date());
++  
++  fflush(fp);
++}  /* report_message */
++
++
++
+ /*************
+  *
+  *   report()
+diff -bur ./provers.src/search.h ./provers.src/search.h
+--- ./provers.src/search.h	2009-02-25 17:00:01.000000000 +0100
++++ ./provers.src/search.h	2014-08-25 03:19:44.000000000 +0200
+@@ -56,6 +56,8 @@
+ 
+ void exit_with_message(FILE *fp, int code);
+ 
++void report_message(FILE *fp, int code);
++
+ void report(FILE *fp, char *level);
+ 
+ void free_search_memory(void);
