@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import semante.pipeline.AbsPipelineTest;
 
-public final class TestCollectivityChecker extends AbsPipelineTest {
+public final class TestCollectivityChecker extends AbsPipelineTest<Integer> {
 	
 	@Test
 	public final void johnAndMaryAreTheDoctors() throws Exception {

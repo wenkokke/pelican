@@ -9,7 +9,7 @@ import com.google.common.collect.Lists;
 import semante.pipeline.Pair;
 import semante.pipeline.impl.IPair;
 
-public final class TestPel1Shared0027 extends AbsPipelineTest {
+public final class TestPel1Shared0027 extends AbsPipelineTest<Integer> {
 
 		@Test
 		public final void testPel1Shared0027() throws Exception {

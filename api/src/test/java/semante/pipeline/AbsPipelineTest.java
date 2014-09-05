@@ -13,9 +13,13 @@ import java.util.List;
 import javax.tools.ToolProvider;
 
 import lambdacalc.STL;
+import lambdacalc.TypeError;
 import lombok.Cleanup;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
+import semante.checker.AnnotationTypeChecker;
+import semante.checker.IAnnotationTypeChecker;
+import semante.checker.IllegalAnnotationException;
 import semante.lexicon.impl.IRichLexicon;
 import semante.pipeline.impl.IAnnotation;
 import semante.pipeline.impl.IBinaryTree;
@@ -25,10 +29,11 @@ import semante.pipeline.impl.ITestCaseCreator;
 import semante.settings.impl.ISettings;
 
 @FieldDefaults(level=PRIVATE)
-public class AbsPipelineTest {
+public abstract class AbsPipelineTest<ID> {
 
 	protected Pipeline pipeline;
 	TestCaseCreator testCaseCreator;
+	AnnotationTypeChecker<ID> fastTypeChecker;
 
 	public AbsPipelineTest() {
 		this(ISettings.defaultSettingsFile());
@@ -41,6 +46,7 @@ public class AbsPipelineTest {
             val lexicon     = new IRichLexicon(settings,lambdacalc);
 		    pipeline        = new IPipeline(settings,lambdacalc,lexicon);
 		    testCaseCreator = new ITestCaseCreator();
+		    fastTypeChecker = new IAnnotationTypeChecker<ID>(lambdacalc,lexicon);
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
@@ -53,73 +59,80 @@ public class AbsPipelineTest {
 		return IPair.pair(fst, snd);
 	}
 	
-	/*
-	protected final BinaryTree<ID,Annotation<ID>> label(SimpleBinaryTree<Pair<String,String>> input) {
-		return labeller.label(input).accept(annotator);
-	}*/
-	
-	protected final <ID> BinaryTree<ID,Annotation<ID>> _(BinaryTree<ID,Annotation<ID>> l, BinaryTree<ID,Annotation<ID>> r, ID id) {
+	protected final BinaryTree<ID,Annotation<ID>> _(BinaryTree<ID,Annotation<ID>> l, BinaryTree<ID,Annotation<ID>> r, ID id) {
 		return IBinaryTree.node(id, l, r);
 	}
 
-	protected final <ID> BinaryTree<ID,Annotation<ID>> word(String category, String text, ID id) {
+	protected final BinaryTree<ID,Annotation<ID>> word(String category, String text, ID id) {
 		return IBinaryTree.leaf((Annotation<ID>)new IAnnotation<ID>(id,text,category));
 	}
 	
-	protected final <ID> Result<ID> prove
+	protected final Result<ID> prove
 		(BinaryTree<ID,Annotation<ID>> text
 		,BinaryTree<ID,Annotation<ID>> hypo
 		,List<Pair<ID,ID>> subs)
 			throws Exception {
+		try {
+			fastTypeChecker.checkTypeWithError(text);
+		}
+		catch (IllegalAnnotationException e) {
+			return e.toResult();
+		}
+		try {
+			fastTypeChecker.checkTypeWithError(hypo);
+		}
+		catch (IllegalAnnotationException e) {
+			return e.toResult();
+		}
 		return pipeline.prove(text, hypo, subs);
 	}
 	
-	protected final <ID> void assertProof
+	protected final void assertProof
 		(BinaryTree<ID,Annotation<ID>> text
 		,BinaryTree<ID,Annotation<ID>> hypo
 		,List<Pair<ID,ID>> subs)
 			throws Exception {
-		prove(text,hypo,subs).accept(new AssertProof<ID>());
+		prove(text,hypo,subs).accept(new AssertProof());
 	}
 
-	protected final <ID> void assertProof
+	protected final void assertProof
 	(BinaryTree<ID,Annotation<ID>> text
 	,BinaryTree<ID,Annotation<ID>> hypo)
 		throws Exception {
-	prove(text,hypo,new ArrayList<Pair<ID,ID>>()).accept(new AssertProof<ID>());
+	prove(text,hypo,new ArrayList<Pair<ID,ID>>()).accept(new AssertProof());
 	}
 	
-	protected final <ID> void assertNoProof
+	protected final void assertNoProof
 		(BinaryTree<ID,Annotation<ID>> text
 		,BinaryTree<ID,Annotation<ID>> hypo
 		,List<Pair<ID,ID>> subs)
 			throws Exception {
-		prove(text,hypo,subs).accept(new AssertNoProof<ID>());
+		prove(text,hypo,subs).accept(new AssertNoProof());
 	}
 	
-	protected final <ID> void assertNoProof
+	protected final void assertNoProof
 		(BinaryTree<ID,Annotation<ID>> text
 		,BinaryTree<ID,Annotation<ID>> hypo)
 				throws Exception {
 		assertNoProof(text,hypo,new ArrayList<Pair<ID,ID>>());
 	}
 	
-	protected final <ID> void assertException
+	protected final void assertException
 		(BinaryTree<ID,Annotation<ID>> text
 		,BinaryTree<ID,Annotation<ID>> hypo
 		,List<Pair<ID,ID>> subs)
 			throws Exception {
-		prove(text,hypo,subs).accept(new AssertException<ID>());
+		prove(text,hypo,subs).accept(new AssertException());
 	}
 	
-	protected final <ID> void assertException
+	protected final void assertException
 		(BinaryTree<ID,Annotation<ID>> text
 		,BinaryTree<ID,Annotation<ID>> hypo)
 				throws Exception {
 		assertException(text,hypo,new ArrayList<Pair<ID,ID>>());
 	}
 	
-	protected final <ID> void testTestCaseCreator
+	protected final void testTestCaseCreator
 		(BinaryTree<ID,Annotation<ID>> text
 		,BinaryTree<ID,Annotation<ID>> hypo
 		,ResultType resultType)
@@ -127,7 +140,7 @@ public class AbsPipelineTest {
 		testTestCaseCreator(text,hypo,resultType,new ArrayList<Pair<ID,ID>>());
 	}
 	
-	protected final <ID> void testTestCaseCreator
+	protected final void testTestCaseCreator
 		(BinaryTree<ID,Annotation<ID>> text
 		,BinaryTree<ID,Annotation<ID>> hypo
 		,ResultType resultType
@@ -159,7 +172,7 @@ public class AbsPipelineTest {
 		}
 	}
 	
-	private final class AssertProof<ID> implements Result.Visitor<ID, Void> {
+	private final class AssertProof implements Result.Visitor<ID, Void> {
 
 		@Override
 		public final Void proof() {
@@ -192,7 +205,7 @@ public class AbsPipelineTest {
 		
 	}	
 
-	private final class AssertNoProof<ID> implements Result.Visitor<ID, Void> {
+	private final class AssertNoProof implements Result.Visitor<ID, Void> {
 
 		@Override
 		public final Void proof() {
@@ -224,7 +237,7 @@ public class AbsPipelineTest {
 		
 	}
 	
-	private final class AssertException<ID> implements Result.Visitor<ID, Void> {
+	private final class AssertException implements Result.Visitor<ID, Void> {
 
 		@Override
 		public Void counterExample() {

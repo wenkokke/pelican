@@ -10,7 +10,7 @@ import com.google.common.collect.Lists;
 import semante.pipeline.Pair;
 import semante.pipeline.impl.IPair;
 
-public final class TestIdioms extends AbsPipelineTest {
+public final class TestIdioms extends AbsPipelineTest<Integer> {
 
 		@Test
 		public final void TestCase01() throws Exception {

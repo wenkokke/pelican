@@ -97,7 +97,7 @@ public final class ITestCaseCreator implements TestCaseCreator {
 			}
 		}
 		line();
-		line("public final class Test%s extends AbsPipelineTest {", className);
+		line("public final class Test%s extends AbsPipelineTest<Integer> {", className);
 		if (! comment.isEmpty()) {
 			line();
 			line(1,"/*");

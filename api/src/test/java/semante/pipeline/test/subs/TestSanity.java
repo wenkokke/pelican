@@ -14,7 +14,7 @@ import semante.pipeline.impl.IPair;
 
 import com.google.common.collect.Lists;
 
-public final class TestSanity extends AbsPipelineTest {
+public final class TestSanity extends AbsPipelineTest<Integer> {
 
 		@Test
 		public final void TestCase01() throws Exception {

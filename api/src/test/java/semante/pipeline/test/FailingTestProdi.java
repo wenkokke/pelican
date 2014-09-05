@@ -12,7 +12,7 @@ import semante.pipeline.impl.IPair;
 
 import com.google.common.collect.Lists;
 
-public final class FailingTestProdi extends AbsPipelineTest {
+public final class FailingTestProdi extends AbsPipelineTest<Integer> {
 
 		@Test
 		public final void testShared112() throws Exception {

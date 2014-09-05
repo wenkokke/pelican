@@ -19,13 +19,14 @@ import com.google.common.collect.Iterables;
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true,level=PRIVATE)
-public class IAnnotationTypeChecker<ID> implements AnnotationTypeChecker<ID> {
+public final class IAnnotationTypeChecker<ID> implements AnnotationTypeChecker<ID> {
 
 	STL stl;
 	RichLexicon lexicon;
 	
 	@Override
-	public void checkTypeWithError(BinaryTree<ID, Annotation<ID>> tree) {
+	public void checkTypeWithError(BinaryTree<ID, Annotation<ID>> tree)
+		throws IllegalAnnotationException {
 		tree.accept(new Helper());
 	}
 
@@ -46,7 +47,7 @@ public class IAnnotationTypeChecker<ID> implements AnnotationTypeChecker<ID> {
 		@Override
 		public final List<Type> leaf(
 				final Annotation<ID> ann) {
-			val denotations = lexicon.getCategory(
+			val denotations = lexicon.getEntry(
 					ann.getCategory(), ann.getText()).getDenotations();
 			val builder = ImmutableList.<Type> builder();
 			for (val denotation : denotations) {

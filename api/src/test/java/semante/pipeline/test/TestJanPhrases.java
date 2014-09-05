@@ -7,7 +7,7 @@ import org.junit.Test;
 import semante.pipeline.AbsPipelineTest;
 import static semante.pipeline.ResultType.*;
 
-public final class TestJanPhrases extends AbsPipelineTest {
+public final class TestJanPhrases<ID> extends AbsPipelineTest<Integer> {
 
 	@Test
 	public final void jan01() throws Exception {

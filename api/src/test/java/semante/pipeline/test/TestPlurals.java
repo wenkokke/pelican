@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import semante.pipeline.AbsPipelineTest;
 
-public final class TestPlurals extends AbsPipelineTest {
+public final class TestPlurals extends AbsPipelineTest<Integer> {
 
 	@Test
 	public final void TestCase01() throws Exception {
