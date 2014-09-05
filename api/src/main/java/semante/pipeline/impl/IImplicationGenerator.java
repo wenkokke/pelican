@@ -67,7 +67,7 @@ public class IImplicationGenerator implements ImplicationGenerator {
 
 		if (sourceType.equals(Types.ET)) {
 			// this is the simplest case of et subsumption. We simply define a 
-			// universal quantification on the argumet of the two et predicates
+			// universal quantification on the argument of the two et predicates
 			// and assert that the truthfulness of the first entails the second.
 			Symbol newVar = buildSymbol("z0", Types.E);
 			implicationsB.add( 
@@ -78,7 +78,27 @@ public class IImplicationGenerator implements ImplicationGenerator {
 							bld.application(bld.variable("IMPLIES",Types.TTT),
 								extractIotas(bld.application(sourceExp,bld.variable(newVar)),uniquenessConditionsB)),
 								extractIotas(bld.application(targetExp,bld.variable(newVar)),uniquenessConditionsB)))));
+		} else if (sourceType.equals(Types.EET)) {
+			// this is aso a relatively simple case of subsumption - concerning relational
+			// nouns. We simply define a universal quantification on the two argument of the
+			//  eet predicates and assert that the truthfulness of the first entails the second.
 			
+			// two symbols for the universal quantification
+			val newVarSymbol1 = buildSymbol("z0", Types.E);
+			val newVarSymbol2 = buildSymbol("z1", Types.E);
+			
+			implicationsB.add( 
+				bld.application(
+					bld.variable("FORALL", Types.ET_T),
+					bld.abstraction(newVarSymbol1,
+						bld.application(	
+							bld.variable("FORALL", Types.ET_T),
+							bld.abstraction(newVarSymbol2,						
+								bld.application(
+									bld.application(bld.variable("IMPLIES",Types.TTT),
+										extractIotas(bld.application(bld.application(sourceExp,bld.variable(newVarSymbol1)),bld.variable(newVarSymbol2)),uniquenessConditionsB)),
+										extractIotas(bld.application(bld.application(targetExp,bld.variable(newVarSymbol1)),bld.variable(newVarSymbol2)),uniquenessConditionsB)))))));
+
 		} else if (sourceType.equals(TypeET_T_ET)) {
 			// we assume that ((et)t)et is a V_2 case. So the argument (which
 			// has the type (et)t) is the internal argument of the verb in 
