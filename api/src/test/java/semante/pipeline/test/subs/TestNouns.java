@@ -836,4 +836,332 @@ public final class TestNouns extends AbsPipelineTest {
 			testTestCaseCreator(tt, th, Proof, subs);
 		}
 		
+		@Test
+		public final void TestCase12() throws Exception {
+
+			// create the vocabulary for the text;
+			val t01_john = word("NP_D","John",1);
+			val t02_is = word("IS","is",2);
+			val t03_a = word("A","a",3);
+			val t04_leader = word("N_2","leader",4);
+			val t05_of = word("OF","of",5);
+			val t06_the = word("THE","the",6);
+			val t07_team = word("N","team",7);
+
+			// create the vocabulary for the hypothesis;
+			val h01_john = word("NP_D","John",1);
+			val h02_is = word("IS","is",2);
+			val h03_a = word("A","a",3);
+			val h04_member = word("N_2","member",4);
+			val h05_of = word("OF","of",5);
+			val h06_the = word("THE","the",6);
+			val h07_team = word("N","team",7);
+
+			// create the tree structure for the text;
+			val tt =
+			_(
+				t01_john
+				,
+				_(
+					t02_is
+					,
+					_(
+						t03_a
+						,
+						_(
+							t04_leader
+							,
+							_(
+								t05_of
+								,
+								_(
+									t06_the
+									,
+									t07_team
+									,
+									6
+								)
+								,
+								7
+							)
+							,
+							8
+						)
+						,
+						9
+					)
+					,
+					10
+				)
+				,
+				11
+			)
+			;
+
+			// create the tree structure for the hypothesis;
+			val th =
+			_(
+				h01_john
+				,
+				_(
+					h02_is
+					,
+					_(
+						h03_a
+						,
+						_(
+							h04_member
+							,
+							_(
+								h05_of
+								,
+								_(
+									h06_the
+									,
+									h07_team
+									,
+									6
+								)
+								,
+								7
+							)
+							,
+							8
+						)
+						,
+						9
+					)
+					,
+					10
+				)
+				,
+				11
+			)
+			;
+
+			// create the subsumption relations;
+		List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+		subs.add(new IPair<Integer,Integer>(4,4));
+
+			// test for a proof;
+			assertProof(tt, th, subs);
+			// test the testcasecreator;
+			testTestCaseCreator(tt, th, Proof, subs);
+		}
+		
+		
+		@Test
+		public final void TestCase13() throws Exception {
+
+			// create the vocabulary for the text;
+			val t01_john = word("NP_D","John",1);
+			val t02_is = word("IS","is",2);
+			val t03_a = word("A","a",3);
+			val t04_talented = word("MR","talented",4); 
+			val t05_leader = word("N_2","leader",5);
+			val t06_of = word("OF","of",6);
+			val t07_the = word("THE","the",7);
+			val t08_team = word("N","team",8);
+
+			// create the vocabulary for the hypothesis;
+			val h01_john = word("NP_D","John",1);
+			val h02_is = word("IS","is",2);
+			val h03_a = word("A","a",3);
+			val h04_skillful = word("MR","skillful",4); 
+			val h05_member = word("N_2","member",5);
+			val h06_of = word("OF","of",6);
+			val h07_the = word("THE","the",7);
+			val h08_team = word("N","team",8);
+
+			// create the tree structure for the text;
+			val tt =
+			_(
+				t01_john
+				,
+				_(
+					t02_is
+					,
+					_(
+						t03_a
+						,
+						_(
+							t04_talented
+							,
+							_(
+								t05_leader
+								,
+								_(
+									t06_of
+									,
+									_(
+										t07_the
+										,
+										t08_team
+										,
+										9
+									)
+									,
+									10
+								)
+								,
+								11
+							)
+							,
+							12
+						)
+						,
+						13
+					)
+					,
+					14
+				)
+				,
+				15
+			)
+			;
+
+			// create the tree structure for the hypothesis;
+			val th =
+			_(
+				h01_john
+				,
+				_(
+					h02_is
+					,
+					_(
+						h03_a
+						,
+						_(
+							h04_skillful
+							,
+							_(
+								h05_member
+								,
+								_(
+									h06_of
+									,
+									_(
+										h07_the
+										,
+										h08_team
+										,
+										9
+									)
+									,
+									10
+								)
+								,
+								11
+							)
+							,
+							12
+						)
+						,
+						13
+					)
+					,
+					14
+				)
+				,
+				15
+			)
+			;
+			// create the subsumption relations;
+		List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+		subs.add(new IPair<Integer,Integer>(4,4));
+		subs.add(new IPair<Integer,Integer>(5,5));
+
+			// test for a proof;
+			assertProof(tt, th, subs);
+			// test the testcasecreator;
+			testTestCaseCreator(tt, th, Proof, subs);
+		}
+
+
+		@Test
+		public final void TestCase14() throws Exception {
+
+			// create the vocabulary for the text;
+			val t01_john = word("NP_D","John",1);
+			val t02_is = word("IS","is",2);
+			val t03_a = word("A","a",3);
+			val t04_tal = word("MR","talented",4);
+			val t05_man = word("N","man",5);
+
+			// create the vocabulary for the hypothesis;
+			val h01_john = word("NP_D","John",1);
+			val h02_is = word("IS","is",2);
+			val h03_a = word("A","a",3);
+			val h04_skill = word("MR","skillful",4);
+			val h05_human = word("N","human",5);
+
+			// create the tree structure for the text;
+			val tt =
+			_(
+				t01_john
+				,
+				_(
+					t02_is
+					,
+					_(
+						t03_a
+						,
+						_(
+							t04_tal
+							,
+							t05_man
+							,
+							6
+						)
+						,
+						7
+					)
+					,
+					8
+				)
+				,
+				9
+			)
+			;
+
+			// create the tree structure for the hypothesis;
+			val th =
+			_(
+				h01_john
+				,
+				_(
+					h02_is
+					,
+					_(
+						h03_a
+						,
+						_(
+							h04_skill
+							,
+							h05_human
+							,
+							6
+						)
+						,
+						7
+					)
+					,
+					8
+				)
+				,
+				9
+			)
+			;
+
+			// create the subsumption relations;
+		List<Pair<Integer,Integer>> subs = Lists.newArrayList();
+		subs.add(new IPair<Integer,Integer>(4,4));
+		subs.add(new IPair<Integer,Integer>(5,5));
+
+			// test for a proof;
+			assertProof(tt, th, subs);
+			// test the testcasecreator;
+			testTestCaseCreator(tt, th, Proof, subs);
+		}
+		
 }
