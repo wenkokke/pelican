@@ -2,15 +2,19 @@ package semante.prover.impl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Pattern;
 
 import lombok.Cleanup;
 import lombok.val;
@@ -39,25 +43,115 @@ public class IProver implements Prover {
 	private final static int FULL_TIMEOUT_SEC = 60;
 	private final static String PROVER9_EXE_NAME = "prover9";
 
+	private static final String THEOREM_PROVED_INDICATION = "THEOREM PROVED";
+	private static final String SEARCH_FAILED_INDICATION = "SEARCH FAILED";
+	private static final String ERROR_INDICATION = "error";
+	
+	private static Pattern ipPattern = 
+		Pattern.compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):\\d+$");
+	
 	private PredCalc fol;
 	private String proverPath;
 	private boolean debugMode;
 	private boolean printPredCalc;
+	
+	private String hostName;
+	private int portNumber;
 	
 	public IProver(Settings settings, PredCalc pcalc) {
 		this.fol  = pcalc;
 		this.proverPath = settings.get("SemAnTE","Prover","Location");
 		this.debugMode = Boolean.parseBoolean(settings.get("SemAnTE","Tracer","Prover"));
 		this.printPredCalc = Boolean.parseBoolean(settings.get("SemAnTE","Tracer","PredCalc"));
+		if (ipPattern.matcher(proverPath).matches()) {
+			int colPos = proverPath.indexOf(':');
+			hostName = proverPath.substring(0,colPos);
+			portNumber = Integer.parseInt(proverPath.substring(colPos+1));
+		} else {
+			hostName = null;
+			portNumber = -1;
+		}
 	}
 
 	@Override
 	public ProverResult prove(ExprForm<Formula> textExp, ExprForm<Formula> hypoExp) {
 		return prove(textExp,hypoExp,"");
 	}
-
+	
 	@Override
 	public ProverResult prove(ExprForm<Formula> textExp, ExprForm<Formula> hypoExp,
+			String subsumptionRules) {
+		ProverResult ret = null;
+		if (hostName!=null) {
+			ret = proveSocket(textExp,hypoExp,subsumptionRules);
+		} else {
+			ret = proveProcess(textExp,hypoExp,subsumptionRules);
+		}
+		return ret;
+	}
+
+	public ProverResult proveSocket(ExprForm<Formula> textExp, ExprForm<Formula> hypoExp,
+			String subsumptionRules) {
+
+		ProverOutput proverOutputPF;
+
+		String prooverInput = toProverInput(textExp, hypoExp, subsumptionRules);
+		
+		Socket echoSocket = null;
+		DataOutputStream out = null;
+		BufferedReader in = null;
+		
+		try {
+			System.out.println("Connecting to server");
+			echoSocket = new Socket(hostName, portNumber);
+			out = new DataOutputStream(echoSocket.getOutputStream());
+			in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));                
+
+			System.out.println("Writing to socket");
+			out.writeBytes(prooverInput);
+			out.writeByte(255);
+			out.flush();
+			
+			ResultType resultType = ResultType.Unset;
+			StringBuilder buff = new StringBuilder();
+			String receivedMessage;
+
+			System.out.println("Reading from socket");
+			while (((receivedMessage = in.readLine()) != null) && (resultType==ResultType.Unset)) {
+				buff.append(receivedMessage);
+
+				System.out.println(receivedMessage); // displaying at DOS prompt
+				
+				if (buff.indexOf(THEOREM_PROVED_INDICATION)!=-1) {
+					resultType = ResultType.ProofFound;
+				} else if (buff.indexOf(SEARCH_FAILED_INDICATION)!=-1) {
+					resultType = ResultType.NoProofCanBeFound;
+				} else if (buff.indexOf(ERROR_INDICATION)!=-1) {
+					resultType = ResultType.Error;
+				}
+			}
+			
+			System.out.println("Read ended; result: " + resultType);
+			proverOutputPF = new IProverOutput(buff.toString(),resultType);
+		} catch (UnknownHostException e) {
+			proverOutputPF = new IProverOutput("Failed to resolve host: " + hostName + " - " + e.getMessage(),ResultType.Error);
+		} catch (IOException e) {
+			proverOutputPF = new IProverOutput("I/O Exception - " + e.getMessage(),ResultType.Error);
+		} finally {
+			if (echoSocket!=null) {
+				try {
+					echoSocket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		ProverOutput proverOutputCMF = new IProverOutput(null,ResultType.NotRun);
+		return new IProverResult(prooverInput, proverOutputPF, proverOutputCMF);
+	}
+	
+	public ProverResult proveProcess(ExprForm<Formula> textExp, ExprForm<Formula> hypoExp,
 			String subsumptionRules) {
 
 		File 			tempFile = null;
