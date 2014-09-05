@@ -48,7 +48,6 @@ import semante.pipeline.TestCaseCreator;
 import semante.predcalc.Smasher;
 import semante.predcalc.impl.IPredCalc;
 import semante.predcalc.impl.ISmasher;
-import semante.prover.impl.IProver;
 import semante.settings.Settings;
 
 import com.google.common.base.Function;
@@ -85,7 +84,6 @@ public final class IPipeline implements Pipeline {
 		
 		// prepare interfaces
 		val pcalc  = new IPredCalc(settings);
-		val prover = new IProver(settings, pcalc);
 		val stl2p  = new ISmasher(settings,pcalc, stl);
 			
 		// prepare the formuals to try to prove (including disambiguation, flattening, etc.)
@@ -105,7 +103,7 @@ public final class IPipeline implements Pipeline {
 				
 			for (int index = 0; index<formulas.size() && !resultHandler.isFinalResultSet(); index++) {
 				val formula = formulas.get(index);
-				resultHandler.handle(prover.prove(formula.getTFormula(), formula.getHFormula()));
+				resultHandler.handle(pcalc.prove(formula.getTFormula(), formula.getHFormula()));
 			}
 			return resultHandler.getFinalResult();
 		}
