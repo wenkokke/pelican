@@ -15,7 +15,6 @@ import semante.pipeline.Annotation;
 import semante.pipeline.BinaryTree;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true,level=PRIVATE)
@@ -79,13 +78,27 @@ public final class IAnnotationTypeChecker<ID> implements AnnotationTypeChecker<I
 			val types = builder.build();
 			if (types.isEmpty()) {
 				throw new IllegalAnnotationException(id,
-					String.format("type error; cannot compose types %s and %s",
-						Iterables.toString(leftTypes), Iterables.toString(rightTypes)));
+					String.format("type error; cannot compose types [%s] and [%s]",
+						toString(leftTypes), toString(rightTypes)));
 			}
 			else {
 				return types;
 			}
 		}
+
+		private String toString(List<Type> types) {
+			StringBuilder buffer = new StringBuilder();
+			if (types.size()>0) {
+				for (val leftType : types) {
+					buffer.append(stl.format(leftType));
+					buffer.append(", ");
+				}
+				buffer.delete(buffer.length()-2, buffer.length());
+			}
+			return buffer.toString();
+		}
+		
+		
 
 	}
 }
