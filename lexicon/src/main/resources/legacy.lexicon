@@ -41,21 +41,24 @@ $z$, $x$ and $y$ respectively.
 
 \subsubsection{The Gerund}
 
-Usually, the gerund should be interpreted as a verb that behaves as an
-intersective modifier.
+Usually, the gerund should be interpreted as a verb that behaves as a restrictive/intersective 
+modifier of the matrix verb. 
+For restrictive instances: [John [travelled walking]] => travelled_walking(john) & travelled(john)
+For intersective instances: [John [travelled walking]] => walking(john) & travelled(john)
 
-% [John [travelled walking]] => walking(travelled)(john)
+For one place gerunds (John toured brussels by walking (note that the 'by' is annotated as P_GR = IGNORE)
+> GER_1   \A:et.\z:e.AND:ttt (A:et z:e) (WORD:(et)et A:et z:e)
+> GER_I1  \A:et.\z:e.AND:ttt (A:et z:e) (WORD:et z:e)
 
-> GER_1  \A:et.\z:e.AND:ttt (WORD:(et)et A:et z:e) (A:et z:e)
-> GER_2  \Obj1:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.WORD:eet x:e z:e))
-> GER_3  \Obj1:(et)t.\Obj2:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.Obj2:(et)t (\y:e.WORD:eeet z:e x:e y:e)))
+For two-place gerunds:
+> GER_2   \Obj1:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.WORD:e(et)et x:e A:et z:e))
+> GER_I2  \Obj1:(et)t.\A:et.\z:e.AND:ttt (A:et z:e) (Obj1:(et)t (\x:e.WORD:eet x:e z:e))
 
-In other cases, the gerund will syntactically behave as a noun, but
-semantically still behave as a verb. These cases are easily taken care of.
-
-@ V_1 GER_1
-@ V_2 GER_2
-@ V_3 GER_3
+We may also want to have a special case of a gerund that is an argument of a V_2. 
+In this case the gerund is non-restrictive: John is accused of killing a girl => 
+accused_killing(John, a girl). However, since this is not in line with the restrictive
+or intersective versions above, it is currently commented-out.
+< > GER_2  \Obj1:(et)t.\V:((et)t)et.\z:e.(WORD:(et)et (V:((et)t)et Obj1:(et)t)) z:e
 
 \subsection{Modifiers}
 
@@ -113,7 +116,7 @@ approached through the annotation $A$ and its alias $\text{SOME}$
 > SOME    \A:et.\B:et.EXISTS:(et)t (\x:e.AND:ttt (A:et x:e) (B:et x:e))
 @ SOME A
 
-Finally, the annotation $\text{EVERY}$ introduces a univeral quantifier.
+Finally, the annotation $\text{EVERY}$ introduces a universal quantifier.
 
 > EVERY   \A:et.\B:et.FORALL:(et)t (\x:e.IMPLIES:ttt (A:et x:e) (B:et x:e))
 
@@ -127,7 +130,7 @@ entailment from being used in any negative examples.
 
 \subsection{The $\text{AND}$ Annotation}
 
-The $\text{AND}$ annotation implements a polymorphic conjunction, that
+The $\text{AND}$ annotation implements a polymorphic distributive conjunction, that
 reduces down to usage of the first-order primitive $(\land)$.
 
 > AND   AND:ttt
@@ -201,14 +204,14 @@ in Boston walks" is treated as $\iota x. \text{man}(x) \land \text{in}(x,\text{m
 > P_R   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:e(et)et y:e A:et x:e))
 > P_I   \P:(et)t.\A:et.\x:e.AND:ttt (A:et x:e) (P:(et)t (\y:e.WORD:eet y:e x:e))
 
-Then there is a special-case annotation for the cases where a gerund
-is used for the prepositional modification.
+Then there is a special-case annotation for the cases where a preposition precedes a gerund:
+John toured Brussels by visiting the HQ of the EU.
+For these cases the preposition has no meaning of its own and therefore it is an identity function. 
+To prevent overloading, a new preposition is defined for this purpose: 
 
-% [John [leaves [by walking]]]
-% by : NP -> N -> N
-% by(john,leaves,walking)
 
-> P_R   \A:et.\B:et.\x:e.AND:ttt (AND:ttt (A:et x:e) (B:et x:e)) (WORD:(et)(et)et A:et B:et x:e)
+< P_R   \A:et.\B:et.\x:e.AND:ttt (AND:ttt (A:et x:e) (B:et x:e)) (WORD:(et)(et)et A:et B:et x:e)
+> P_GR  \M:(et)et.M:(et)et
 
 Finally, there is a special-case annotation for $\text{TO}$ when used to denote the object of
 a ditransitive verb, which is simply the identity function.\footnote{

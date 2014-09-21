@@ -1,11 +1,12 @@
 package semante.pipeline.test;
 
+import static semante.pipeline.ResultType.Proof;
+import static semante.pipeline.ResultType.NoProof;
 import lombok.val;
 
 import org.junit.Test;
 
 import semante.pipeline.AbsPipelineTest;
-import static semante.pipeline.ResultType.*;
 
 public final class TestJanPhrases<ID> extends AbsPipelineTest<Integer> {
 
@@ -27,7 +28,7 @@ public final class TestJanPhrases<ID> extends AbsPipelineTest<Integer> {
 
 		// create the tree structure for the hypothesis;
 		val th = _(h00_jan, h01_ate,3);
-
+		
 		// return the new entailment;
 		assertProof(tt, th);
 		testTestCaseCreator(tt, th, Proof);
@@ -443,4 +444,42 @@ public final class TestJanPhrases<ID> extends AbsPipelineTest<Integer> {
 		assertProof(tt, th);
 		testTestCaseCreator(tt, th, Proof);
 	}
+	
+	@Test
+	public final void jan16() throws Exception {
+
+			// create the vocabulary for the text;
+			val t01_an = word("A","An",1);
+			val t02_american = word("N","American",2);
+			val t03_who = word("WHO_R","who",3);
+			val t04_is = word("IS","is",4);
+			val t05_accused = word("V_1","accused",5);
+			val t06_of = word("P_R","of",6);
+			val t07_emptydet = word("EMPTYDET","emptydet",7);
+			val t08_espionage = word("N","espionage",8);
+			val t09_escaped = word("V_1","escaped",9);
+
+			// create the vocabulary for the hypothesis;
+			val h01_an = word("A","An",1);
+			val h02_american = word("N","American",2);
+			val h03_is = word("IS","is",3);
+			val h04_emptydet = word("EMPTYDET","emptydet",4);
+			val h05_espionage = word("N","espionage",5);
+
+			// create the tree structure for the text;
+			val tt =_(_(t01_an,_(t02_american,_(t03_who,_(t04_is,_(t05_accused,_(t06_of,_(t07_emptydet,t08_espionage,12),13),14),15),17),10),22),
+						t09_escaped,21);
+
+			// create the tree structure for the hypothesis;
+			val th =_(_(h01_an,h02_american,6),_(h03_is,_(h04_emptydet,h05_espionage,7),8),10);
+
+			// create the subsumption relations;
+
+			// test for a proof;
+			assertNoProof(tt, th);
+			// test the testcasecreator;
+			testTestCaseCreator(tt, th, NoProof);
+		}
+ 
+	
 }

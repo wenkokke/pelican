@@ -9,15 +9,17 @@ import semante.pipeline.AbsPipelineTest;
 public final class TestGerunds extends AbsPipelineTest<Integer> {
 
 	@Test
-	public final void ger01() throws Exception {
+	public final void ger_simple_PP() throws Exception {
 
 		// create the vocabulary for the text:
 		val t00_john = word("NP", "John",1);
 		val t01_travelled = word("V_1", "travelled",2);
 		val t02_to = word("P_R", "to",3);
 		val t03_Boston = word("NP", "Boston",4);
-		val t04_by = word("P_R", "by",5);
+		val t04_by = word("P_GR", "by",5);
 		val t05_walking = word("GER_1", "walking",6);
+		val t06_to = word("P_R", "to",7);
+		val t07_Boston = word("NP", "Boston",8);
 
 		// create the vocabulary for the hypothesis:
 		val h00_john = word("NP", "John",1);
@@ -27,16 +29,18 @@ public final class TestGerunds extends AbsPipelineTest<Integer> {
 		val tt = _(
 				t00_john,
 				_(_(t01_travelled, _(t02_to, t03_Boston,7),8),
-						_(t04_by, t05_walking,9),10),11);
+						_(t04_by, _(t05_walking,_(t06_to,t07_Boston,12),13),9),10),11);
 
 		// create the tree structure for the hypothesis;
 		val th = _(h00_john, h01_travelled,3);
 
-		assertProof(tt, th);
+		// should fail because we don't support PP modification of gerunds (because 
+		// they are modifiers by themselves)
+		assertException(tt, th);
 	}
 
 	@Test
-	public final void ger02() throws Exception {
+	public final void ger_simple_GER2() throws Exception {
 
 		// create the vocabulary for the text;
 		val t00_john = word("NP", "John",1);
@@ -76,14 +80,14 @@ public final class TestGerunds extends AbsPipelineTest<Integer> {
 	}
 
 	@Test
-	public final void ger03() throws Exception {
+	public final void ger_simple_BY_GER2() throws Exception {
 
 		// create the vocabulary for the text;
 		val t00_john = word("NP_D", "John",1);
 		val t01_finished = word("V_2", "finished",2);
 		val t02_the = word("THE", "the",3);
 		val t03_affair = word("N", "affair",4);
-		val t04_by = word("P_R", "by",5);
+		val t04_by = word("P_GR", "by",5);
 		val t05_writing = word("GER_2", "writing",6);
 		val t06_a = word("A", "a",7);
 		val t07_letter = word("N", "letter",8);
@@ -107,7 +111,7 @@ public final class TestGerunds extends AbsPipelineTest<Integer> {
 	}
 
 	@Test
-	public final void ger04() throws Exception {
+	public final void ger_simple_GER1() throws Exception {
 
 		// create the vocabulary for the text:
 		val t00_john = word("NP", "John",1);
@@ -128,31 +132,37 @@ public final class TestGerunds extends AbsPipelineTest<Integer> {
 	}
 
 	@Test
-	public final void ger05() throws Exception {
+	public final void ger_conj_GER1() throws Exception {
 
 		// create the vocabulary for the text:
-		val john = word("NP", "John",1);
-		val is = word("IS", "is",2);
-		val accused = word("V_1", "accused",3);
-		val of = word("P_R", "of",4);
-		val killing = word("GER_2", "killing",5);
-		val the = word("THE", "the",6);
-		val girl = word("N", "girl",7);
+		val t00_john = word("NP", "John",1);
+		val t01_travelled = word("V_1", "travelled",2);
+		val t02_to = word("P_R", "to",3);
+		val t03_Boston = word("NP", "Boston",4);
+		val t04_by = word("P_GR", "by",5);
+		val t05_walking = word("GER_1", "walking",6);
+		val t06_and = word("AND", "and",7);
+		val t07_dancing = word("GER_1", "dancing",8);
 
 		// create the vocabulary for the hypothesis:
-		val a = word("A", "a",1);
-
+		val h00_john = word("NP", "John",1);
+		val h01_travelled = word("V_1", "travelled",2);
+		
 		// create the tree structure for the text;
-		val tt = _(john, _(is, _(accused, _(of, _(killing, _(the, girl,8),9),10),11),12),13);
+		val tt = _(
+				t00_john,
+				_(_(t01_travelled, _(t02_to, t03_Boston,9),10),
+						_(t04_by, _(t05_walking, _(t06_and, t07_dancing,16),17),11),12),13);
 
 		// create the tree structure for the hypothesis;
-		val th = _(john, _(is, _(accused, _(of, _(killing, _(a, girl,2),3),4),5),6),7);
+		val th = _(h00_john, h01_travelled,3);
 
-		assertNoProof(tt, th);
+		// expected to throw a type error because we no longer support conjunction of gerunds (since they are modifiers)
+		assertException(tt, th);
 	}
 
 	@Test // This test is now no longer valid, due to an illegal use of NP conjunctions.
-	public final void ger06() throws Exception {
+	public final void ger_conj_GER2() throws Exception {
 
 		// create the vocabulary for the text;
 		val t00_the = word("THE", "The",1);
@@ -165,8 +175,8 @@ public final class TestGerunds extends AbsPipelineTest<Integer> {
 		val t07_american = word("MI", "American",8);
 		val t08_soldier = word("N", "soldier",9);
 		val t09_app = word("WHO_R", "APP",10);
-		val t10_accused = word("V_1", "accused",11);
-		val t11_of = word("P_R", "of",12);
+		val t10_accused = word("V_2", "accused",11);
+		val t11_of = word("P_GR", "of",12);
 		val t12_raping = word("GER_2", "raping",13);
 		val t13_the = word("THE", "the",14);
 		val t14_iraqi = word("MR", "Iraqi",15);
@@ -175,15 +185,21 @@ public final class TestGerunds extends AbsPipelineTest<Integer> {
 		val t17_killing = word("GER_2", "killing",18);
 		val t18_the = word("THE", "the",19);
 		val t19_family = word("N", "family",20);
+
+/*  not used anymore because we don't support modifiers of gerunds
+ *  (because gerunds are modifiers by themselves)
+ *  		
 		val t20_in = word("P_R", "in",21);
 		val t21_the = word("THE", "the",22);
 		val t22_march = word("MR", "March",23);
 		val t23_2006 = word("NUMBER", "2006",24);
 		val t24_incident = word("N", "incident",25);
+*/
 		val t25_pleaded = word("V_2", "pleaded",26);
 		val t26_det = word("EMPTYDET", "DET",27);
 		val t27_guilty = word("N", "guilty",28);
 		val t28_to = word("P_R", "to",29);
+		val t282_empty =  word("EMPTYDET", "DET",101);
 		val t29_murder = word("N", "murder",30);
 		val t30_on = word("P_R", "on",31);
 		val t31_wednesday = word("NP_D", "Wednesday",32);
@@ -199,8 +215,8 @@ public final class TestGerunds extends AbsPipelineTest<Integer> {
 		val h00_james = word("$NPC_1$", "James",1);
 		val h01_barker = word("NP_D", "Barker",2);
 		val h02_is = word("IS", "is",3);
-		val h03_accused = word("V_1", "accused",4);
-		val h04_of = word("P_R", "of",5);
+		val h03_accused = word("V_2", "accused",4);
+		val h04_of = word("P_GR", "of",5);
 		val h05_raping = word("GER_2", "raping",6);
 		val h06_an = word("A", "an",7);
 		val h07_iraqi = word("MR", "Iraqi",8);
@@ -220,7 +236,7 @@ public final class TestGerunds extends AbsPipelineTest<Integer> {
 												_(t09_app,
 														_(t10_accused,
 																_(t11_of,
-																		_(_(_(t12_raping,
+																		_(_(t12_raping,
 																				_(t13_the,
 																						_(t14_iraqi,
 																								t15_girl,45),46),47),
@@ -228,13 +244,13 @@ public final class TestGerunds extends AbsPipelineTest<Integer> {
 																						_(t17_killing,
 																								_(t18_the,
 																										t19_family,48),49),50),51),
-																				_(t20_in,
+																				/*_(t20_in,
 																						_(t21_the,
 																								_(t22_march,
 																										_(t23_2006,
-																												t24_incident,52),53),54),55),56),57),58),59),60),61),62),63),
+																												t24_incident,52),53),54),55),56),*/57),58),59),60),61),62),63),
 				_(_(_(t25_pleaded,
-						_(t26_det, _(t27_guilty, _(t28_to, t29_murder,64),65),66),67),
+						_(t26_det, _(t27_guilty, _(t28_to, _(t282_empty,t29_murder,100),64),65),66),67),
 						_(t30_on, t31_wednesday,68),69),
 						_(t32_in,
 								_(_(t33_fort, t34_campbell,70),
@@ -256,6 +272,187 @@ public final class TestGerunds extends AbsPipelineTest<Integer> {
 																_(h11_the,
 																		h12_family,18),19),20),21),22),23),24),25);
 
+		// expected to throw an exception because we no longer support conjunction of gerunds (since they are modifiers)
+		assertException(tt, th);
+	}
+	
+	@Test
+	public final void ger_arg_of_v1() throws Exception {
+
+		// create the vocabulary for the text:
+		val john = word("NP", "John",1);
+		val is = word("IS", "is",2);
+		val accused = word("V_1", "accused",3);
+		val of = word("P_GR", "of",4);
+		val killing = word("GER_2", "killing",5);
+		val the = word("THE", "the",6);
+		val girl = word("N", "girl",7);
+
+		// create the vocabulary for the hypothesis:
+		val a = word("A", "a",1);
+
+		// create the tree structure for the text;
+		val tt = _(john, _(is, _( accused, _(of, _(killing, _(the, girl,8),9),10),11),12),13);
+
+		// create the tree structure for the hypothesis;
+		val th = _(john, _(is, _(accused, _(of, _(killing, _(a, girl,2),3),4),5),6),7);
+
+		// a proof is expected although accused is V_1, but see the test ger11() for an undesired result.
+		// of the representation we create
+		assertProof(tt, th);
+	}
+
+	@Test
+	public final void ger_arg_of_v2() throws Exception {
+
+		// create the vocabulary for the text:
+		val john = word("NP", "John",1);
+		val is = word("IS", "is",2);
+		val accused = word("V_2", "accused",3);
+		val of = word("P_GR", "of",4);
+		val killing = word("GER_2", "killing",5);
+		val the = word("THE", "the",6);
+		val girl = word("N", "girl",7);
+
+		// create the vocabulary for the hypothesis:
+		val a = word("A", "a",1);
+
+		// create the tree structure for the text;
+		val tt = _(john, _(is, _( accused, _(of, _(killing, _(the, girl,8),9),10),11),12),13);
+
+		// create the tree structure for the hypothesis;
+		val th = _(john, _(is, _(accused, _(of, _(killing, _(a, girl,2),3),4),5),6),7);
+
+		// an exception is expected because the combination of a V_2 and a gerund is 
+		// commented-out in the lexicon (a special case of GER_2). 
+		assertException(tt, th);
+	}
+	
+
+	@Test
+	public final void ger_non_intersective_GER1() throws Exception {
+
+		// create the vocabulary for the text:
+		val t00_john = 		word("NP", "John",1);
+		val t01_travelled = word("V_1", "travelled",2);
+		val t02_by = 		word("P_GR", "by",3);
+		val t03_walking = 	word("GER_1", "walking",4);
+
+		// create the vocabulary for the hypothesis:
+		val h00_john = word("NP", "John",1);
+		val h01_travelled = word("V_1", "walking",2);
+
+		// create the tree structure for the text;
+		val tt = _(t00_john, _(t01_travelled, _(t02_by,t03_walking,5),6),7);
+
+		// create the tree structure for the hypothesis;
+		val th = _(h00_john, h01_travelled,3);
+
+		// no proof is expected because GER_1 is restrictive
 		assertNoProof(tt, th);
 	}
+
+	@Test
+	public final void ger_intersective_GER1() throws Exception {
+
+		// create the vocabulary for the text:
+		val t00_john = 		word("NP", "John",1);
+		val t01_travelled = word("V_1", "travelled",2);
+		val t02_by = 		word("P_GR", "by",3);
+		val t03_walking = 	word("GER_I1", "walking",4);
+
+		// create the vocabulary for the hypothesis:
+		val h00_john = word("NP", "John",1);
+		val h01_travelled = word("V_1", "walking",2);
+
+		// create the tree structure for the text;
+		val tt = _(t00_john, _(t01_travelled, _(t02_by,t03_walking,5),6),7);
+
+		// create the tree structure for the hypothesis;
+		val th = _(h00_john, h01_travelled,3);
+
+		// a proof is expected because GER_O1 is intersective		
+		assertProof(tt, th);
+	}
+
+
+	
+	@Test
+	public final void ger_non_intersective_GER2() throws Exception {
+
+		// create the vocabulary for the text:
+		val john = word("NP", "John",1);
+		val is = word("IS", "is",2);
+		val accused = word("V_1", "accused",3);
+		val of = word("P_GR", "of",4);
+		val killing = word("GER_2", "killing",5);
+		val the = word("THE", "the",6);
+		val girl = word("N", "girl",7);
+
+		// create the tree structure for the text;
+		val tt = _(john, _(is, _( accused, _(of, _(killing, _(the, girl,8),9),10),11),12),13);
+
+		// create the tree structure for the hypothesis;
+		val th = _(john, _(is, _(killing, _(the, girl,2),3),4),5);
+
+		// no proof is expected because GER_2 is restrctive non-intersective. 
+		// so the generated representation is:
+		// exists x0 (girl(x0) & (accused(John) & killing_accused(x0, John))).
+		// this doesn't allow to infer that "John is killing the girl"
+		assertNoProof(tt, th);
+	}
+
+	@Test
+	public final void ger_intersective_GER2() throws Exception {
+
+		// create the vocabulary for the text:
+		val john = word("NP", "John",1);
+		val is = word("IS", "is",2);
+		val accused = word("V_1", "accused",3);
+		val of = word("P_GR", "of",4);
+		val killing = word("GER_I2", "killing",5);
+		val the = word("THE", "the",6);
+		val girl = word("N", "girl",7);
+
+		// create the tree structure for the text;
+		val tt = _(john, _(is, _( accused, _(of, _(killing, _(the, girl,8),9),10),11),12),13);
+
+		// create the tree structure for the hypothesis;
+		val th = _(john, _(is, _(killing, _(the, girl,2),3),4),5);
+
+		// a proof is expected because GER_I2 is intersective. 
+		// so the generated representation is:
+		// exists x0 (girl(x0) & (accused(John) & killing(x0, John))).
+		// this allows to infer that "John is killing the girl"
+		assertProof(tt, th);
+	}
+
+	@Test
+	public final void ger_simple_BY_GER1() throws Exception {
+	
+		// create the vocabulary for the text:
+		val t00_john = word("NP", "John",1);
+		val t01_travelled = word("V_1", "travelled",2);
+		val t02_to = word("P_R", "to",3);
+		val t03_Boston = word("NP", "Boston",4);
+		val t04_by = word("P_GR", "by",5);
+		val t05_walking = word("GER_1", "walking",6);
+	
+		// create the vocabulary for the hypothesis:
+		val h00_john = word("NP", "John",1);
+		val h01_travelled = word("V_1", "travelled",2);
+	
+		// create the tree structure for the text;
+		val tt = _(
+				t00_john,
+				_(_(t01_travelled, _(t02_to, t03_Boston,7),8),
+						_(t04_by, t05_walking,9),10),11);
+	
+		// create the tree structure for the hypothesis;
+		val th = _(h00_john, h01_travelled,3);
+	
+		assertProof(tt, th);
+	}
+
+	
 }
