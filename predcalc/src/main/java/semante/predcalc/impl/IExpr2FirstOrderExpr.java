@@ -197,12 +197,15 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 		}
 		
 		private final Expr hash(final Expr e, final Type hType) {
-			val hCode = lcalc.format(lcalc.toDeBruijn(e)).hashCode();
+			val str = lcalc.format(lcalc.toDeBruijn(lcalc.parse(lcalc.format(e))));
+			val hCode = str.hashCode();
 			val hName = ("h_" + hCode).replaceAll("-", "_");
 			val hVar  = lcalc.getExprBuilder().variable(buildSymbol(hName, hType));
+			if (debugMode) {
+				System.out.println("Hashed: [" + str + "] => " + hName);
+			}
 			return hVar;
 		}
-
 		
 		@Override
 		public Expr abstraction(Symbol s, Expr body) {
@@ -271,17 +274,20 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 				return null;
 			}
 			@Override public String application(Expr fun, Expr arg) {
-				if (arg.accept(new Visitor<Boolean>() {
-					@Override public Boolean abstraction(Symbol s, Expr body) { 
-						return body.accept(new Visitor<Boolean>() {
-							@Override public Boolean abstraction(Symbol s, Expr body) { return false; }
+				
+				// if the argument is an abstraction on type T, process the function only
+				if (arg.accept(
+						new Visitor<Boolean>() {
+							@Override public Boolean abstraction(Symbol s, Expr body) { 
+								return body.accept(new Visitor<Boolean>() {
+									@Override public Boolean abstraction(Symbol s, Expr body) { return false; }
+									@Override public Boolean application(Expr fun, Expr arg) { return false; }
+									@Override public Boolean variable(Symbol s) { return s.getType().equals(Types.T); }
+								});
+							}
 							@Override public Boolean application(Expr fun, Expr arg) { return false; }
-							@Override public Boolean variable(Symbol s) { return s.getType().equals(Types.T); }
-							});
-					}
-					@Override public Boolean application(Expr fun, Expr arg) { return false; }
-					@Override public Boolean variable(Symbol s) { return false; }
-					})) {
+							@Override public Boolean variable(Symbol s) { return false; }
+						})) {
 					return fun.accept(this);
 				}
 
@@ -290,31 +296,24 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 				boolean argIsTypeT = argType.equals(Types.T);
 				
 				if (argIsTypeE) {
-					if (fun.accept(isConstant)) {
-						// the application can be one of many options. For example, it can be something like "man:et x1:e" or 
-						// something like "love:eet x3:e". What's important to check is whether the argument is an external variable 
-						// (i.e. a variable introduced by an abstraction outside the scope of the argument from which we extract these 
-						// predicates. If the variable is not external (i.e. it's internal), we investigate only the function. 
-						// if, however, the argument is external, we create a complex predicate - a predicate with an argument.
-						String argName = arg.accept(this);
-						boolean argIsExternal = externalVars.contains(argName);
 
-						if (argIsExternal) {
-							if (debugMode) {							
-								System.out.println("Argument [" + argName + "] is external");
-							}
+					// the application can be one of many options. For example, it can be something like "man:et x1:e" or 
+					// something like "love:eet x3:e". What's important to check is whether the argument is an external variable 
+					// (i.e. a variable introduced by an external abstraction or a constant like John). If this is the case then
+					// we collect the argument for the new predicate the we are building.
+					String argName = arg.accept(this);
+					boolean argIsExternal = externalVars.contains(argName);
+
+					if (argIsExternal) {
+						// i.e. the argument is 'John' or 'x4' introduced by an external iota.
+						if (debugMode) {							
+							System.out.println("Argument [" + argName + "] is external");
 						}
-						
-						if (argIsExternal) {
-							// i.e. the argument is 'John' or 'x4' introdued by an external iota.
-							arguments.add(argName);
-						}
-						fun.accept(this);
-						
-					} else {
-						// the function is not constant, so it's an application by itself - something like: ((Loves c1) x1) 
-						fun.accept(this);
+						arguments.add(argName);
 					}
+					
+					fun.accept(this);
+					
 				} else if (argIsTypeT ){
 					// the argument is of type t - it's an element in a list of conjuncts, like P2 in: ((AND P1(x0)) P2(x0))
 					
@@ -330,9 +329,8 @@ public class IExpr2FirstOrderExpr implements Expr2FirstOrderExpr {
 				}
 				
 				return null;
-
-				// in this case have an argument like x0 - an argument this is a result some abstraction; we ignore it and investigate the function
 			}
+			
 			@Override public String variable(Symbol s) {
 				Type type = s.getType();
 				if (type.equals(Types.ET) || type.equals(Types.EET) || type.equals(Types.EEET)) {
