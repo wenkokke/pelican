@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 import semante.checker.util.IfAnnotatedWith;
+import semante.checker.util.IfHoldsForSubtree;
 import semante.disamb.FlattenTree;
 import semante.disamb.UnambiguousAnnotation;
 import semante.pipeline.BinaryTree;
@@ -29,10 +30,18 @@ public final class IQuantifierModificationChecker<ID> implements AbuseChecker<ID
 	IfAnnotatedWith<ID> isModI = new IfAnnotatedWith<ID>("MOD_I");
 	IfAnnotatedWith<ID> isMR   = new IfAnnotatedWith<ID>("MR");
 	IfAnnotatedWith<ID> isMI   = new IfAnnotatedWith<ID>("MI");
+	IfHoldsForSubtree<ID,DeBruijn> check = new IfHoldsForSubtree<ID,DeBruijn>(new IfModifiesComplexNP());  
 	
 	@Override
 	public void check(BinaryTree<ID, UnambiguousAnnotation<ID>> tree) throws IllegalAnnotationException {
-		 
+		val maybeModifiedComplexNP = tree.accept(check);
+		 if (maybeModifiedComplexNP.isJust()) {
+			val modifiedComplexNP = maybeModifiedComplexNP.fromJust();
+			throw new IllegalAnnotationException(null,
+				String.format(
+					"Illegal modification of complex NP, `%s`",
+					stl.format(stl.fromDeBruijn(modifiedComplexNP))));
+		 }
 	}
 	
 	private final boolean isModifier(SimpleBinaryTree<UnambiguousAnnotation<ID>> tree) {
@@ -65,12 +74,20 @@ public final class IQuantifierModificationChecker<ID> implements AbuseChecker<ID
 			// check if `l` is a modifier:
 			if (isModifier(l))
 			{
+				
 				// check if `r` is a simple NP:
-				if (isNP(r)) return nothing();
+				if (isNP(r)) {
+					return nothing();
+				}
 				
 				// check if `r` is a complex NP:
 				val expR = flattener.flatten(r);
-				if (stl.typeOf(expR).equals(Types.ET_T)) return just(expR);
+				val typ1 = stl.format(stl.typeOf(expR));
+				val typ2 = stl.format(Types.ET_T);
+				if (typ1.equals(typ2))
+				{
+					return just(expR);
+				}
 			}
 			
 			return nothing();
