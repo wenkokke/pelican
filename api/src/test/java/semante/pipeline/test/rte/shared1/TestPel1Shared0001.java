@@ -5,7 +5,7 @@ import org.junit.Test;
 import semante.pipeline.AbsPipelineTest;
 import static semante.pipeline.ResultType.*;
 
-public final class TestPel1Shared0001 extends AbsPipelineTest<Integer> {
+public final class TestPel1Shared0001 extends AbsPipelineTest {
 
 		@Test
 		public final void testPel1Shared0001() throws Exception {

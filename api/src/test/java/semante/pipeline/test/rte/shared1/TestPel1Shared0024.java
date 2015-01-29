@@ -28,7 +28,7 @@ public final class TestPel1Shared0024 extends AbsPipelineTest<Integer> {
 			val t16_japanese = word("MI","Japanese",16);
 			val t17_court = word("N","court",17);
 			val t55_app = word("WHO_A","APP",55);
-			val t18_ruling = word("GER_1","ruling",18);
+			val t18_ruling = word("V_1","ruling",18);
 			val t19_in = word("P_R","in",19);
 			val t20_a = word("A","a",20);
 			val t21_civil = word("MR","civil",21);

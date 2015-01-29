@@ -32,7 +32,7 @@ public final class TestPel2Shared0006 extends AbsPipelineTest<Integer> {
 			val t19_the = word("THE","the",19);
 			val t20_marine = word("MI","marine",20);
 			val t21_ecosystem = word("N","ecosystem",21);
-			val t22_by = word("P_R","by",22);
+			val t22_by = word("P_GR","by",22);
 			val t23_saving = word("GER_2","saving",23);
 			val t73_det = word("EMPTYDET","DET",73);
 			val t24_endangered = word("MI","endangered",24);
