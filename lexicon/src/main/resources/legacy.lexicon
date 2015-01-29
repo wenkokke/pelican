@@ -73,12 +73,10 @@ are \textit{intersective}, \textit{restrictive} or \textit{non-restrictive}.
 
 > MOD_NR \A:et.\z:e.((WORD:(et)et A:et) z:e)
 
-Two specialized versions of $\text{MOD}_I$ and $\text{MOD}_R$\footnote{
-  \textbf{TODO}: provide examples in which these versions are needed.
-}.
+Two specialized versions of $\text{MOD}_I$ and $\text{MOD}_R$ for modification of proper names, as in Tall John jumps. The analysis is always intersective: jumps(John) & tall(John).\footnote{Note that modification of other (et)t predicates (i.e. non simple NPs) is prevented by a checker in the code.}.
 
 > MOD_I \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t WORD:et)
-> MOD_R \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t (WORD:(et)et A:et))
+> MOD_R \P:(et)t.\A:et.AND:ttt (P:(et)t A:et) (P:(et)t WORD:et)
 
 Furthermore, $\text{WHO}_R$ returns an application of $\text{MOD}_I$.
 
