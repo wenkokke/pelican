@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 import semante.checker.ICollectivityAndIotaChecker;
+import semante.checker.IQuantifierModificationChecker;
 import semante.checker.IllegalAnnotationException;
 import semante.disamb.AnnotationTreePrinter;
 import semante.disamb.Disambiguator;
@@ -135,11 +136,13 @@ public final class IPipeline implements Pipeline {
 		
 		// CHECK: perform a series of checks on the unambiguous annotation trees
 		val collectivityAndIota = new ICollectivityAndIotaChecker<ID>(stl,flattener,treebuilder);
+		val quantifierModification = new IQuantifierModificationChecker<ID>(stl,flattener);
 		val validTextsBuilder = ImmutableList.<BinaryTree<ID, UnambiguousAnnotation<ID>>> builder();
 		val invalidTextsBuilder = ImmutableList.<IllegalAnnotationException> builder();
 		for (val disambText: disambTexts) {
 			try {
 				collectivityAndIota.check(disambText);
+				quantifierModification.check(disambText);
 				validTextsBuilder.add(disambText);
 			}
 			catch (IllegalAnnotationException e) {

@@ -17,7 +17,7 @@ import semante.pipeline.Maybe;
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal=true,level=PRIVATE)
-public final class IfAny implements DeBruijn.Visitor<Maybe<DeBruijn>> {
+public final class IfAnyForTerm implements DeBruijn.Visitor<Maybe<DeBruijn>> {
 
 	@NonNull
 	DeBruijnBuilder builder;

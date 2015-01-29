@@ -22,7 +22,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import semante.checker.util.Direction;
 import semante.checker.util.IfAnnotatedWith;
-import semante.checker.util.IfAny;
+import semante.checker.util.IfAnyForTerm;
 import semante.checker.util.IfConstantWithName;
 import semante.checker.util.IfHasId;
 import semante.checker.util.IfHoldsForDirectSubterm;
@@ -47,8 +47,7 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 	BinaryTreeBuilder<ID,UnambiguousAnnotation<ID>> builder;
 	
 	@Override
-	public void check(BinaryTree<ID,UnambiguousAnnotation<ID>> tree)
-			throws IllegalAnnotationException {
+	public void check(BinaryTree<ID,UnambiguousAnnotation<ID>> tree) throws IllegalAnnotationException {
 		
 		// replace all occurrences of [[AND ...] ...] with [[AND z1] z2]
 		val replaceWithConst = new ReplaceNPsInConjunctionByConstant();
@@ -117,7 +116,7 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 			for (val usedName : usedNames) {
 				init.add(new IfConstantWithName(builder, usedName));
 			}
-			return new IfAny(builder, init.build());
+			return new IfAnyForTerm(builder, init.build());
 		}
 		
 		private final DeBruijn.Visitor<Maybe<DeBruijn>> initializeRightSubtermIsAnyInList() {
@@ -188,7 +187,7 @@ public final class ICollectivityAndIotaChecker<ID> implements AbuseChecker<ID> {
 			for (val usedName : usedNames) {
 				init.add(new IfConstantWithName(builder, usedName));
 			}
-			return new IfAny(builder, init.build());
+			return new IfAnyForTerm(builder, init.build());
 		}
 		
 		private final DeBruijn.Visitor<Maybe<DeBruijn>> initializeAnySubtermIsAnyInList() {
