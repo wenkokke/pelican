@@ -57,10 +57,12 @@ public class IProver implements Prover {
 	
 	private String hostName;
 	private int portNumber;
+	private boolean readProof;
 	
 	public IProver(Settings settings, PredCalc pcalc) {
 		this.fol  = pcalc;
 		this.proverPath = settings.get("SemAnTE","Prover","Location");
+		this.readProof = Boolean.parseBoolean(settings.get("SemAnTE","Prover","ReadProof"));
 		this.debugMode = Boolean.parseBoolean(settings.get("SemAnTE","Tracer","Prover"));
 		this.printPredCalc = Boolean.parseBoolean(settings.get("SemAnTE","Tracer","PredCalc"));
 		if (ipPattern.matcher(proverPath).matches()) {
@@ -102,12 +104,16 @@ public class IProver implements Prover {
 		BufferedReader in = null;
 		
 		try {
-			System.out.println("Connecting to server");
+			if (debugMode) {
+				System.out.println("Connecting to server");
+			}
 			echoSocket = new Socket(hostName, portNumber);
 			out = new DataOutputStream(echoSocket.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));                
 
-			System.out.println("Writing to socket");
+			if (debugMode) {
+				System.out.println("Writing to socket");
+			}
 			out.writeBytes(prooverInput);
 			out.writeByte(255);
 			out.flush();
@@ -116,11 +122,15 @@ public class IProver implements Prover {
 			StringBuilder buff = new StringBuilder();
 			String receivedMessage;
 
-			System.out.println("Reading from socket");
-			while (((receivedMessage = in.readLine()) != null) && (resultType==ResultType.Unset)) {
-				buff.append(receivedMessage);
+			if (debugMode) {
+				System.out.println("Reading from socket");
+			}
+			while (((receivedMessage = in.readLine()) != null) && (!readProof ? resultType==ResultType.Unset : true)) {
+				buff.append(receivedMessage + "\n");
 
-				System.out.println(receivedMessage); // displaying at DOS prompt
+				if (debugMode) {
+					System.out.println(receivedMessage); // displaying at DOS prompt
+				}
 				
 				if (buff.indexOf(THEOREM_PROVED_INDICATION)!=-1) {
 					resultType = ResultType.ProofFound;
@@ -131,7 +141,9 @@ public class IProver implements Prover {
 				}
 			}
 			
-			System.out.println("Read ended; result: " + resultType);
+			if (debugMode) {
+				System.out.println("Read ended; result: " + resultType);
+			}
 			proverOutputPF = new IProverOutput(buff.toString(),resultType);
 		} catch (UnknownHostException e) {
 			proverOutputPF = new IProverOutput("Failed to resolve host: " + hostName + " - " + e.getMessage(),ResultType.Error);
@@ -178,7 +190,9 @@ public class IProver implements Prover {
 			out.write(prooverInput);
 			out.flush();
 			
-			val prover9 = new File(proverPath,PROVER9_EXE_NAME);
+			val prover9ext = System.getProperty("os.name").toLowerCase().indexOf("win")>-1 ? ".exe" : "";
+			
+			val prover9 = new File(proverPath,PROVER9_EXE_NAME + prover9ext);
 			val timeout = FULL_TIMEOUT_SEC * 3/4;
 			val command = new String[] { prover9.getPath(), "-t", Integer.toString(timeout), "-f", fileName};
 			
